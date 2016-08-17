@@ -1,0 +1,9 @@
+<script type="text/javascript">
+    function platformLogout() {
+        window.location.href = '<%= ApplicationController::APPSCHEF_URL %>/api/users/<%= @token_string %>/logout/<%= APPSCHEF_API_KEY %>';
+    }
+</script>
+
+<body onLoad="platformLogout();return false;">
+
+</body>

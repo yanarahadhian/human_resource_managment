@@ -1,0 +1,2 @@
+module HolidayAllowancesHelper
+end

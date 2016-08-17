@@ -1,0 +1,49 @@
+<span class="input">
+  <label>Kategori</label>:
+  <%= f.select :violation_category, options_for_select(['Ringan', 'Sedang', 'Berat'], !params[:violation].blank? ? params[:violation][:violation_category] : @violation.violation_category) %>
+</span>
+<span class="clear"></span>
+
+<span class="input">
+  <label>Keterangan<span class="redstar">*</span></label><span class="left">:&nbsp;</span>
+  <%= f.text_area :violation_description, :rows => 3, :cols => 20 %>
+  <div class="clear"></div>
+  <div style="margin-left:164px;"><%= error_message_on @violation, :violation_description %></div>
+</span>
+<span class="clear"></span>
+
+<span class="input">
+  <label>Tanggal Kejadian<span class="redstar">*</span></label><span class="left">:&nbsp;</span>
+  <%= f.text_field :occurence_date, :id => "ui-date", :class => "ui-date" %>
+  <div class="clear"></div>
+  <div style="margin-left:164px;"><%= error_message_on @violation, :occurence_date %></div>
+  </span>
+
+<span class="clear"></span>
+
+
+<span class="input">
+  <label>No. Telp</label>:
+  <input type="text" name="notelp" />
+</span>
+<span class="clear"></span>
+
+<span class="input">
+  <label>Penanggung Jawab</label>:
+  <input type="text" name="penjawab"/>
+</span>
+<span class="clear"></span>
+
+<span class="input">
+  <label>Hukuman</label>:
+  <%= f.select :action_taken, options_for_select([['Pilih Hukuman', ''],"Warning", "SP1", "SP2", "SP3"], !params[:violation].blank? ? params[:violation][:action_taken] : @violation.action_taken), {} %><%= error_message_on @violation, :action_taken %>
+</span>
+<span class="clear"></span>
+
+<span class="input" id="batas_hukuman">
+  <label>Berlaku Sampai</label><span class="left">:&nbsp;</span>
+  <%#= f.date_select :active_until, {:order => [:day, :month, :year], :start_year => (Time.now.year - 100)} %>
+  <%= f.text_field :active_until, :id => "ui-date2", :class => "ui-date" %>
+</span>
+
+<span class="clear"></span>

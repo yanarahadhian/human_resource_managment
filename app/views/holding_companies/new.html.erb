@@ -1,0 +1,41 @@
+<div id="pagelet_stream_header" style="padding-top: 10px;">
+    <div class="clearfix UIIntentionalStream_Top">
+        <div class="UIIntentionalStream_Top_Icon UIImageBlock clearfix">
+            <div class="UIImageBlock_Content UIImageBlock_ICON_Content">
+                <li class="UIIntentionalStream_Top_Header">
+                    <span class="UIIntentionalStream_LiveHeader">Tambah holding company</span>
+                </li>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="info_tab" class="info_tab" style="padding: 15px 70px 20px;">       
+  <div id="info_section_basic" class="info_section edit_mode ">
+        <div class="section_header" id="info_section_header_basic">
+            <h3 class="clearfix">
+                <span>Info Holding Company</span>
+                <div class="divider"> </div>
+            </h3>
+        </div>
+    <div class="profile_info_container clearfix">
+            <div id="info_section_editor_basic" class="profile_info section_editor" style="height: auto;">
+                <div class="editor_panel clearfix">
+            <% form_for @holding_company, :html => { :multipart => true }  do |f| %>
+                        <div style="float:right;width: 15%;">* Harus di isi</div>
+                        <%= render :partial => 'holding_company_form', :locals => {:f => f} %>
+                        <table class="editor">
+                                <tr>
+                                    <td colspan="2">
+                                        <div class="buttons">
+                                            <input type="submit" value="Save" name="info_section_save_basic" id="info_section_save_basic" class="inputsubmit"/>
+                                            <input id="info_section_cancel_basic" class="inputbutton inputaux" type="reset" value="Cancel" name="info_section_cancel_basic" onclick="javascript:window.location='<%=holding_companies_path%>'"/>
+                                        </div>
+                                    </td>
+                                </tr>
+                        </table>
+            <% end-%>
+                </div>
+            </div>
+    </div>
+  </div>
+</div>

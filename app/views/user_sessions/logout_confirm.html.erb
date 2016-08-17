@@ -1,0 +1,35 @@
+<div id="mainContent">
+    <div class="container">
+        <div class="placeHolder topMargin">
+            <div class="placeContent ContentFull">
+                <div class="contentInside">
+                    <h2 class="big_header center">Konfirmasi Logout</h2>
+		                <br />
+                    <p class="large_text center">
+                        Anda telah login sebelumnnya, apa anda yakin akan logout?
+                    </p>
+                    <% form_tag logout_confirmed_user_sessions_path do %>
+                        <div class="form_chooseCompany">
+                            <p class="large_text">
+                                <span class="field">
+                                    <label><%= radio_button_tag 'logout', 'logout'%> Logout</label>
+                                </span>
+                            </p>
+				                    <div class="clear"></div>
+                            <p class="large_text">
+                                <span class="field">
+                                    <label><%= radio_button_tag 'logout', 'dashboard'%> Kembali ke halaman dashboard</label>
+                                </span>
+                            </p>
+                            <div class="clear"></div>
+                            <div class="clear"></div>
+                            <%= submit_tag "Submit", :class => "green", :id => "add_comment_button", :style => "margin-left:175px", :name => "commit" %>
+                        </div>
+                    <% end %>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="clear"></div>
+</div>
+

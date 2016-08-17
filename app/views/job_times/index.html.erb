@@ -1,0 +1,186 @@
+<legend>HRM Setting</legend>
+<div class="panelFilter">
+              <table cellspacing="0" cellpadding="0">
+                <tbody><tr>
+                  <td width="103px">
+                    <div id="action_menu">
+                    <ul>
+                      <li>
+                        <a class="grey_button2" href="">
+                          <span class="left">More Actions</span>
+                          <span class="icons drop_arrow_ico">&nbsp;</span>
+                        </a>
+                        <div class="clear"></div>
+                        <ul>
+                          <li><a class="list" href="#">Diabaikan</a></li>
+                          <li><a class="list" href="#" id="delete" onclick="onDelete()">Delete</a></li>
+                        </ul>
+                      </li>
+                    </ul>
+                  </div>
+                  </td>
+
+                  <td>
+                    <div id="action_menu">
+                      <ul>
+                        <li>
+                          <a class="grey_button2" href="">
+                            <span class="left">Tambah Filter</span>
+                            <span class="icons drop_arrow_ico">&nbsp;</span>
+                          </a>
+                          <div class="clear"></div>
+                          <ul>
+                            <li><a class="list" href="">Nama</a></li>
+                            <li><a class="list" href="">Status</a></li>
+                          </ul>
+                        </li>
+                      </ul>
+                    </div>
+                    <a class="grey_button2" href="">
+                      <span class="left">Reset Filter</span>
+                    </a>
+
+                  </td>
+                  <td width="296px">
+                    <div class="pagination">
+                        <span class="add-button right">
+                          <a href="job_times/new" id="add_keluarga" class="grey_button2">
+                          <span class="icons add_ico">&nbsp;</span>
+                          Tambah Daftar Jam Kerja
+                         </a>
+                        </span>
+                      <div id="action_menu">
+                        <ul>
+                          <li>
+                            <a class="grey_button2" href="">
+                              <span class="left">Export Data to</span>
+                              <span class="icons drop_arrow_ico">&nbsp;</span>
+                            </a>
+                            <div class="clear"></div>
+                            <ul>
+                              <li><a class="list" href=""><span class="icons doc_ico">&nbsp;</span><span class="left">DOC File</span></a></li>
+                              <li><a class="list" href=""><span class="icons pdf_ico">&nbsp;</span><span class="left">PDF File</span></a></li>
+                              <li><a class="list" href=""><span class="icons xls_ico">&nbsp;</span><span class="left">XLS File</span></a></li>
+                            </ul>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                    <div class="clear"></div>
+                  </td>
+
+                </tr>
+                <tr>
+                  <td></td>
+                  <td>
+                    <div class="expand_filter">
+                      <div class="filter_opt">
+                      <label class="left">Periode</label>
+                      <span class="left result_filter">1 Mei 2011 - 1 Mei 2012</span>
+                      <a href="" class="icons cancel_ico">&nbsp;</a>
+                      <div class="clear"></div>
+                      </div>
+                      <div class="clear"></div>
+
+                      <div class="filter_opt">
+                      <label class="left">Nama</label>
+                      <input type="text" class="left">
+                      <div class="clear"></div>
+                      </div>
+                      <a class="grey_button2" href="">
+                      <span class="left">Go</span>
+                      <div class="clear"></div>
+
+
+                    </a>
+                    </div>
+                  </td>
+                  <td></td>
+                </tr>
+              </tbody></table>
+
+            </div>
+             <div class="clear"></div>
+       <!-- <div class="panelFilter">
+		        <div id="action_menu">
+		              <ul>
+		                <li> <a class="grey_button2" href=""> <span class="left">More Action</span> <span class="icons drop_arrow_ico">&nbsp;</span> </a>
+                    </li></ul>
+                    </div>
+             <div id="action_menu">
+		              <ul>
+		                <li> <a class="grey_button2" href=""> <span class="left">Tambah Filter</span> <span class="icons drop_arrow_ico">&nbsp;</span> </a>
+                    </li></ul>
+                    </div>
+              <div id="action_menu">
+		              <ul>
+		                <li> <a class="grey_button2" href=""> <span class="left">Reset Filter</span></a>
+                    </li></ul>
+                    </div>
+
+
+		          <div class="pagination">
+		           <div id="action_menu">
+		              <ul>
+		                <li> <a class="grey_button2" href=""> <span class="left">Simpan Data sebagai</span> <span class="icons drop_arrow_ico">&nbsp;</span> </a>
+		                  <div class="clear"></div>
+		                  <ul>
+		                    <li><a class="list" href=""><span class="icons doc_ico">&nbsp;</span><span class="left">DOC File</span></a></li>
+		                    <li><a class="list" href=""><span class="icons pdf_ico">&nbsp;</span><span class="left">PDF File</span></a></li>
+		                    <li><a class="list" href=""><span class="icons xls_ico">&nbsp;</span><span class="left">XLS File</span></a></li>
+		                    <li><a class="list" target="_blank" href="10_list_print.html"><span class="icons print_ico">&nbsp;</span><span class="left">Print File</span></a></li>
+                          </ul>
+                        </li>
+                      </ul>
+                    </div>
+		           <span class="add-button right">
+		      <a href="job_times/new" id="add_keluarga" class="grey_button2">
+				  <span class="icons add_ico">&nbsp;</span>
+					Tambah Daftar Jam Kerja
+				 </a>
+		    </span>
+                  </div>
+		          <div class="clear"></div>
+                </div>
+
+                <div class="panelFilter3">
+               <div class="expand_filter">
+                 <div class="filter_opt">
+                 <label class="left">Periode :</label>
+                 <select class="left" id="cbtype" onchange="javascript:onDisplay()">
+
+                     <option>Bulanan</option>
+                     <option selected="">Harian</option>
+
+
+                 </select>
+                 <div class="left" id="periode">
+                 </div>
+                 </div>
+                 <a onclick="javascript:onAbsensi()" href="#" class="grey_button2"><span class="left">Go</span></a>
+                 <a href="" class="icons cancel_ico">&nbsp;</a>
+                 <div class="clear"></div>
+               </div>
+
+             </div>-->
+     <%= render :partial => "list_job_times" %>
+        <div class="panelFilter">
+		          <div class="pagination">
+		            <div id="action_menu">
+		              <ul>
+		                <li>
+		                  <div class="clear"></div>
+		                  <ul>
+		                    <li><a class="list" href="URL sub 1">Penjualan Usha</a></li>
+		                    <li><a class="list" href="URL sub 2">Piutang</a></li>
+		                    <li><a class="list" href="URL sub 3">Retur Pembelian Barang</a></li>
+		                    <li><a class="list" href="URL sub 3">Hutang</a></li>
+		                    <li><a class="list" href="URL sub 3">Pajak PPn</a></li>
+                          </ul>
+                        </li>
+                      </ul>
+                    </div>
+		            <span class="paginationResult">1-12 dari 20</span> <a href=""><span class="icons last_ico">&nbsp;</span></a> <a href=""><span class="icons next_ico">&nbsp;</span></a> <a href=""><span class="icons prev_ico">&nbsp;</span></a> <a href=""><span class="icons first_ico">&nbsp;</span></a>
+            </div>
+		          <div class="clear"></div>
+               </div>

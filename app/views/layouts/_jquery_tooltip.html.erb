@@ -1,0 +1,80 @@
+<% position = "right" %>
+<% position = "left" if link == "help_tooltip_trigger" || link.include?("no_keluar_masuk") %>
+<script type="text/javascript">
+  $(document).ready(function(){
+    var background = 'rgba(255,255,255,0.9)';
+    var border = '#A9D5F2';
+    var font_color = '#56626a';
+      $('#person_tax_status_id').change(function(){
+      var n = $(this).val();
+      var title;
+	switch(n){
+	   case '1' : title = "Explanation 1"; break;
+	   case '2' : title = "Explanation 2"; break;
+	   case '3' : title = "Explanation 3"; break;
+	   case '4' : title = "Explanation 4"; break;
+	   case '5' : title = "Explanation 5"; break;
+	   default : title = "Explanation Above than 5";
+	}
+			$(this).attr("bt-xtitle",title);
+			$('.tooltip').bt({
+			  showTip: function(box) {
+                             $(box).fadeIn('fast');
+			  },
+				shrinkToFit: true,
+				hoverIntentOpts: {
+				interval: 0,
+				timeout: 0
+			},
+			positions: ['left','left'],
+			fill: background,
+			strokeStyle: border,
+			overlap: 0,
+			centerPointY: 1,
+			centerPointX: 0,
+			cornerRadius: 4,
+			right: 20,
+			cssStyles: {
+			fontFamily: 'Arial,"Lucida Grande",Helvetica,Arial,Verdana,sans-serif',
+			fontSize: '12px',
+			color: font_color,
+			width: 'auto',
+			padding: 5,
+		},
+		shadow: true,
+		shadowColor: 'rgba(0,0,0,.2)',
+		shadowBlur: 5,
+		shadowOffsetX: 0,
+		hadowOffsetY: 0
+  });
+});
+										// NEW TOOLTIP ------------------------
+$('#<%= list %>').hide();
+$('#<%= link %>').bt({
+  positions: ['<%= position %>','<%= position %>'],
+	showTip: function(box){
+	  $(box).fadeIn('medium');
+	},
+  fill: background,
+	contentSelector: "$('#<%= list %>')",
+	strokeStyle: border,
+	overlap: 0,
+	trigger: ['mouseover','mouseout'],
+	right: 20,
+	cssStyles: {
+	  fontFamily: 'Arial,"Lucida Grande",Helvetica,Arial,Verdana,sans-serif',
+		fontSize: '12px',
+		color: font_color,
+		width: 'auto',
+		padding: 5,
+		margin: '2px 0',
+		width: <%= link.include?("no_keluar_masuk") ? "80" : "370" %>
+	},
+	shadow: true,
+	shadowColor: 'rgba(0,0,0,.2)',
+	shadowBlur: 10,
+	shadowOffsetX: 2,
+	shadowOffsetY: 2
+});
+});
+</script>

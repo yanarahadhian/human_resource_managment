@@ -1,0 +1,112 @@
+<% form_for @training, :url => person_training_path(params[:person_id], @training) do |f| %>
+  <div id="box_retur_0">
+      <%= render :partial => 'training_detail_form', :locals => {:f => f} %>
+    <div class="clear"></div>
+
+      <div id="button" style="display:none" class="center-text block-btn-form">
+         <%= render :partial => "layouts/button_loader"  %>
+        <input type="reset" onclick="doCancelTrainingEdit();" name="info_section_cancel_basic" value="Batal" class="grey_button" id="info_section_cancel_basic">
+        <input type="submit" value="Simpan" name="info_section_save_basic" id="info_section_save_basic" class="blue_button" onclick="ajaxLoad1('<%= person_training_path(params[:person_id], @training) %>','button','ajax-load1')" />
+      </div>
+   
+  </div>
+<% end-%>
+
+<script>
+
+  function doCancelTrainingEdit(){
+    path = "<%= ApplicationController::BASE_URL %>/people/<%= params[:person_id] %>/trainings/cancel_popup_detail";
+    $.ajax({
+      type: "get",
+      url: path,
+      data :"id=<%= @training.id%>",
+      dataType: 'script',
+      success: function(){
+        $('.grey_button_a.top-right').show();
+      }
+    })
+  }
+  
+  function onClose(){
+    $('#field_status').hide();
+    $('#label_status').show();
+    $('#field_start').hide();
+    $('#label_start').show();
+    $('#field_perubahan').hide();
+    $('#label_perubahan').show();
+    $('#field_end').hide();
+    $('#label_end').show();
+    $('#field_department').hide();
+    $('#label_department').show();
+    $('#field_divisi').hide();
+    $('#label_divisi').show();
+    $('#field_group').hide();
+    $('#label_group').show();
+    $('#field_jabatan').hide();
+    $('#label_jabatan').show();
+    $('#field_reason').hide();
+    $('#label_reason').show();
+    $('.title-page-tambah').html("Detail Jabatan");
+    $('#button').hide();
+    $.fn.colorbox.close();
+  }
+
+  $(document).ready(function(){
+     $('#training_promoter_phone').numeric();
+     $('#cboxClose').click(function(){
+        onClose()
+     });
+     <% if @sign == "gagal" %>
+        onChangeField();
+     <% end %>
+      $.datepicker.setDefaults({
+        showOn: "button",
+        buttonImage: "<%= ApplicationController::APPSCHEF_URL %>/images/calendar.gif",
+        changeMonth: true,
+        changeYear: true,
+        dateFormat: 'dd/mm/yy',
+        altFormat: 'dd MM yy',
+        firstDay: 1
+      });
+
+      $( ".ui-date, .ui-date2" ).datepicker({
+      buttonImageOnly: true
+     });
+
+    });
+
+   function ajaxLoad1(url, div_btn, div_load){
+     $("#" + div_load + "").show();
+     $("#" + div_btn + "").hide();
+       $.get(url, function(data) {
+         $("#ajax-load").hide();
+       });
+    }
+
+   function onChangeField(){
+    $('#field_training_type').show();
+    $('#lbl_training_type').hide();
+    $('#field_person_trained_in').show();
+    $('#lbl_person_trained_in').hide();
+    $('#field_promoter').show();
+    $('#lbl_promoter').hide();
+    $('#field_promoter_phone').show();
+    $('#lbl_promoter_phone').hide();
+    $('#field_theme').show();
+    $('#lbl_theme').hide();
+    $('#field_certificate_number').show();
+    $('#lbl_certificate_number').hide();
+    $('#field_training_start').show();
+    $('#lbl_training_start').hide();
+    $('#field_training_end').show();
+    $('#lbl_training_end').hide();
+    $('#field_training_description').show();
+    $('#lbl_training_description').hide();
+    $('.title-page-tambah').html("Edit Pelatihan");
+    $('.input-help').show();
+    $('#div_link_edit').hide();
+    $('#button').show();
+    $('.grey_button_a.top-right').hide();
+  }
+  
+</script>

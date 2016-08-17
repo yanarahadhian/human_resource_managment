@@ -1,0 +1,188 @@
+<table width="1328" id="monthly_absences_table">
+  <thead>
+    <tr>
+      <th width="20"><input type="checkbox"></th>
+      <th width="120">Nama</th>
+      <th width="100" class="center-text">Departemen</th>
+      <th width="100" class="center-text">Bagian</th>
+      <th width="80" class="center-text">Kehadiran</th>
+      <th width="80" class="center-text">Cuti / Ijin</th>
+      <th width="80" class="center-text">Sakit</th>
+      <th width="80" class="center-text">Mangkir</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td class="center-text"></td>
+      <td class="left-text"></td>
+      <td class="left-text"></td>
+      <td class="left-text"></td>
+      <td class="center-text"></td>
+      <td class="center-text"></td>
+      <td class="center-text"></td>
+      <td class="center-text"></td>
+    </tr>
+  </tbody>
+</table>
+<%= render :partial => "absences/popup_pages/popup_karyawan" %>
+<script type="text/javascript" >
+  var oTable;
+  var gaiSelected =  [];
+  var displayStart = 0;
+
+  $(document).ready(function() {
+    resetInput();
+
+    oTable = $('#monthly_absences_table').dataTable( {
+      "aoColumnDefs": [ { "bSortable": false, "aTargets": [ 0 ] },
+        { "bVisible": false, "aTargets": [ 0 ] },
+        { "sClass": "center-text", "aTargets": [ 0, 4, 5, 6, 7 ] }
+      ],
+      "aoColumns":    [ { "sName": "id" },
+        { "sName": "name" },
+        { "sName": "department" },
+        { "sName": "division" },
+        { "sName": "present"},
+        { "sName": "leave"},
+        { "sName": "sick"},
+        { "sName": "awol"}
+      ],
+      "bFilter": false,
+      "bLengthChange": false,
+      "bInfo":false,
+      "bProcessing": false,
+      "bServerSide": true,
+      "iDisplayLength": 25,
+      "fnDrawCallback": function(){
+        $('#monthly_absences_table tbody tr td input').each(function (){
+          var iId = this ;
+          if ( jQuery.inArray(iId.value, gaiSelected) != -1 ){
+            $(this).attr( 'checked', true );
+            $(this).parent().parent().addClass('row_selected');
+          }
+          else{
+            $('#monthly_absences_table thead tr th input').attr('checked', false);
+          }
+        });
+        $('.dataTables_empty').parent().addClass('no-data');
+      },
+      "sAjaxSource":  "/absences/monthly_index_table",
+      "oLanguage": {
+        "sZeroRecords": "<div class='description center-text'>Data tidak ditemukan!</div>"
+      },
+      "fnServerData": function ( sSource, aoData, fnCallback ) {
+        /* Add some extra data to the sender */
+
+        aoData.push( { "name": "date_month", "value": $('#date_month').val() } );
+        aoData.push( { "name": "date_year", "value": $('#date_year').val() } );
+        aoData.push( { "name": "name", "value": $('#filter_name').val() } );
+        aoData.push( { "name": "department", "value": $('#filter_department').val() } );
+        aoData.push( { "name": "division", "value": $('#filter_division').val() } );
+        //          fnSetKey(aoData, "iDisplayStart", displayStart );
+        fnSetKey(aoData, "iDisplayStart", displayStart );
+        dataLength = fnGetKey(aoData, "iDisplayLength");
+        $.getJSON( sSource, aoData, function (json) {
+          if (json.iTotalDisplayRecords > 0){
+            $( '.paginationResult' ).html( parseInt(displayStart) + 1 +" - "+ (parseInt(json.iTotalDisplayRecords) + parseInt(displayStart)) +" dari <span id='total'>"+ json.iTotalRecords +"</span>");
+          }
+          else{
+            $( '.paginationResult' ).html("&nbsp;");
+          }
+          if (json.iTotalRecords < dataLength ){
+            $( '.pagination' ).hide();
+          } else{
+            $( '.pagination' ).show();
+          }
+          $('.result_filter').html($('#date_month option:selected').text()+" "+$('#date_year').val() );
+          fnCallback(json);
+          stop_filter();
+        });
+      }
+    } );
+
+    $('#monthly_absences_table tbody tr td input').live('click', function () {
+      var rowElement = $(this).parent().parent()
+      var iId = this;
+      if ( jQuery.inArray(iId.value, gaiSelected) == -1 ){
+        gaiSelected[gaiSelected.length++] = iId.value;
+        rowElement.addClass('row_selected');
+        $(iId).attr( 'checked', true );
+      }
+      else{
+        $(iId).attr( 'checked', false );
+        $('#monthly_absences_table thead tr th input').attr('checked', false);
+        rowElement.removeClass('row_selected');
+        gaiSelected = jQuery.grep(gaiSelected, function(value) {
+          return value != iId.value;
+        } );
+      }
+    } );
+
+    $('#monthly_absences_table thead tr th input').live('click', function () {
+      if ($(this).is(":checked")) {
+        $('#monthly_absences_table tbody tr td input').each(function (){
+          $(this).attr( 'checked', true );
+          $(this).parent().parent().addClass('row_selected');
+          var iId = this ;
+          if ( jQuery.inArray(iId.value, gaiSelected) == -1 ){
+            gaiSelected[gaiSelected.length++] = iId.value;
+          }
+        });
+      }
+      else{
+        $('#monthly_absences_table tbody tr').each(function (){
+          $(this).removeClass('row_selected');
+          var iId = $('#monthly_absences_table tbody tr td input');
+          gaiSelected = [];
+          iId.attr( 'checked', false );
+        });
+      }
+    } );
+
+    $('#remove_month_filter').click(function (e) {
+      e.preventDefault();
+      $(this).hide();
+      //$('#month_filter').show();
+      //$('#filter_button').show();
+      $('.result_filter').hide();
+      $('#date_month').val(<%= Date.today.month%>);
+      $('#date_year').val(<%= Date.today.year%>);
+      oTable.fnDraw();
+    });
+
+    $('#filter_button').click(function (e) {
+      e.preventDefault();
+      progress_filter();
+      $('#filter_show').show();
+      $('#filter_division').val();
+      oTable.fnDraw();
+      return false;
+    } );
+
+  });
+
+  function progress_filter(){
+     $("#ajax-load1").show();
+     $('#filter_button').hide();
+   }
+
+  function stop_filter(){
+    $("#ajax-load1").hide();
+    $('#filter_button').show();
+  }
+
+  function resetInput(){
+    $('#filter_select').val("2");
+    $('#date_month').val(<%= Date.today.month%>);
+    $('#date_year').val(<%= Date.today.year%>);
+    $('#month_filter').show();
+    $('#date_filter').hide();
+    $('.result_filter').hide();
+    $('#filter_button').show();
+    displayStart = 0;
+  }
+
+  function onLate(){
+    $(".kehadiran").colorbox({width:"700px",height:"auto", inline:true, href:"#popup_karyawan"});
+  }
+</script>

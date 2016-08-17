@@ -1,0 +1,54 @@
+<div id="left-sidebar" class="left-information">
+  <% file_name = "user.jpg" %>
+  <% unless @person.blank? %>
+    <% unless @person.id.blank? %>
+      <% unless @person.headshot.blank? %>
+        <% unless @person.headshot.url.blank? && @person.headshot.path.blank? %>
+          <% file_name = @person.headshot.url if File.exist?(@person.headshot.path.to_s)%>
+        <% end %>
+      <% end %>
+    <% end%>
+  
+  <%= image_tag(file_name , :class=>"photo") %>
+
+  <div class="modul-nama"><%= @person.full_name %></div>
+    <div class="modul">
+              <span class="modul-title">Perusahaan</span>
+              <p class="bold center-text"><%= current_company %></p>
+              <span class="clear"></span> 
+              <span class="modul-label">Bagian</span> <span class="modul-value">
+                <%= @person.current_employment.blank? ? "-" : @person.current_employment.division.blank? ? "-" : @person.current_employment.division.name  %>
+              </span>
+              <span class="clear"></span>
+              <span class="modul-label">Jabatan</span>  <span class="modul-value">
+                <%= @person.current_employment.blank? ? "-" : @person.current_employment.position.blank? ? "-" : @person.current_employment.position.position_name %></span>
+              <span class="clear"></span>
+              <span class="clear"></span><span class="modul-label">NIK</span>  <span class="modul-value"><%= @person.employee_identification_number %></span>
+              <span class="clear"></span>
+            </div>
+            <div class="modul">
+              <span class="modul-title">No KTP dan No NPWP</span>
+              <span class="modul-label">No KTP</span> <span class="modul-value"><%= @person.no_ktp.blank? ? "-" : @person.no_ktp %></span>
+              <span class="clear"></span>
+              <span class="modul-label">No NPWP</span> <span class="modul-value"><%= @person.no_npwp.blank? ? "-" : @person.no_npwp %></span>
+              <span class="clear"></span>
+            </div>
+            <div class="modul">
+              <span class="modul-title">Alamat</span>
+              <div class="bold left-text" style="margin-left:8px;">
+                <%= @person.addresses.first.street1 unless @person.addresses.blank? %> <br/>
+                <%= @person.addresses.first.city unless @person.addresses.blank?%> <%= ", #{@person.addresses.first.state.display}" unless @person.addresses.blank? %></div>
+              <span class="clear"></span>
+              <span class="modul-label">No Telp</span> <span class="modul-value"><%= @person.addresses.blank? ? "-" : @person.addresses.first.no_telp  %></span>
+              <span class="clear"></span>
+              <span class="modul-label">No HP</span> <span class="modul-value"><%= @person.no_hp.blank? ? "-" : @person.no_hp %></span>
+              <span class="clear"></span>
+            </div>
+            <div class="modul modul-last">
+              <span class="modul-title">Kontak darurat</span>
+              <span class="modul-label">No Telp</span>
+              <span class="modul-value"><%= @person.no_telp_kontak_darurat.blank? ? "-" : @person.no_telp_kontak_darurat %></span>
+            </div>
+        <div class="clear"></div>  <% end %>
+	</div>
+

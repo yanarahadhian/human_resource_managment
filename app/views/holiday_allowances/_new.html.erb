@@ -1,0 +1,55 @@
+<%= render :partial=> "layouts/shared/breadcrumbs" %>
+<%= render :partial => "layouts/howto_menu" %>
+<fieldset class="fm-table">
+  <legend> <a href="#" id="help_dash" class="icons help-top-icon" title="Click to show/hide information">&nbsp;</a>
+  THR Baru</legend>
+  <%= render :partial => "layouts/howto/howto_content"%>
+  
+  <% form_remote_for :date,
+    :url => new_holiday_allowance_path,
+    :html => { :id => 'filter_date' },
+    :method => :get,
+    :before => "$('#spinner-karyawan').show();$('.grey_button').hide();",
+    :complete => "$('#spinner-karyawan').hide();$('.grey_button').show();" do |f| %>
+    <fieldset class="header-chart fm-table">
+      <span class="input auto-size">
+        <label>Periode</label> :
+        <%= select_month(@filter_date, :prompt => 'Pilih Bulan')  %>
+        <%= select_year(@filter_date, :prompt => 'Pilih Tahun')  %>
+      </span>
+      <div class="clear"></div>
+      <span class="input">
+        <label>Karyawan</label>:
+        <%= text_field_tag 'person', nil, :id => "person-name" %>
+        <%= hidden_field_tag :person_id, :value => '' %>
+        <span id="spinner-karyawan" style="display:none">
+          <%= image_tag "/images/ajax-loader.gif" %>
+        </span>
+        <%= submit_tag "Go", :class => "grey_button" %>
+      </span>
+    </fieldset>
+  <% end %>
+  <div class="clear"></div>
+  
+
+  <div id ="person-details">
+<%#= render :partial => 'salaries/person_details' %>
+  </div>
+
+  <div id ="honor-details">
+    <% unless @person.blank? %>
+      <%= render :partial => 'thr_details'  %>
+    <% else %>
+      <div class="input-help-wide">
+        <label>Silahkan pilih Periode dan Karyawan yang akan dicetak THR-nya!</label>
+    </div>
+    <% end %>
+  </div>
+</fieldset>
+
+<script type="text/javascript">
+  $(document).ready(function(){
+    $("#person-name").autocomplete(ar_name);
+    removeNotifyMessage();
+  });
+</script>

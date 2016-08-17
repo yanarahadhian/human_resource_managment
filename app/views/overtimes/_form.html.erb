@@ -1,0 +1,86 @@
+<span class="input">
+  <label>Jenis lembur<span class="redstar">*</span></label>
+  <div id="lembur_lainnya" >
+  <select id="cblembur" onchange="javascript:change_lembur_lainnya()">
+    <option>Lembur Wajib</option>
+    <option>Long Shift</option>
+    <option>Lembur Lainnya</option>
+  </select>
+  </div>
+</span>
+<span class="clear"></span>
+
+<span class="input">
+  <label>Tanggal Lembur<span class="redstar">*</span></label>
+  <input type="text" id="datepicker">
+</span>
+<span class="clear"></span>
+
+<span class="input">
+  <label>Lama Lembur</label>
+  <input type="text"> Jam
+</span>
+<span class="clear"></span>
+
+<span class="input">
+  <label>Periode lembur</label>
+  <input type="text"> Hari
+</span>
+<span class="clear"></span>
+
+<span class="input">
+  <label>Assign lembur</label>
+  <select name="cbBagian" onchange="javascript:addGroup()">
+  <option>Spinning</option>
+  <option>Akunting</option>
+  <option>Printing</option>
+  <option>karu</option>
+  </select>
+</span>
+<span class="clear"></span>
+
+<div id="group">  
+</div>
+
+<script>
+
+  function addGroup() {
+    document.getElementById("group").innerHTML = "";
+    var strToAdd = '';
+    strToAdd += '<span class="input">';
+    strToAdd += '<label>Group :</label>';
+    strToAdd += '<select name="cbGroup">';
+    strToAdd += '<option>Group A</option>';
+    strToAdd += '<option>Group B</option>';
+    strToAdd += '<option>Group C</option>';
+    strToAdd += '<option>Group D</option>';
+    strToAdd += '</select>';
+    strToAdd += '</span>';
+    strToAdd += '<span class="clear"></span>';
+    $('#group').append(strToAdd);    
+  }
+
+  function change_lembur_lainnya(){
+    a = $('#cblembur').val();    
+    if (a == "Lembur Lainnya"){
+      document.getElementById("lembur_lainnya").innerHTML = "";
+      var strToAdd = '';
+      strToAdd += '<input type="text" name="txtLemburLainnya"><a href="#" onclick="javascript:change_to_cb_lembur()">close</a>'
+      $('#lembur_lainnya').append(strToAdd);
+    }
+  }
+
+  function change_to_cb_lembur(){
+    document.getElementById("lembur_lainnya").innerHTML = "";
+    var strToAdd = '';
+    strToAdd += '<select id="cblembur" onchange="javascript:change_lembur_lainnya()">';
+    strToAdd += '<option>Lembur Wajib</option>';
+    strToAdd += '<option>Long Shift</option>';
+    strToAdd += '<option>Lembur Lainnya</option>';
+    strToAdd += '</select>';
+    strToAdd += '</div>'
+    $('#lembur_lainnya').append(strToAdd);
+  }
+
+</script>
+           

@@ -1,0 +1,92 @@
+<script type="text/javascript">
+  $(".tablesorter").tablesorter({
+    widgets: ['zebra'],
+    headers: {
+      0: { sorter: false }
+    }
+  });
+  $("#coba").colorbox({width:"auto",height:"auto", inline:true,
+    href:"#sick_delete"});
+  $(document).ready(function(){
+<%= render :partial => "layouts/shared/tooltip_hr_setting" %>
+  });
+
+</script>
+<table id="cuti_sakit_table" class="tablesorter">
+  <thead>
+    <tr>
+      <th width="47" class="center-text"><%= check_box_tag("checkall", :id =>"checkall")%></th>
+      <th width="67" class="center-text"> Kode </th>
+      <th width="332" class="center-text"> Jenis Tidak Masuk </th>
+      <th width="338" class="center-text"> Maksimal Pengambilan Dalam 1 Tahun </th>
+      <th width="249" class="left-text"> Memotong Gaji </th>
+      <th width="249" class="left-text"> Memotong Tunjangan </th>
+      <th width="249" class="left-text"> Memotong Jatah Cuti Tahunan </th>
+    </tr>
+  </thead>
+
+  <tbody>
+
+    <%unless @leave.blank?%>
+      <% @leave.each  do |absence_type| %>
+        <tr id="<%= absence_type.id %>">
+          <td class="center"><%=  check_box_tag "delete_ids[]", absence_type.id, false%></td>
+          <td class="center">
+            <% unless absence_type.absence_type_code.blank? %>
+              <%=h absence_type.absence_type_code %>
+            <%  else %>
+              Tidak Ada Code
+            <% end %>
+          </td>
+          <td class="left-text"><%= link_to  h(absence_type.absence_type_name), "#sett/edit_cuti_sakit/#{absence_type.id.to_s}" %></td>
+          <td class="center-text"><%=h absence_type.quota.to_i %></td>
+          <td class="center-text">
+            <% if absence_type.is_salary_paid? %>
+              <%= "Tidak" %>
+            <%else%>
+            <%= "Ya" %>
+            <%end%>
+          </td>
+          <td class="center-text">
+            <% if absence_type.allowance_are_paid %>
+              <%= "Tidak" %>
+            <% else %>
+            <%= "Ya" %>
+            <% end %>
+          </td>
+          <td class="center-text">
+            <% if absence_type.count_as_leave %>
+              <%= "Ya" %>
+            <%else%>
+              <%= "Tidak" %>
+            <%end%>
+          </td>
+        </tr>
+      <%end %>
+    <%else%>
+      <tr class="no-data">
+        <td class="center-text" colspan="8">
+          <div class="description">Belum Ada Data Cuti dan Ijin Sakit. </div>
+          <div class="info">Silahkan  <%= link_to 'Tambah Data Cuti Atau Ijin Sakit', "#new_cuti_sakit" %> untuk menambah data</div>
+        </td>
+      </tr>
+    <%end%>
+
+  </tbody>
+</table>
+
+<div class="clear"></div>
+<div class="panelFilter">
+  <div class="pagination">
+    <% unless @leave.blank? %>
+      <span class="paginationResult">
+        <% a = format_paginate1(@leave, @per_page, @leave.total_entries,'cuti_sakit') %>
+        <%= a[:a] %> - <%= a[:b] %> dari <%= @leave.total_entries %>
+      </span>
+      <%= a[:paginate] %>
+    <% else %>
+      &nbsp;
+    <% end %>
+    <div class="clear"></div>
+  </div>
+</div>

@@ -1,0 +1,27 @@
+:backgroundrb:
+  :ip: 0.0.0.0
+  :port: 11207
+
+:development:
+  :backgroundrb:
+    :port: 11206
+    :environment: development
+    :debug_log: true
+    :persistent_disabled: false
+    :persistent_delay: 2
+
+:staging:
+  :backgroundrb:
+    :port: 11207
+    :environment: staging
+    :debug_log: true
+    :persistent_disabled: false
+    :persistent_delay: 10
+
+:production:
+  :backgroundrb:
+    :port: 11208
+    :environment: production
+    :debug_log: true
+    :persistent_disabled: false
+    :persistent_delay: 15

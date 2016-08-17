@@ -1,0 +1,181 @@
+## YAML Template.
+01:
+ id: 1
+ person_id: 1
+ violation_category: "Ringan"
+ violation_description: "Sering terlambat"
+ occurence_date: 2011_01_13
+ action_taken: "SP1"
+ active_until: 2011_12_01
+ person_in_charge_name: "Andi"
+ company_id: 1
+02:
+ id: 2
+ person_id: 2
+ violation_category: "Ringan"
+ violation_description: "Sering Ijin"
+ occurence_date: 2011_02_13
+ action_taken: "SP1"
+ active_until: 2011_12_01
+ person_in_charge_name: "Andi"
+ company_id: 1
+03:
+ id: 3
+ person_id: 2
+ violation_category: "Sedang"
+ violation_description: "Jarang masuk"
+ occurence_date: 2011_01_13
+ action_taken: "SP2"
+ active_until: 2011_11_01
+ person_in_charge_name: "Andi"
+ company_id: 1
+04:
+ id: 4
+ person_id: 2
+ violation_category: "Sedang"
+ violation_description: "Merusak properti kantor"
+ occurence_date: 2011_02_11
+ action_taken: "SP3"
+ active_until: 2011_11_01
+ person_in_charge_name: "Andi"
+ company_id: 1
+05:
+ id: 5
+ person_id: 3
+ violation_category: "Berat"
+ violation_description: "Mengformat server client tanpa ijin"
+ occurence_date: 2011_03_11
+ action_taken: "SP3"
+ active_until: 2011_10_01
+ person_in_charge_name: "Reacha"
+ company_id: 1
+06:
+ id: 6
+ person_id: 3
+ violation_category: "Ringan"
+ violation_description: "Security server kurang baik"
+ occurence_date: 2011_03_11
+ action_taken: "SP3"
+ active_until: 2011_10_01
+ person_in_charge_name: "Reacha"
+ company_id: 1
+07:
+ id: 7
+ person_id: 3
+ violation_category: "Ringan"
+ violation_description: "Ribut sesama tim"
+ occurence_date: 2011_02_11
+ action_taken: "SP2"
+ active_until: 2011_11_01
+ person_in_charge_name: "Vita"
+ company_id: 1
+10:
+ id: 10
+ person_id: 3
+ violation_category: "Sedang"
+ violation_description: "Sering mangkir"
+ occurence_date: 2011_03_11
+ action_taken: "SP1"
+ active_until: 2011_10_01
+ person_in_charge_name: "Rina hasim"
+ company_id: 1
+11:
+ id: 11
+ person_id: 4
+ violation_category: "Sedang"
+ violation_description: "Tidak ikut rapat dengan client"
+ occurence_date: 2011_03_11
+ action_taken: "SP2"
+ active_until: 2011_10_01
+ person_in_charge_name: "Rina hasim"
+ company_id: 1
+12:
+ id: 12
+ person_id: 5
+ violation_category: "Sedang"
+ violation_description: "Membuat client berhenti"
+ occurence_date: 2011_03_11
+ action_taken: "SP3"
+ active_until: 2011_10_01
+ person_in_charge_name: "Vita dewi"
+ company_id: 1
+13:
+ id: 13
+ person_id: 6
+ violation_category: "Sedang"
+ violation_description: "Klien kecewa dengan hasil kerja"
+ occurence_date: 2011_04_11
+ action_taken: "SP2"
+ active_until: 2011_10_01
+ person_in_charge_name: "Vita dewi"
+ company_id: 1
+14:
+ id: 14
+ person_id: 6
+ violation_category: "Sedang"
+ violation_description: "Klien kecewa dengan hasil kerja"
+ occurence_date: 2011_04_11
+ action_taken: "SP3"
+ active_until: 2011_10_01
+ person_in_charge_name: "Vita dewi"
+ company_id: 1
+15:
+ id: 15
+ person_id: 6
+ violation_category: "Sedang"
+ violation_description: "Kemampuan komunikasi kurang bagus"
+ occurence_date: 2011_04_11
+ action_taken: "SP3"
+ active_until: 2011_10_01
+ person_in_charge_name: "Vita dewi"
+ company_id: 1
+16:
+ id: 16
+ person_id: 6
+ violation_category: "Ringan"
+ violation_description: "Client berhenti"
+ occurence_date: 2011_03_11
+ action_taken: "SP3"
+ active_until: 2011_07_01
+ person_in_charge_name: "Vita dewi"
+ company_id: 1
+17:
+ id: 17
+ person_id: 6
+ violation_category: "Ringan"
+ violation_description: "Client kecewa dengan hasil kerja"
+ occurence_date: 2011_03_11
+ action_taken: "SP1"
+ active_until: 2011_07_01
+ person_in_charge_name: "Vita dewi"
+ company_id: 1
+18:
+ id: 18
+ person_id: 7
+ violation_category: "Ringan"
+ violation_description: "Server dimatikan"
+ occurence_date: 2011_03_11
+ action_taken: "SP2"
+ active_until: 2011_07_01
+ person_in_charge_name: "Vita dewi"
+ company_id: 1
+19:
+ id: 19
+ person_id: 8
+ violation_category: "Berat"
+ violation_description: "Pelanggaran "
+ occurence_date: 2011_03_11
+ action_taken: "SP2"
+ active_until: 2011_07_01
+ person_in_charge_name: "Vita dewi"
+ company_id: 1
+20:
+ id: 20
+ person_id: 9
+ violation_category: "Berat"
+ violation_description: "Pelanggaran "
+ occurence_date: 2011_03_11
+ action_taken: "SP3"
+ active_until: 2011_07_01
+ person_in_charge_name: "Vita dewi"
+ company_id: 1

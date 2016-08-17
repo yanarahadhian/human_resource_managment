@@ -1,0 +1,163 @@
+<%= render :partial=> "layouts/shared/breadcrumbs" %>
+<fieldset class="fm-table">
+  <legend>
+    <a href="#" id="help_dash" class="icons help-top-icon" title="Click to show/hide information">&nbsp;</a>
+    Rekap Lembur
+  </legend>
+  <%= render :partial => "layouts/howto/howto_content"%>
+  <div class="clear"></div>
+  <div class="box-form">
+    <div class="panelFilter">
+      <table cellpadding="0" cellspacing="0">
+        <tbody>
+          <tr>
+            <td>
+              <a class="grey_button2" id="filter_trigger_rekap_lembur">
+                <span class="icons filter-ico">&nbsp;</span> Filter
+              </a>
+              <span id="button-block-top_lembur">
+                <a class="grey_button2" id="export_lembur_xls">
+                  <span class="icons xls_ico">&nbsp;</span> Export to Excel
+                </a>
+                <%#*<a class="grey_button2" id="print_absence_report">%>
+                  <%#*<span class="icons print-icon">&nbsp;</span> Print%>
+                <%#*</a>%>
+              </span>
+            </td>
+          </tr>
+          <tr id="filter_block_rekap_lembur">
+            <td>
+            	<div class="expand_filter">
+                <div id="filter_st">
+                    <div class="left-filter auto-size">
+                      <div class="filter_opt">
+                        <label>Departemen:</label>
+                        <%= collection_select(:filter, :department, @departments, :id, :department_name, options ={:prompt => "Pilih Departemen"}, html_options = {:id => "rekap_lembur_department"}) %>
+                      </div>
+                      <div class="clear"></div>
+                      <div id="div_divisi_absensi">
+                        <div class="filter_opt">
+                          <label>Bagian:</label>
+                          <%= collection_select(:filter, :division, @divisions, :id, :name, options ={:prompt => "Pilih Bagian"}, html_options = {:id => "rekap_lembur_division"}) %>
+                        </div>
+                      </div>
+                      <div class="clear"></div>
+                      <div class="filter_opt">
+                        <label>Periode:</label>
+                        <%= text_field_tag "temp_lembur_date",{},{:style => "width:100px !important;"}%>
+                        <%= hidden_field_tag :date_start,{},{:id => "date_pick_lembur"} %>
+                        &nbsp; s.d. &nbsp;
+                        <%= text_field_tag "temp_lembur_date2",{},{:style => "width:100px !important;"}%>
+                        <%= hidden_field_tag :date_end,{},{:id => "date_pick_lembur2"} %>
+                      </div>
+                    </div>
+
+                    <div class="right-filter">
+                      <div class="filter_opt">
+                        <label style="width:190px">NIK:</label>
+                        <%= text_field_tag "nik" %>
+                      </div>
+                      <div class="clear"></div>
+                      <div class="filter_opt">
+                        <label style="width:190px">Nama Karyawan:</label>
+                        <%= text_field_tag "name" %>
+                      </div>
+                      <div class="clear"></div>
+                      <div class="filter_opt">
+                        <label style="width:190px">Status Kontrak:</label>
+                        <%= collection_select(:filter, :contract, @contract_types, :id, :contract_type_name, options ={:prompt => "Pilih status kontrak"}, html_options = {:id => "rekap_lembur_contract"}) %>
+                      </div>
+                      <div class="clear"></div>
+                    </div>
+                    <div class="clear"></div>
+                    <div class="center-text filter-btn" id="b1">
+                      <div class="center-text">
+                        <input type="button" class="grey_button2 none" value="Tampilkan" id="trigger_lembur"/>
+                      </div>
+                    </div>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="clear"></div>
+ 
+    <div id="overtime_report_page">
+      <%= render :partial => "/overtimes/overtime_report_lembur" %>
+    </div>
+
+</fieldset>
+<%= render :partial => "/absences/popup_pages/popup_export_report_lembur" %>
+
+<script type="text/javascript" >
+
+  $(document).ready(function() {
+    $('#filter_block_rekap_lembur').show();
+    $('#filter_trigger_rekap_lembur').addClass("filter-active")
+    $('#filter_trigger_rekap_lembur').click(function(){
+      $(this).toggleClass("filter-active");
+      $('#filter_block_rekap_lembur').toggle();
+    });
+    $('.expand_filter .reset-filter-ico').click(function(){
+      $('#filter_block_rekap_lembur').hide();
+      $('#filter_trigger_rekap_lembur').removeClass("filter-active");
+    });
+    $('#rekap_lembur_division').attr('disabled', 'disabled');
+    $("#date_pick_lembur").datepicker({
+      altField: '#temp_lembur_date',
+      altFormat: 'dd/mm/yy',
+      dateFormat: 'yy-mm-dd',
+      maxDate: '+0',
+      buttonImageOnly: true
+    });
+    $("#date_pick_lembur2").datepicker({
+      altField: '#temp_lembur_date2',
+      altFormat: 'dd/mm/yy',
+      dateFormat: 'yy-mm-dd',
+      buttonImageOnly: true,
+      maxDate: '+0'
+    });
+    $("#popup_lembur_date_pick").datepicker({
+      altField: '#popup_lembur_temp_date',
+      altFormat: 'dd/mm/yy',
+      dateFormat: 'yy-mm-dd',
+      buttonImageOnly: true,
+      maxDate: '+0'
+    });
+    $("#popup_lembur_date_pick2").datepicker({
+      altField: '#popup_lembur_temp_date2',
+      altFormat: 'dd/mm/yy',
+      dateFormat: 'yy-mm-dd',
+      buttonImageOnly: true,
+      maxDate: '+0'
+    });
+
+    $('#date_pick_lembur').datepicker("setDate",<%="#{Date.today.strftime("%d/%m/%Y")}"%>);
+    $('#date_pick_lembur2').datepicker("setDate",<%="#{Date.today.strftime("%d/%m/%Y")}"%>);
+
+    $("#export_lembur_xls").colorbox({width:"auto",height:"auto", inline:true, href:"#popup_export_report_lembur",
+      onComplete: function(){
+        $('#popup_lembur_date_pick').datepicker("setDate",$('#date_pick_lembur').val());
+        $('#popup_lembur_date_pick2').datepicker("setDate",$('#date_pick_lembur2').val());
+      },
+      onClosed: function(){
+      }
+    });
+
+    $('#rekap_lembur_department').change(function() {
+      if($(this).val()==""){$('#rekap_lembur_division').attr('disabled', 'disabled');}else{$('#rekap_lembur_division').removeAttr('disabled');}
+      $.get("/absences/divisions_by_department", {id: $(this).val()}, null, "script");
+    });
+    //
+    $('#button-block-top_lembur, #rekap_lembur').hide();
+    $('#trigger_lembur').click(function(){
+      $('#button-block-top_lembur, #rekap_lembur').show();
+      oTable.fnDraw();
+    });
+
+  });
+
+</script>

@@ -1,0 +1,206 @@
+01:
+  id: 1
+  firstname: "Aryani"
+  lastname: "Rojiah"
+  employee_identification_number: "123456"
+  company_id: 1
+  no_ktp: "234124215443534"
+  no_npwp: "23543346543432"
+  city_of_birth: "Bandung"
+  birth_date: "1989-02-12"
+  religion: "islam"
+  marital_status: "nikah"
+  no_hp: "08123432566343"
+  nama_kontak_darurat: "Mardhani"
+  no_telp_kontak_darurat: "0813453453212"
+  token_string: "wudwljgnaklcnsavuztqnlufqfubqkkqysgewgyi"
+  color_blind: "tidak"
+  employment_date: 2011-01-01
+  blood_type: "A"
+  height_in_cm: 160
+  weight_in_kg: 60
+  company_id: 1
+  gender: "wanita"
+  latest_employment_id: 3
+02:
+  id: 2
+  firstname: "Angle"
+  lastname: "Vitoriani"
+  employee_identification_number: "123457"
+  company_id: 1
+  employment_date: "2011-01-01"
+  color_blind: "Ya"
+  blood_type: "A"
+  height_in_cm: 165
+  weight_in_kg: 61
+  company_id: 1
+  gender: "pria"
+  latest_employment_id: 8
+03:
+  id: 3
+  firstname: "Yeti"
+  lastname: "Nurhayati"
+  employee_identification_number: "123458"
+  company_id: 1
+  gender: "wanita"
+  latest_employment_id: 12
+  employment_date: 2011-02-05
+04:
+  id: 4
+  firstname: "Acun"
+  lastname: "Muchtar"
+  employee_identification_number: "123459"
+  company_id: 1
+  gender: "pria"
+  latest_employment_id: 14
+  employment_date: 2011-02-01
+05:
+  id: 5
+  firstname: "Dadan"
+  lastname: "Supyani"
+  employee_identification_number: "123460"
+  company_id: 1
+  gender: "pria"
+  latest_employment_id: 15
+  employment_date: 2011-02-01
+06:
+  id: 6
+  firstname: "Vita"
+  lastname: "Dewi"
+  employee_identification_number: "123461"
+  company_id: 1
+  user_id: 1
+  no_ktp: "0910111213141516"
+  no_npwp: "23543346543432"
+  city_of_birth: "Bandung"
+  birth_date: "1989-08-09"
+  religion: "islam"
+  marital_status: "belum menikah"
+  no_hp: "08123432566343"
+  nama_kontak_darurat: "Wardhani"
+  no_telp_kontak_darurat: "0813453453212"
+  color_blind: "tidak"
+  blood_type: "O"
+  height_in_cm: 160
+  weight_in_kg: 50
+  tax_status_id: 1
+  gender: "pria"
+  latest_employment_id: 16
+  employment_date: 2010-03-01
+07:
+  id: 7
+  firstname: "Anggi"
+  lastname: "Permana"
+  employee_identification_number: "1234462"
+  company_id: 1
+  gender: "pria"
+  latest_employment_id: 18
+  employment_date: 2010-03-01
+10:
+  id: 10
+  firstname: "Alex"
+  lastname: "Nuralam"
+  employee_identification_number: "1234465"
+  company_id: 1
+  gender: "pria"
+  latest_employment_id: 20
+  employment_date: 2010-01-05
+11:
+  id: 11
+  firstname: "Ayu"
+  lastname: "Ratna"
+  employee_identification_number: "1234466"
+  company_id: 1
+  gender: "wanita"
+  latest_employment_id: 25
+  employment_date: 2010-01-07
+12:
+  id: 12
+  firstname: "Steven"
+  lastname: "Richard"
+  employee_identification_number: "1234467"
+  company_id: 1
+  gender: "pria"
+  latest_employment_id: 27
+  employment_date: 2010-01-07
+13:
+  id: 13
+  firstname: "Andi"
+  lastname: "Albar"
+  employee_identification_number: "1234468"
+  company_id: 1
+  gender: "pria"
+  latest_employment_id: 30
+  employment_date: 2010-01-07
+14:
+  id: 14
+  firstname: "Trisna"
+  lastname: "Angga"
+  employee_identification_number: "1234469"
+  company_id: 1
+  gender: "pria"
+  latest_employment_id: 31
+  employment_date: 2011-06-07
+15:
+  id: 15
+  firstname: "Risma"
+  lastname: "Anti"
+  employee_identification_number: "1234470"
+  company_id: 1
+  gender: "wanita"
+  latest_employment_id: 33
+  employment_date: 2011-02-07
+16:
+  id: 16
+  firstname: "Nuralam"
+  lastname: "Sahril"
+  employee_identification_number: "1234471"
+  company_id: 1
+  gender: "wanita"
+  latest_employment_id: 35
+  employment_date: 2011-03-10
+17:
+  id: 17
+  firstname: "Ari"
+  lastname: "sihasale"
+  employee_identification_number: "1234472"
+  company_id: 1
+  gender: "wanita"
+  latest_employment_id: 38
+  employment_date: 2011-01-10
+18:
+  id: 18
+  firstname: "Ari"
+  lastname: "sihasale"
+  employee_identification_number: "1234472"
+  company_id: 1
+  gender: "wanita"
+  latest_employment_id: 40
+  employment_date: 2011-03-10
+19:
+  id: 19
+  firstname: "Ari"
+  lastname: "sihasale"
+  employee_identification_number: "1234472"
+  company_id: 1
+  gender: "wanita"
+  latest_employment_id: 42
+  employment_date: 2011-02-10
+20:
+  id: 20
+  firstname: "Ari"
+  lastname: "sihasale"
+  employee_identification_number: "1234472"
+  company_id: 1
+  gender: "wanita"
+  latest_employment_id: 44
+  employment_date: 2011-02-10
+21:
+  id: 21
+  firstname: "Ari"
+  lastname: "sihasale"
+  employee_identification_number: "1234472"
+  company_id: 1
+  gender: "wanita"
+  latest_employment_id: 46
+  employment_date: 2011-02-10

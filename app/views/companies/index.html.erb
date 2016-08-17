@@ -1,0 +1,25 @@
+<%= render :partial => 'layouts/home_frame'%>
+
+<div class="admin-list">
+  <p class="title">List Perusahaan</p>
+
+  <%= link_to 'Tambah perusahaan', new_company_path %>
+  <table>
+    <thead>
+      <tr>
+        <th>Nama Perusahaan</th>
+        <th>Ruang industri</th>
+        <th>Aksi</th>
+      </tr>
+    </thead>
+
+  <% @companies.each do |company| %>
+    <tr>
+      <td><%=h company.company_name %></td>
+      <td><%=h company.company_industry %></td>
+      <td><%= link_to 'Edit', edit_company_path(company) %> | <%= link_to 'Destroy', company, :confirm => 'Apakah kamu yakin ?', :method => :delete %></td>
+    </tr>
+  <% end %>
+  </table>
+
+</div>	

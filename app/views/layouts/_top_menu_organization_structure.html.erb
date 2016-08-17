@@ -1,0 +1,44 @@
+<!-- TODO: Make it DRY!
+  Condition not needed when use an ajax.
+  Class can be added on it ajax function
+-->
+<%= render :partial => "layouts/howto_menu" %>
+<br />
+<div class="companyTab">
+  <ul class="left">
+    <% if current_features.include?('department_index') %>
+      <% if controller_name == "departments" %>
+        <li><a href="#organization_structure/departments"  class="active department">Departemen</a></li>
+      <% else %>
+        <li><%= link_to "Departemen","#organization_structure/departments", :class=> "department"%> </li>
+      <% end %>
+    <% end %>
+
+    <% if current_features.include?('division_index') %>
+      <% if controller_name == "divisions" %>
+        <li><a href="#organization_structure/divisions"  class="active bagian">Bagian</a></li>
+      <% else %>
+        <li><%= link_to "Bagian", "#organization_structure/divisions", :class => "division_menu", :class => "bagian"%> </li>
+      <% end %>
+    <% end %>
+
+    <% if current_features.include?('group_index') %>
+      <% if controller_name == "work_groups" %>
+        <li><a href="#organization_structure/work_groups"  class="active group">Group</a></li>
+      <% else %>
+        <li><%= link_to "Group", "#organization_structure/work_groups", :class => "group"%></li>
+      <% end %>
+    <% end %>
+
+    <% if current_features.include?('position_index') %>
+      <% if controller_name == "positions" %>
+        <li><a href="#organization_structure/positions"  class="active position">Jabatan</a></li>
+      <% else %>
+        <li><%= link_to "Jabatan", "#organization_structure/positions", :class => "position" %> </li>
+      <% end %>
+    <% end %>
+
+  </ul>
+</div>
+<span class="clear"></span>
+

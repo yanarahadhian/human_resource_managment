@@ -1,0 +1,16 @@
+<div class="companyTab">
+  <ul class="left">
+    <% if action_name=="index" %>
+      <li><a href="#"  class="active">Scheduling</a></li>
+    <% else %>
+      <li><a href="<%= schedules_path %>" onclick="ajaxLoad('<%= schedules_path %>')" style="top: -5px">Scheduling</a></li>
+    <% end %>
+
+    <% if action_name=="layout_schedule" %>
+      <li><a href="#"  class="active">layout scheduling</a></li>
+    <% else %>
+      <li><a href="<%= layout_schedule_path %>" onclick="ajaxLoad('<%= layout_schedule_path %>')" s>layout scheduling</a></li>
+    <% end %>
+  </ul>
+</div>
+<span class="clear"></span>

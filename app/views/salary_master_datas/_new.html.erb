@@ -1,0 +1,40 @@
+<fieldset class="fm-table">
+ <legend> <a href="#" id="help_dash" class="icons help-top-icon" title="Click to show/hide information">&nbsp;</a> Tambah Master Gaji</legend>
+  <%= render :partial => "layouts/howto/howto_content"%>
+  <div class="input-data">
+    <div class="box-form">
+      <div class="input-help">
+        <label>Field dengan tanda <span class="redstar">*</span> harus diisi</label>
+      </div>
+      <div id="box_retur_0">
+        <% form_remote_for @data_master_salary, :url => {:action => "create"} do |f| %>
+          <div class="fifty-fifty">
+            <%= render :partial => 'form_new_master_salary', :locals => {:f => f} %>
+            <div class="center-text">
+              <%= render :partial => "layouts/button_loader"  %>
+              <div id="button" class="block-btn-form">
+                <input id="info_section_cancel_basic" class="grey_button" type="reset" value="Batal" name="info_section_cancel_basic" onclick="onCancel('#salary_master_datas')"/>
+                <input type="submit" value="Simpan" name="info_section_save_basic" id="info_section_save_basic" class="blue_button" onclick="ajaxLoad1('button','ajax-load1')"/>
+              </div>
+            </div>
+          </div>
+        <% end-%>
+      </div>
+    </div>
+  </div>
+</fieldset>
+
+<script type="text/javascript">
+  $(document).ready(function(){
+    $("#person-name").autocomplete(ar_name);
+    $( ".ui-date" ).datepicker({
+      yearRange: '1939:' + endyear,
+        buttonImageOnly: true
+      })
+   });
+
+  function ajaxLoad1(div_btn, div_load){
+    $("#" + div_load + "").show();
+    $("#" + div_btn + "").hide();
+  }
+</script>

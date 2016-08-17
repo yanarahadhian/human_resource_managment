@@ -1,0 +1,225 @@
+<%= render :partial=> "layouts/shared/breadcrumbs" %>
+<fieldset class="fm-table">
+  <legend><a href="#" id="help_dash" class="icons help-top-icon" title="Click to show/hide information">&nbsp;</a>
+   Data Karyawan</legend>
+  <%= render :partial => "layouts/howto/howto_content"%>
+  <%= render :partial => 'layouts/profile_frame'%>
+  <div class="right-information">
+    <%= render :partial=>"layouts/top_menu_detail_karyawan" %>
+    <div id="content-dynamic">
+      <div class="fm-table2">
+        <!-- Riwayat Pendidikan -->
+        <%= render :partial => "layouts/delete_message" %>
+        <fieldset class="fm-table-notab">
+          <legend>
+            <a id="trigger_pendidikan"><span class="icons drop_arrow_ico" id="arrow1">&nbsp;</span>Riwayat Pendidikan</a>
+          </legend>
+          <div class="kategori-transaksi" id="riwayat_pendidikan">
+            <%= render :partial => "riwayat_pendidikan" %>
+          </div>
+        </fieldset>
+        <!-- End Riwayat Pendidikan -->
+          
+        <!-- Riwayat Pekerjaan -->
+
+        <fieldset class="fm-table-notab">
+          <legend>
+            <a id="trigger_pekerjaan"><span class="icons arrow_ico" id="arrow2">&nbsp;</span>Riwayat Pekerjaan</a>
+          </legend>
+          <div class="kategori-transaksi" id="riwayat_pekerjaan">
+            <%= render :partial=>"riwayat_pekerjaan"  %>
+          </div>
+        </fieldset>
+
+        <!-- End Riwayat Pekerjaan -->
+
+        <!-- Riwayat Organisasi -->
+
+        <fieldset class="fm-table-notab">
+          <legend>
+            <a id="trigger_organisasi"><span class="icons arrow_ico" id="arrow3">&nbsp;</span>Riwayat Organisasi</a>
+          </legend>
+          <div class="kategori-transaksi" id="riwayat_organisasi">
+            <%= render :partial =>"riwayat_organisasi" %>
+
+          </div>
+        </fieldset>
+
+        <fieldset class="fm-table-notab">
+          <legend>
+            <a id="trigger_sertifikasi"><span class="icons arrow_ico" id="arrow4">&nbsp;</span>Data Sertifikasi/Penghargaan</a>
+          </legend>
+          <div class="kategori-transaksi" id="data_sertifikasi">
+            <div id="div_riwayat_penghargaan">
+              <%= render :partial =>"riwayat_penghargaan" %>
+            </div>
+
+          </div>
+        </fieldset>
+
+      </div>
+    </div>
+  </div>
+</fieldset>
+<script type="text/javascript">
+   
+  $(document).ready(function(){
+    removeNotifyMessage();
+    $('#riwayat_pendidikan, #riwayat_pekerjaan, #riwayat_organisasi, #data_sertifikasi').hide();
+
+    <% unless params[:save].blank? %>
+      <% if params[:save] == "create_education" %>
+        $('.notify_error').show();$('.message').html('Data riwayat pendidikan berhasil ditambahkan');
+      <% elsif params[:save] == "update_education" %>
+        $('.notify_error').show();$('.message').html('Data riwayat pendidikan berhasil diupdate');
+      <% elsif params[:save] == "create_experience" %>
+      <% if params[:tab] == "2" %>
+          $('.notify_error').show();$('.message').html('Data riwayat pekerjaan berhasil ditambahkan');
+      <% elsif params[:tab] == "3" %>
+          $('.notify_error').show();$('.message').html('Data riwayat organisasi berhasil ditambahkan');
+      <% end %>
+      <% elsif params[:save] == "update_experience" %>
+        <% if params[:tab] == "2" %>
+          $('.notify_error').show();$('.message').html('Data riwayat pekerjaan berhasil diupdate');
+        <% elsif params[:tab] == "3" %>
+          $('.notify_error').show();$('.message').html('Data riwayat organisasi berhasil diupdate');
+        <% end %>
+      <% end %>
+    <% end %>
+
+    <% if params[:tab]=="2" %>
+      $('#riwayat_pekerjaan').show();
+      $('#arrow2').removeClass('icons arrow_ico');
+      $('#arrow2').addClass('icons drop_arrow_ico');
+      $('#arrow1').removeClass('icons drop_arrow_ico');
+      $('#arrow1').addClass('icons arrow_ico');
+    <% elsif params[:tab]=="3" %>
+      $('#riwayat_organisasi').show();
+      $('#arrow3').removeClass('icons arrow_ico');
+      $('#arrow3').addClass('icons drop_arrow_ico');
+      $('#arrow1').removeClass('icons drop_arrow_ico');
+      $('#arrow1').addClass('icons arrow_ico');
+      $('#arrow2').removeClass('icons drop_arrow_ico');
+      $('#arrow2').addClass('icons arrow_ico');
+    <% elsif params[:tab]=="4" %>
+      $('#data_sertifikasi').show();
+      $('#arrow4').removeClass('icons arrow_ico');
+      $('#arrow4').addClass('icons drop_arrow_ico');
+      $('#arrow1').removeClass('icons drop_arrow_ico');
+      $('#arrow1').addClass('icons arrow_ico');
+    <% else %>
+      $('#riwayat_pendidikan').show();
+      $('#arrow1').removeClass('icons arrow_ico');
+      $('#arrow1').addClass('icons drop_arrow_ico');
+    <% end %>
+
+    $('#trigger_pendidikan').click(function(){
+      if($('#riwayat_pendidikan').is(':hidden')){
+        $('#riwayat_pendidikan').show();
+        $('#arrow1').removeClass('icons arrow_ico');
+        $('#arrow1').addClass('icons drop_arrow_ico');
+      }else{
+        $('#riwayat_pendidikan').hide();
+        $('#arrow1').removeClass('icons drop_arrow_ico');
+        $('#arrow1').addClass('icons arrow_ico');
+      }
+    });
+
+    $('#trigger_pekerjaan').click(function(){
+      if($('#riwayat_pekerjaan').is(':hidden')){
+        $('#riwayat_pekerjaan').show();
+        $('#arrow2').removeClass('icons arrow_ico');
+        $('#arrow2').addClass('icons drop_arrow_ico');
+      }else{
+        $('#riwayat_pekerjaan').hide();
+        $('#arrow2').removeClass('icons drop_arrow_ico');
+        $('#arrow2').addClass('icons arrow_ico');
+      }
+    });
+
+    $('#trigger_organisasi').click(function(){
+      if($('#riwayat_organisasi').is(':hidden')){
+        $('#riwayat_organisasi').show();
+        $('#arrow3').removeClass('icons arrow_ico');
+        $('#arrow3').addClass('icons drop_arrow_ico');
+      }else{
+        $('#riwayat_organisasi').hide();
+        $('#arrow3').removeClass('icons drop_arrow_ico');
+        $('#arrow3').addClass('icons arrow_ico');
+      }
+    });
+
+    $('#trigger_sertifikasi').click(function(){
+      if($('#data_sertifikasi').is(':hidden')){
+        $('#data_sertifikasi').show();
+        $('#arrow4').removeClass('icons arrow_ico');
+        $('#arrow4').addClass('icons drop_arrow_ico');
+      }else{
+        $('#data_sertifikasi').hide();
+        $('#arrow4').removeClass('icons drop_arrow_ico');
+        $('#arrow4').addClass('icons arrow_ico');
+      }
+    });
+  });
+
+  function onDelete(sign){
+     if (sign==1){
+        onDelete_pendidikan();
+     } else if (sign==2){
+        onDelete_pekerjaan();
+     } else if (sign==3){
+        onDelete_organisasi();
+     }
+   }
+
+   function onDelete_pendidikan(){
+      var arr_params = new Array();
+      $('#education_table tbody input:checked').each(function() {
+        arr_params = arr_params.concat($(this).val());
+      });
+      if (arr_params.length > 0){
+        $('#div_sign').html('pendidikan');
+        $('#div_btn_hapus').html('<input type="button" value="Ya" class="blue_button" onclick="delete_pendidikan()"/>');
+        jQuery().colorbox({width:"auto",height:"auto", inline:true,href:"#message_delete",
+          onClosed:function(){
+          }
+        });
+      }else{
+        return false;
+      }
+    }
+
+    function onDelete_pekerjaan(){
+      var arr_params = new Array();
+      $('#work_table tbody input:checked').each(function() {
+        arr_params = arr_params.concat($(this).val());
+      });
+      if (arr_params.length > 0){
+        $('#div_sign').html('pekerjaan');
+        $('#div_btn_hapus').html('<input type="button" value="Ya" class="blue_button" onclick="delete_pekerjaan()"/>');
+        jQuery().colorbox({width:"auto",height:"auto", inline:true,href:"#message_delete",
+          onClosed:function(){
+          }
+        });
+      }else{
+        return false;
+      }
+    }
+
+    function onDelete_organisasi(){
+      var arr_params = new Array();
+      $('#org_table tbody input:checked').each(function() {
+        arr_params = arr_params.concat($(this).val());
+      });
+      if (arr_params.length > 0){
+        $('#div_sign').html('organisasi');
+        $('#div_btn_hapus').html('<input type="button" value="Ya" class="blue_button" onclick="delete_organisasi()"/>');
+        jQuery().colorbox({width:"auto",height:"auto", inline:true,href:"#message_delete",
+          onClosed:function(){
+          }
+        });
+      }else{
+        return false;
+      }
+    }
+</script>

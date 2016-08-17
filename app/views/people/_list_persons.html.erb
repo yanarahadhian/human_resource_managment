@@ -1,0 +1,110 @@
+<%= javascript_include_tag  'pagination' %>
+<%= render :partial => "people/people_script" %>
+<img alt="spinner" id="spinner" src="<%=  ApplicationController::APPSCHEF_URL %>/images/ajax-loader.gif" style="display:none" />
+<table id="person_table" class="tablesorter" width="100%">
+  <thead>
+    <tr>
+      <th><input type="checkbox" /></th>
+      <th class="left-text">
+        <span class="left"><%= sortable "NIK" %></span><span class="icons sorter_ico">&nbsp;</span>
+      </th>
+      <th class="left-text">
+        <span class="left"><%= sortable "nama" %></span>
+        <span class="icons sorter_ico">&nbsp;</span>
+      </th>
+      <th class="left-text">Status Kerja</th>
+      <th class="left-text">Habis Kontrak</th>
+      <th class="left-text">Jabatan</th>
+      <th class="left-text">Departemen</th>
+      <th class="left-text">Shift</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% if @people.total_entries ==0 %>
+      <tr class="no-data">
+        <td colspan="10" class="center-text">
+          <div class="description">
+            <% if params[:filter] %>
+              Data Tidak Ditemukan
+            <% else %>
+              Belum Ada Data karyawan
+            <% end %>
+          </div>
+          <div class="info">
+            <% if params[:filter] %>
+              Silahkan <a id="import2" onclick="onBtnReset('/reset_list_index')"> Reset Filter</a> atau rubah nilai parameter filter Anda
+            <% else %>
+              Silahkan klik<a id="import2" href="#person_new"> Tambah Karyawan</a> untuk menambah data
+            <% end %>
+          </div>
+        </td>
+      </tr>
+    <% else %>
+      <% @people.each do |p| %>
+        <tr>
+          <td class="center-text">
+            <%= check_box_tag'myrow[ids][]', p.id, false ,:id => "myrow_ids_#{p.id}" %>
+          </td>
+          <td class="left-text"><%= link_to p.employee_identification_number, "#people/#{p.id}?tab=0" %></td>
+          <!--<td><%= link_to_if current_features.include?('employee_details'),  p.employee_identification_number, "#people/#{p.id}?tab=0" %></td>-->
+          <td class="left-text"><%= link_to p.full_name, "#people/#{p.id}?tab=0"%></td>
+          <td>
+            <% unless p.current_status.blank? %>
+              <%= p.current_status.contract_type.blank? ? "-" : p.current_status.contract_type.contract_type_name   %>
+            <% else %>
+              -
+            <% end %>
+          </td>
+          <% curr_contract = p.current_work_contract %>
+          <% unless curr_contract.blank? %>
+            <td class="right-text">
+              <%= curr_contract.contract_end.blank? ? "" : curr_contract.contract_end.strftime("%d/%m/%Y") %>
+            </td>
+          <% else %>
+            <td class="left-text">
+              <a id="no_contract_id_<%= p.id %>" style="color: red;">Belum ada kontrak</a>
+              <%= render :partial => "layouts/jquery_tooltip", :locals => {:link=>"no_contract_id_#{p.id}", :list=>"list_no_contract_id"} %>              
+            </td>
+          <% end %>          
+          <td class="left-text">
+            <%= p.current_employment.blank? ? "-" : p.current_employment.position.blank? ? "-" : p.current_employment.position.position_name %></td>
+          <td class="left-text">
+            <%= p.current_employment.blank? ? "-" : p.current_employment.department.blank? ? "-" : p.current_employment.department.department_name %>
+          </td>
+          <td class="left-text">
+            <%= p.employee_shifts.blank? ? "-" : p.employee_shifts.collect{|u| u.shift.shift_name if u.is_active && !u.shift.blank?} %>
+          </td>
+        </tr>
+      <% end %>
+    <% end %>
+  </tbody>
+</table>
+<div class="panelFilter">
+  <div class="pagination">
+    <% if @people.count > 0 %>
+      <span class="paginationResult">
+        <% a = format_paginate1(@people, @per_page, @people.total_entries) %>
+        <%= a[:a] %> - <%= a[:b] %> dari <%= @people.total_entries %>
+      </span>
+      <%= a[:paginate] %>
+    <% else %>
+      &nbsp;
+    <% end %>
+    <div class="clear"></div>
+  </div>
+</div>
+
+<div id="list_no_contract_id" class="list" style="display: none; ">
+  <ul>
+    <li style="cursor: default; list-style-image: none;">
+      Kontrak diperlukan untuk menentukan jatah cuti, biaya jabatan, dsb.
+    </li>
+  </ul>
+</div>
+
+<script type="text/javascript">
+
+  $(document).ready(function(){
+  });
+  
+</script>

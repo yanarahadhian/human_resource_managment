@@ -1,0 +1,714 @@
+<%= render :partial=> "layouts/shared/breadcrumbs" %>
+<%= render :partial => "layouts/howto_menu" %>
+
+<fieldset class="fm-table">
+  <legend><a href="#" id="help_dash" class="icons help-top-icon" title="Click to show/hide information">&nbsp;</a>
+   Edit Shift</legend>
+  <%= render :partial => "layouts/howto/howto_content"%>
+  
+  <div class="box-form">
+    <% input_kd_shift = "input" %>
+    <% err_kd_shift =  error_message_on @work_time, :shift_code %>
+    <% input_kd_shift = "input-error" unless err_kd_shift.blank? %>
+
+    <% input_name = "input" %>
+    <% err_name =  error_message_on @work_time, :shift_name %>
+    <% input_name = "input-error" unless err_name.blank? %>
+
+    <% form_remote_for @work_time,  :url =>  shift_path do |f| %>
+      <% hidden_field_tag "id" ,  @work_time.id.to_s %>
+      <%
+      unless  @work_time.monday_time.nil?
+        break_time_1 = @work_time.monday_time.break_length_in_minutes
+        break_per_hour_1 = @work_time.monday_time.break_per_hour_in_minutes
+        compulsory_1 = @work_time.monday_time.compulsory_overtime_in_minutes
+      else
+        break_time_1 = 0
+        break_per_hour_1 = 0
+        compulsory_1 = 0
+      end
+      unless @work_time.tuesday_time.nil?
+        break_time_2 = @work_time.tuesday_time.break_length_in_minutes
+        compulsory_2 = @work_time.tuesday_time.compulsory_overtime_in_minutes
+        break_per_hour_2 = @work_time.tuesday_time.break_per_hour_in_minutes
+      else
+        break_time_2 = 0
+        break_per_hour_2 = 0
+        compulsory_2 = 0
+      end
+      unless @work_time.wednesday_time.nil?
+        break_time_3 = @work_time.wednesday_time.break_length_in_minutes
+        compulsory_3 = @work_time.wednesday_time.compulsory_overtime_in_minutes
+        break_per_hour_3 = @work_time.wednesday_time.break_per_hour_in_minutes
+      else
+        break_time_3 = 0
+        break_per_hour_3 = 0
+        compulsory_3 = 0
+      end
+      unless @work_time.thursday_time.nil?
+        break_time_4 = @work_time.thursday_time.break_length_in_minutes
+        compulsory_4 = @work_time.thursday_time.compulsory_overtime_in_minutes
+        break_per_hour_4 = @work_time.thursday_time.break_per_hour_in_minutes
+      else
+        break_time_4 = 0
+        break_per_hour_4 = 0
+        compulsory_4 = 0
+      end
+      unless @work_time.friday_time.nil?
+        break_time_5 = @work_time.friday_time.break_length_in_minutes
+        compulsory_5 = @work_time.friday_time.compulsory_overtime_in_minutes
+        break_per_hour_5 = @work_time.friday_time.break_per_hour_in_minutes
+      else
+        break_time_5 = 0
+        break_per_hour_5 = 0
+        compulsory_5 = 0
+      end
+      unless @work_time.saturday_time.nil?
+        break_time_6 = @work_time.saturday_time.break_length_in_minutes
+        compulsory_6 = @work_time.saturday_time.compulsory_overtime_in_minutes
+        break_per_hour_6 = @work_time.saturday_time.break_per_hour_in_minutes
+      else
+        break_time_6 = 0
+        break_per_hour_6 = 0
+        compulsory_6 = 0
+      end
+      unless @work_time.sunday_time.nil?
+        break_time_7 = @work_time.sunday_time.break_length_in_minutes
+        compulsory_7 = @work_time.sunday_time.compulsory_overtime_in_minutes
+        break_per_hour_7 = @work_time.sunday_time.break_per_hour_in_minutes
+      else
+        break_time_7 = 0
+        break_per_hour_7 = 0
+        compulsory_7 = 0
+      end
+    %>
+      <div class="left fifty-fifty">
+        <div class="input">
+          <span class="input-field width370">
+            <label>Nama shift <span class="redstar">*</span></label><span class="left">&nbsp;</span>
+            <%=  text_field_tag :shift_name, h(@work_time.shift_name) %>
+            <%= err_name %>
+          </span>
+          <div class="clear"></div>
+          
+            <span class="input-field width370">
+              <label>Jenis shift</label><span class="left">&nbsp;</span>
+              <%= select_tag :shift_category, options_for_select([["Shift", "Shift"], ["Non-Shift", "Non-Shift"],
+                  ["Shift Driver", "Shift Driver"],['Shift Satpam', 'Shift Satpam']],(@work_time.shift_category).to_s  )%>
+            </span>
+       
+          <div class="clear"></div>
+          <span class="input-field width370">
+            <label>Kode shift<span class="redstar">*</span></label><span class="left">&nbsp;</span>
+            <%=  text_field_tag :shift_code, h(@work_time.shift_code) %>
+            <%= err_kd_shift %>
+          </span>
+          <span class="input-field" style="display:none">
+            <%= label_tag :late_tolerance, 'Toleransi Terlambat' %>:
+            <%= text_field_tag :late_tolerance, h(@hr.blank? ? 0 : @hr.lateness_tolerance_in_minutes),
+              :class=>'small-text' , :readonly=>'readonly' %> Menit
+          </span>
+        </div>
+      </div>
+      <div class="left fifty-fifty">
+        <div class="input">
+          <span class="input-field width370">
+            <% if !@work_time.break_choice.nil? && @work_time.break_choice == "per_day" %>
+              <%= radio_button_tag :break_choice, :per_day, true, :class => "break" %>
+            <% else %>
+              <%= radio_button_tag :break_choice, "per_day", true, :class => "break" %>
+            <% end %>
+            <%= label_tag 'break_choice_per_day', 'Durasi istirahat dalam per hari', :class => 'auto-size' %>
+          </span>
+          <div class="clear"></div>
+          <span class=" input-field width370">
+            <% if !@work_time.break_choice.nil? && @work_time.break_choice == "per_hour" %>
+              <%= radio_button_tag :break_choice, :per_hour, true, :class => "break" %>
+            <% else %>
+              <%= radio_button_tag :break_choice, "per_hour", false, :class => "break" %>
+            <% end %>
+            <%= label_tag 'break_choice_per_hour', 'Durasi istirahat dalam per jam', :class => 'auto-size' %>
+          </span>
+          <div class="clear"></div>
+          <span class=" input-field width370">
+            <%= f.label :working_hour_per_week, 'Lama kerja maksimal per minggu', :class => 'auto-size' %>&nbsp;
+            <%= text_field_tag :working_hour_per_week, h((!@work_time.working_hour_per_week.nil?) && @work_time.working_hour_per_week), :class => "small-text" %>
+          </span>
+        </div>
+      </div>
+
+      <div class="clear"></div>
+      <div>
+        <fieldset class="fm-form">
+          <legend>Jadwal Kerja</legend>
+          <div class="frm-input">
+            <table id="jadwal_kerja">
+              <thead><tr>
+                  <th width="13%" class="center-text">Hari</th>
+                  <th width="24%" class="center-text">Jam Mulai Kerja</th>
+                  <th width="24%" class="center-text">Jam Selesai Kerja</th>
+                  <th width="13%" class="center-text">Istirahat<br/>(dalam menit/<span class ="title">hari</span>)</th>
+                  <th width="13%" class="center-text">Lembur Wajib<br/>(dalam menit)</th>
+                  <th width="13%" class="center-text">Lama kerja</th>
+                  <th width="13%" class="center-text">Libur</th>
+                </tr>
+                <tr >
+                  <td class="center-text"> Senin</td>
+                  <td class="center-text">
+                    <div class="special">
+                      <%= time_select("post", :start_time_1,
+                        :default=>{:hour =>
+                            unless @work_time.monday_time.nil?
+                            (@work_time.monday_time.start_time).strftime("%H")
+                          else
+                            00
+                          end,
+                          :minute=>
+                            unless @work_time.monday_time.nil?
+                            (@work_time.monday_time.start_time).strftime("%M")
+                          else
+                            00
+                          end},:minute_step => 15) %>
+                    </div>
+                  </td>
+                  <td class="center-text">
+                    <div class="special">
+                      <%= time_select("post", :end_time_1,
+                        :default=>{:hour =>
+                            unless @work_time.monday_time.nil?
+                            (@work_time.monday_time.end_time).strftime("%H")
+                          else
+                            00
+                          end,
+                          :minute=>
+                            unless @work_time.monday_time.nil?
+                            (@work_time.monday_time.end_time).strftime("%M")
+                          else
+                            00
+                          end},:minute_step => 15) %>
+                    </div>
+                  </td>
+                  <td>
+                    <% unless break_time_1 == 0 %>
+                      <%= text_field_tag :break_1, break_time_1, :class=>'checkTextField' %>
+                    <%else%>
+                      <%= text_field_tag :break_1, break_per_hour_1, :class=>'checkTextField' %>
+                    <%end%>
+                  </td>
+                  <td>
+                    <%= text_field_tag :compulsory_1, compulsory_1, :class=>'checkTextField' %>
+                  </td>
+                  <td class="center-text"><%=h @work_time.monday_time.length_in_hours.to_s %> Jam</td>
+                  <td class="center-text">
+                    <%if @work_time.monday_time.length_in_hours == 0 %>
+                      <%= check_box_tag :c1,'vacation',true, :class=>'check' %>
+                    <%else%>
+                      <%= check_box_tag :c1,'vacation',false, :class=>'check' %>
+                    <%end%>
+                  </td>
+                </tr>
+                <tr class="alt" >
+                  <td class="center-text"> Selasa</td>
+                  <td class="center-text">
+                    <div class="special">
+                      <%= time_select("post", :start_time_2,
+                        :default=>{:hour =>
+                            unless @work_time.tuesday_time.nil?
+                            (@work_time.tuesday_time.start_time).strftime("%H")
+                          else
+                            00
+                          end,
+                          :minute=>
+                            unless @work_time.tuesday_time.nil?
+                            (@work_time.tuesday_time.start_time).strftime("%M")
+                          else
+                            00
+                          end},:minute_step => 15) %>
+                    </div>
+                  </td>
+                  <td class="center-text">
+                    <div class="special">
+                      <%= time_select("post", :end_time_2,
+                        :default=>{:hour =>
+                            unless @work_time.tuesday_time.nil?
+                            (@work_time.tuesday_time.end_time).strftime("%H")
+                          else
+                            00
+                          end,
+                          :minute=>
+                            unless @work_time.tuesday_time.nil?
+                            (@work_time.tuesday_time.end_time).strftime("%M")
+                          else
+                            00
+                          end},:minute_step => 15) %>
+                    </div>
+                  </td>
+                  <td>
+                    <% unless break_time_2 == 0 %>
+                      <%= text_field_tag :break_2, break_time_2, :class=>'checkTextField' %>
+                    <%else%>
+                      <%= text_field_tag :break_2, break_per_hour_2, :class=>'checkTextField' %>
+                    <%end%>
+                  </td>
+                  <td>
+                    <%= text_field_tag :compulsory_2, compulsory_2, :class=>'checkTextField' %>
+                  </td>
+                  <td class="center-text"><%=h @work_time.tuesday_time.length_in_hours.to_s %> Jam</td>
+                  <td class="center-text">
+                    <%if @work_time.tuesday_time.length_in_hours == 0 %>
+                      <%= check_box_tag :c2,'vacation',true, :class=>'check' %>
+                    <%else%>
+                      <%= check_box_tag :c2,'vacation',false, :class=>'check' %>
+                    <%end%>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="center-text"> Rabu</td>
+                  <td class="center-text">
+                    <div class="special">
+                      <%= time_select("post", :start_time_3,
+                        :default=>{:hour =>
+                            unless @work_time.wednesday_time.nil?
+                            (@work_time.wednesday_time.start_time).strftime("%H")
+                          else
+                            00
+                          end,
+                          :minute=>
+                            unless @work_time.wednesday_time.nil?
+                            (@work_time.wednesday_time.start_time).strftime("%M")
+                          else
+                            00
+                          end},:minute_step => 15) %>
+                    </div>
+                  </td>
+                  <td class="center-text">
+                    <div class="special">
+                      <%= time_select("post", :end_time_3,
+                        :default=>{:hour =>
+                            unless @work_time.wednesday_time.nil?
+                            (@work_time.wednesday_time.end_time).strftime("%H")
+                          else
+                            00
+                          end,
+                          :minute=>
+                            unless @work_time.wednesday_time.nil?
+                            (@work_time.wednesday_time.end_time).strftime("%M")
+                          else
+                            00
+                          end},:minute_step => 15) %>
+                    </div>
+                  </td>
+                  <td>
+                    <% unless break_time_3 == 0 %>
+                      <%= text_field_tag :break_3, break_time_3, :class=>'checkTextField' %>
+                    <%else%>
+                      <%= text_field_tag :break_3, break_per_hour_3, :class=>'checkTextField' %>
+                    <%end%>
+                  </td>
+                  <td>
+                    <%= text_field_tag :compulsory_3, compulsory_3, :class=>'checkTextField' %>
+                  </td>
+                  <td class="center-text"><%=h @work_time.wednesday_time.length_in_hours.to_s %> Jam</td>
+                  <td class="center-text">
+                    <%if @work_time.wednesday_time.length_in_hours == 0 %>
+                      <%= check_box_tag :c3,'vacation',true, :class=>'check' %>
+                    <%else%>
+                      <%= check_box_tag :c3,'vacation',false, :class=>'check' %>
+                    <%end%>
+                  </td>
+                </tr>
+                <tr class="alt" >
+                  <td class="center-text"> Kamis</td>
+                  <td class="center-text">
+                    <div class="special">
+                      <%= time_select("post", :start_time_4,
+                        :default=>{:hour =>
+                            unless @work_time.thursday_time.nil?
+                            (@work_time.thursday_time.start_time).strftime("%H")
+                          else
+                            00
+                          end,
+                          :minute=>
+                            unless @work_time.thursday_time.nil?
+                            (@work_time.thursday_time.start_time).strftime("%M")
+                          else
+                            00
+                          end},:minute_step => 15) %>
+                    </div>
+                  </td>
+                  <td class="center-text">
+                    <div class="special">
+                      <%= time_select("post", :end_time_4,
+                        :default=>{:hour =>
+                            unless @work_time.thursday_time.nil?
+                            (@work_time.thursday_time.end_time).strftime("%H")
+                          else
+                            00
+                          end,
+                          :minute=>
+                            unless @work_time.thursday_time.nil?
+                            (@work_time.thursday_time.end_time).strftime("%M")
+                          else
+                            00
+                          end},:minute_step => 15) %>
+                    </div>
+                  </td>
+                  <td>
+                    <% unless break_time_4 == 0 %>
+                      <%= text_field_tag :break_4, break_time_4, :class=>'checkTextField' %>
+                    <%else%>
+                      <%= text_field_tag :break_4, break_per_hour_4, :class=>'checkTextField' %>
+                    <%end%>
+                  </td>
+                  <td>
+                    <%= text_field_tag :compulsory_4, compulsory_4, :class=>'checkTextField' %>
+                  </td>
+                  <td class="center-text"><%=h @work_time.thursday_time.length_in_hours.to_s %> Jam</td>
+                  <td class="center-text">
+                    <%if @work_time.thursday_time.length_in_hours == 0 %>
+                      <%= check_box_tag :c4,'vacation',true, :class=>'check' %>
+                    <%else%>
+                      <%= check_box_tag :c4,'vacation',false, :class=>'check' %>
+                    <%end%>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="center-text">Jumat</td>
+                  <td class="center-text">
+                    <div class="special">
+                      <%= time_select("post", :start_time_5,
+                        :default=>{:hour =>
+                            unless @work_time.friday_time.nil?
+                            (@work_time.friday_time.start_time).strftime("%H")
+                          else
+                            00
+                          end,
+                          :minute=>
+                            unless @work_time.friday_time.nil?
+                            (@work_time.friday_time.start_time).strftime("%M")
+                          else
+                            00
+                          end},:minute_step => 15) %>
+                    </div>
+                  </td>
+                  <td class="center-text">
+                    <div class="special">
+                      <%= time_select("post", :end_time_5,
+                        :default=>{:hour =>
+                            unless @work_time.friday_time.nil?
+                            (@work_time.friday_time.end_time).strftime("%H")
+                          else
+                            00
+                          end,
+                          :minute=>
+                            unless @work_time.friday_time.nil?
+                            (@work_time.friday_time.end_time).strftime("%M")
+                          else
+                            00
+                          end},:minute_step => 15) %>
+                    </div>
+                  </td>
+                  <td>
+                    <% unless break_time_5 == 0 %>
+                      <%= text_field_tag :break_5, break_time_5, :class=>'checkTextField' %>
+                    <%else%>
+                      <%= text_field_tag :break_5, break_per_hour_5, :class=>'checkTextField' %>
+                    <%end%>
+                  </td>
+                  <td>
+                    <%= text_field_tag :compulsory_5, compulsory_5, :class=>'checkTextField' %>
+                  </td>
+                  <td class="center-text"><%=h @work_time.friday_time.length_in_hours.to_s %> Jam</td>
+                  <td class="center-text">
+                    <%if @work_time.friday_time.length_in_hours == 0 %>
+                      <%= check_box_tag :c5,'vacation',true, :class=>'check' %>
+                    <%else%>
+                      <%= check_box_tag :c5,'vacation',false, :class=>'check' %>
+                    <%end%>
+                  </td>
+                </tr>
+                <tr class="alt">
+                  <td class="center-text">Sabtu</td>
+                  <td class="center-text">
+                    <div class="special">
+                      <%= time_select("post", :start_time_6,
+                        :default=>{:hour =>
+                            unless @work_time.saturday_time.nil?
+                            (@work_time.saturday_time.start_time).strftime("%H")
+                          else
+                            00
+                          end,
+                          :minute=>
+                            unless @work_time.saturday_time.nil?
+                            (@work_time.saturday_time.start_time).strftime("%M")
+                          else
+                            00
+                          end},:minute_step => 15) %>
+                    </div>
+                  </td>
+                  <td class="center-text">
+                    <div class="special">
+                      <%= time_select("post", :end_time_6,
+                        :default=>{:hour =>
+                            unless @work_time.saturday_time.nil?
+                            (@work_time.saturday_time.end_time).strftime("%H")
+                          else
+                            00
+                          end,
+                          :minute=>
+                            unless @work_time.saturday_time.nil?
+                            (@work_time.saturday_time.end_time).strftime("%M")
+                          else
+                            00
+                          end},:minute_step => 15) %>
+                    </div>
+                  </td>
+                  <td>
+                    <% unless break_time_6 == 0 %>
+                      <%= text_field_tag :break_6, break_time_6, :class=>'checkTextField' %>
+                    <%else%>
+                      <%= text_field_tag :break_6, break_per_hour_6, :class=>'checkTextField' %>
+                    <%end%>
+                  </td>
+                  <td>
+                    <%= text_field_tag :compulsory_6, compulsory_6, :class=>'checkTextField' %>
+                  </td>
+                  <td class="center-text"><%=h @work_time.saturday_time.length_in_hours.to_s %> Jam</td>
+                  <td class="center-text">
+                    <%if @work_time.saturday_time.length_in_hours == 0 %>
+                      <%= check_box_tag :c6,'vacation',true, :class=>'check' %>
+                    <%else%>
+                      <%= check_box_tag :c6,'vacation',false, :class=>'check' %>
+                    <%end%>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="center-text">Minggu</td>
+                  <td class="center-text">
+                    <div class="special">
+                      <%= time_select("post", :start_time_7,
+                        :default=>{:hour =>
+                            unless @work_time.sunday_time.nil?
+                            (@work_time.sunday_time.start_time).strftime("%H")
+                          else
+                            00
+                          end,
+                          :minute=>
+                            unless @work_time.sunday_time.nil?
+                            (@work_time.sunday_time.start_time).strftime("%M")
+                          else
+                            00
+                          end},:minute_step => 15) %>
+                    </div>
+                  </td>
+                  <td class="center-text">
+                    <div class="special">
+                      <%= time_select("post", :end_time_7,
+                        :default=>{:hour =>
+                            unless @work_time.sunday_time.nil?
+                            (@work_time.sunday_time.end_time).strftime("%H")
+                          else
+                            00
+                          end,
+                          :minute=>
+                            unless @work_time.sunday_time.nil?
+                            (@work_time.sunday_time.end_time).strftime("%M")
+                          else
+                            00
+                          end},:minute_step => 15) %>
+                    </div>
+                  </td>
+                  <td>
+                    <% unless break_time_7 == 0 %>
+                      <%= text_field_tag :break_7, break_time_7, :class=>'checkTextField' %>
+                    <%else%>
+                      <%= text_field_tag :break_7, break_per_hour_7, :class=>'checkTextField' %>
+                    <%end%>
+                  </td>
+                  <td>
+                    <%= text_field_tag :compulsory_7, compulsory_7, :class=>'checkTextField' %>
+                  </td>
+                  <td class="center-text"><%=h @work_time.sunday_time.length_in_hours.to_s %> Jam</td>
+                  <td class="center-text">
+                    <% a = false %>
+                    <% unless @work_time.sunday_time.blank? %>
+                      <%if @work_time.sunday_time.length_in_hours == 0 %>
+                        <%= check_box_tag :c7,'vacation',true, :class=>'check' %>
+                      <%else%>
+                        <%= check_box_tag :c7,'vacation',a, :class=>'check' %>
+                      <%end%>
+                    <% end %>
+
+                  </td>
+                </tr>
+              </thead>
+            </table>
+          </div>
+        </fieldset>
+      </div>
+      <div class="clear"></div>
+      <hr />
+      <div class="center-text box-form">
+        <%= render :partial => "layouts/button_loader" %>
+        <div id="button">
+          <input id="info_section_cancel_basic" class="grey_button" type="reset" value="Batal" name="info_section_cancel_basic" onclick="onCancel('#shifts')"/>
+          <input type="submit" value="Simpan" name="info_section_save_basic" id="info_section_save_basic" class="blue_button" onclick="ajaxLoad1('button','ajax-load1')"/>
+        </div>
+      </div>
+    <%end%>
+  </div>
+</fieldset>
+
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('.checkTextField').blur(function(){
+      var temp = ($(this).val()).match(/^\d+$/);
+      if (temp == null ){
+        $(this).val(0);
+      }
+    });
+    if ($("#c1").is(':checked')){
+      $("#post_start_time_1_4i").attr('disabled', 'disabled');
+      $("#post_start_time_1_5i").attr('disabled', 'disabled');
+      $("#post_end_time_1_4i").attr('disabled', 'disabled');
+      $("#post_end_time_1_5i").attr('disabled', 'disabled');
+      $("#post_start_time_1_4i").val("00");
+      $("#post_start_time_1_5i").val("00");
+      $("#post_end_time_1_4i").val("00");
+      $("#post_end_time_1_5i").val("00");
+      $("#break_1").attr('readOnly', 'readOnly');
+      $("#break_1").val("0");
+      $("#compulsory_1").attr('readOnly', 'readOnly');
+    }
+    if ($("#c2").is(':checked')){
+      $("#post_start_time_2_4i").attr('disabled', 'disabled');
+      $("#post_start_time_2_5i").attr('disabled', 'disabled');
+      $("#post_end_time_2_4i").attr('disabled', 'disabled');
+      $("#post_end_time_2_5i").attr('disabled', 'disabled');
+      $("#post_start_time_2_4i").val("00");
+      $("#post_start_time_2_5i").val("00");
+      $("#post_end_time_2_4i").val("00");
+      $("#post_end_time_2_5i").val("00");
+      $("#break_2").attr('readOnly', 'readOnly');
+      $("#break_2").val("0");
+      $("#compulsory_2").attr('readOnly', 'readOnly');
+    }
+    if ($("#c3").is(':checked')){
+      $("#post_start_time_3_4i").attr('disabled', 'disabled');
+      $("#post_start_time_3_5i").attr('disabled', 'disabled');
+      $("#post_end_time_3_4i").attr('disabled', 'disabled');
+      $("#post_end_time_3_5i").attr('disabled', 'disabled');
+      $("#post_start_time_3_4i").val("00");
+      $("#post_start_time_3_5i").val("00");
+      $("#post_end_time_3_4i").val("00");
+      $("#post_end_time_3_5i").val("00");
+      $("#break_3").attr('readOnly', 'readOnly');
+      $("#break_3").val("0");
+      $("#compulsory_3").attr('readOnly', 'readOnly');
+    }
+    if ($("#c4").is(':checked')){
+      $("#post_start_time_4_4i").attr('disabled', 'disabled');
+      $("#post_start_time_4_5i").attr('disabled', 'disabled');
+      $("#post_end_time_4_4i").attr('disabled', 'disabled');
+      $("#post_end_time_4_5i").attr('disabled', 'disabled');
+      $("#post_start_time_4_4i").val("00");
+      $("#post_start_time_4_5i").val("00");
+      $("#post_end_time_4_4i").val("00");
+      $("#post_end_time_4_5i").val("00");
+      $("#break_4").attr('readOnly', 'readOnly');
+      $("#break_4").val("0");
+      $("#compulsory_4").attr('readOnly', 'readOnly');
+    }
+    if ($("#c5").is(':checked')){
+      $("#post_start_time_5_4i").attr('disabled', 'disabled');
+      $("#post_start_time_5_5i").attr('disabled', 'disabled');
+      $("#post_end_time_5_4i").attr('disabled', 'disabled');
+      $("#post_end_time_5_5i").attr('disabled', 'disabled');
+      $("#post_start_time_5_4i").val("00");
+      $("#post_start_time_5_5i").val("00");
+      $("#post_end_time_5_4i").val("00");
+      $("#post_end_time_5_5i").val("00");
+      $("#break_5").attr('readOnly', 'readOnly');
+      $("#break_5").val("0");
+      $("#compulsory_5").attr('readOnly', 'readOnly');
+    }
+    if ($("#c6").is(':checked')){
+      $("#post_start_time_6_4i").attr('disabled', 'disabled');
+      $("#post_start_time_6_5i").attr('disabled', 'disabled');
+      $("#post_end_time_6_4i").attr('disabled', 'disabled');
+      $("#post_end_time_6_5i").attr('disabled', 'disabled');
+      $("#post_start_time_6_4i").val("00");
+      $("#post_start_time_6_5i").val("00");
+      $("#post_end_time_6_4i").val("00");
+      $("#post_end_time_6_5i").val("00");
+      $("#break_6").attr('readOnly', 'readOnly');
+      $("#break_6").val("0");
+      $("#compulsory_6").attr('readOnly', 'readOnly');
+    }
+    if ($("#c7").is(':checked')){
+      $("#post_start_time_7_4i").attr('disabled', 'disabled');
+      $("#post_start_time_7_5i").attr('disabled', 'disabled');
+      $("#post_end_time_7_4i").attr('disabled', 'disabled');
+      $("#post_end_time_7_5i").attr('disabled', 'disabled');
+      $("#post_start_time_7_4i").val("00");
+      $("#post_start_time_7_5i").val("00");
+      $("#post_end_time_7_4i").val("00");
+      $("#post_end_time_7_5i").val("00");
+      $("#break_7").attr('readOnly', 'readOnly');
+      $("#break_7").val("0");
+      $("#compulsory_7").attr('readOnly', 'readOnly');
+    }
+    var j = 0;
+    $('.check' ).click(function(){
+      if ($(this).attr('id') == 'c1'){ j = 1;}
+      if ($(this).attr('id') == 'c2'){ j = 2;}
+      if ($(this).attr('id') == 'c3'){ j = 3;}
+      if ($(this).attr('id') == 'c4'){ j = 4;}
+      if ($(this).attr('id') == 'c5'){ j = 5;}
+      if ($(this).attr('id') == 'c6'){ j = 6;}
+      if ($(this).attr('id') == 'c7'){ j = 7;}
+      if ($("#c"+j).is(':checked')){
+        $("#post_start_time_"+j+"_4i").attr('disabled', 'disabled');
+        $("#post_start_time_"+j+"_5i").attr('disabled', 'disabled');
+        $("#post_end_time_"+j+"_4i").attr('disabled', 'disabled');
+        $("#post_end_time_"+j+"_5i").attr('disabled', 'disabled');
+        $("#post_start_time_"+j+"_4i").val("00");
+        $("#post_start_time_"+j+"_5i").val("00");
+        $("#post_end_time_"+j+"_4i").val("00");
+        $("#post_end_time_"+j+"_5i").val("00");
+        $("#break_"+j).attr('readOnly', 'readOnly');
+        $("#break_"+j).val('0');
+        $("#compulsory_"+j).attr('readOnly', 'readOnly');
+      }
+      else{
+        $("#post_start_time_"+j+"_4i").removeAttr('disabled');
+        $("#post_start_time_"+j+"_5i").removeAttr('disabled');
+        $("#post_end_time_"+j+"_4i").removeAttr('disabled');
+        $("#post_end_time_"+j+"_5i").removeAttr('disabled');
+        $("#break_"+j).removeAttr('readOnly', 'readOnly');
+        $("#compulsory_"+j).removeAttr('readOnly', 'readOnly');
+      }
+    });
+
+    changeTitle();
+    $('.break').click(function(){
+      changeTitle();
+    });
+  });
+
+  function changeTitle(){
+    var name = $('input[name=break_choice]:checked').val();
+    if(name == 'per_day'){
+      $('.title').text("hari");
+    }
+    else{
+      $('.title').text("jam");
+    }
+  }
+
+  function ajaxLoad1(div_btn, div_load){
+    $("#" + div_load + "").show();
+    $("#" + div_btn + "").hide();
+  }
+
+</script>

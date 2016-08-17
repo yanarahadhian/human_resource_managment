@@ -1,0 +1,144 @@
+<div class="panelFilter">
+  <table cellspacing="0" cellpadding="0">
+    <tbody>
+      <% unless @is_user_login %>
+        <tr>
+          <td width="103px">
+            <div id="action_menu">
+              <ul>
+                <li>
+                  <a class="grey_button2">
+                    <span class="left">More Actions</span> <span class="icons drop_arrow_ico">&nbsp;</span>
+                  </a>
+                  <div class="clear"></div>
+                  <ul>
+                    <li style="cursor: default; list-style-image: none;">
+                      <a onclick="onDelete(2)" class="list">Delete</a>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+          </td>
+          <td>
+            <div class="pagination">
+              <span class="add-button right">
+                <a id="add_family" href="/popup_add_family/<%= @person.id %>" class="grey_button2 cboxElement">
+                  <span class="icons add_ico">&nbsp;</span>
+                  Tambah Keluarga
+                </a>
+              </span>
+            </div>
+            <div class="clear"></div>
+          </td>
+        </tr>
+      <% else %>
+        <tr><td>&nbsp;</td></tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+<div class="clear"></div>
+<table id="families_table">
+  <thead>
+    <tr>
+      <% unless @is_user_login %>
+        <th width="30"><input type="checkbox"/></th>
+      <% end %>
+      <th width="105">Nama</th>
+      <th width="90" class="center-text">Hubungan</th>
+      <th width="163" class="left-text">Alamat</th>
+      <th width="85" class="center-text">No. Telp</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% unless @families.blank? -%>
+      <% @families.each do |family| %>
+        <tr>
+          <% unless @is_user_login %>
+            <td class="center-text"><%= check_box_tag'myrow[ids][]', family.id, false %></td>
+          <% end %>
+          <td class="left-text"><a id="edit_family_<%= family.id %>" class="grey_button4" href="/popup_edit_family/<%= @person.id %>/<%= family.id %>"><%= family.full_name.display %></a> </td>
+          <td class="left-text"><%= family.relationship_to_person.blank? ? "-" : family.relationship_to_person %></td>
+          <td><%= family.address ? family.address.street1 : '' %></td>
+          <td class="center-text"><%= family.address.blank? ? "-" : family.address.no_telp.blank? ? "-" : family.address.no_telp %></td>
+        </tr>
+      <% end %>
+    <% else -%>
+      <tr class="no-data">
+        <td colspan="7" class="center-text"><div class="description">Belum Ada Data Keluarga. </div><div class="info">Silahkan klik<a id="add_family2" href="/popup_add_family/<%= @person.id %>"> Tambah Keluarga</a> untuk menambah data</div></td>
+      </tr>
+    <% end -%>
+  </tbody>
+</table>
+
+<script>
+
+  var gaiSelectedFamily =  [];
+  $(document).ready(function(){
+<% unless @families.blank? -%>
+  <% @families.each do |exp| %>
+      $("#edit_family_<%= exp.id %>").colorbox({width:"550px",height:"600px", iframe:true,
+        onClosed:function(){
+          $('#data_keluarga').load('<%= ApplicationController::BASE_URL %>/people/<%= @person.id %>/families');
+        }
+      });
+  <%end%>
+<% end %>
+    $("#add_family").colorbox({width:"600px",height:"600px", iframe:true,
+      onClosed:function(){
+        $('#data_keluarga').load('<%= ApplicationController::BASE_URL %>/people/<%= @person.id %>/families');
+      }
+    });
+
+    $("#add_family2").colorbox({width:"600px",height:"500px", iframe:true,
+      onClosed:function(){
+        $('#data_keluarga').load('<%= ApplicationController::BASE_URL %>/people/<%= @person.id %>/families');
+      }
+    });
+
+ 
+    $('#families_table thead tr th input').live('click', function () {
+      if ($(this).is(":checked")) {
+        $('#families_table tbody tr td input').each(function (){
+          $(this).attr( 'checked', true );
+          $(this).parent().parent().addClass('row_selected');
+          var iId = this ;
+          if ( jQuery.inArray(iId.value, gaiSelectedFamily) == -1 ){
+            gaiSelectedFamily[gaiSelectedFamily.length++] = iId.value;
+          }
+        });
+      }
+      else{
+        $('#families_table tbody tr').each(function (){
+          $(this).removeClass('row_selected');
+          var iId = $('#families_table tbody tr td input');
+          gaiSelectedFamily = [];
+          iId.attr( 'checked', false );
+        });
+      }
+    } );
+
+  });
+
+  function delete_keluarga(){
+    var arr_params = new Array();
+    $('#families_table tbody input:checked').each(function() {
+      arr_params = arr_params.concat($(this).val());
+    });
+    var controller = "/families/delete_multiple";
+    $("#ajax-load").show();
+    $.ajax({
+      type: "post",
+      url: escape(controller),
+      data:{'_method': 'post',"ids":arr_params,"person_id":<%= @person.id %>},
+      dataType: 'script',
+      success: function(){
+        $('#info_alamat').load('<%= ApplicationController::BASE_URL %>/people/<%= @person.id %>/addresses');
+        $("#ajax-load").hide();
+        $.fn.colorbox.close();
+      }
+    });
+  }
+
+</script>

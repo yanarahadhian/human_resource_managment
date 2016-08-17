@@ -1,0 +1,14 @@
+satu:
+  id: 1
+  premium_name: "Tunjangan Jabatan"
+  count_daily: 1
+
+dua:
+  id: 2
+  premium_name: "Premi Hadir Harian"
+  count_daily: 1
+
+tiga:
+  id: 3
+  premium_name: "Premi Masa Kerja"
+  count_daily: 0

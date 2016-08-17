@@ -1,0 +1,22 @@
+
+<%= stylesheet_link_tag  "#{ApplicationController::APPSCHEF_URL}/stylesheets/private2.css" %>
+<% if params[:filter]=="mutasi" %>
+  <%= render :partial => "content_mutasi" %>
+<% elsif params[:filter]=="formasi" %>
+  <%= render :partial => "content_formasi" %>
+<% elsif params[:filter]=="formasi_jabatan" %>
+  <%= render :partial => "content_formasi_jabatan" %>
+<% elsif params[:filter]=="formasi_departemen" %>
+  <%= render :partial => "content_formasi_departemen" %>
+<% elsif params[:filter]=="formasi_bagian" %>
+  <%= render :partial => "content_formasi_bagian" %>
+<% elsif params[:filter]=="sp" %>
+  <%= render :partial => "content_sp" %>
+<% elsif params[:filter]=="accident" %>
+  <%= render :partial => "content_accident" %>
+<% elsif params[:filter]=="status" %>
+  <%= render :partial => "content_status" %>
+<% elsif params[:filter]=="absensi" %>
+  <%= render :partial => "content_absensi" %>
+<% end %>
+

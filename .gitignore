@@ -1,0 +1,14 @@
+.DS_Store
+.bundle
+.rvmrc
+tmp/**/*
+config/database.yml
+db/schema.rb
+public/system/*
+honors/*
+log
+nbproject/*
+coverage/*
+test/coverage/*
+tmp
+

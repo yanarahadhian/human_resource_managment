@@ -1,0 +1,72 @@
+<div id="footer">
+  <div class="contain">
+     <div class="navigation">
+       <ul>
+         <li>
+           <h2>Get to Know Us</h2>
+           <div class="footer_list">
+             <a href="">About Us</a>
+             <a href="">Contact Us</a>
+             <a href="">Blog</a>
+           </div>
+         </li>
+         <li>
+           <h2>Guidances</h2>
+           <div class="footer_list">
+             <a href="">FAQ</a>
+             <a href="">Privacy Policy</a>
+             <a href="">Security Statement</a>
+           </div>
+         </li>
+         <li>
+           <h2>Keep in touch</h2>
+           <div class="footer_list">
+             <a href="http://www.facebook.com/wgsapps?sk=app_4949752878"><span class="icons fb_ico">&nbsp;</span>Become Fan</a>
+             <a href="https://twitter.com/#!/WGSAPPS"><span class="icons twitter_ico">&nbsp;</span>Follow Us</a>
+           </div>
+         </li>
+         <li>
+           <h2>Our Company</h2>
+           <div class="footer_list">
+             <p><span class="contact-footer"><strong>PT. Walden Global Services</strong></span>
+                <span class="clear"></span>
+                <span class="contact-footer">Jln Karapitan No. 100 Bandung</span>
+                <span class="clear"></span>
+                <span class="contact-footer">P: +62 22 6006 222 (Hunting)</span>
+                <span class="clear"></span>
+                <span class="contact-footer">Email : info@wgs.co.id</span>
+             </p>
+           </div>
+         </li>
+       </ul>
+     </div>
+
+     <div class="clear"></div>
+   </div>
+</div>
+<%#= render :partial => "layouts/live_chat" %>
+<script type="text/javascript">
+  $(document).ready(function(){
+     //credit card
+     $(".credit-card").hide();
+     $("a.credit_confirm").click(function(){
+       $(".credit-card").show("400");
+       return false;
+     });
+     $("a.hide_content").click(function(){
+       $(".credit-card").hide("400");
+       return false;
+     });
+       //datepicker
+     $(".datepicker").datepicker();
+   });
+
+   function show_filter_by(thisObj){
+     if($('#filter_setor_tunai').css('display')!='none') $('#filter_setor_tunai').hide();
+     if($('#filter_users').css('display')!='none') $('#filter_users').hide();
+     if(thisObj.value=='setor_tunai'){
+       $('#filter_setor_tunai').slideToggle("normal", "linear");
+     }
+   }
+
+ </script>

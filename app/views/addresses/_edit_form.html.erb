@@ -1,0 +1,46 @@
+<% form_for @address, :url => person_address_path(params[:person_id],@address) do |f| %>
+    <div id="box_retur_0">
+     <%= render :partial => 'popup_edit_form', :locals => {:f => f} %>
+   </div>
+
+      <div id="button" style="display:none" class="center-text block-btn-form">
+        <%= render :partial => "layouts/button_loader" %>
+        <input type="reset" id="info_section_cancel_basic" class="grey_button" value="Batal" name="info_section_cancel_basic" onclick="doCancelAddressEdit();">
+        <input type="submit" value="Simpan" name="info_section_save_basic" id="info_section_save_basic" class="blue_button" onclick="ajaxLoad1('<%= person_address_path(params[:person_id],@address) %>','button','ajax-load1')"/>
+      </div>
+   
+<% end-%>
+
+<script>
+
+  $(document).ready(function(){
+    <% if @sign=="gagal" %>
+      onChangeField();
+    <% end %>
+  })
+
+  function doCancelAddressEdit(){
+    path = "<%= ApplicationController::BASE_URL %>/people/<%= params[:person_id] %>/addresses/cancel_popup_detail";
+    $.ajax({
+      type: "get",
+      url: path,
+      data :"id=<%= @address.id%>",
+      dataType: 'script',
+      success: function(){
+        $('.title-page-tambah').html("Detail Alamat");
+        $('.grey_button_a').show();
+        $('.input-help').hide();
+      }
+    })
+  }
+
+   function ajaxLoad1(url, div_btn, div_load){
+     $("#" + div_load + "").show();
+     $("#" + div_btn + "").hide();
+       $.get(url, function(data) {
+         $("#ajax-load").hide();
+       });
+    }
+
+    
+</script>

@@ -1,0 +1,68 @@
+<table class="no-border">
+  <tbody>
+    <tr>
+      <td width="30%" class="left-text">Total Penghasilan Netto Tahun <%= @salary.end_period.year %> </td>
+      <td width="30%" class="center-text">
+        Gaji, Tunjangan, THR, Bonus, Lembur
+      </td>
+      <td width="19%" class="right-text">
+        <%= format_currency(@salary.year_net_income) unless @salary.year_net_income.blank? %>
+      </td>
+      <td width="21%" class="right-text">&nbsp;</td>
+    </tr>
+    <tr>
+      <td class="left-text"> PTKP</td>
+      <td class="center-text">&nbsp;</td>
+      <td class="right-text total4">
+        <%= format_currency(@salary.ptkp) unless @salary.ptkp.blank? %>
+      </td>
+      <td class="right-text total4">&nbsp;</td>
+    </tr>
+    <tr class="alt">
+      <td class="left-text">PKP</td>
+      <td class="center-text">&nbsp;</td>
+      <td class="right-text">
+        <span class="bold">
+          <%= format_currency(@salary.pkp) unless @salary.pkp.blank? %>
+        </span>
+      </td>
+      <td class="right-text">&nbsp;</td>
+    </tr>
+  </tbody>
+</table>
+<div class="clear"></div>
+<br />
+<table class="no-border">
+  <tbody>
+    <tr bordercolor="#D2E8FF">
+      <td width="30%" class="left-text">PPh 21 Yang Harus dibayar di <%= @salary.end_period.year %> </td>
+      <td width="30%" class="center-text">
+      </td>
+      <td width="19%" class="right-text">
+        <%= format_currency(@salary.pph_indebted_per_year) unless @salary.pph_indebted_per_month.blank? %>
+      </td>
+      <td width="21%" class="right-text">&nbsp;</td>
+    </tr>
+    <tr bordercolor="#D2E8FF">
+      <td width="30%" class="left-text">PPh 21 yang sudah dibayar </td>
+      <td width="30%" class="center-text"></td>
+      <td width="19%" class="right-text">
+        <% total_net_income, paid_tax = @salary.count_paid_tax %>
+        <%= format_currency(paid_tax)%>
+      </td>
+      <td width="21%" class="right-text">&nbsp;</td>
+    </tr>
+    <tr>
+      <td class="left-text"> PPh 21 bulan ini</td>
+      <td class="center-text">
+      
+      </td>
+      <td class="right-text">
+        <span class="bold">
+          <%= format_currency(@salary.pph_indebted_per_month) unless @salary.pph_indebted_per_month.blank? %>
+        </span>
+      </td>
+      <td class="right-text">&nbsp;</td>
+    </tr>
+  </tbody>
+</table>

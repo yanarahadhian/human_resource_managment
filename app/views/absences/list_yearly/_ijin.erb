@@ -1,0 +1,21 @@
+<table style="width: 650px; margin: 1pt auto;">
+  <thead>
+    <tr>
+      <th width="63">Tanggal</th>
+      <th width="154"> <a href=""> <span class="center-text">Keterangan</span></a> </th>
+    </tr>
+  </thead>
+  <tbody>
+    <%- @total_excuse.each do |excuse| %>
+      <tr>
+        <%- if excuse[:total_days] > 1 %>
+          <td><%= "#{l excuse[:from_date]} - #{l excuse[:to_date]}" %></td>
+        <%- else %>
+          <td><%= l excuse[:from_date] %></td>
+        <%- end %>
+        <td><%= excuse[:description] %></td>
+      </tr>
+    <%- end %>
+  </tbody>
+</table>
+

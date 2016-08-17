@@ -1,0 +1,17 @@
+<div id="list_detail" class="list" style="display: none; ">
+   <ul>
+     <% ket = "" %>
+     <% @tax.each do |x| %>
+       <% ket = "tidak menikah dan tidak menanggung orangtua" if x.tax_status_code == "T/0" %>
+       <% ket = "tidak menikah dan menanggung satu orang" if x.tax_status_code == "T/1" %>
+       <% ket = "tidak menikah dan menanggung tiga orang" if x.tax_status_code == "T/2" %>
+       <% ket = "menikah, tidak menanggung keluarga" if x.tax_status_code == "T/3" %>
+       <% ket = "menikah dan menanggung satu orang" if x.tax_status_code == "K/1" %>
+       <% ket = "menikah dan menanggung dua orang" if x.tax_status_code == "K/2" %>
+       <% ket = "menikah dan menanggung tiga orang" if x.tax_status_code == "K/3" %>
+       <li style="cursor: default; list-style-image: none; "><%= x.tax_status_code %>: status pajak untuk yang <%= ket %> . Besar PTKP adalah <%= x.ptkp %></li>
+     <% end unless @tax.nil?%>
+   </ul>
+</div>
+<%= javascript_include_tag  'tax_status_tooltips' %>
+<%= render :partial => "layouts/jquery_tooltip", :locals => {:link => "help_tooltip_trigger", :list => "list_detail"} %>

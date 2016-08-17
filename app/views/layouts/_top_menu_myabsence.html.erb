@@ -1,0 +1,25 @@
+
+<%= render :partial => "layouts/howto_menu" %>
+<br />
+<div class="companyTab">
+  <ul class="left">
+    <% if action_name == "my_absence" %>
+      <li><a  class="active">Harian</a></li>
+    <% else %>
+      <li><%= link_to "Harian", "#dailyabsence?id=#{@current_person.id}"%></li>
+    <% end %>
+
+    <% if action_name == "my_monthly_absence" %>
+      <li><a class="active">Bulanan</a></li>
+    <% else %>
+      <li><%= link_to "Bulanan", "#monthlyabsence/#{@current_person.id}"%></li>
+    <% end %>
+
+    <% if action_name == "my_yearly_absence" %>
+      <li><a class="active">Tahunan</a></li>
+    <% else %>
+      <li><%= link_to "Tahunan", "#yearlyabsence/#{@current_person.id}" %></li>
+    <% end %>
+  </ul>
+</div>
+

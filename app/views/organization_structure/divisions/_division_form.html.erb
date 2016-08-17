@@ -1,0 +1,34 @@
+<% input_nama = "input-field" %>
+<% err_nama = error_message_on @division, :name %>
+<% input_nama = "input-error" unless err_nama.blank? %>
+
+<% input_dept = "input-field" %>
+<% err_dept = error_message_on @division, :department_id %>
+<% input_dept = "input-error" unless err_dept.blank? %>
+
+<% input_kode = "input-field" %>
+<% err_kode = error_message_on @division, :division_code %>
+<% input_kode = "input-error" unless err_kode.blank? %>
+
+<div class="input">
+  <span class="<%= input_kode %>">
+    <span class="left"><label>Kode Bagian <span class='redstar'>*</span></label>:&nbsp;</span>
+    <%= f.text_field :division_code %>
+    <%= err_kode %>
+  </span>
+  <span class="clear"></span>
+  <span class="<%= input_nama %>">
+    <span class="left"><label>Nama Bagian <span class="redstar">*</span></label>:&nbsp;</span>
+    <%= f.text_field :name %>
+    <%= err_nama %>
+  </span>
+  <span class="clear"></span>
+
+  <span class="<%= input_dept %>">
+    <label>Pilih Departemen<span class="redstar">*</span></label>:
+    <%= collection_select(:division, :department_id, @departments, :id, :department_name, options ={:prompt => "Pilih Departemen"}) %>
+    <%= err_dept %>
+  </span>
+</div>
+<span class="clear"></span>
+

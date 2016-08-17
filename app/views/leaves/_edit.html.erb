@@ -1,0 +1,28 @@
+
+<fieldset class="fm-table">
+  <legend>
+    <a href="#" id="help_dash" class="icons help-top-icon" title="Click to show/hide information">&nbsp;</a>  
+    Ubah Cuti Karyawan
+  </legend>
+  <%= render :partial => "layouts/howto/howto_content"%>
+  <br/>
+  <div class="input-help-wide">
+    <label>Field dengan tanda <span class="redstar">*</span> harus diisi</label>
+  </div>
+  <div class="clear"></div>
+  <% form_remote_for :leave,  :url => { :action => "update", :id => @leave.id }, :method => :put do |f| %>
+    <div class="input-data box-form">
+      <%= render :partial => "leave_form", :locals => { :f =>f } %>
+      <div id="div_load" class="loading-btn" style="display: none; ">
+        <%= image_tag 'ajax-loader.gif'%>
+        <span class="message">Processing...</span>
+      </div>
+      <div id="button">
+        <div class="center-text box-form">
+          <input id="info_section_cancel_basic" class="grey_button" type="reset" value="Batal" name="info_section_cancel_basic" onclick="onCancel('#leaves')"/>
+          <input type="submit" value="Simpan" name="info_section_save_basic" id="info_section_save_basic" class="blue_button" onclick="ajaxLoad1('#leaves','button','div_load')"/>
+        </div>
+      </div>
+    </div>
+  <%  end %>
+</fieldset>

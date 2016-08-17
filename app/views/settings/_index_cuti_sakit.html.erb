@@ -1,0 +1,116 @@
+<%= javascript_include_tag  'pagination' %>
+<%= render :partial=> "layouts/shared/breadcrumbs" %>
+<%= render :partial => "layouts/howto_menu" %>
+
+<fieldset class="fm-table">
+ <legend> <a href="#" id="help_dash" class="icons help-top-icon" title="Click to show/hide information">&nbsp;</a>
+   Daftar Jenis Tidak Masuk</legend>
+  <%= render :partial => "layouts/howto/howto_content"%>
+  <%= render :partial => "layouts/delete_message" %>
+  <div class="panelFilter">
+      <table cellpadding="0" cellspacing="0">
+        <tbody><tr>
+            <%unless @leave.blank?%>
+              <td width="106">
+                <div id="action_menu">
+                  <ul>
+                    <li>
+                      <a href="" class="grey_button2">
+                        <span class="left">More Actions</span>
+                        <span class="icons drop_arrow_ico">&nbsp;</span>
+                      </a>
+                      <div class="clear"></div>
+                      <ul>
+                        <% if current_features.include?('leave_delete') %>
+                          <li>
+                            <a onclick="onDelete_cuti_sakit()" class="list">Delete</a>
+                          </li>
+                        <% end %>
+                      </ul>
+                    </li>
+                  </ul>
+                </div>
+              </td>
+            <% end %>
+            <td width="732">&nbsp;</td>
+            <% if current_features.include?('leave_new') %>
+              <td width="240">
+                <div class="pagination">
+                  <%= link_to '<span class="icons add_ico">&nbsp;</span>Tambah Jenis Tidak Masuk',
+                    "#new_cuti_sakit", :class=> 'grey_button2 add_barang' %>
+                </div>
+                <div class="clear"></div>
+              </td>
+            <% end %>
+          </tr>
+        </tbody></table>
+    </div>
+    <div class="clear"></div>
+    <div id="list_cuti">
+      <%= render :partial => "list_cuti_sakit" %>
+    </div>
+</fieldset>
+
+<script type="text/javascript">
+
+  var gaiSelectedTraining = []
+  $(document).ready(function(){
+  error_handle("<%= flash.now[:notice] %>");
+  $('#cuti_sakit_table thead tr th input').live('click', function () {
+     if ($(this).is(":checked")) {
+        $('#cuti_sakit_table tbody tr td input').each(function (){
+            $(this).attr( 'checked', true );
+            $(this).parent().parent().addClass('row_selected');
+            var iId = this ;
+            if ( jQuery.inArray(iId.value, gaiSelectedTraining) == -1 ){
+              gaiSelectedTraining[gaiSelectedTraining.length++] = iId.value;
+            }
+          });
+        }
+        else{
+          $('#cuti_sakit_table tbody tr').each(function (){
+            $(this).removeClass('row_selected');
+            var iId = $('#cuti_sakit_table tbody tr td input');
+            gaiSelectedTraining = [];
+            iId.attr( 'checked', false );
+          });
+        }
+      } );
+  });
+
+   function onDelete_cuti_sakit(){
+      var arr_params = new Array();
+      $('#cuti_sakit_table tbody input:checked').each(function() {
+        arr_params = arr_params.concat($(this).val());
+      });
+      if (arr_params.length > 0){
+        $('#div_sign').html('Jenis Tidak Masuk ini');
+        $('#div_btn_hapus').html('<input type="button" value="Ya" class="blue_button" onclick="delete_cuti_sakit()"/>');
+        jQuery().colorbox({width:"auto",height:"auto", inline:true,href:"#message_delete",
+          onClosed:function(){
+          }
+        });
+      }else{
+        return false;
+      }
+    }
+
+   function delete_cuti_sakit(){
+     var arr_params = new Array();
+     $('#cuti_sakit_table tbody input:checked').each(function() {
+       arr_params = arr_params.concat($(this).val());
+     });
+     var controller = "/settings/delete_multiple";
+     $("#ajax-load").show();
+     $.ajax({
+       type: "post",
+       url: escape(controller),
+       data:{'_method': 'post',"ids":arr_params},
+       dataType: 'script',
+       success: function(){
+         $("#ajax-load").hide();
+         $.fn.colorbox.close();
+       }
+     });
+   };
+</script>

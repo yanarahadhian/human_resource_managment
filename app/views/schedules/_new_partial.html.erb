@@ -1,0 +1,188 @@
+<%= render :partial=> "layouts/shared/breadcrumbs" %>
+<%= render :partial => "layouts/howto_menu" %>
+
+<% form_remote_for :schedule,  :url => { :action => "create"} do |f| %>
+  <fieldset class="fm-table">
+    <legend>
+      <a href="#" id="help_dash" class="icons help-top-icon" title="Click to show/hide information">&nbsp;</a>    
+      Susun Jadwal Kerja Baru
+    </legend>
+    <%= render :partial => "layouts/howto/howto_content"%>
+    <div id="content-dynamic">
+      <div class="box-form">
+            
+              <div class="input full-width">
+                <span class="input-field">
+                  <label>Periode</label> :
+                  <%= text_field_tag :date_start,"",:class=> 'ui-date datepicker dp1 cdate' %> s/d
+                  <%= text_field_tag :date_end,"",:class=> 'ui-date datepicker dp2 cdate'%>
+                  <%= hidden_field_tag 'first_start' %>
+                  <%= hidden_field_tag 'first_end' %>
+    
+                  <a class="icons help_ico" id="tooltip_periode" bt-xtitle="" title="">&nbsp;</a>
+                  <%= render :partial => "layouts/jquery_tooltip", :locals => {:link=>"tooltip_periode", :list=>"list_periode"} %>
+    
+                </span>
+                <div class="clear"></div>
+                
+                <span class="input-field">
+                  <label>Shift</label> :
+                  <%= f.collection_select :shift_id, Shift.find(:all ,
+                    :conditions=>['company_id = ?' , current_company_id]), :id, :shift_name,
+                    :prompt => "Pilih Shift" %>
+    
+                  <a class="icons help_ico" id="tooltip_shift">&nbsp;</a>
+                  <%= render :partial => "layouts/jquery_tooltip", :locals => {:link=>"tooltip_shift", :list=>"list_shift"} %>
+                  <div class="clear" ></div>
+                </span>
+              </div>
+              <div class="clear"></div>
+              
+        <div class="left fifty-fifty">
+               <div class="left hiding">
+          <fieldset class="fm-form">
+            <legend><a class="icons help_ico" id="tooltip_byk_karyawan" bt-xtitle="" title="">&nbsp;</a> Pilih Banyak Karyawan</legend>
+
+            <%= render :partial => "layouts/jquery_tooltip", :locals => {:link=>"tooltip_byk_karyawan", :list=>"list_byk_karyawan"} %>
+
+            <div class="clear"></div>
+            <div class="input">
+              <span class="input-field" >
+                <%= label_tag :bagian, "Pilih Nama Bagian" %>
+                <%= f.collection_select :bagian, @divisions, :id, :name, :prompt => "Semua Bagian" %>
+              </span>
+              <span class="clear"></span>
+              <span class="input-field change_group" >
+                 <%= render :partial => "change_group_selector" %>
+              </span>
+            </div>
+
+            <div class="clear"></div>
+            <div class="input data-tabel">
+              <div class="frm-input" id="change_table_2">
+                <table id="tb_gradex">
+                  <thead>
+                    <tr>
+                      <th width="202" class="center-text">Nama</th>
+                      <th width="184" class="center-text">Group</th>
+                      <th width="36" class="center-text">&nbsp;</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+          </fieldset>
+          <div class="clear"></div>
+        </div>
+        </div>
+    
+     <div class="left fifty-fifty">
+          <div id="changeTable" class="hiding">
+            <fieldset class="fm-form">
+              <legend><a class="icons help_ico" id="tooltip_karyawan" bt-xtitle="" title="">&nbsp;</a> Pilih Karyawan</legend>
+              <%= render :partial => "layouts/jquery_tooltip", :locals => {:link=>"tooltip_karyawan", :list=>"list_karyawan"} %>
+              <%= render :partial => "change_table" %>
+            </fieldset>
+          </div>
+        </div>
+        
+      </div>
+    </div>
+    <div class="clear"></div>
+    <hr />
+    <div class="center-text box-form hiding_button">
+      <%= render :partial => "layouts/button_loader" %>
+      <div id="button">
+        <input id="info_section_cancel_basic" class="grey_button" type="reset" value="Batal" name="info_section_cancel_basic" onclick="onCancel('#schedules')"/>
+        <input type="submit" value="Simpan" name="info_section_save_basic" id="info_section_save_basic" class="blue_button" onclick="ajaxLoad1('button','ajax-load1')"/>
+      </div>
+    </div>
+  <%end%>
+</fieldset>
+
+<%= render :partial => "tooltip_all_field_scheduls" %>
+
+<script type="text/javascript">
+  $(document).ready(function() {
+    $(".autoComplete").autocomplete(ar_name);
+    $(".datepicker").datepicker({
+      buttonImageOnly: true,
+      altFormat: 'yy-mm-dd'
+    });
+    $(".dp1").datepicker( "option", "altField", '#first_start' );
+    $('.dp2').datepicker("option", "altField", '#first_end');
+    $('.hiding').hide();
+    $('.dp1').attr('readOnly', 'readOnly');
+    $('.dp2').attr('readOnly', 'readOnly');
+    $(".hiding_button").hide();
+
+    $('.cdate').change(function(){
+      if($('.dp1').val() != "" && $('.dp2').val() != "" ){
+        var a = $('.dp1').val().split("/")
+        var b = $('.dp2').val().split("/")
+        var istart = new Date(a[2],a[1],a[0]);
+        var iend = new Date(b[2],b[1],b[0]);
+        if(istart > iend ){
+          alert("Tanggal Mulai Harus Lebih Kecil Dari Tanggal Selesai");
+          $('.cdate').val("");
+        }
+      }
+    })
+
+    $('.dp1').change(function(){
+      if ($(this).val() == ""){
+        $('.hiding').hide();
+        $('.hiding_button').hide();
+      }
+      if ($('.dp1').val() != "" && $('.dp2').val() != "" && $('#schedule_shift_id').val() != ""){
+        $('.hiding').show();
+        $('.hiding_button').show();
+      }
+    });
+
+    $('.dp2').change(function(){
+      if ($(this).val() == ""){
+        $('.hiding').hide();
+        $('.hiding_button').hide();
+      }
+      if ($('.dp1').val() != "" && $('.dp2').val() != "" && $('#schedule_shift_id').val() != ""){
+        $('.hiding').show();
+        $('.hiding_button').show();
+      }
+    });
+
+    $('#schedule_shift_id').change(function(){
+      if ($(this).val() == ""){
+        $('.hiding').hide();
+        $('.hiding_button').hide();
+      }
+      if ($('.dp1').val() != "" && $('.dp2').val() != "" && $('#schedule_shift_id').val() != ""){
+        $('.hiding').show();
+        $('.hiding_button').show();
+        $(".hide-first").slideDown();
+      }
+      if ($('#schedule_shift_id').val() == ""){
+        $(".hide-first").slideUp();
+      }
+    });
+
+    $('#schedule_bagian').change(function(){
+      $('.change_group').load("/group_selector?value="+$(this).val());
+      $('#change_table_2').load("/change_table_group",
+      {'value':'',
+        'division':$('#schedule_bagian').val()
+      });
+    });
+
+  });
+
+  function ajaxLoad1(div_btn, div_load){
+     $("#" + div_load + "").show();
+     $("#" + div_btn + "").hide();
+   }
+</script>

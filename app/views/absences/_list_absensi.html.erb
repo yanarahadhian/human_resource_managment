@@ -1,0 +1,183 @@
+<table width="1450" id="daily_absences_table">
+  <thead>
+    <tr>
+      <th width="20" class="center-text"><input type="checkbox"></th>
+      <th width="160">Nama Karyawan</th>
+      <th width="120">Departemen</th>
+      <th width="120">Bagian</th>
+      <th width="90">Jam Mulai</th>
+      <th width="90">Jam Selesai</th>
+      <th width="90">Istirahat</th>
+      <th width="90">Lama Kerja</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td class="center-text"></td>
+      <td class="left-text"></td>
+      <td class="left-text"></td>
+      <td class="left-text"></td>
+      <td class="center-text"></td>
+      <td class="center-text"></td>
+      <td class="center-text"></td>
+      <td class="center-text"></td>
+    </tr>
+  </tbody>
+</table>
+
+
+
+<script type="text/javascript" >
+  var oTable;
+  var displayStart = 0;
+  var gaiSelected = new Array();
+
+  $(document).ready(function() {
+    $('.menu_absence').click(function(){
+      $('.menu_absence').removeClass('active');
+      $(this).addClass('active');
+    });
+    resetInput();
+    $("#date_pick").datepicker({
+      altField: '#temp_date',
+      altFormat: 'dd/mm/yy',
+      buttonImageOnly: true,
+      dateFormat: 'yy-mm-dd',
+      maxDate: '+0',
+      onSelect: function(dateText, inst) {
+        //if ($('#filter_button').is(":hidden")){
+        //  $('#filter_button').click();
+        //}
+        $('.result_filter').html($('#temp_date').val() );
+      }
+    });
+    $('#date_pick').datepicker("setDate",<%="#{Date.today.strftime("%d/%m/%Y")}"%>);
+
+    oTable = $('#daily_absences_table').dataTable( {
+      "aoColumnDefs": [ { "bSortable": false, "aTargets": [ 0 ] },
+        { "sClass": "right-text", "aTargets": [ 4, 5, 6, 7 ] },
+        { "sClass": "center-text", "aTargets": [ 0 ] }
+      ],
+      "aoColumns":    [ { "sName": "id" },
+        { "sName": "name" },
+        { "sName": "department" },
+        { "sName": "division" },
+        { "sName": "start"},
+        { "sName": "end"},
+        { "sName": "break"},
+        { "sName": "work"}
+      ],
+      "bFilter": false,
+      "bLengthChange": false,
+      "bInfo":false,
+      "bProcessing": false,
+      "bServerSide": true,
+      "iDisplayLength": 25,
+      "fnDrawCallback": function(){
+        $('#daily_absences_table tbody tr td input').each(function (){
+          var iId = this ;
+          if ( jQuery.inArray(iId.value, gaiSelected) != -1 ){
+            $(this).attr( 'checked', true );
+            $(this).parent().parent().addClass('row_selected');
+          }
+          else{
+            $('#daily_absences_table thead tr th input').attr('checked', false);
+          }
+        });
+        $('.dataTables_empty').parent().addClass('no-data');
+        $('.dataTables_empty').addClass('center-text');
+      },
+      "sAjaxSource":  "/absences/daily_index_table",
+      "oLanguage": {
+        "sZeroRecords": "<div class='description center-text'>Data tidak ditemukan!</div><% if current_features.include?('present_employee') %><div class='info'>Silahkan klik <a id='present'>Absenkan Karyawan</a> untuk menambah data</div><% end %>"
+      },
+      "fnServerData": function ( sSource, aoData, fnCallback ) {
+        /* Add some extra data to the sender */
+
+        aoData.push( { "name": "date_start", "value": $('#date_pick').val() } );
+        aoData.push( { "name": "name", "value": $('#filter_name').val() } );
+        aoData.push( { "name": "department", "value": $('#filter_department').val() } );
+        aoData.push( { "name": "division", "value": $('#filter_division').val() } );
+        //          fnSetKey(aoData, "iDisplayStart", displayStart );
+        fnSetKey(aoData, "iDisplayStart", displayStart );
+        dataLength = fnGetKey(aoData, "iDisplayLength");
+        $.getJSON( sSource, aoData, function (json) {
+
+          if (json.presencesAllCount > 0 ){
+            $(".action_menu").show();
+            $("#filter_block").show();
+          }else{
+            $(".action_menu").hide();
+            $("#filter_block").hide();
+          }
+
+          if (json.iTotalDisplayRecords > 0){
+            $( '.paginationResult' ).html( parseInt(displayStart) + 1 +" - "+ (parseInt(json.iTotalDisplayRecords) + parseInt(displayStart)) +" dari <span id='total'>"+ json.iTotalRecords +"</span>");
+            $('#id_more_action').show();
+            $('#action_menu').show();
+          }
+          else{
+            $( '.paginationResult' ).html("&nbsp;");
+            $('#id_more_action').hide();
+            $('#action_menu').hide();
+          }
+          if (json.iTotalRecords < dataLength ){
+            $( '.pagination .icons' ).hide();
+          } else{
+            $( '.pagination .icons' ).show();
+          }
+          fnCallback(json);
+          stop_filter();
+        });
+      }
+    } );
+
+    $('#present').live ("click", function (e){
+      e.preventDefault();
+      $('#employee_present_button').click();
+    });
+
+    $('#remove_date_filter').click(function (e) {
+      e.preventDefault();
+      $(this).hide();
+      $('#date_filter').show();
+      $('#date_pick').datepicker("setDate",<%="#{Date.today.strftime("%d/%m/%Y")}"%>);
+      $('.result_filter').html($('#temp_date').val() );
+      if ($('#text_department').html() != ''){
+        $('#filter_department').show();
+        $('#text_department').hide();
+        $('#text_department').next().show();
+      }
+      if (!($('#filter_opt_3').is(':hidden') && $('#filter_opt_2 ').is(':hidden') && $('#filter_opt_1').is(':hidden'))){
+        $('#filter_button').show();
+      }
+      oTable.fnDraw();
+    });
+
+    $('#filter_button').click(function (e) {
+      progress_filter();
+      e.preventDefault();
+      oTable.fnDraw();
+      return false;
+    } );
+
+  });
+
+  function progress_filter(){
+     $("#ajax-load1").show();
+     $('#filter_button').hide();
+   }
+
+  function stop_filter(){
+    $("#ajax-load1").hide();
+    $('#filter_button').show();
+  }
+
+  function resetInput(){
+    $('.expand_filter input').val('');
+    $('#filter_select').val('1');
+    displayStart = 0;
+  }
+
+
+</script>

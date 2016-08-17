@@ -1,0 +1,9 @@
+01:
+  id: 1
+  company_id: 1
+  department_name: "produksi"
+02:
+  id: 2
+  company_id: 1
+  department_name: "Aukitchen"
+

@@ -1,0 +1,158 @@
+<%= render :partial=> "layouts/shared/breadcrumbs" %>
+<fieldset class="fm-table">
+  <legend>
+    <a href="#" id="help_dash" class="icons help-top-icon" title="Click to show/hide information">&nbsp;</a>
+    Edit Hari Libur
+  </legend>
+  <%= render :partial => "layouts/howto/howto_content"%>
+  
+  <div class="input-help-wide">
+    <label>Field dengan tanda <span class="redstar">*</span> harus diisi</label>
+  </div>
+  
+  <% form_remote_for @holidays, :url => holiday_path(@holidays.id) do |f| %>
+    <div class="input" style="width:600px">
+      <span class="input-field">
+        <% hidden_field_tag "holiday_id", @holiday_id %>
+        <%= f.label 'Nama Hari Libur <span class="redstar">*</span>' %>
+        <%= f.text_field :holiday_name %>
+        <a class="icons help_ico" id="tooltip_holiday_name" bt-xtitle="" title="">&nbsp;</a>
+        <%= render :partial => "layouts/jquery_tooltip", :locals => {:link=>"tooltip_holiday_name", :list=>"list_detail"} %>
+        <span class="clear"></span>
+        <%= error_message_on @holidays, :holiday_name %>
+      </span>
+      <span class="clear"></span>
+      <span class="input-field" style="width:600px">
+        <%= f.label 'Periode <span class="redstar">*</span>' %>
+        <%= f.text_field :holiday_start_date, :class=>'ui-date datepicker changeDate', :id=>'date1', :value =>"#{@holidays.holiday_start_date.blank? ? "" :@holidays.holiday_start_date.strftime("%d/%m/%Y")}"%>
+        s/d
+        <%= f.text_field :holiday_end_date, :class=>"ui-date datepicker changeDate", :id=>'date2', :value =>"#{@holidays.holiday_end_date.blank? ? "" :@holidays.holiday_end_date.strftime("%d/%m/%Y")}"%>
+        <a class="icons help_ico" id="tooltip_holiday_periode" bt-xtitle="" title="">&nbsp;</a>
+        <%= render :partial => "layouts/jquery_tooltip", :locals => {:link=>"tooltip_holiday_periode", :list=>"list_periode"} %>
+        <span class="clear"></span>
+        <%= error_message_on @holidays, :holiday_start_date %>
+        <%= error_message_on @holidays, :holiday_end_date %>
+      </span>
+      <span class="clear"></span>
+      <span class="input-field">
+        <label>Lama libur <span class="redstar">*</span></label>
+        <span id="totalDays">
+          <%=  f.text_field :holiday_duration,  :id=>'duration'%> Hari
+          <a class="icons help_ico" id="tooltip_length_holiday" bt-xtitle="" title="">&nbsp;</a>
+          <%= render :partial => "layouts/jquery_tooltip", :locals => {:link=>"tooltip_length_holiday", :list=>"list_length_holiday"} %>
+          <span class="clear"></span>
+          <%= error_message_on @holidays, :holiday_duration %></span>
+      </span>
+      <span class="clear"></span>
+      <span class="input-field">
+        <span class="left marginL10 marginT4 width160px">
+          <label><%= check_box_tag :leave_duration_check, true , @holidays.leave_duration.to_i > 0 , :id=>'daysCutiTrigger'%>&nbsp;Cuti Bersama</label>
+        </span>
+        <a class="icons help_ico" id="tooltip_leave_together" bt-xtitle="" title="">&nbsp;</a>
+        <%= render :partial => "layouts/jquery_tooltip", :locals => {:link=>"tooltip_leave_together", :list=>"list_leave_together"} %>
+        <%= f.text_field  :leave_duration, :size=>5, :class=>'small-text left', :id=>'daysCuti' %> <span class="left">&nbsp;Hari</span>
+        <span class="clear"></span>
+        <%= error_message_on @holidays, :leave_duration %>
+      </span>
+    </div>
+    <span class="clear"></span>
+    <div class="block-btn-form">
+      <%= render :partial => "layouts/button_loader" %>
+      <div id="button">
+        <input id="info_section_cancel_basic" class="grey_button" type="reset" value="Batal" name="info_section_cancel_basic" onclick="onCancel('#holidays')"/>
+        <input type="submit" value="Simpan" name="info_section_save_basic" id="info_section_save_basic" class="blue_button" onclick="ajaxLoad1('button','ajax-load1')"/>
+      </div>
+    </div>
+  <%  end %>
+</fieldset>
+<%= render :partial => "tooltip_all_field" %>
+
+<script type="text/javascript">
+  
+  $(document).ready(function() {
+
+    $("#date1").datepicker({
+      altField: '#temp_date1',
+      buttonImageOnly: true
+    })
+    $("#date2").datepicker({
+      altField: '#temp_date2',
+      buttonImageOnly: true
+    })
+    $("#temp_date1").attr('readonly','readonly');
+    $("#temp_date2").attr('readonly','readonly');
+    $('#duration').attr('readOnly', 'readOnly');
+    $('#daysCuti').attr('readOnly', 'readOnly');
+
+    $("#national_holiday_holiday_name").change(function(){
+      if ($(this).val()== ""){
+        //alert("Mohon mengisi nama hari libur")
+        //$("#info_section_save_basic").attr("disabled","disabled");
+      }
+      else{
+        //$("#info_section_save_basic").removeAttr("disabled");
+      }
+    })
+    $("#daysCuti").change(function(){
+      if ($(this).val()== ""){
+        $(this).val("0")
+      }
+    })
+
+
+    if($('#daysCutiTrigger').is(':checked')){
+      $("#daysCuti").removeAttr('readOnly');
+    }
+    else{
+      $("#daysCuti").attr('readOnly', 'readOnly');
+    }
+    $('#daysCutiTrigger').change(function() {
+      if($('#daysCutiTrigger').is(':checked')){
+        $("#daysCuti").removeAttr('readOnly');
+      }
+      else{
+        $("#daysCuti").attr('readOnly', 'readOnly');
+      }
+    });
+
+    $('.changeDate').change(function() {
+      var str = ''
+      a = $("#date1").val().split("/")
+      b = $("#date2").val().split("/")
+      time1 = a[2] + "/" + a[1] + "/" + a[0]
+      time2 = b[2] + "/" + b[1] + "/" + b[0]
+      var time1 = Date.parse(time1);
+      var time2 = Date.parse(time2);
+      var distance_in_miliseconds = 0;
+      var flag = 0;
+      if(time1 == null || time2 == null){
+        distance_in_miliseconds =0;
+      }
+      else{
+        var distance_in_miliseconds = time2 - time1;
+        if (distance_in_miliseconds < 0)
+        {
+          //alert ("Tanggal Awal Liburan Harus Lebih Awal Dari Tanggal Berakhir");
+          //$('#date1').val("");
+          //$('#date2').val("");
+          distance_in_miliseconds = 0;
+          flag = 1;
+        }
+      }
+      if (flag == 1){
+        $('#duration').val("");
+      }
+      else{
+        str = (distance_in_miliseconds / (1000*60*60*24)) + 1;
+        $('#duration').val(str);
+        $('#duration').text(str);
+      }
+    });
+
+  });
+
+  function ajaxLoad1(div_btn, div_load){
+     $("#" + div_load + "").show();
+     $("#" + div_btn + "").hide();
+   }
+</script>

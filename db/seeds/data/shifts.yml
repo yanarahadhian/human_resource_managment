@@ -1,0 +1,23 @@
+shifts1:
+  id: 1
+  company_id: 1
+  shift_name: "Normal Shift"
+  monday_time_id: 1
+  tuesday_time_id: 1
+  wednesday_time_id: 1
+  thursday_time_id: 1
+  friday_time_id: 1
+  saturday_time_id: 2
+
+shifts2:
+  id: 2
+  company_id: 1
+  shift_name: "Driver Shift"
+  monday_time_id: 3
+  tuesday_time_id: 3
+  wednesday_time_id: 3
+  thursday_time_id: 3
+  friday_time_id: 3
+  saturday_time_id: 2
+  shift_category: "driver"
+

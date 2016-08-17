@@ -1,0 +1,186 @@
+--- !ruby/object:Gem::Specification 
+name: acts_as_archive
+version: !ruby/object:Gem::Version 
+  hash: 15
+  prerelease: 
+  segments: 
+  - 0
+  - 4
+  - 0
+  version: 0.4.0
+platform: ruby
+authors: 
+- Winton Welsh
+autorequire: 
+bindir: bin
+cert_chain: []
+
+date: 2011-01-25 00:00:00 +07:00
+default_executable: 
+dependencies: 
+- !ruby/object:Gem::Dependency 
+  name: also_migrate
+  prerelease: false
+  requirement: &id001 !ruby/object:Gem::Requirement 
+    none: false
+    requirements: 
+    - - "="
+      - !ruby/object:Gem::Version 
+        hash: 25
+        segments: 
+        - 0
+        - 3
+        - 5
+        version: 0.3.5
+  type: :runtime
+  version_requirements: *id001
+- !ruby/object:Gem::Dependency 
+  name: mover
+  prerelease: false
+  requirement: &id002 !ruby/object:Gem::Requirement 
+    none: false
+    requirements: 
+    - - "="
+      - !ruby/object:Gem::Version 
+        hash: 31
+        segments: 
+        - 0
+        - 3
+        - 6
+        version: 0.3.6
+  type: :runtime
+  version_requirements: *id002
+description: Don't delete your records, move them to a different table. Like acts_as_paranoid, but doesn't mess with your SQL queries.
+email: mail@wintoni.us
+executables: []
+
+extensions: []
+
+extra_rdoc_files: []
+
+files: 
+- .gitignore
+- LICENSE
+- README.md
+- Rakefile
+- acts_as_archive.gemspec
+- bin/acts_as_archive
+- config/externals.yml
+- config/gemsets.yml
+- config/gemspec.yml
+- init.rb
+- lib/acts_as_archive.rb
+- lib/acts_as_archive/adapters/rails2.rb
+- lib/acts_as_archive/adapters/rails3.rb
+- lib/acts_as_archive/adapters/sinatra.rb
+- lib/acts_as_archive/gems.rb
+- rails/init.rb
+- spec/Rakefile
+- spec/acts_as_archive/gems_spec.rb
+- spec/acts_as_archive_spec.rb
+- spec/fixtures/config/acts_as_archive.yml
+- spec/fixtures/config/database.yml.example
+- spec/fixtures/db/migrate/001_belongs_tos.rb
+- spec/fixtures/db/migrate/002_records.rb
+- spec/fixtures/db/migrate/003_has_ones.rb
+- spec/fixtures/db/migrate/004_has_manies.rb
+- spec/fixtures/db/migrate/005_has_many_through_throughs.rb
+- spec/fixtures/db/migrate/006_has_many_throughs.rb
+- spec/fixtures/db/migrate/007_has_one_through_throughs.rb
+- spec/fixtures/db/migrate/008_has_one_throughs.rb
+- spec/fixtures/frameworks.yml
+- spec/fixtures/frameworks/rails2/application_controller.rb
+- spec/fixtures/frameworks/rails2/database.yml
+- spec/fixtures/frameworks/rails2/init.rb
+- spec/fixtures/frameworks/rails2/routes.rb
+- spec/fixtures/frameworks/rails3/Gemfile
+- spec/fixtures/frameworks/rails3/application_controller.rb
+- spec/fixtures/frameworks/rails3/database.yml
+- spec/fixtures/frameworks/rails3/routes.rb
+- spec/fixtures/frameworks/sinatra/application.rb
+- spec/fixtures/gemsets.yml
+- spec/fixtures/gemspec.yml
+- spec/fixtures/helpers/spec_helper.rb
+- spec/fixtures/models/belongs_to.rb
+- spec/fixtures/models/has_many.rb
+- spec/fixtures/models/has_many_through.rb
+- spec/fixtures/models/has_many_through_through.rb
+- spec/fixtures/models/has_one.rb
+- spec/fixtures/models/has_one_through.rb
+- spec/fixtures/models/has_one_through_through.rb
+- spec/fixtures/models/record.rb
+- spec/run
+- spec/spec.opts
+- spec/spec_helper.rb
+has_rdoc: true
+homepage: http://github.com/winton/acts_as_archive
+licenses: []
+
+post_install_message: 
+rdoc_options: []
+
+require_paths: 
+- lib
+required_ruby_version: !ruby/object:Gem::Requirement 
+  none: false
+  requirements: 
+  - - ">="
+    - !ruby/object:Gem::Version 
+      hash: 3
+      segments: 
+      - 0
+      version: "0"
+required_rubygems_version: !ruby/object:Gem::Requirement 
+  none: false
+  requirements: 
+  - - ">="
+    - !ruby/object:Gem::Version 
+      hash: 3
+      segments: 
+      - 0
+      version: "0"
+requirements: []
+
+rubyforge_project: 
+rubygems_version: 1.5.2
+signing_key: 
+specification_version: 3
+summary: Don't delete your records, move them to a different table
+test_files: 
+- spec/Rakefile
+- spec/acts_as_archive/gems_spec.rb
+- spec/acts_as_archive_spec.rb
+- spec/fixtures/config/acts_as_archive.yml
+- spec/fixtures/config/database.yml.example
+- spec/fixtures/db/migrate/001_belongs_tos.rb
+- spec/fixtures/db/migrate/002_records.rb
+- spec/fixtures/db/migrate/003_has_ones.rb
+- spec/fixtures/db/migrate/004_has_manies.rb
+- spec/fixtures/db/migrate/005_has_many_through_throughs.rb
+- spec/fixtures/db/migrate/006_has_many_throughs.rb
+- spec/fixtures/db/migrate/007_has_one_through_throughs.rb
+- spec/fixtures/db/migrate/008_has_one_throughs.rb
+- spec/fixtures/frameworks.yml
+- spec/fixtures/frameworks/rails2/application_controller.rb
+- spec/fixtures/frameworks/rails2/database.yml
+- spec/fixtures/frameworks/rails2/init.rb
+- spec/fixtures/frameworks/rails2/routes.rb
+- spec/fixtures/frameworks/rails3/Gemfile
+- spec/fixtures/frameworks/rails3/application_controller.rb
+- spec/fixtures/frameworks/rails3/database.yml
+- spec/fixtures/frameworks/rails3/routes.rb
+- spec/fixtures/frameworks/sinatra/application.rb
+- spec/fixtures/gemsets.yml
+- spec/fixtures/gemspec.yml
+- spec/fixtures/helpers/spec_helper.rb
+- spec/fixtures/models/belongs_to.rb
+- spec/fixtures/models/has_many.rb
+- spec/fixtures/models/has_many_through.rb
+- spec/fixtures/models/has_many_through_through.rb
+- spec/fixtures/models/has_one.rb
+- spec/fixtures/models/has_one_through.rb
+- spec/fixtures/models/has_one_through_through.rb
+- spec/fixtures/models/record.rb
+- spec/run
+- spec/spec.opts
+- spec/spec_helper.rb

@@ -1,0 +1,144 @@
+<div class="input-data">
+  <div class="input big">
+    <span class="input-field" id="give_jamsostek">
+      <label class='auto widthAuto'>
+        Apakah perusahaan memberikan Jamsostek ?
+      </label>
+      <label class="auto widthAuto"><%= f.radio_button :jamsostek_by_company, :true %> Ya </label>
+      <label class="auto widthAuto"><%= f.radio_button :jamsostek_by_company, :false %> Tidak </label>
+    </span>
+    <div class="clear"></div>
+
+    <span class="input-field" id="value_jamsostek">
+      <label class='auto widthAuto left'>
+        Basis perhitungan Jamsostek
+      </label>
+      <%= select_tag :role_jamsostek , options_for_select([["Gaji Pokok", "gp"], ["UMK", "umk"]], is_jamsostek_value(@payroll)? "umk" : "gp"), :class => 'auto-size left' %>
+      <div id="div_txt_pay_jamsotex" style="display:none" class="left">
+        <%= f.text_field :jamsostek_value, :class => "small-text" %>
+      </div>
+    </span>
+  </div>
+  <div class="clear"></div>
+  <hr />
+   <span class="input-field">
+      <label class="auto widthAuto">
+        Jumlah Hari Kerja Yang Dihitung
+      </label>
+      <label class="auto widthAuto">
+        <%= radio_button_tag :full_working_days, 30, :cheked => true %>30 Hari
+      </label>
+      <label class="auto widthAuto">
+        <%= radio_button_tag :full_working_days, 'others', :class=>'left'%>
+        <%= text_field_tag :full_working_days,'', :class=>'small-text hide2'%><span class="hide2">Hari</span>
+      </label>
+      <%= error_message_on @payroll, :full_working_days %>
+    </span>
+    <span class="clear"></span>
+
+    <span class="input-field">
+      <label  class="auto widthAuto">
+        Pembayaran dengan rekening BCA
+        <%= f.check_box :payroll_by_bca %>
+      </label>
+      
+    </span>
+    <span class="clear"></span>
+
+    <div id="bca-info">
+      <%= render :partial => 'bca_account_form', :locals => {:f => f} %>
+    </div>
+    <span class="clear"></span>
+     <div style="margin-left:-5px;">
+       <span class="input-field">
+        <label class="auto widthAuto">
+          Slip Gaji Menggunakan Logo:
+        </label>
+        <label class="auto widthAuto"><%= f.radio_button :use_logo_in_payroll_slip, :true %> Ya </label>
+        <label class="auto widthAuto"><%= f.radio_button :use_logo_in_payroll_slip, :false %> Tidak </label>
+      </span>
+    </div>
+</div>
+
+<div class="clear"></div>
+ <div class="block-btn-form">
+  <%= render :partial => "layouts/button_loader" %>
+  <div id="button">
+    <input id="info_section_cancel_basic" class="grey_button" type="reset" value="Batal" name="info_section_cancel_basic" onclick="onCancel('#payrolls')"/>
+    <input type="submit" value="Simpan" name="info_section_save_basic" id="info_section_save_basic" class="blue_button" onclick="ajaxLoad1('button','ajax-load1')"/>
+  </div>
+</div>
+
+<script type="text/javascript">
+  $(document).ready(function(){
+    $('#payroll_setting_ptkp').numeric();
+    $('#payroll_setting_jamsostek_value').numeric();
+    $('#payroll_setting_cut_off_date, #payroll_setting_company_cover_jamsostek, #full_working_days').numeric();
+    
+    //Jamsostek
+    <% if @payroll.blank? || !@payroll.jamsostek_by_company %>
+      $('#value_jamsostek').hide();   
+    <% end %>
+
+    $('#payroll_setting_jamsostek_by_company_true').click(function(){
+      $('#value_jamsostek').show(); 
+    });
+    $('#payroll_setting_jamsostek_by_company_false').click(function(){
+      $('#value_jamsostek').hide(); 
+     });
+
+    $('#role_jamsostek').change(function() {
+      var val = $('#role_jamsostek').val();
+      if (val == "umk"){
+        $('#div_txt_pay_jamsotex').show();
+      }else{
+        $('#payroll_setting_jamsostek_value').val("0");
+        $('#div_txt_pay_jamsotex').hide();        
+      }
+    });
+
+    //Working days
+    <% if @payroll.full_working_days == 30 %>
+      $("#full_working_days_30").attr("checked", true);
+      disable_workdays();
+    <% elsif @payroll.full_working_days == 0 %>
+      $("#full_working_days_0").attr("checked", true);
+      disable_workdays();
+    <% else %>
+      $("#full_working_days_others").attr("checked", true);
+      $('#full_working_days').val(<%= @payroll.full_working_days %>);
+      $("#full_working_days").attr("disabled","");
+    <% end %>
+    })
+
+    // BCA
+    <% if @payroll.payroll_by_bca %>
+      $('#bca-info').show();
+    <% else %>
+      $('#bca-info').hide();
+    <% end %>
+
+  $(function(){
+    $('#payroll_setting_payroll_by_bca').click(function(){
+      $('#bca-info').toggle();
+    });
+
+    $('#full_working_days_30').click(function(){
+      disable_workdays();
+    });
+
+    $('#full_working_days_others').click(function(){
+      $("#full_working_days").attr("disabled","");
+    });
+  });
+
+  function disable_workdays(){
+    $("#full_working_days").attr("disabled","disabled");
+    $('#full_working_days').val(0);
+  }
+
+  function ajaxLoad1(div_btn, div_load){
+     $("#" + div_load + "").show();
+     $("#" + div_btn + "").hide();
+   }
+</script>

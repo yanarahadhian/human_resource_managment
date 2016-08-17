@@ -1,0 +1,33 @@
+<p>
+  <b>Accident location:</b>
+  <%=h @accident.accident_location %>
+</p>
+
+<p>
+  <b>Accident date:</b>
+  <%=h @accident.accident_date %>
+</p>
+
+<p>
+  <b>Causes:</b>
+  <%=h @accident.causes %>
+</p>
+
+<p>
+  <b>Accident description:</b>
+  <%=h @accident.accident_description %>
+</p>
+
+<p>
+  <b>Action taken:</b>
+  <%=h @accident.action_taken %>
+</p>
+
+<p>
+  <b>Accident category:</b>
+  <%=h @accident.accident_category %>
+</p>
+
+
+<%= link_to 'Edit', edit_accident_path(@accident) %> |
+<%= link_to 'Back', accidents_path %>

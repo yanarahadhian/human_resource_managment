@@ -1,0 +1,31 @@
+<fieldset class="fm-table-parent2">
+  <legend><a href="#" id="help_dash" class="icons help-top-icon" title="Click to show/hide information">&nbsp;</a>
+   Data Karyawan</legend>
+  <%= render :partial => "layouts/howto/howto_content"%>
+  <%= render :partial => 'layouts/profile_frame'%>
+  <legend>Edit Violation</legend>
+   <div class="left right-information" style="width:1070px;">
+    <%= render :partial=>"layouts/top_menu_detail_karyawan" %>
+    <div id="content-dynamic">
+      <fieldset class="fm-table">
+        <div class="inner-title"></div>
+        <div class="box-form">
+          <% form_for @violation, :url => person_violation_path(params[:person_id], @violation) do |f| %>
+            <div id="box_retur_0">
+              <%= render :partial => 'violation_form', :locals => {:f => f} %>
+              <span class="clear"></span>
+              <hr />
+              <div class="center-text">
+                <%= render :partial => "layouts/button_loader"  %>
+                <div id="button">
+                  <input id="info_section_cancel_basic" class="grey_button" type="reset" value="Batal" name="info_section_cancel_basic" onclick="onCancel('#people/<%= @person.id %>/employments?tab=3')"/>
+                  <input type="submit" value="Simpan" name="info_section_save_basic" id="info_section_save_basic" class="blue_button"/>
+                </div>
+              </div>
+            </div>
+          <% end-%>
+        </div>
+      </fieldset>
+    </div>
+  </div>
+</fieldset>

@@ -1,0 +1,30 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+satu:
+  id: 1
+  tax_status_code: "T/0"
+  ptkp: 1320000
+  company_id: 32
+dua:
+  id: 2
+  tax_status_code: "T/1"
+  ptkp: 1430000
+  company_id: 32
+tiga:
+  id: 3
+  tax_status_code: "T/2"
+  ptkp: 1540000
+  company_id: 32
+empat:
+  id: 4
+  tax_status_code: "T/3"
+  ptkp: 1650000
+  company_id: 32
+lima:
+  id: 5
+  tax_status_code: "K/0"
+  ptkp: 1430000
+  company_id: 32
+#
+# two:
+#   column: value

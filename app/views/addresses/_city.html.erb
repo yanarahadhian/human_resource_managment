@@ -1,0 +1,17 @@
+<% disabled_status = (province_name.blank? || province_name=='nil')? "disabled" : "" %>
+
+<span class="input-field">
+    <% if params[:sign] == "addresses" %>
+      <label>Kota / Kabupaten<span class="redstar">*</span></label><span class="left">:&nbsp;</span>
+      <select name="address[city]" id="address_city" <%= disabled_status %>>
+    <% else %>
+      <label>Kota / Kabupaten</label><span class="left">:&nbsp;</span>
+      <select name="family[address_attributes][city]" id="address_city" <%= disabled_status %>>
+    <% end %>
+      <option value="">Pilih</option>
+      <% @city.each do |p| %>
+        <option value="<%= p %>"><%= p %></option>
+      <% end %>
+    </select>
+  </span>
+<span class="clear"></span>

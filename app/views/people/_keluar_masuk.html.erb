@@ -1,0 +1,137 @@
+<div class="panelFilter">
+  <table cellspacing="0" cellpadding="0">
+   <tbody>
+     <tr>
+       <% unless @people.blank? %>
+         <td style="width:100px;">
+           <div id="action_menu">
+             <ul>
+               <li>
+                 <a class="grey_button2">
+                   <span class="left">More Actions</span>
+                   <span class="icons drop_arrow_ico">&nbsp;</span>
+                 </a>
+                 <div class="clear"></div>
+                 <ul>
+                    <li><a class="list" onclick="onDelete('keluar_masuk')">Delete</a></li>
+                 </ul>
+               </li>
+             </ul>
+           </div>         
+         </td>
+       <% end %>
+       <% if @people_count > 0 %>
+         <td>
+           <a class="grey_button2" id="filter_trigger" style="color: rgb(89, 119, 156); ">
+             <span class="icons filter-ico">&nbsp;</span> Filter
+           </a>
+         </td>
+       <% end %>
+       <td style="width:240px;">
+         <% unless @people.blank? %>
+           <div class="pagination">
+             <div id="action_menu">
+               <ul>
+                 <li>
+                   <a class="grey_button2">
+                     <span class="left">Export Data to</span>
+                     <span class="icons drop_arrow_ico">&nbsp;</span>
+                   </a>
+                   <div class="clear"></div>
+                   <ul>
+                     <li><a class="list" href="<%= export_change_from_before_path('keluar_masuk') %>"><span class="icons xls_ico">&nbsp;</span><span class="left">XLS File</span></a></li>
+                   </ul>
+                 </li>
+               </ul>
+             </div>
+           </div>
+         <% end %>
+         <div class="clear"></div>
+       </td>
+     </tr>
+     <tr id="filter_block" style="display: table-row;" >
+       <td colspan="3">
+           <div class="expand_filter">
+             <div id="filter_st" style="display: block; ">
+               <% form_remote_tag :url => {:action=>:keluar_masuk}, :method => :get  do -%>
+                 <div class="left-filter">
+                   <div class="filter_opt">
+                     <label class="left">Bulan</label>
+                     <select name="filter[bulan]" id="filter_mutasi_bulan">
+                       <option value="">Semua bulan</option>
+                       <option value="01" <%= value_month_for_combo(1, params) %> >Januari</option>
+                       <option value="02" <%= value_month_for_combo(2, params) %> >Februari</option>
+                       <option value="03" <%= value_month_for_combo(3, params) %> >Maret</option>
+                       <option value="04" <%= value_month_for_combo(4, params) %> >April</option>
+                       <option value="05" <%= value_month_for_combo(5, params) %> >Mei</option>
+                       <option value="06" <%= value_month_for_combo(6, params) %> >Juni</option>
+                       <option value="07" <%= value_month_for_combo(7, params) %> >Juli</option>
+                       <option value="08" <%= value_month_for_combo(8, params) %> >Agustus</option>
+                       <option value="09" <%= value_month_for_combo(9, params) %> >September</option>
+                       <option value="10" <%= value_month_for_combo(10, params) %> >Oktober</option>
+                       <option value="11" <%= value_month_for_combo(11, params) %> >November</option>
+                       <option value="12" <%= value_month_for_combo(12, params) %> >Desember</option>
+                     </select>
+                   </div>
+                 </div>
+                 <div class="right-filter">
+                 <div class="filter_opt">
+                   <label class="left">Tahun</label>
+                   <select name="filter[tahun]" id="filter_sp_tahun">
+                     <option value="">Pilih Tahun</option>
+                     <%= get_year_for_combo(params) %>
+                   </select>
+                 </div>
+                 </div>
+                 <div class="clear"></div>
+                 <div class="center filter-btn">
+                   <div style="display: none;" class="ajax-load" id="filter-load">
+                     <img alt=""  src="<%= ApplicationController::BASE_URL %>/images/ajax-loader.gif"/>
+                       Harap Tunggu
+                   </div>
+                   <span class="center" id="filter_button"><%= submit_tag 'Tampilkan', :class=>"grey_button2", :onclick=> "progress_filter()", :style => 'float :none; margin-bottom :3px;' %></span>
+                 </div>
+                 <div class="clear"></div>
+               <% end %>
+             </div>
+           </div>
+         </td>
+       </tr>
+     </tbody></table>
+ </div>
+ <div class="clear"></div>
+ <div id="div_list_keluar_masuk">
+   <%= render :partial=> "keluar_masuk/list_keluar_masuk" %>
+</div>
+
+<script type="text/javascript">
+   //Javascript Filter   
+   $(document).ready(function(){
+     removeNotifyMessage();
+     <% if params[:filter].blank? %>
+       $('#filter_block').hide();       
+     <% else %>
+       $('#filter_block').show();
+       $('#filter_trigger').toggleClass("filter-active");
+     <% end %>
+     
+     $('#filter_trigger').click(function(){
+       $(this).toggleClass("filter-active");
+       $('#filter_block').toggle();
+     });
+     $('.expand_filter .reset-filter-ico').click(function(){
+       $('#filter_block').hide();
+       $('#filter_trigger').removeClass("filter-active")
+     });
+     //Filter_Step
+     $('#filter_nd').hide();
+     $('#next_step').click(function(){
+       $('#filter_st').hide();
+       $('#filter_nd').show();
+     });
+     $('#save_create, #cancel_create').click(function(){
+       $('#filter_st').show();
+       $('#filter_nd').hide();
+     });
+   });
+</script>

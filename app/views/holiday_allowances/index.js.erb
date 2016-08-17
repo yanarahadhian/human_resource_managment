@@ -1,0 +1,19 @@
+// Refresh #honors
+$("#honors").html("<%= escape_javascript(render("list_thr")) %>");
+
+// Refresh span#export-menu
+$("span#export-menu").html("<%= escape_javascript(render("export_menu")) %>");
+
+// Show filter result and hide filter period
+<% unless params[:date].blank? %>
+    $("#filter-period").hide();
+    $("span.result_filter").show();
+    $("span.result_filter").html("<%= escape_javascript(render("filter_period")) %>");
+<% end %>
+// Close filter result and show filter period
+$(document).ready(function() {  
+  $('a#clear-filter').click(function (){
+      $("span.result_filter").hide();
+      $("#filter-period").show();
+    });
+});

@@ -1,0 +1,102 @@
+<% input_nama = "input-field" %>
+<% err_nama = error_message_on @leave,:person_id %>
+<% input_nama = "input-error" unless err_nama.blank? %>
+
+<% input_periode = "input-field" %>
+<% err_periode = error_message_on @leave, :leave_date %>
+<% input_periode = "input-error" unless err_periode.blank? %>
+
+<% input_alasan = "input-field" %>
+<% err_alasan = error_message_on @leave, :base %>
+<% input_alasan = "input-error" unless err_alasan.blank? %>
+
+<div class="input">
+  <div class="input-field">
+    <% if @error == true || (!@leave) %>
+      <span class="<%= input_nama %>" style = "width: 600px;">
+        <span class='left'><label>Nama Karyawan <span class="redstar">*</span></label>:&nbsp;</span>
+        <%= text_field_tag 'person', nil, :id => "person-name" %>
+        <%= hidden_field_tag :person_id, "" %>
+        <span class="clear"></span>
+        <div><%= err_nama %></div>
+      </span>
+      <span class="clear"></span>
+
+      <span class="<%= input_periode %>" style = "width: 600px;">
+        <label>Periode Cuti<span class="redstar">*</span></label>:
+        <%= text_field_tag "temp_date",{},{:style => "width:100px !important;"}%>
+        <%= hidden_field_tag :date_start,{},{:id => "date_pick"} %>
+        &nbsp; s.d. &nbsp;
+        <%= text_field_tag "temp_date2",{},{:style => "width:100px !important;"}%>
+        <%= hidden_field_tag :date_end,{},{:id => "date_pick2"} %>
+        <div class="clear"></div>
+        <div><%= err_periode %></div>
+      </span>
+      <span class="clear"></span>
+
+      <span class="<%= input_alasan %>" style = "width: 600px;">
+        <label>Pilih Alasan<span class="redstar">*</span></label>:
+        <%= f.collection_select :type_id , @absence_types, :id, :absence_type_name , {:prompt => "Pilih Alasan Cuti"} %>
+        <div class="clear"></div>
+        <div><%= err_alasan %></div>
+      </span>
+      <span class="clear"></span>
+    <% else %>
+      <span class="input_field" style = "width: 600px;">
+        <span class='left'><label> Nama Karyawan </label>:&nbsp;</span>
+        <span><%= @person.full_name if !@person.nil? %></span>
+        <span class="clear"></span>
+      </span>
+      <span class="clear"></span>
+
+      <span class="input-field" style = "width: 600px;">
+        <label>Tanggal Cuti<span class="redstar">*</span></label>:
+        <%= text_field_tag "temp_date",{},{:value => (@leave.leave_date.nil? ? "" : @leave.leave_date.strftime("%d/%m/%Y")), :style => "width:100px !important;"}%>
+        <%= hidden_field_tag :date_start,{},{:id => "date_pick"} %>
+      </span>
+      <span class="clear"></span>
+
+      <span class="input-field" style = "width: 600px;">
+        <label>Pilih Alasan<span class="redstar">*</span></label>:
+        <%= f.collection_select :type_id , @absence_types, :id, :absence_type_name %>
+      </span>
+      <span class="clear"></span>
+    <% end %>
+
+    <span class="input-field" style = "width: 600px;">
+      <span class='left'><label>Deskripsi </label>:&nbsp;</span>
+      <%= f.text_area :leave_description, :cols => "30", :rows => "3" %>
+    </span>
+    <span class="clear"></span>
+
+    <span class="input-field" style = "width: 600px;">
+      <label>Status Cuti<span class="redstar">*</span></label>:
+      <%= f.select :leave_status, ["Pending", "Approved", "Rejected"] %>
+    </span>
+    <span class="clear"></span>
+  </div>
+</div>
+
+<script type="text/javascript">
+  $(document).ready(function() {
+
+    $("#date_pick").datepicker({
+      altField: '#temp_date',
+      altFormat: 'dd/mm/yy',
+      dateFormat: 'yy-mm-dd',
+      minDate: new Date(),
+      buttonImageOnly: true
+    });
+    $("#date_pick2").datepicker({
+      altField: '#temp_date2',
+      altFormat: 'dd/mm/yy',
+      dateFormat: 'yy-mm-dd',
+      buttonImageOnly: true,
+      minDate: new Date()
+    });
+    if ($('#temp_date').val() == ""){
+      $('#date_pick').datepicker("setDate",<%="#{Date.tomorrow.strftime("%d/%m/%Y")}"%>);
+      $('#date_pick2').datepicker("setDate",<%="#{Date.tomorrow.strftime("%d/%m/%Y")}"%>);
+    }
+  });
+</script>

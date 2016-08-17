@@ -1,0 +1,80 @@
+<%= javascript_include_tag  'pagination' %>
+<%= render :partial => "people_script" %>
+<table id="person_table" class="tablesorter">
+  <thead>
+     <tr>
+       <th><input type="checkbox"/></th>
+       <th>NIK</th>
+       <th class="left-text">
+              <span class="left"><%= sortable "Nama karyawan" %></span>
+              <span class="icons sorter_ico">&nbsp;</span>
+        </th>
+       <th>Departemen Awal</th>
+       <th>Bagian Awal</th>
+       <th>Jabatan Awal</th>
+       <th class="left-text">Departemen Saat Ini</th>
+       <th class="left-text">Bagian Saat Ini</th>
+       <th class="left-text">Jabatan Saat Ini</th>
+       <th class="left-text">Tanggal</th>
+       <th class="left-text">Alasan</th>
+    </tr>
+  </thead>
+  <tbody>
+     <% unless @employments.blank? %>
+      <% @employments.each do |emp| %>
+        <tr>
+          <td>
+            <%= check_box_tag'myrow[ids][]', emp.id, false %>
+           </td>
+          <td class="left-text">
+            <%= link_to emp.person.employee_identification_number, "#people/#{emp.person.id }?tab=0" %>
+          </td>
+          <td class="left-text">
+            <%= link_to emp.person.full_name, "#people/#{emp.person.id }?tab=0" %>
+          </td>
+          <% emp_previous = Employment.find_by_id(emp.previous_employment_id)%>
+          <td class="left-text"><%= emp_previous.blank? ? "-" : emp_previous.department.blank? ? "-" : emp_previous.department.department_name %></td>
+          <td class="left-text"><%= emp_previous.blank? ? "-" : emp_previous.division.blank? ? "-" : emp_previous.division.name %></td>
+          <td class="left-text"><%= emp_previous.blank? ? "-" : emp_previous.position.blank? ? "-" : emp_previous.position.position_name %></td>
+          <td class="left-text"><%= emp.blank? ? "-" : emp.department.blank? ? "-" : emp.department.department_name %></td>
+          <td class="left-text"><%= emp.blank? ? "-" : emp.division.blank? ? "-" : emp.division.name %></td>
+          <td class="left-text"><%= emp.blank? ? "-" : emp.position.blank? ? "-" : emp.position.position_name %></td>
+          <td class="left-text"><%= emp.updated_at %></td>
+          <td class="left-text"><%= emp.reason_for_change.blank? ? "-" : emp.reason_for_change %></td>
+        </tr>
+      <% end %>
+    <% else %>
+      <tr class="no-data">
+        <td colspan="11" class="center-text">
+          <div class="description">
+            <% if params[:filter] %>
+              Data Tidak Ditemukan
+            <% else %>
+              Belum Ada Data Demosi
+            <% end %>
+          </div>
+          <div class="info">
+            <% if params[:filter] %>
+              Silahkan <a id="import2" onclick="onBtnReset('/reset_list_demosi')"> Reset Filter</a> untuk mengubah parameter anda
+            <% end %>&nbsp;
+         </div>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<div class="panelFilter">
+  <div class="pagination">
+    <% if @employments.count > 0 %>
+      <span class="paginationResult">
+        <% a = format_paginate1(@employments, @per_page, @employments.total_entries, "list_demosi") %>
+        <%= a[:a] %> - <%= a[:b] %> dari <%= @employments.total_entries %>
+      </span>
+      <%= a[:paginate] %>
+    <% else %>
+      &nbsp;
+    <% end %>
+    <div class="clear"></div>
+  </div>
+	<div class="clear"></div>
+</div>

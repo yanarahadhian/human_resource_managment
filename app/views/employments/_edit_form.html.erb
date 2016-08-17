@@ -1,0 +1,105 @@
+<% form_for @employment, :url => person_employment_path(@person.id, @employment.id), :html=> {:method => "put"}, :method=> "post" do |f| %>
+  <div id="box_retur_0">
+    
+      <%= render :partial => 'employment_detail_form', :locals => {:f => f, :employment => @employment} %>
+
+    <div class="center-text">
+      <%= render :partial => "layouts/button_loader" %>
+      <div class="clear"></div>
+      <div id="button_edit_emp" style="display:none" class="block-btn-form">
+        <input type="reset" onclick="doCancelEdit();" name="info_section_cancel_basic" value="Batal" class="grey_button" id="info_section_cancel_basic">
+        <input type="submit" value="Simpan" name="info_section_save_basic" id="info_section_save_basic" class="blue_button" onclick="ajaxLoad1('<%= person_employment_path(params[:person_id], @employment.id) %>','button_edit_emp','ajax-load1')"/>
+      </div>
+    </div>
+  </div>
+<% end-%>
+
+<script>
+
+  function ajaxLoad1(url, div_btn, div_load){
+    $("#" + div_load + "").show();
+    $("#" + div_btn + "").hide();
+    $.get(url, function(data) {
+      $("#ajax-load").hide();
+    });
+  }
+
+  function onChangeField(){
+    $('#field_status').show();
+    $('#label_status').hide();
+    $('#field_start').show();
+    $('#label_start').hide();
+    $('#field_perubahan').show();
+    $('#label_perubahan').hide();
+    $('#field_end').show();
+    $('#label_end').hide();
+    $('#field_department').show();
+    $('#label_department').hide();
+    $('#field_divisi').show();
+    $('#label_divisi').hide();
+    $('#field_group').show();
+    $('#label_group').hide();
+    $('#field_jabatan').show();
+    $('#label_jabatan').hide();
+    $('#field_shift').show();
+    $('#label_shift').hide();
+    $('#field_reason').show();
+    $('#label_reason').hide();
+    $('.title-page-tambah').html("Edit Jabatan");
+    $('.input-help').show();
+    $('#div_link_edit').hide();
+    $('#button_edit_emp').show();
+    $('.grey_button_a.top-right').hide();
+  }
+
+  function doCancelEdit(){
+    path = "<%= ApplicationController::BASE_URL %>/people/<%= params[:person_id] %>/employments/cancel_popup_detail";
+    $.ajax({
+      type: "get",
+      url: path,
+      data :"id=<%= @employment.id%>",
+      dataType: 'script',
+      success: function(){
+        $('.title-page-tambah').html("Detail Jabatan");
+        $('.grey_button_a').show();
+      }
+    });
+  }
+
+  function onClose(){
+    $('#field_status').hide();
+    $('#label_status').show();
+    $('#field_start').hide();
+    $('#label_start').show();
+    $('#field_perubahan').hide();
+    $('#label_perubahan').show();
+    $('#field_end').hide();
+    $('#label_end').show();
+    $('#field_department').hide();
+    $('#label_department').show();
+    $('#field_divisi').hide();
+    $('#label_divisi').show();
+    $('#field_group').hide();
+    $('#label_group').show();
+    $('#field_jabatan').hide();
+    $('#label_jabatan').show();
+    $('#field_reason').hide();
+    $('#label_reason').show();
+    $('.title-page-tambah').html("Detail Jabatan");
+    $('#div_button').hide();
+    $.fn.colorbox.close();
+  }
+  $(document).ready(function(){
+    $('#cboxClose').click(function(){
+      onClose()
+    });
+    <% if @sign == "gagal" %>
+      onChangeField();
+    <% end %>
+
+    $( ".ui-date, .ui-date2" ).datepicker({
+      buttonImageOnly: true
+    })
+
+  });
+</script>

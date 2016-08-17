@@ -1,0 +1,206 @@
+<script>
+
+  $(function() {
+    var availableTags = [
+      <% Experience.all.each do |comp| %>
+        <% if comp.id == PreviousCompany.last.id %>
+           "<%= comp.company_name%> ",
+        <% else %>
+           "<%= comp.company_name%>"
+        <% end %>
+      <% end %>
+    ];
+    $("#company_name").autocomplete({
+      source: availableTags
+    });
+  });
+
+</script>
+
+<div class="input">
+  <% if pdata_type == "organizational" %>
+    <% input_org_name = "input-field" %>
+    <% err_org_name = f.error_message_on :company_name %>
+    <% unless err_org_name.blank? %>
+      <% input_org_name = "input-error" %>
+      <% err_org_name = err_org_name  %>
+    <% end %>
+
+    <% input_thn_masuk = "input-field" %>
+    <% err_thn_masuk = f.error_message_on :start_date %>
+    <% input_thn_masuk = "input-error" unless err_thn_masuk.blank? %>
+
+    <span class="<%= input_org_name %>">
+      <label>Organisasi<span class="redstar">*</span></label><span class="left">:&nbsp;</span>
+      <%= f.text_field :company_name %>
+      <%= f.hidden_field :experience_type, :value => pdata_type %>
+      <%= err_org_name %>
+
+    </span>
+    <span class="clear"></span>
+
+    <span class="input-field">
+       <label>No. Telp</label>:
+       <%= f.text_field :no_telp %>
+    </span>
+    <span class="clear"></span>
+
+    <span class="input-field">
+      <label>Bagian</label>:
+      <%= f.text_field :division %>
+    </span>
+    <span class="clear"></span>
+
+    <span class="input-field">
+      <label>Jabatan</label>:
+      <%= f.text_field :position_held, :class => 'inputtext' %>
+    </span>
+    <span class="clear"></span>
+
+    <span class="input-field">
+      <label>Keterangan Lain</label>:
+      <%= f.text_area :job_description, :rows => 3, :cols => 20 %>
+    </span>
+    <span class="clear"></span>
+
+    <span class="<%= input_thn_masuk %>">
+      <label>Tahun Masuk<span class="redstar">*</span></label><span class="left">:&nbsp;</span>
+      <select id="experience_start_date" name="experience[start_date]">
+         <option selected="selected" value="">Pilih</option>
+         <% (Time.now.year).downto(Time.now.year-50) do |i|%>
+           <% sel = '' %>
+           <% if params[:experience] %>
+             <% sel =" selected='selected'" if params[:experience][:end_date].to_i == i%>
+           <% end %>
+           <option value="<%= i %>"<%= sel %>><%= i %></option>
+         <% end %>
+       </select>
+      <br class="clear">
+      <%= err_thn_masuk %>
+    </span>
+    <span class="clear"></span>
+
+    <span class="input-field">
+      <label>Status</label><span class="left">:&nbsp;</span>
+      <select onchange="checkvalue(this)" id="cbStatus">
+        <option value="aktif">Aktif</option>
+        <option value="tidak_aktif">Tidak Aktif</option>
+      </select>
+    </span>
+    <span class="clear"></span>
+
+    <div id="hideshow" style="display:<%= @experience.end_date.to_s.empty? ? 'none' : 'input' %>">
+      <span class="input-field" id="if_error">
+        <label>Tahun keluar</label><span class="left">:&nbsp;</span>
+         <div class="left">
+            <select name="experience[end_date]" id="experience_end_date">
+         <option selected="selected" value="">Pilih</option>
+           <% (Time.now.year).downto(Time.now.year-50) do |i|%>
+             <% sel = '' %>
+             <% if params[:experience] %>
+                <% sel =" selected='selected'" if params[:experience][:end_date].to_i == i%>
+             <% end %>
+             <option value="<%= i %>"<%= sel %>><%= i %></option>
+           <% end %>
+         </select>
+         </div>
+         <div class="left"><a href="javascript:hidediv()">Cancel</a></div>
+         <%= error_message_on @experience, :end_date %><div class="clear"></div>
+         <div class="formError" id="fe" style="display: none">Tahun Keluar tidak boleh kosong</div>
+      </span>
+      <span class="clear"></span>
+    </div>
+
+  <% else %>
+
+    <% input_comp_name = "input-field" %>
+    <% err_comp_name = f.error_message_on :company_name %>
+    <% unless err_comp_name.blank? %>
+      <% input_comp_name = "input-error" %>
+      <% err_comp_name = err_comp_name %>
+    <% end %>
+
+    <% input_start_date = "input-field" %>
+    <% err_start_date = f.error_message_on :start_date %>
+    <% input_start_date = "input-error" unless err_start_date.blank? %>
+
+    <% input_end_date = "input-field" %>
+    <% err_end_date = f.error_message_on :end_date %>
+    <% input_end_date = "input-error" unless err_end_date.blank? %>
+
+     <span class="<%= input_comp_name %>">
+       <%= f.hidden_field :experience_type, :value => pdata_type %>
+       <label>Perusahaan<span class="redstar">*</span></label><span class="left">:&nbsp;</span>
+       <%= f.text_field :company_name, :id=>"company_name" %>
+       <div class="clear"></div>
+       <%= err_comp_name %>
+     </span>
+     <span class="clear"></span>
+
+     <span class="input-field">
+       <label>No. Telp</label>:
+       <%= f.text_field :no_telp %>
+     </span>
+     <span class="clear"></span>
+
+     <span class="input-field">
+       <label>Jenis Kerja</label>:
+       <%= f.text_field :division %>
+     </span>
+     <span class="clear"></span>
+
+     <span class="input-field">
+       <label>Jabatan</label>:
+       <%= f.text_field :position_held, :class => 'inputtext' %>
+     </span>
+     <span class="clear"></span>
+
+     <span class="input-field">
+       <label>Keterangan Lain</label>:
+       <%= f.text_area :job_description, :rows => 3, :cols => 20 %>
+     </span>
+     <span class="clear"></span>
+
+     <span class="<%= input_start_date %>">
+       <label>Tahun Masuk<span class="redstar">*</span></label><span class="left">:&nbsp;</span>
+       <select id ="experience_start_date" name="experience[start_date]" >
+         <option selected="selected" value="">Pilih</option>
+         <% (Time.now.year).downto(Time.now.year-50) do |i|%>
+           <% sel = '' %>
+           <% if params[:experience] %>
+             <% sel = "selected='selected'" if params[:experience][:start_date].to_i == i %>
+           <% end %>
+           <option value="<%= i %>"<%= sel %>><%= i %></option>
+         <% end %>
+       </select>
+       <br class="clear">
+       <%= err_start_date %>
+     </span>
+     <span class="clear"></span>
+
+     <span class="<%= input_end_date %>">
+       <label>Tahun Keluar<span class="redstar">*</span></label><span class="left">:&nbsp;</span>
+       <select id="experience_end_date" name="experience[end_date]">
+         <option selected="selected" value="">Pilih</option>
+         <% (Time.now.year).downto(Time.now.year-50) do |i|%>
+           <% sel = '' %>
+           <% if params[:experience] %>
+             <% sel = "selected='selected'" if params[:experience][:end_date].to_i == i %>
+           <% end %>
+           <option value="<%= i %>"<%= sel %>><%= i %></option>
+         <% end %>
+       </select>
+        <br class="clear">
+       <%= err_end_date %>
+     </span>
+     <span class="clear"></span>
+
+    <span class="input-field">
+      <label>Alasan berhenti
+      </label>:
+      <%= f.text_area :reason_of_termination, :rows => 3, :cols => 20 %>
+    </span>
+    <span class="clear"></span>
+
+  <% end %>
+</div>

@@ -1,0 +1,40 @@
+<%= render :partial=> "layouts/shared/breadcrumbs" %>
+<%= render :partial => "layouts/howto_menu" %>
+<div class="clear"></div>
+<fieldset class="fm-table">
+  <legend>
+    <a href="#" id="help_dash" class="icons help-top-icon" title="Click to show/hide information">&nbsp;</a>
+    Download Data Kehadiran
+  </legend>
+  <%= render :partial => "layouts/howto/howto_content"%>
+  <% unless @fingerprint_device.blank? %>
+    <div id="button">
+      <input type="submit" value="Download" id="button_download" class="blue_button" disabled="disabled" onclick="download()"/>
+    </div>
+    <%= render :partial => "layouts/button_loader"  %>
+  <% else %>
+    <span>Anda belum mengatur alat fingerprint Anda.</span><br/>
+    <span>Silahkan klik <%= link_to "disini", "#fingerprint_settings" %> untuk mengatur alat fingerprint Anda.</span>
+  <% end %>
+</fieldset>
+
+<%= render :partial => "absences/popup_pages/popup_late" %>
+
+<script type="text/javascript" >
+
+  <% if @download_process.blank? %>
+      $('#button_download').removeAttr("disabled");
+  <% end %>
+  function download(){
+    alert("Proses download ini akan memakan waktu beberapa menit. Hasil download akan muncul di halaman waktu kerja dan lembur. Silakan lanjutkan aktifitas Anda dengan klik menu yang lain.")
+    $.ajax({
+      type: 'GET',
+       beforeSend:function(request){$('#spinner').show();$("#ajax-load1").show();CloseNotify();$('#button_download').attr("disabled", "disabled");},
+        complete:function(request){
+          $('#spinner').hide();
+          $("#ajax-load1").hide();},
+      url: '/download_data'
+    });
+  }
+</script>
+

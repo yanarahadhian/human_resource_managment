@@ -1,0 +1,75 @@
+<%= javascript_include_tag  'pagination' %>
+<%= render :partial => "job_accidents_script" %>
+<table id="table_accidents" class="tablesorter">
+  <thead>
+     <tr>
+       <th class="center-text"><input type="checkbox"/></th>
+       <th class="left-text">NIK</th>
+       <th class="left-text">Nama Karyawan</th>
+       <th class="center-text">No. Jamsostek</th>
+       <th class="center-text">Bagian</th>
+       <th class="left-text">Tanggal</th>
+       <th class="left-text">Penyebab</th>
+       <th class="left-text">Tindakan</th>
+       <th class="left-text">Penanggung jawab</th>
+       <th class="left-text">Kategori</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% unless @accidents.blank? %>
+      <% @accidents.each do |p| %>
+        <tr>
+          <td class="center-text"><%= check_box_tag'myrow[ids][]', p.id, false %></td>
+          <% person = Person.first(:conditions => "id = #{p.person_id}") unless p.person_id.blank? %>
+          <td class="left-text">
+            <%= link_to person.employee_identification_number, "#people/#{person.id}?tab=0" unless person.blank? %>
+          </td>
+          <td class="left-text">
+            <%= link_to person.full_name, "#people/#{person.id}?tab=0" unless person.blank? %>
+          </td>
+          <td class="left-text"><%= person.blank? ? "-" : person.jamsostek_number.blank? ? "-" : person.jamsostek_number %></td>
+          <td class="left-text"><%= person.blank? ? "-" : person.current_employment.blank? ? "-" : person.current_employment.division.blank? ? "-" : person.current_employment.division.name %></td>
+          <td class="left-text"><a href="#job_accidents/<%= p.id %>/edit"><%= p.accident_date.strftime("%d/%m/%Y") %></a></td>
+          <td class="left-text"><a href="#job_accidents/<%= p.id %>/edit"><%= p.causes.blank? ? "-" : p.causes %></a></td>
+          <td class="left-text"><%= p.action_taken.blank? ? "-" : p.action_taken %></td>
+          <td class="left-text"><%= p.accident_person_in_charge.blank? ? "-" : p.accident_person_in_charge %></td>
+          <td class="left-text"><%= p.accident_category.blank? ? "-" : p.accident_category %> </td>
+        </tr>
+      <% end %>
+    <% else %>
+      <tr class="no-data">
+        <td colspan="10" class="center-text">
+          <div class="description">
+            <% if params[:filter] %>
+              Data Tidak Ditemukan
+            <% else %>
+              Belum Ada Data Kecelakaan Kerja
+            <% end %>
+            </div>
+            <div class="info">
+              <% if params[:filter] %>
+                Silahkan <a id="reset_filter2"> Reset Filter</a> atau rubah nilai parameter filter Anda
+              <% else %>
+                Silahkan klik<a href="#job_accidents/new"> Tambah kecelakaan kerja</a> untuk menambah data
+              <% end %>
+            </div>
+        </td>
+      </tr>
+    <% end %>
+   
+  </tbody>
+</table>
+ <div class="panelFilter">
+  <div class="pagination">
+    <% if @accidents.count > 0 %>
+      <span class="paginationResult">
+        <% a = format_paginate1(@accidents, @per_page, @accidents.total_entries) %>
+        <%= a[:a] %> - <%= a[:b] %> dari <%= @accidents.total_entries %>
+      </span>
+      <%= a[:paginate] %>
+    <% else %>
+      &nbsp;
+    <% end %>
+   <div class="clear"></div>
+  </div>
+</div>

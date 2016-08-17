@@ -1,0 +1,107 @@
+<%= render :partial=> "layouts/shared/breadcrumbs" %>
+<fieldset class="fm-table">
+  <legend>
+    <a href="#" id="help_dash" class="icons help-top-icon" title="Click to show/hide information">&nbsp;</a>
+    Statistik Ketidakhadiran
+  </legend>
+  <%= render :partial => "layouts/howto/howto_content"%>
+  <div class="box-form">
+    <div class="panelFilter">
+      <table cellpadding="0" cellspacing="0">
+        <tbody>
+          <tr>
+            <td>
+              <a class="grey_button2" id="filter_trigger"> 
+                <span class="icons filter-ico">&nbsp;</span> Filter 
+              </a>
+            </td>
+          </tr>
+          <tr id="filter_block">
+            <td>
+              <div class="expand_filter">
+                <div id="filter_st">
+                  <div class="center-text auto-size">
+                    <div class="filter_opt">
+                      <span>Periode:</span>
+                      <%= text_field_tag "temp_date",{},{:style => "width:100px !important;"}%>
+                      <%= hidden_field_tag :date_start,{},{:id => "date_pick_absen"} %>
+                      &nbsp; s.d. &nbsp;
+                      <%= text_field_tag "temp_date2",{},{:style => "width:100px !important;"}%>
+                      <%= hidden_field_tag :date_end,{},{:id => "date_pick_absen2"} %>
+                    </div>
+                    <% form_remote_tag :url => {:action=>:index}, :method => :get  do -%>
+                      <div class="clear"></div>
+                      <div class="filter_opts">
+                        <label class="right">Nama Karyawan</label> :
+                        <span><%= text_field :filter, :name, :id => "names" %></span>
+                      </div>
+                    </div>
+                    <div class="clear"></div>
+                    <div class="center-text filter-btn" id="b1">
+                      <%= render :partial => "layouts/button_loader" %>
+                      <div id="button_absensi_submit" style="display: block">
+                        <input type="button" class="grey_button2 none" value="Tampilkan" id="trigger_ketidakhardiran"/>
+                      </div>
+                    </div>
+                  <% end %>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="clear"></div>
+
+  <div id="absence_report_page">
+    <%= render :partial => "/absences/list_absence_report" %>
+  </div>
+
+<script type="text/javascript">
+  //Tooltip
+  $(document).ready(function(){
+    $('#trigger_ketidakhardiran').click(function(e){
+      var date_start = new Date($("#date_pick_absen").val());
+      var date_end = new Date($("#date_pick_absen2").val());
+      var name = $("#names").val();
+      var selisih = Math.floor(((date_end - date_start) / (60*60*24)) / 1000)
+      if(selisih > 30){
+        alert("Periode waktu tidak boleh lebih dari 30 hari");
+        return false;
+      }else{
+        e.preventDefault();
+        resetTablePage($("#date_pick_absen").val(), $("#date_pick_absen2").val(), $("#names").val(), dataLength, displayStart);
+      }
+    });
+
+    $("#date_pick_absen").datepicker({
+      altField: '#temp_date',
+      altFormat: 'dd/mm/yy',
+      dateFormat: 'yy-mm-dd',
+      maxDate: '+0',
+      buttonImageOnly: true
+    });
+    $("#date_pick_absen2").datepicker({
+      altField: '#temp_date2',
+      altFormat: 'dd/mm/yy',
+      dateFormat: 'yy-mm-dd',
+      buttonImageOnly: true,
+      maxDate: '+0'
+    });
+
+    $('#date_pick_absen').datepicker("setDate",<%="#{Date.today.strftime("%d/%m/%Y")}"%>);
+    $('#date_pick_absen2').datepicker("setDate",<%="#{Date.today.strftime("%d/%m/%Y")}"%>);
+  });
+</script>
+
+<style type="text/css">
+.input-data .panelFilter .filter_opts label,
+.input-data .panelFilter .filter_opts .label-no-filter{
+        color: #00688A;
+        font-weight: bold;
+        text-align: inherit;
+        margin: 0px -416px 0 411px;
+        font-size: 12px;
+}
+</style>

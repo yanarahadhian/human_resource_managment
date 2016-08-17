@@ -1,0 +1,18 @@
+<%= render :partial=> "layouts/shared/breadcrumbs" %>
+<fieldset class="fm-table">
+  <legend>
+    <a href="#" id="help_dash" class="icons help-top-icon" title="Click to show/hide information">&nbsp;</a>
+   Setting Payroll
+  </legend>
+  <%= render :partial => "layouts/howto/howto_content"%>
+
+  <div class="">
+    <div class="box-form">
+      <% form_remote_for @payroll, :payroll, :url => payrolls_path, :html=>{:method=>:get} do |f| %>
+        <%= render :partial => "payroll_setting_form", :locals => {:f => f}%> 
+      <% end %>
+    </div>
+  </div>
+  <div class="clear"></div>
+</fieldset>
+

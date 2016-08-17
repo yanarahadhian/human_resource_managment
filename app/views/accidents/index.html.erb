@@ -1,0 +1,56 @@
+<div class="panelFilter">
+	<label>Tampilkan</label>
+	<select>
+    <option>Pilih Filter</option>
+    <option>Kategori</option>
+    <option>Tanggal</option>
+    <option>Deskripsi</option>
+    <option>Tindakan</option>
+  </select>
+
+  <input type="text" />
+		<span class="add-button right">
+		  <a class="grey_button2" id="add_barang" href="<%= new_person_accident_path(@person.id) %> ">
+				<span class="icons add_ico">&nbsp;</span>
+				Tambah Data Kecelakaan
+			</a>
+		</span>
+ </div>
+
+ <% unless @accidents.blank? -%>
+	 <table width="1381">
+		 <thead>
+			 <tr>
+			   <th width="38" >No.</th>
+			   <th width="113" > <a href=""> <span class="center-text">Kategori</span></a> </th>
+			   <th width="120" class="center-text"  > <a href="" class="left-text"> Tanggal  </a> </th>
+			   <th width="188" class="left-text">Deskripsi</th>
+			   <th width="128" class="left-text">Tindakan</th>
+			   <th width="272" class="left-text">Perlakuan</th>
+		   </tr>
+		 </thead>
+		 <tbody>
+       <% @accidents.each_with_index do |accident,index| %>
+		   <tr>
+			   <td class="left-text"><span class="center-text"><%= index+1 %></span></td>
+			   <td class="left-text"><%= accident.accident_category.display %></td>
+			   <td class="left-text"><%= accident.accident_date %></td>
+			   <td><%= accident.accident_description.blank? ? accident.accident_description.display : label_tag('expander', accident.accident_description.display , :class => 'expander') %></td>
+			   <td><%= accident.action_taken.display %></td>
+			   <td>
+            <span class="icons edit-icon">&nbsp;</span>
+            <span class="left"><%= link_to("Edit", edit_person_accident_path(@person.id, accident),:class=>"grey_button3")%></span>
+            <span class="icons delete-icon">&nbsp;</span>
+            <span class="left"><%= link_to('Hapus', person_accident_path(@person.id, accident), :method => :delete, :confirm => "Apakah anda yakin akan menghapus ini", :class=>"grey_button3")%></span>
+            <span class="icons detail-icon">&nbsp;</span>
+            <a href="#" class="grey_button4">
+              <span class="left">Lihat Detail</span>
+            </a>
+         </td>
+		   </tr>
+     <%end%>
+   </tbody>
+  </table>
+ <% else -%>
+   <div style="text-align:center;padding-top:30px;"><h1>Belum ada Kecelakaan</h1></div>
+ <% end -%>

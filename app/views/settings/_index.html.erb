@@ -1,0 +1,54 @@
+<%= render :partial=> "layouts/shared/breadcrumbs" %>
+<%= render :partial => "layouts/howto_menu" %>
+<fieldset class="fm-table">
+  <legend><a href="#" id="help_dash" class="icons help-top-icon" title="Click to show/hide information">&nbsp;</a>
+   Setting HR</legend>
+  <%= render :partial => "layouts/howto/howto_content"%>
+  <div class="clear"></div>
+  <%unless @hr.blank?%>
+    <div class="input" style="width:500px;">
+      <% if current_features.include?('hr_setting_edit') %>
+          <%=  link_to '<span class="icons edit-icon">&nbsp;</span>Edit', "#st/edit/#{@hr.id}" , :class=>'grey_button_a top-right', :id=> "btn_edit_setting" %>
+      <% end %>
+      <span class="input-field">
+        <label class="width180px">Toleransi keterlambatan</label>:
+        <%=h  @hr.lateness_tolerance_in_minutes %> menit
+      </span>
+      <div class="clear"></div>
+      <span class="input-field">
+        <label class="width180px">Waktu kelipatan perhitungan</label> :
+        <%=h  @hr.period_in_minutes %> menit
+      </span>
+      <div class="clear"></div>
+      <span class="input-field">
+        <label class="width180px">Jatah cuti tahun pertama</label> :
+        <%=h  @hr.leaves_first_year_quota %> hari
+      </span>
+      <div class="clear"></div>
+      <span class="input-field">
+        <label class="width180px">Jatah cuti setiap tahun</label> :
+        <%=h  @hr.leaves_quota_per_year %> hari
+      </span>
+      <div class="clear"></div>
+      
+      <span class="input-field">
+        <label class="width180px">Lembur</label> :
+        <%=h str_is_company_overtime(@hr) %>
+      </span>
+      <div class="clear"></div>
+
+    </div>
+  <%else%>
+    <div class="button-block-top">
+      <span class="no-data-view setting"><span class="icons help-top-icon">&nbsp;</span> Belum Ada HR Setting </span>
+    </div>
+  <%end%>
+</fieldset>
+
+<script type="text/javascript">
+  $(document).ready(function(){
+     <%= render :partial => "layouts/shared/tooltip_hr_setting"%>
+     error_handle("<%= flash.now[:notice] %>");
+  })
+</script>
+

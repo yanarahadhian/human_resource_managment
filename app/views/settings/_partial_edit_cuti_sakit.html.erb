@@ -1,0 +1,190 @@
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('#leave_is_salary_paid_0').click(function () { 
+      $('#leave_count_as_leave_0').attr('checked',false);
+      $('#leave_count_as_leave_0').attr('checked',true);
+    });
+
+    $('#leave_is_salary_paid_1').click(function () { 
+      $('#leave_count_as_leave_1').attr('checked',false);
+      $('#leave_count_as_leave_1').attr('checked',true);
+    });
+
+    $('#leave_count_as_leave_0').click(function () { 
+      $('#leave_is_salary_paid_0').attr('checked',false);
+      $('#leave_is_salary_paid_0').attr('checked',true);
+    });
+
+    $('#leave_count_as_leave_1').click(function () { 
+      $('#leave_is_salary_paid_1').attr('checked',false);
+      $('#leave_is_salary_paid_1').attr('checked',true);
+    });
+
+  });
+</script>
+
+<%= render :partial=> "layouts/shared/breadcrumbs" %>
+<%= render :partial => "layouts/howto_menu" %>
+<fieldset class="fm-table">
+  <legend><a href="#" id="help_dash" class="icons help-top-icon" title="Click to show/hide information">&nbsp;</a>
+   Edit Jenis Tidak Masuk</legend>
+  <%= render :partial => "layouts/howto/howto_content"%>
+
+  <div class="box-form">
+    <% form_remote_for :leave,  :url => update_cuti_sakit_setting_path(@leave.id), :method =>'put' do |f| %>
+      <% input_code = "input-field" %>
+      <% err_code = error_message_on @leave, :absence_type_code %>
+      <% input_code = "input-error" unless err_code.blank? %>
+
+      <% input_type = "input-field" %>
+      <% err_type = error_message_on @leave, :absence_type_name %>
+      <% input_type = "input-error" unless err_type.blank? %>
+
+      <% input_quotas = "input-field" %>
+      <% err_quotas = error_message_on @quota, :quota %>
+      <% input_quotas = "input-error" unless err_quotas.blank? %>
+
+      <div class="input-help-wide">
+        <label>Field dengan tanda <span class="redstar">*</span> harus diisi</label>
+      </div>
+      <div class="clear"></div>
+
+      <div class="input">
+
+        <span class="<%= input_code %>">
+          <label class="width180px">Kode tidak masuk <span class="redstar">*</span></label>:
+            <%= f.text_field :absence_type_code, :value => @leave.absence_type_code, :class=>'small-text bt-tooltip-text', :title=> 'Kode Ketidakhadiran'%>
+
+
+          <a class="icons help_ico" id="tooltip_kd_tdk_masuk" bt-xtitle="" title="">&nbsp;</a>
+          <%= render :partial => "layouts/jquery_tooltip", :locals => {:link=>"tooltip_kd_tdk_masuk", :list=>"list_kd_tdk_msk"} %>
+
+          <%= err_code %>
+        </span>
+        <div class="clear"></div>
+
+        <span class="<%= input_type %>">
+          <label class="width180px">Jenis tidak masuk <span class="redstar">*</span></label>:
+          <%- if @leave.type_id >= 1 && @leave.type_id <= 7 %>
+            <label>
+              <%=h @leave.absence_type_name %>
+            </label>
+          <%- else %>
+              <%= f.text_field :absence_type_name, :value => @leave.absence_type_name, :class=>'bt-tooltip-text', :title=> 'Nama Ketidakhadiran'%>
+          <%- end %>
+
+          <a class="icons help_ico" id="tooltip_jns_tdk_masuk" bt-xtitle="" title="">&nbsp;</a>
+          <%= render :partial => "layouts/jquery_tooltip", :locals => {:link=>"tooltip_jns_tdk_masuk", :list=>"list_jns_tdk_msk"} %>
+
+          <%= err_type  %>
+        </span>
+        <div class="clear"></div>
+        <span class="<%= input_quotas %>">
+          <label class="width180px">Maksimal pengambilan dalam 1 tahun<span class="redstar">*</span></label>:
+            <%= f.text_field :quota , :class=>'small-text bt-tooltip-text' , :value => @leave.quota , :title=>'Quota Ketidakhadiran'%> Hari
+
+          <a class="icons help_ico" id="tooltip_jth_in_year" bt-xtitle="" title="">&nbsp;</a>
+          <%= render :partial => "layouts/jquery_tooltip", :locals => {:link=>"tooltip_jth_in_year", :list=>"list_jth_in_year"} %>
+
+          <span class="clear"></span>
+          <%= err_quotas %>
+        </span>
+        <div class="clear"></div>
+
+
+<%=
+# True and false pada Memotong gaji dan memotong tunjangan  sengaja dibuat terbalik karena yang disimpan dalam database adalah dibayarkan atau tidak.
+%>
+        <span class="input-field">
+          <%= label_tag :is_salary_paid , 'Memotong Gaji ', :class=>'width180px' %>
+          <span class="left"> :</span>
+          <label style="width:80px">
+            <span style="float:left;"><%= f.radio_button :is_salary_paid, 0, :checked => !@leave.is_salary_paid? %></span>
+            <span style="float:left;">Ya</span>
+          </label>
+          <label class="auto">
+            <span style="float:left;"><%= f.radio_button :is_salary_paid, 1, :checked => @leave.is_salary_paid? %></span>
+            <span style="float:left;">Tidak</span>
+          </label>
+
+          <a class="icons help_ico" id="tooltip_gj_dibyr" bt-xtitle="" title="">&nbsp;</a>
+          <%= render :partial => "layouts/jquery_tooltip", :locals => {:link=>"tooltip_gj_dibyr", :list=>"list_gj_dibyr"} %>
+        </span>
+        <div class="clear"></div>
+
+        <span class="input-field">
+          <%= label_tag :allowance_are_paid , 'Memotong Tunjangan ', :class=>'width180px' %>
+          <span class="left"> :</span>
+          <label style="width:80px">
+            <span style="float:left;"><%= f.radio_button :allowance_are_paid, 0, :checked => !@leave.allowance_are_paid? %></span>
+            <span style="float:left;">Ya</span>
+          </label>
+          <label class="auto">
+            <span style="float:left;"><%= f.radio_button :allowance_are_paid, 1, :checked => @leave.allowance_are_paid? %></span>
+            <span style="float:left;">Tidak</span>
+          </label>
+
+          <a class="icons help_ico" id="tooltip_tg_dibyr" bt-xtitle="" title="">&nbsp;</a>
+          <%= render :partial => "layouts/jquery_tooltip", :locals => {:link=>"tooltip_tg_dibyr", :list=>"list_tg_dibayar"} %>
+        </span>
+        <div class="clear"></div>
+
+        <span class="input-field">
+          <%= label_tag :count_as_leave , 'Memotong jatah cuti tahunan ', :class=>'width180px' %>
+          <span class="left"> :</span>
+          <label style="width:80px">
+            <span style="float:left;"><%= f.radio_button :count_as_leave, 1, :checked => @leave.count_as_leave? %></span>
+            <span style="float:left;">Ya</span>
+          </label>
+          <label class="auto">
+            <span style="float:left;"><%= f.radio_button :count_as_leave, 0, :checked => !@leave.count_as_leave? %></span>
+            <span style="float:left;">Tidak</span>
+          </label>
+
+          <a class="icons help_ico" id="tooltip_htng_sbg_cuti" bt-xtitle="" title="">&nbsp;</a>
+          <%= render :partial => "layouts/jquery_tooltip", :locals => {:link=>"tooltip_htng_sbg_cuti", :list=>"list_htng_sbg_cuti"} %>
+
+        </span>
+        <div class="clear"></div>
+
+      </div>
+
+      <div class="clear"></div>
+      <hr />
+      <div class="block-btn-form">
+        <%= render :partial => "layouts/button_loader" %>
+        <div id="button">
+          <input id="info_section_cancel_basic" class="grey_button" type="reset" value="Batal" name="info_section_cancel_basic" onclick="onCancel('#cuti_sakit')"/>
+          <input type="submit" value="Simpan" name="info_section_save_basic" id="info_section_save_basic" class="blue_button" onclick="ajaxLoad1('button','ajax-load1')"/>
+        </div>
+
+      </div>
+      <!-- End -->
+    <% end %>
+
+  </div>
+</fieldset>
+<%= render :partial => "tooltip_all_field_cuti_sakit" %>
+
+<script type="text/javascript">
+  $(document).ready(function(){
+    if ($("#quota").val() == ""){
+      $("#quota").val("0");
+    }
+    $("#quota").change(function(){
+      if ($(this).val().length > 3){
+        $(this).val("0")
+      }
+      if($(this).val().match(/[a-z]/)){
+        $(this).val("0");
+      }
+      if ($("#quota").val() == ""){
+        $("#quota").val("0");
+      }
+    });
+
+  function ajaxLoad1(div_btn, div_load){
+     $("#" + div_load + "").show();
+     $("#" + div_btn + "").hide();
+   }
+</script>

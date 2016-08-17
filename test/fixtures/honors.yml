@@ -1,0 +1,43 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+ one:
+   id: 1
+   person_id: 1
+   company_id: 32
+   salary: 3500000
+   jamsostek_house_cut: 10000
+   jamsostek_insurance: 15000
+   gross_income: 3385833.67
+   position_expenses: 169291.68
+   month_net_income: 140000
+   year_net_income: 38598492
+   ptkp: 15840000
+   pkp: 22758000
+   pph_indebted_per_year: 1365480
+   pph_indebted_per_month: 113790
+   final_take_home_pay: 3272043.67
+   rounding_off: -43
+   start_period: "2012-03-01"
+   end_period: "2012-03-30"
+   is_thr: true
+
+ two:
+   id: 2
+   person_id: 2
+   company_id: 32
+   salary: 4000000
+   jamsostek_house_cut: 10000
+   jamsostek_insurance: 15000
+   position_expenses: 169291.68
+   gross_income: 3385833.67
+   month_net_income: 140000
+   year_net_income: 38598492
+   ptkp: 15840000
+   pkp: 22758000
+   pph_indebted_per_year: 1365480
+   pph_indebted_per_month: 113790
+   final_take_home_pay: 3272043.67
+   rounding_off: -43
+   start_period: "2012-03-01"
+   end_period: "2012-03-30"
+   is_thr: 0

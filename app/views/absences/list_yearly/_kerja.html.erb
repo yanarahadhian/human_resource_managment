@@ -1,0 +1,144 @@
+<table width="1381">
+  <thead>
+    <tr>
+      <th width="120"> <a href=""> <span class="center-text">Bulan</span></a> </th>
+      <%= "<th width='120' class='center-text'> Hari Kerja </th>" unless controller_name == "absences" && action_name == "mine" %>
+      <th width="120" class="center-text"> Lama kerja </th>
+      <th width="120" class="left-text">Terlambat</th>
+      <th width="180" class="left-text">Keterangan</th>
+    </tr>
+  </thead>
+  <tbody>
+    <%- if controller_name == "absences" && action_name == "mine"%>
+      <tr>
+        <td class="left-text"><span class="center-text"><%= l @date_start, :format => "%B" %></span></td>
+        <td class="left-text">
+          <%= link_to "#{Presence.hours_to_hour_text(@total_presence[:hours])}", "#monthlyabsence/#{@person.id}?date_month=#{@date_start.month}&date_year=#{@date_start.year}",
+            :onclick => "ajaxLoad('#{my_monthly_absence_path(:id => @person.id, :date_month => @date_start.month, :date_year => @date_start.year)}')" %>
+        </td>
+        <td class="left-text"><%= "#{@person.presences.late_comers(@person.company_id, @date_start, @date_end).count} Kali"%></td>
+        <td></td>
+      </tr>
+    <%- else%>
+      <%- (1..12).each do |month| %>
+        <tr>
+          <% date_start = Time.mktime(@year.year,month).to_date%>
+          <% total_presence = @person.presences.total_work_days(month, @year.year)%>
+          <td class="left-text"><span class="center-text"><%= l date_start, :format => "%B" %></span></td>
+          <td class="left-text">
+            <%= link_to "#{total_presence[:days]} Hari", "#monthlyabsence/#{@person.id}?date_month=#{month}&date_year=#{@year.year}",
+              :onclick => "ajaxLoad('#{my_monthly_absence_path(:id => @person.id, :date_month => month, :date_year => @year.year)}')" %>
+          </td>
+          <td class="left-text">
+            <%= link_to "#{Presence.hours_to_hour_text(total_presence[:hours])}", "#monthlyabsence/#{@person.id}?date_month=#{month}&date_year=#{@year.year}",
+              :onclick => "ajaxLoad('#{my_monthly_absence_path(:id => @person.id, :date_month => month, :date_year => @year.year)}')" %>
+          </td>
+          <td class="left-text"><%= "#{@person.presences.late_comers(@person.company_id, date_start, date_start.at_end_of_month).count} Kali"%></td>
+          <td></td>
+        </tr>
+      <%- end %>
+    <%- end%>
+  </tbody>
+</table>
+<script type="text/javascript" >
+  $(document).ready(function(){
+    $('#info_kerja, #info_sakit, #info_cuti, #info_cuti_khusus, #data_cuti_melahirkan,#info_ijin,#info_mangkir,#info_cuti_kecelakaan').hide()
+
+    $('#trigger_kerja').click(function () {
+      if($('#info_kerja').is(':hidden')){
+        $('#info_kerja').show();
+        $('#arrow1').removeClass('icons arrow_ico');
+        $('#arrow1').addClass('icons drop_arrow_ico');
+      }else{
+        $('#info_kerja').hide();
+        $('#arrow1').removeClass('icons drop_arrow_ico');
+        $('#arrow1').addClass('icons arrow_ico');
+      }
+    });
+
+    $('#trigger_sakit').click(function () {
+      if($('#info_sakit').is(':hidden')){
+        $('#info_sakit').show();
+        $('#arrow2').removeClass('icons arrow_ico');
+        $('#arrow2').addClass('icons drop_arrow_ico');
+      }else{
+        $('#info_sakit').hide();
+        $('#arrow2').removeClass('icons drop_arrow_ico');
+        $('#arrow2').addClass('icons arrow_ico');
+      }
+    });
+
+    $('#trigger_cuti').click(function () {
+      if($('#info_cuti').is(':hidden')){
+        $('#info_cuti').show();
+        $('#arrow3').removeClass('icons arrow_ico');
+        $('#arrow3').addClass('icons drop_arrow_ico');
+      }else{
+        $('#info_cuti').hide();
+        $('#arrow3').removeClass('icons drop_arrow_ico');
+        $('#arrow3').addClass('icons arrow_ico');
+      }
+    });
+
+    $('#trigger_cuti_khusus').click(function () {
+      if($('#info_cuti_khusus').is(':hidden')){
+        $('#info_cuti_khusus').show();
+        $('#arrow4').removeClass('icons arrow_ico');
+        $('#arrow4').addClass('icons drop_arrow_ico');
+      }else{
+        $('#info_cuti_khusus').hide();
+        $('#arrow4').removeClass('icons drop_arrow_ico');
+        $('#arrow4').addClass('icons arrow_ico');
+      }
+    });
+
+    $('#trigger_cuti_melahirkan').click(function () {
+      if($('#info_cuti_melahirkan').is(':hidden')){
+        $('#info_cuti_melahirkan').show();
+        $('#arrow5').removeClass('icons arrow_ico');
+        $('#arrow5').addClass('icons drop_arrow_ico');
+      }else{
+        $('#info_cuti_melahirkan').hide();
+        $('#arrow5').removeClass('icons drop_arrow_ico');
+        $('#arrow5').addClass('icons arrow_ico');
+      }
+    });
+
+    $('#trigger_ijin').click(function () {
+      if($('#info_ijin').is(':hidden')){
+        $('#info_ijin').show();
+        $('#arrow6').removeClass('icons arrow_ico');
+        $('#arrow6').addClass('icons drop_arrow_ico');
+      }else{
+        $('#info_ijin').hide();
+        $('#arrow6').removeClass('icons drop_arrow_ico');
+        $('#arrow6').addClass('icons arrow_ico');
+      }
+    });
+
+    $('#trigger_mangkir').click(function () {
+      if($('#info_mangkir').is(':hidden')){
+        $('#info_mangkir').show();
+        $('#arrow7').removeClass('icons arrow_ico');
+        $('#arrow7').addClass('icons drop_arrow_ico');
+      }else{
+        $('#info_mangkir').hide();
+        $('#arrow7').removeClass('icons drop_arrow_ico');
+        $('#arrow7').addClass('icons arrow_ico');
+      }
+    });
+
+    $('#trigger_cuti_kecelakaan').click(function () {
+      if($('#info_cuti_kecelakaan').is(':hidden')){
+        $('#info_cuti_kecelakaan').show();
+        $('#arrow8').removeClass('icons arrow_ico');
+        $('#arrow8').addClass('icons drop_arrow_ico');
+      }else{
+        $('#info_cuti_kecelakaan').hide();
+        $('#arrow8').removeClass('icons drop_arrow_ico');
+        $('#arrow8').addClass('icons arrow_ico');
+      }
+    });
+  });
+</script>
+

@@ -1,0 +1,1718 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="description" content="AppsChef" />
+    <meta name="keywords" content="AppsChef" />
+    <link rel="icon" href="<%= ApplicationController::BASE_URL %>/images/favicon-hr.ico" type="image/x-icon"/>
+    <!--<link rel="icon" href="http://localhost:3003/images/favicon-hr.ico" type="image/x-icon"/>-->
+    <% if session[:platform_user]['user']['app_mode'] == 'on_premise' %>
+      <%= stylesheet_link_tag  "#{ApplicationController::APPSCHEF_URL}/stylesheets/private2.css",
+        "#{ApplicationController::APPSCHEF_URL}/stylesheets/blue_werp.css",
+        "#{ApplicationController::APPSCHEF_URL}/stylesheets/960gs/fluid_grid.css",
+        "#{ApplicationController::APPSCHEF_URL}/stylesheets/colorbox.css",
+        "#{ApplicationController::APPSCHEF_URL}/stylesheets/footpanel.css",
+        "#{ApplicationController::APPSCHEF_URL}/stylesheets/redmond/jquery-ui-1.8.7.custom.css",
+        "#{ApplicationController::APPSCHEF_URL}/stylesheets/app.css",
+        "jquery.autocomplete.css"%>
+    <% else %>
+      <%= stylesheet_link_tag  "#{ApplicationController::APPSCHEF_URL}/stylesheets/private2.css",
+        "#{ApplicationController::APPSCHEF_URL}/stylesheets/fm_form.css",
+        "#{ApplicationController::APPSCHEF_URL}/stylesheets/960gs/fluid_grid.css",
+        "#{ApplicationController::APPSCHEF_URL}/stylesheets/colorbox.css",
+        "#{ApplicationController::APPSCHEF_URL}/stylesheets/footpanel.css",
+        "#{ApplicationController::APPSCHEF_URL}/stylesheets/redmond/jquery-ui-1.8.7.custom.css",
+        "#{ApplicationController::APPSCHEF_URL}/stylesheets/app.css",
+        "jquery.autocomplete.css"%>
+    <% end %>
+
+    <title>Human Resources Management: <%= render :partial => "layouts/title" %></title>
+    <style>.ui-date{background:#FFF !important; width:140px !important;}</style>
+  
+    <%= javascript_include_tag "#{ApplicationController::APPSCHEF_URL}/javascripts/jquery-1.4.2.min.js",
+      'jrails',
+      "#{ApplicationController::APPSCHEF_URL}/javascripts/jquery.spinner.js",
+      "#{ApplicationController::APPSCHEF_URL}/javascripts/jquery-ui-1.8.7.custom.min.js",
+      "jquery-ui-1.8.7.custom/development-bundle/ui/jquery.ui.core.js",
+      "jquery-ui-1.8.7.custom/development-bundle/ui/jquery.ui.widget.js",
+      "jquery-ui-1.8.7.custom/development-bundle/ui/jquery.ui.datepicker.js",
+      "jquery-ui-1.8.7.custom/development-bundle/ui/i18n/jquery.ui.datepicker-id.js",
+      "#{ApplicationController::APPSCHEF_URL}/javascripts/jquery.colorbox.js",
+      "#{ApplicationController::APPSCHEF_URL}/javascripts/mobilyslider.js",
+      "#{ApplicationController::APPSCHEF_URL}/javascripts/jquery.hint.js",
+      "#{ApplicationController::APPSCHEF_URL}/javascripts/jquery.tooltip.min.js",
+      "#{ApplicationController::APPSCHEF_URL}/javascripts/ui.spinner.js", "pagination.js","jquery.alphanumeric.pack.js",
+      "ac_style_script.js",
+      "#{ApplicationController::APPSCHEF_URL}/javascripts/ac_cross_script.js" %>
+
+    <%= javascript_include_tag 'jquery.tablesorter.js','jquery.tablesorter.pager.js', "jquery.dataTables.min",
+      'jquery.address-1.3.2.min', 'application.js', 'jquery.labelify.js', 'jquery.qtip', 'jquery.autocomplete',
+      'autologout_timeout.js'%>
+
+    <%= yield :head %>
+    
+    <script  type="text/javascript">
+      var app_one = null;
+      var app_two = null;
+      var app_setting = null;
+      var icon_how_to = '<a href="#" id="help_dash" class="icons help-top-icon" title="Click to show/hide information">&nbsp;</a>';
+      var ar_name = <%= current_people.map { |x| "#{x.full_data_name}" }.to_json %>;
+      var ar_id = <%= current_people.map { |x| x.id }.to_json %>
+      
+      $(document).ready(function(){
+
+        activateLayoutTwo();
+
+        //ini method yang digunakan untuk memanggil autologout
+        //liveStats();
+
+        $( ".ui-date, .ui-date2" ).datepicker({
+           buttonImageOnly: true
+        });
+
+        $("#add_product").click(function(){
+          $('#box_retur_1').show();
+        });
+
+        $('#login_approve').hide();
+        $('#approval_cek').click(
+        function(){
+          if($(this).is(':checked')){
+            $('#login_approve').show();
+          }else{
+            $('#login_approve').hide();
+          }
+        });
+
+        $("#datepicker" ).datepicker();
+        $("#datepicker2" ).datepicker();
+
+        $('.side_link').click(function(){
+        $('.top_link').removeClass('active');
+        $('.side_link').removeClass('active');
+          $(this).addClass('active');
+        });
+
+        $(icon_how_to).insertAfter($('.fm-table legend:first'));
+        var dt = new Date;
+        endyear = dt.getFullYear() +10;
+        $.datepicker.setDefaults({
+          showOn: "button",
+          buttonImage: "<%=ApplicationController::APPSCHEF_URL%>/images/calendar.gif",
+          changeMonth: true,
+          changeYear: true,
+          dateFormat: 'dd/mm/yy',
+          altFormat: 'dd/mm/yy',
+          selectDefaultDate: true,
+          <% if (controller_name=="people" && action_name=="new") %>
+            yearRange: '1939:' + endyear,
+          <% end %>
+          firstDay: 1
+        });
+
+        $('.txtYear').spinner({min: 0, max: 100000});        
+        $('.menu_absence').click(function(){
+          $('.menu_absence').removeClass('active');
+          $(this).addClass('active');
+        });
+        $.address.externalChange(function(event) {
+          if(event.value.match(/\/absences$/)||event.value.match(/\/absences\?/))  {
+            activateLayoutTwo();
+            var url_val = event.value
+            $('title').html('Human Resources Management:Absensi');
+            jQuery.ajax(
+            {beforeSend:function(request){$('#spinner').show(); $("#ajax-load").show();},
+              complete:function(request){$('#spinner').hide(); $("#ajax-load").hide();},
+              success:function(request){
+                jQuery('.input-data').empty(); jQuery('.input-data').html(request); 
+                $(".salaries_top_link").removeClass('active');$(".absences_top_link").addClass('active');$(".memorandums_top_link").removeClass('active');$(".people_top_link").removeClass('active');removeNotifyMessage();},
+              url:url_val});
+          }
+          if(event.value.match(/\/absences\/no_logout/))  {
+            activateLayoutTwo();
+            var url_val = event.value
+            $('title').html('Human Resources Management:Absensi');
+            jQuery.ajax(
+            {beforeSend:function(request){$('#spinner').show(); $("#ajax-load").show();},
+              complete:function(request){$('#spinner').hide(); $("#ajax-load").hide();},
+              success:function(request){jQuery('.input-data').empty(); jQuery('.input-data').html(request);$(".salaries_top_link").removeClass('active');$(".absences_top_link").addClass('active');$(".memorandums_top_link").removeClass('active');$(".people_top_link").removeClass('active');removeNotifyMessage();},
+              url:url_val});
+          }
+          if(event.value.match(/\/leaves/))  {
+            activateLayoutTwo();
+            var url_val = event.value
+            $('title').html('Human Resources Management:Cuti');
+            jQuery.ajax(
+            {beforeSend:function(request){$('#spinner').show(); $("#ajax-load").show();},
+              complete:function(request){$('#spinner').hide(); $("#ajax-load").hide();},
+              success:function(request){jQuery('.input-data').empty(); jQuery('.input-data').html(request);$(".salaries_top_link").removeClass('active');$(".absences_top_link").addClass('active');$(".memorandums_top_link").removeClass('active');$(".people_top_link").removeClass('active');removeNotifyMessage();},
+              url:url_val });
+          }
+          if(event.value.match(/\/fingerprint_settings/))  {
+            activateLayoutSetting();
+            $('title').html('Human Resources Management:Setting');
+            jQuery.ajax(
+            {beforeSend:function(request){$('#spinner').show(); $("#ajax-load").show();},
+              complete:function(request){
+                $('#spinner').hide();
+                $("#ajax-load").hide();
+                $('.top_link').removeClass('active');
+                activate_menu("fingerprint_menu")},
+              success:function(request){jQuery('.input-data').empty(); jQuery('.input-data').html(request);removeNotifyMessage();},
+              url: event.value });
+          }
+          if(event.value.match(/\/salaries$/))  {
+            activateLayoutTwo();
+            var url_val = '/salaries'
+            $('title').html('Human Resources Management:Gaji dan Tunjangan');
+            jQuery.ajax(
+            {beforeSend:function(request){$('#spinner').show(); $("#ajax-load").show();},
+              complete:function(request){$('#spinner').hide(); $("#ajax-load").hide();},
+              success:function(request){jQuery('.input-data').empty(); jQuery('.app_two_con').html(request);
+                $(".salaries_top_link").addClass('active');$(".absences_top_link").removeClass('active');$(".memorandums_top_link").removeClass('active');$(".people_top_link").removeClass('active');removeNotifyMessage();
+              },
+              url:url_val});
+          }
+
+          if(event.value.match(/\/salary_master_datas/))  {
+            activateLayoutTwo();
+            var url_val = '/salary_master_datas'
+            $('title').html('Human Resources Management:Gaji dan Tunjangan');
+            jQuery.ajax(
+            {beforeSend:function(request){$('#spinner').show(); $("#ajax-load").show();},
+              complete:function(request){$('#spinner').hide(); $("#ajax-load").hide();},
+              success:function(request){
+                jQuery('.input-data').empty(); jQuery('.app_two_con').html(request);
+                $(".salaries_top_link").addClass('active');
+                $(".salaries_top_link").addClass('active');$(".absences_top_link").removeClass('active');$(".memorandums_top_link").removeClass('active');$(".people_top_link").removeClass('active');removeNotifyMessage();
+              },
+              url:url_val});
+          }
+
+          if(event.value.match(/\/holiday_allowances/))  {
+            activateLayoutTwo();
+            var url_val = '/holiday_allowances'
+            $('title').html('Human Resources Management:THR');
+            jQuery.ajax(
+            {beforeSend:function(request){$('#spinner').show(); $("#ajax-load").show();},
+              complete:function(request){$('#spinner').hide(); $("#ajax-load").hide();},
+              success:function(request){jQuery('.input-data').empty(); jQuery('.app_two_con').html(request);$(".salaries_top_link").addClass('active');$(".absences_top_link").removeClass('active');$(".memorandums_top_link").removeClass('active');$(".people_top_link").removeClass('active');removeNotifyMessage();},
+              url:url_val});
+          }
+          if(event.value.match(/\/show_holiday_allowances\/(\d+)/))  {
+            activateLayoutTwo ();
+            var op = event.value.match(/\/show_holiday_allowances\/(\d+)/);
+            $('title').html('Human Resources Management:THR');
+            jQuery.ajax(
+            {beforeSend:function(request){$('#spinner').show();$("#ajax-load").show();},
+              complete:function(request){$('#spinner').hide();$("#ajax-load").hide();},
+              success:function(request){jQuery('.fm-table').remove(); jQuery('.app_two_con').html(request);$(".salaries_top_link").addClass('active');$(".absences_top_link").removeClass('active');$(".memorandums_top_link").removeClass('active');$(".people_top_link").removeClass('active');removeNotifyMessage();},
+              url:'/holiday_allowances/' + op[1]});
+          }
+          if(event.value.match(/\/edit_holiday_allowances\/(\d+)/))  {
+            activateLayoutTwo ();
+            var op = event.value.match(/\/edit_holiday_allowances\/(\d+)/);
+            $('title').html('Human Resources Management:THR');
+            jQuery.ajax(
+            {beforeSend:function(request){$('#spinner').show();$("#ajax-load").show();},
+              complete:function(request){$('#spinner').hide();$("#ajax-load").hide();},
+              success:function(request){jQuery('.fm-table').remove(); jQuery('.app_two_con').html(request);$(".salaries_top_link").addClass('active');$(".absences_top_link").removeClass('active');$(".memorandums_top_link").removeClass('active');$(".people_top_link").removeClass('active');removeNotifyMessage();},
+              url:'/holiday_allowances/' + op[1] +'/edit'});
+          }
+          if(event.value.match(/\/memorandums$/))  {
+            activateLayoutTwo()
+            $('title').html('Human Resources Management:Laporan Lainnya');
+            jQuery.ajax(
+            {beforeSend:function(request){$('#spinner').show();$("#ajax-load").show();},
+              complete:function(request){$('#spinner').hide(); $("#ajax-load").hide();},
+              success:function(request){
+                jQuery('.input-data').empty();
+                jQuery('.app_two_con').html(request);
+                $("#ajax-load").hide();
+                $(".salaries_top_link").removeClass('active');$(".absences_top_link").removeClass('active');$(".memorandums_top_link").addClass('active');$(".people_top_link").removeClass('active');removeNotifyMessage();
+              },
+              url:'/memorandums'});
+          }
+          if(event.value.match(/\/keluar_masuk/))  {
+            activateLayoutTwo ()
+            $('title').html('Human Resources Management:keluar_masuk');
+            jQuery.ajax(
+            {beforeSend:function(request){$('#spinner').show();$("#ajax-load").show();},
+              complete:function(request){$('#spinner').hide();$("#ajax-load").hide();},
+              success:function(request){$("#ajax-load").hide();jQuery('.input-data').empty(); jQuery('.input-data').html(request);$(".salaries_top_link").removeClass('active');$(".absences_top_link").removeClass('active');$(".memorandums_top_link").removeClass('active');$(".people_top_link").addClass('active');removeNotifyMessage();},
+              url:'/keluar_masuk'});
+          }
+          if(event.value.match(/\/list_mutasi$/))  {
+            activateLayoutTwo ()
+            $('title').html('Human Resources Management:mutasi');
+            jQuery.ajax(
+            {beforeSend:function(request){$('#spinner').show();$("#ajax-load").show();},
+              complete:function(request){$('#spinner').hide();$("#ajax-load").hide();},
+              success:function(request){jQuery('.input-data').empty(); jQuery('.input-data').html(request);$(".salaries_top_link").removeClass('active');$(".absences_top_link").removeClass('active');$(".memorandums_top_link").removeClass('active');$(".people_top_link").addClass('active');removeNotifyMessage();},
+              url:'/list_mutasi'});
+          }
+          if(event.value.match(/\/list_demosi$/))  {
+            activateLayoutTwo ()
+            $('title').html('Human Resources Management:demosi');
+            jQuery.ajax(
+            {beforeSend:function(request){$('#spinner').show();$("#ajax-load").show();},
+              complete:function(request){$('#spinner').hide();$("#ajax-load").hide();},
+              success:function(request){jQuery('.input-data').empty(); jQuery('.input-data').html(request);$(".salaries_top_link").removeClass('active');$(".absences_top_link").removeClass('active');$(".memorandums_top_link").removeClass('active');$(".people_top_link").addClass('active');removeNotifyMessage();},
+              url:'/list_demosi'});
+          }
+
+          if(event.value.match(/\/promotions/))  {
+            activateLayoutTwo()
+            $('title').html('Human Resources Management:Promosi');
+            jQuery.ajax(
+            {beforeSend:function(request){$('#spinner').show();$("#ajax-load").show();},
+              complete:function(request){$('#spinner').hide();$("#ajax-load").hide();CloseNotify();},
+              success:function(request){jQuery('.input-data').empty(); jQuery('.input-data').html(request);$(".salaries_top_link").removeClass('active');$(".absences_top_link").removeClass('active');$(".memorandums_top_link").removeClass('active');$(".people_top_link").addClass('active');removeNotifyMessage();},
+              url:'/promotions'});
+          }
+
+          if(event.value.match(/\/myovertime\/(\d+)/))  {
+            activateLayoutTwo()
+            var op = event.value.match(/\/myovertime\/(\d+)/);
+            $('title').html('Human Resources Management:Mutasi');
+            jQuery.ajax(
+            {beforeSend:function(request){$('#spinner').show();$("#ajax-load").show();},
+              complete:function(request){$('#spinner').hide();$("#ajax-load").hide();},
+              success:function(request){jQuery('.input-data').empty(); jQuery('.input-data').html(request);removeNotifyMessage();},
+              url:'/myovertime/'+op[1]});
+          }
+          if(event.value.match(/\/late$/))  {
+            activateLayoutTwo()
+            $('title').html('Human Resources Management:Terlambat');
+            jQuery.ajax(
+            {beforeSend:function(request){$('#spinner').show(); $("#ajax-load").show();},
+              complete:function(request){$('#spinner').hide(); $("#ajax-load").hide();},
+              success:function(request){jQuery('.input-data').empty(); jQuery('.input-data').html(request);$(".salaries_top_link").removeClass('active');$(".absences_top_link").addClass('active');$(".memorandums_top_link").removeClass('active');$(".people_top_link").removeClass('active');removeNotifyMessage();},
+              url:'/late'});
+          }
+          if(event.value.match(/\/download_from_device$/))  {
+            activateLayoutTwo()
+            $('title').html('Human Resources Management:Download Dari Alat');
+            jQuery.ajax(
+            {beforeSend:function(request){$('#spinner').show(); $("#ajax-load").show();},
+              complete:function(request){$('#spinner').hide(); $("#ajax-load").hide();},
+              success:function(request){jQuery('.input-data').empty(); jQuery('.input-data').html(request);$(".salaries_top_link").removeClass('active');$(".absences_top_link").addClass('active');$(".memorandums_top_link").removeClass('active');$(".people_top_link").removeClass('active');removeNotifyMessage();},
+              url:'/download_from_device'});
+          }
+          if(event.value.match(/\/download_data$/))  {
+            activateLayoutTwo()
+            $('title').html('Human Resources Management:Download Dari Alat');
+            jQuery.ajax(
+            {beforeSend:function(request){$('#spinner').show(); $("#ajax-load").show();},
+              complete:function(request){$('#spinner').hide(); $("#ajax-load").hide();},
+              success:function(request){jQuery('.input-data').empty(); jQuery('.input-data').html(request);$(".salaries_top_link").removeClass('active');$(".absences_top_link").addClass('active');$(".memorandums_top_link").removeClass('active');$(".people_top_link").removeClass('active');removeNotifyMessage();},
+              url:'/download_data'});
+          }
+          if(event.value.match(/\/more_hour$/))  {
+            activateLayoutTwo()
+            $('title').html('Human Resources Management:Jam Kerja Lebih');
+            jQuery.ajax(
+            {beforeSend:function(request){$('#spinner').show(); $("#ajax-load").show();},
+              complete:function(request){$('#spinner').hide(); $("#ajax-load").hide();},
+              success:function(request){jQuery('.input-data').empty(); jQuery('.input-data').html(request);$(".salaries_top_link").removeClass('active');$(".absences_top_link").addClass('active');$(".memorandums_top_link").removeClass('active');$(".people_top_link").removeClass('active');removeNotifyMessage();},
+              url:'/more_hour'});
+          }
+          if(event.value.match(/\/less_hour$/))  {
+            activateLayoutTwo()
+            $('title').html('Human Resources Management:Jam Kerja Kurang');
+            jQuery.ajax(
+            {beforeSend:function(request){$('#spinner').show(); $("#ajax-load").show();},
+              complete:function(request){$('#spinner').hide(); $("#ajax-load").hide();},
+              success:function(request){jQuery('.input-data').empty(); jQuery('.input-data').html(request);$(".salaries_top_link").removeClass('active');$(".absences_top_link").addClass('active');$(".memorandums_top_link").removeClass('active');$(".people_top_link").removeClass('active');removeNotifyMessage();},
+              url:'/less_hour'});
+          }
+          if(event.value.match(/\/more_rest$/))  {
+            activateLayoutTwo()
+            $('title').html('Human Resources Management:Istirahat Lebih');
+            jQuery.ajax(
+            {beforeSend:function(request){$('#spinner').show(); $("#ajax-load").show();},
+              complete:function(request){$('#spinner').hide(); $("#ajax-load").hide();},
+              success:function(request){jQuery('.input-data').empty(); jQuery('.input-data').html(request);$(".salaries_top_link").removeClass('active');$(".absences_top_link").addClass('active');$(".memorandums_top_link").removeClass('active');$(".people_top_link").removeClass('active');removeNotifyMessage();},
+              url:'/more_rest'});
+          }
+          if(event.value.match(/\/less_rest$/))  {
+            activateLayoutTwo()
+            $('title').html('Human Resources Management:Istirahat Kurang');
+            jQuery.ajax(
+            {beforeSend:function(request){$('#spinner').show(); $("#ajax-load").show();},
+              complete:function(request){$('#spinner').hide(); $("#ajax-load").hide();},
+              success:function(request){jQuery('.input-data').empty(); jQuery('.input-data').html(request);$(".salaries_top_link").removeClass('active');$(".absences_top_link").addClass('active');$(".memorandums_top_link").removeClass('active');$(".people_top_link").removeClass('active');removeNotifyMessage();},
+              url:'/less_rest'});
+          }
+          if(event.value.match(/\/absent/))  {
+            activateLayoutTwo()
+            $('title').html('Human Resources Management:Tidak Masuk');
+            jQuery.ajax(
+            {beforeSend:function(request){$('#spinner').show(); $("#ajax-load").show();},
+              complete:function(request){$('#spinner').hide(); $("#ajax-load").hide();},
+              success:function(request){jQuery('.input-data').empty(); jQuery('.input-data').html(request);$(".salaries_top_link").removeClass('active');$(".absences_top_link").addClass('active');$(".memorandums_top_link").removeClass('active');$(".people_top_link").removeClass('active');removeNotifyMessage();},
+              url:event.value});
+          }
+          if(event.value.match(/\/overtimes/))  {
+            activateLayoutTwo()
+            $('title').html('Human Resources Management:Lembur');
+            jQuery.ajax(
+            {beforeSend:function(request){$('#spinner').show(); $("#ajax-load").show();},
+              complete:function(request){$('#spinner').hide(); $("#ajax-load").hide();},
+              success:function(request){jQuery('.input-data').empty(); jQuery('.input-data').html(request);$(".salaries_top_link").removeClass('active');$(".absences_top_link").addClass('active');$(".memorandums_top_link").removeClass('active');$(".people_top_link").removeClass('active');removeNotifyMessage();},
+              url:event.value});
+          }
+          if(event.value.match(/\/job_accidents$/))  {
+            activateLayoutTwo()
+            $('title').html('Human Resources Management:Lembur');
+            jQuery.ajax(
+            {beforeSend:function(request){$('#spinner').show();$("#ajax-load").show();},
+              complete:function(request){$('#spinner').hide();},
+              success:function(request){
+                jQuery('.input-data').empty();
+                jQuery('.app_two_con').html(request);
+                $("#ajax-load").hide();
+                $(".salaries_top_link").removeClass('active');$(".absences_top_link").removeClass('active');$(".memorandums_top_link").removeClass('active');$(".people_top_link").addClass('active');removeNotifyMessage();
+              },
+              url:'/job_accidents'});
+          }
+
+          if(event.value.match(/\/view_absensi$/))  {
+            activateLayoutTwo()
+            $('title').html('Human Resources Management:Absensi');
+            jQuery.ajax(
+            {beforeSend:function(request){$('#spinner').show(); $("#ajax-load").show();},
+              complete:function(request){$('#spinner').hide(); $("#ajax-load").hide();},
+              success:function(request){jQuery('.input-data').empty(); jQuery('.input-data').html(request);$(".salaries_top_link").removeClass('active');$(".absences_top_link").removeClass('active');$(".memorandums_top_link").addClass('active');$(".people_top_link").removeClass('active');removeNotifyMessage();},
+              url:'/dashboard/view_absensi'});
+          }
+
+          if(event.value.match(/\/view_laporan_ketidakhadiran/))  {
+            activateLayoutTwo()
+            $('title').html('Human Resources Management:Laporan Ketidakhadiran');
+            jQuery.ajax(
+            {beforeSend:function(request){$('#spinner').show(); $("#ajax-load").show();},
+              complete:function(request){$('#spinner').hide(); $("#ajax-load").hide();},
+              success:function(request){jQuery('.input-data').empty(); jQuery('.input-data').html(request);$(".salaries_top_link").removeClass('active');$(".absences_top_link").removeClass('active');$(".memorandums_top_link").addClass('active');$(".people_top_link").removeClass('active');removeNotifyMessage();},
+              url:'/dashboard/view_laporan_ketidakhadiran'});
+          }
+
+          if(event.value.match(/\/view_rekap_absensi$/))  {
+            activateLayoutTwo()
+            $('title').html('Human Resources Management:Absensi');
+            jQuery.ajax(
+            {beforeSend:function(request){$('#spinner').show(); $("#ajax-load").show();},
+              complete:function(request){$('#spinner').hide(); $("#ajax-load").hide();},
+              success:function(request){jQuery('.input-data').empty(); jQuery('.input-data').html(request);$(".salaries_top_link").removeClass('active');$(".absences_top_link").removeClass('active');$(".memorandums_top_link").addClass('active');$(".people_top_link").removeClass('active');removeNotifyMessage();},
+              url:'/dashboard/view_rekap_absensi'});
+          }
+
+          if(event.value.match(/\/view_rekap_overtime$/))  {
+            activateLayoutTwo()
+            $('title').html('Human Resources Management:Absensi');
+            jQuery.ajax(
+            {beforeSend:function(request){$('#spinner').show(); $("#ajax-load").show();},
+              complete:function(request){$('#spinner').hide(); $("#ajax-load").hide();},
+              success:function(request){jQuery('.input-data').empty(); jQuery('.input-data').html(request);$(".salaries_top_link").removeClass('active');$(".absences_top_link").removeClass('active');$(".memorandums_top_link").addClass('active');$(".people_top_link").removeClass('active');removeNotifyMessage();},
+              url:'/dashboard/view_rekap_overtime'});
+          }
+
+          if(event.value.match(/\/view_formasi$/))  {
+            activateLayoutTwo()
+            $('title').html('Human Resources Management:Absensi');
+            jQuery.ajax(
+            {beforeSend:function(request){$('#spinner').show(); $("#ajax-load").show();},
+              complete:function(request){$('#spinner').hide(); $("#ajax-load").hide();},
+              success:function(request){jQuery('.input-data').empty(); jQuery('.input-data').html(request);$(".salaries_top_link").removeClass('active');$(".absences_top_link").removeClass('active');$(".memorandums_top_link").addClass('active');$(".people_top_link").removeClass('active');removeNotifyMessage();},
+              url:'/dashboard/view_formasi'});
+          }
+
+          if(event.value.match(/\/view_formasi_jabatan$/))  {
+            activateLayoutTwo()
+            $('title').html('Human Resources Management:Absensi');
+            jQuery.ajax(
+            {beforeSend:function(request){$('#spinner').show(); $("#ajax-load").show();},
+              complete:function(request){$('#spinner').hide(); $("#ajax-load").hide();},
+              success:function(request){jQuery('.input-data').empty(); jQuery('.input-data').html(request);$(".salaries_top_link").removeClass('active');$(".absences_top_link").removeClass('active');$(".memorandums_top_link").addClass('active');$(".people_top_link").removeClass('active');removeNotifyMessage();},
+              url:'/dashboard/view_formasi_jabatan'});
+          }
+
+          if(event.value.match(/\/view_formasi_departemen$/))  {
+            activateLayoutTwo()
+            $('title').html('Human Resources Management:Absensi');
+            jQuery.ajax(
+            {beforeSend:function(request){$('#spinner').show(); $("#ajax-load").show();},
+              complete:function(request){$('#spinner').hide(); $("#ajax-load").hide();},
+              success:function(request){jQuery('.input-data').empty(); jQuery('.input-data').html(request);$(".salaries_top_link").removeClass('active');$(".absences_top_link").removeClass('active');$(".memorandums_top_link").addClass('active');$(".people_top_link").removeClass('active');removeNotifyMessage();},
+              url:'/dashboard/view_formasi_departemen'});
+          }
+
+          if(event.value.match(/\/view_formasi_bagian$/))  {
+            activateLayoutTwo()
+            $('title').html('Human Resources Management:Absensi');
+            jQuery.ajax(
+            {beforeSend:function(request){$('#spinner').show(); $("#ajax-load").show();},
+              complete:function(request){$('#spinner').hide(); $("#ajax-load").hide();},
+              success:function(request){jQuery('.input-data').empty(); jQuery('.input-data').html(request);$(".salaries_top_link").removeClass('active');$(".absences_top_link").removeClass('active');$(".memorandums_top_link").addClass('active');$(".people_top_link").removeClass('active');removeNotifyMessage();},
+              url:'/dashboard/view_formasi_bagian'});
+          }
+
+          if(event.value.match(/\/view_mutasi$/))  {
+            activateLayoutTwo()
+            $('title').html('Human Resources Management:Absensi');
+            jQuery.ajax(
+            {beforeSend:function(request){$('#spinner').show(); $("#ajax-load").show();},
+              complete:function(request){$('#spinner').hide(); $("#ajax-load").hide();},
+              success:function(request){jQuery('.input-data').empty(); jQuery('.input-data').html(request);$(".salaries_top_link").removeClass('active');$(".absences_top_link").removeClass('active');$(".memorandums_top_link").addClass('active');$(".people_top_link").removeClass('active');removeNotifyMessage();},
+              url:'/dashboard/view_mutasi'});
+          }
+
+           if(event.value.match(/\/view_status$/))  {
+            activateLayoutTwo()
+            $('title').html('Human Resources Management:Absensi');
+            jQuery.ajax(
+            {beforeSend:function(request){$('#spinner').show(); $("#ajax-load").show();},
+              complete:function(request){$('#spinner').hide(); $("#ajax-load").hide();},
+              success:function(request){jQuery('.input-data').empty(); jQuery('.input-data').html(request);$(".salaries_top_link").removeClass('active');$(".absences_top_link").removeClass('active');$(".memorandums_top_link").addClass('active');$(".people_top_link").removeClass('active');removeNotifyMessage();},
+              url:'/dashboard/view_status'});
+          }
+
+          if(event.value.match(/\/view_sp$/))  {
+            activateLayoutTwo()
+            $('title').html('Human Resources Management:Absensi');
+            jQuery.ajax(
+            {beforeSend:function(request){$('#spinner').show(); $("#ajax-load").show();},
+              complete:function(request){$('#spinner').hide(); $("#ajax-load").hide();},
+              success:function(request){jQuery('.input-data').empty(); jQuery('.input-data').html(request);$(".salaries_top_link").removeClass('active');$(".absences_top_link").removeClass('active');$(".memorandums_top_link").addClass('active');$(".people_top_link").removeClass('active');removeNotifyMessage();},
+              url:'/dashboard/view_sp'});
+          }
+
+          if(event.value.match(/\/view_accident$/))  {
+            activateLayoutTwo()
+            $('title').html('Human Resources Management:Absensi');
+            jQuery.ajax(
+            {beforeSend:function(request){$('#spinner').show(); $("#ajax-load").show();},
+              complete:function(request){$('#spinner').hide(); $("#ajax-load").hide();},
+              success:function(request){jQuery('.input-data').empty(); jQuery('.input-data').html(request);$(".salaries_top_link").removeClass('active');$(".absences_top_link").removeClass('active');$(".memorandums_top_link").addClass('active');$(".people_top_link").removeClass('active');removeNotifyMessage();},
+              url:'/dashboard/view_accident'});
+          }
+
+          if(event.value.match(/\/myabsence$/)||event.value.match(/\/dailyabsence/))  {
+            activateLayoutTwo()
+            var url_val = '/myabsence'+"?"+event.queryString
+            $('title').html('Human Resources Management:Absensi');
+            jQuery.ajax(
+            {beforeSend:function(request){$('#spinner').show(); $("#ajax-load").show();},
+              complete:function(request){$('#spinner').hide(); $("#ajax-load").hide();},
+              success:function(request){jQuery('.input-data').empty(); jQuery('.input-data').html(request);removeNotifyMessage();},
+              url:url_val});
+          }
+          if(event.value.match(/\/rekap_absensi$/))  {
+            activateLayoutTwo()
+            $('title').html('Human Resources Management:Absensi');
+            jQuery.ajax(
+            {beforeSend:function(request){$('#spinner').show(); $("#ajax-load").show();},
+              complete:function(request){$('#spinner').hide(); $("#ajax-load").hide();},
+              success:function(request){jQuery('.input-data').empty(); jQuery('.input-data').html(request);removeNotifyMessage();},
+              url:'/absences/presence_report'});
+          }
+          if(event.value.match(/\/absences\/mine/))  {
+            activateLayoutTwo()
+            $('title').html('Human Resources Management:Absensi Saya');
+            jQuery.ajax(
+            {beforeSend:function(request){$('#spinner').show(); $("#ajax-load").show();},
+              complete:function(request){$('#spinner').hide(); $("#ajax-load").hide();},
+              success:function(request){jQuery('.input-data').empty(); jQuery('.input-data').html(request);$(".salaries_top_link").removeClass('active');$(".absences_top_link").removeClass('active');$(".memorandums_top_link").removeClass('active');$(".people_top_link").addClass('active');removeNotifyMessage();},
+              url:event.value});
+          }
+          if(event.value.match(/\/monthlyabsence\/(\d+)/))  {
+            activateLayoutTwo();
+            var op = event.value.match(/\/monthlyabsence\/(\d+)/);
+            $('title').html('Human Resources Management:Absensi');
+            jQuery.ajax(
+            {beforeSend:function(request){$('#spinner').show(); $("#ajax-load").show();},
+              complete:function(request){$('#spinner').hide(); $("#ajax-load").hide();},
+              success:function(request){jQuery('.input-data').empty(); jQuery('.input-data').html(request);removeNotifyMessage();},
+              url:'/my_monthly_absence/'+op[1]+'?'+event.queryString});
+          }
+          if(event.value.match(/^\/yearlyabsence\/(\d+)/))  {
+            activateLayoutTwo();
+            var op = event.value.match(/^\/yearlyabsence\/(\d+)/);
+            $('title').html('Human Resources Management:Absensi');
+            jQuery.ajax(
+            {beforeSend:function(request){$('#spinner').show(); $("#ajax-load").show();},
+              complete:function(request){$('#spinner').hide(); $("#ajax-load").hide();},
+              success:function(request){jQuery('.input-data').empty(); jQuery('.input-data').html(request);removeNotifyMessage();},
+              url:'/my_yearly_absence/'+op[1]});
+          }
+
+          if(event.value.match(/\/st\/edit\/(\d+)/))  {
+            activateLayoutSetting();
+            var op = event.value.match(/\/st\/edit\/(\d+)/);
+            $('title').html('Human Resources Management:Setting');
+            jQuery.ajax(
+            {beforeSend:function(request){$('#spinner').show();$("#ajax-load").show();},
+              complete:function(request){$('#spinner').hide();$("#ajax-load").hide();
+                activate_menu("setting_menu");},
+              success:function(request){jQuery('.setting-con').html(request);removeNotifyMessage();},
+              url:'/settings/' + op[1] + '/edit'});
+          }
+
+          if(event.value.match(/\/settings$/))  {
+            activateLayoutSetting();
+            $('title').html('Human Resources Management:Setting');
+            jQuery.ajax(
+            {beforeSend:function(request){$('#spinner').show();$("#ajax-load").show();},
+              complete:function(request){
+                activate_menu("setting_menu");
+                onRemoveTooltipOnDashboard();
+                $('#spinner').hide();
+                $("#ajax-load").hide();
+                // $('#div_menu_name_setting').html("<a href=\"#person_index\">Dashboard</a>");
+                $('.top_link').removeClass('active');
+                $('.holiday_top_link').addClass('active');
+              },
+              success:function(request){
+                jQuery('.setting-con').html(request);
+                $('.db').addClass("hide-tooltip");
+                removeNotifyMessage();
+              },
+              url:'/settings'});
+          }
+          if(event.value.match(/\/shifts/))  {
+            activateLayoutSetting();
+            $('title').html('Human Resources Management:Shift');
+            jQuery.ajax(
+            {beforeSend:function(request){$('#spinner').show();$("#ajax-load").show();},
+              complete:function(request){
+                $('#spinner').hide();
+                $('.top_link').removeClass('active');
+                // $('#div_menu_name_setting').html("<a href=\"#person_index\">Dashboard</a>");
+                $("#ajax-load").hide();
+                activate_menu("shift_menu");},
+              success:function(request){
+                jQuery('.setting-con').html(request);removeNotifyMessage();
+              },
+              url:'/shifts'});
+          }
+
+          if(event.value.match(/\/cuti_sakit/))  {
+            activateLayoutSetting();
+            $('title').html('Human Resources Management:Cuti dan Ijin Sakit');
+            jQuery.ajax(
+            {beforeSend:function(request){$('#spinner').show();$("#ajax-load").show();},
+              complete:function(request){
+                activate_menu("cuti_sakit_menu")
+                $('#spinner').hide();
+                $('.top_link').removeClass('active');
+                $("#ajax-load").hide();
+                $('.holiday_top_link').addClass('active')},
+              success:function(request){jQuery('.setting-con').html(request);removeNotifyMessage();},
+              url:'/cuti_sakit'});
+          }
+          if(event.value.match(/\/organization_structure\/departments/))  {
+            activateLayoutSetting();
+            $('title').html('Human Resources Management:Struktur Organisasi / Departemen');
+            jQuery.ajax(
+            {beforeSend:function(request){$('#spinner').show(); $("#ajax-load").show();},
+              complete:function(request){
+                activate_menu("org_menu");
+                $('#spinner').hide();
+                $("#ajax-load").hide();
+                // $('#div_menu_name_setting').html("<a href=\"#person_index\">Dashboard</a>");
+                $('.top_link').removeClass('active');
+                $('.holiday_top_link').addClass('active')},
+              success:function(request){
+                jQuery('.setting-con').html(request);removeNotifyMessage();
+              },
+              url:event.value});
+          }
+          if(event.value.match(/\/organization_structure\/work_groups/))  {
+            activateLayoutSetting();
+            $('title').html('Human Resources Management:Struktur Organisasi / Work Group');
+            jQuery.ajax(
+            {beforeSend:function(request){$('#spinner').show(); $("#ajax-load").show();},
+              complete:function(request){
+                activate_menu("org_menu");
+                $('#spinner').hide();
+                $("#ajax-load").hide();
+                // $('#div_menu_name_setting').html("<a href=\"#person_index\">Dashboard</a>");
+                $('.top_link').removeClass('active');
+                $('.holiday_top_link').addClass('active')},
+              success:function(request){jQuery('.setting-con').html(request);removeNotifyMessage();},
+              url:event.value});
+          }
+
+          if(event.value.match(/\/organization_structure\/positions/))  {
+            activateLayoutSetting();
+            $('title').html('Human Resources Management:Struktur Organisasi / Jabatan');
+            jQuery.ajax(
+            {beforeSend:function(request){$('#spinner').show(); $("#ajax-load").show();},
+              complete:function(request){
+                activate_menu("org_menu");
+                $('#spinner').hide();
+                $("#ajax-load").hide();
+                // $('#div_menu_name_setting').html("<a href=\"#person_index\">Dashboard</a>");
+                $('.top_link').removeClass('active');
+                $('.holiday_top_link').addClass('active')},
+              success:function(request){jQuery('.setting-con').html(request);removeNotifyMessage();},
+              url:event.value});
+          }
+
+          if(event.value.match(/\/mutasi/))  {
+            activateLayoutTwo();
+            $('title').html('Human Resources Management:Mutasi');
+            jQuery.ajax(
+            {beforeSend:function(request){$('#spinner').show();$("#ajax-load").show();},
+              complete:function(request){
+                activate_menu("org_menu");
+                $('#spinner').hide();
+                $("#ajax-load").hide();
+                $('.top_link').removeClass('active');
+                $('.holiday_top_link').addClass('active')},
+              success:function(request){jQuery('.app_two_con').html(request);removeNotifyMessage();},
+              url:'/mutasi'});
+          }
+
+          if(event.value.match(/\/schedules/))  {
+            activateLayoutSetting();
+            $('title').html('Human Resources Management:Schedules');
+            jQuery.ajax(
+            {beforeSend:function(request){$('#spinner').show();$("#ajax-load").show();},
+              complete:function(request){
+                activate_menu("schedule_menu");
+                $('#spinner').hide();
+                $('.top_link').removeClass('active');
+                $("#ajax-load").hide();
+                // $('#div_menu_name_setting').html("<a href=\"#person_index\">Dashboard</a>");
+                $('.holiday_top_link').addClass('active')},
+              success:function(request){jQuery('.setting-con').html(request);removeNotifyMessage();},
+              url:'/schedules'});
+          }
+          if(event.value.match(/\/payrolls/))  {
+            activateLayoutSetting();
+            $('title').html('Human Resources Management:Payrolls');
+            jQuery.ajax(
+            {beforeSend:function(request){$('#spinner').show();$("#ajax-load").show();},
+              complete:function(request){
+                activate_menu("payroll_menu");
+                $('#spinner').hide();
+                $('.top_link').removeClass('active');
+                $("#ajax-load").hide();
+                // $('#div_menu_name_setting').html("<a href=\"#person_index\">Dashboard</a>");
+                $('.holiday_top_link').addClass('active')},
+              success:function(request){jQuery('.setting-con').html(request);removeNotifyMessage();},
+              url:'/payrolls'});
+          }
+          if(event.value.match(/\/allowances/))  {
+            activateLayoutSetting();
+            $('title').html('Human Resources Management:Tunjangan Di Luar Gaji');
+            jQuery.ajax(
+            {beforeSend:function(request){$('#spinner').show();$("#ajax-load").show();},
+              complete:function(request){
+                $('#spinner').hide();
+                $("#ajax-load").hide();
+                $('.top_link').removeClass('active');
+                $('.holiday_top_link').addClass('active')},
+              success:function(request){jQuery('.setting-con').html(request);removeNotifyMessage();},
+              url:'/allowances'});
+          }
+
+          if(event.value.match(/\/holiday\/new/))  {
+            activateLayoutSetting();
+            $('title').html('Human Resources Management:Hari Libur');
+            jQuery.ajax(
+            {beforeSend:function(request){$('#spinner').show();$("#ajax-load").show();},
+              complete:function(request){
+                activate_menu("holiday_menu");
+                $("#ajax-load").hide();
+                $('#spinner').hide();
+                $('.top_link').removeClass('active');
+                $('.holiday_top_link').addClass('active')},
+              success:function(request){jQuery('.setting-con').html(request);removeNotifyMessage();},
+              url:'/holidays/new'});
+          }
+          if(event.value.match(/\/payroll\/new/))  {
+            activateLayoutSetting();
+            $('title').html('Human Resources Management:Payroll');
+            jQuery.ajax(
+            {beforeSend:function(request){$('#spinner').show();$("#ajax-load").show();},
+              complete:function(request){
+                activate_menu("payroll_menu");
+                $("#ajax-load").hide();
+                $('#spinner').hide();
+                $('.top_link').removeClass('active');
+                $('.holiday_top_link').addClass('active')},
+              success:function(request){jQuery('.setting-con').html(request);removeNotifyMessage();},
+              url:'/payrolls/new'});
+          }
+          if(event.value.match(/\/person_new$/))  {
+            activateLayoutTwo()
+            $('title').html('Human Resources Management:Tambah Karyawan');
+            jQuery.ajax(
+            {beforeSend:function(request){$('#spinner').show();$("#ajax-load").show();},
+              complete:function(request){$('#spinner').hide();},
+              success:function(request){
+                jQuery('.input-data').html(request);
+                $("#ajax-load").hide();removeNotifyMessage();removeNotifyMessage();
+              },
+              url:'/people/new'});
+          }
+
+          if(event.value.match(/\/people\/(\d+)\/employments\?tab=(\d+)&save=(\w+)/))  {
+            activateLayoutTwo()
+            var op = event.value.match(/\/people\/(\d+)\/employments\?tab=(\d+)&save=(\w+)/);
+            $('title').html('Human Resources Management:Data Karyawan');
+            jQuery.ajax(
+            {beforeSend:function(request){$('#spinner').show();$("#ajax-load").show();},
+              complete:function(request){$('#spinner').hide();$("#ajax-load").hide();},
+              success:function(request){
+                jQuery('.input-data').html(request);
+                $("#ajax-load").hide();
+                $(".salaries_top_link").removeClass('active');$(".absences_top_link").removeClass('active');$(".memorandums_top_link").removeClass('active');$(".people_top_link").addClass('active');removeNotifyMessage();
+              },
+              url:'/people/' + op[1] + '/employments?tab=' + op[2] + '&save=' + op[3]});
+          }
+
+          if(event.value.match(/\/people\/(\d+)\/employments\?tab=(\d+)$/))  {
+            activateLayoutTwo()
+            var op = event.value.match(/\/people\/(\d+)\/employments\?tab=(\d+)/);
+            $('title').html('Human Resources Management:Data Karyawan');
+            jQuery.ajax(
+            {beforeSend:function(request){$('#spinner').show();$("#ajax-load").show();},
+              complete:function(request){$('#spinner').hide();$("#ajax-load").hide();},
+              success:function(request){
+                jQuery('.input-data').html(request);
+                $("#ajax-load").hide();
+                $(".salaries_top_link").removeClass('active');$(".absences_top_link").removeClass('active');$(".memorandums_top_link").removeClass('active');$(".people_top_link").addClass('active');removeNotifyMessage();
+              },
+              url:'/people/' + op[1] + '/employments?tab=' + op[2]});
+          }
+
+          if(event.value.match(/\/people\/(\d+)\?tab=(\d+)/))  {
+            activateLayoutTwo()
+            var op = event.value.match(/\/people\/(\d+)\?tab=(\d+)/);
+            $('title').html('Human Resources Management:Data Karyawan');
+            jQuery.ajax(
+            {beforeSend:function(request){$('#spinner').show();$("#ajax-load").show();},
+              complete:function(request){$('#spinner').hide();$("#ajax-load").hide();},
+              success:function(request){
+console.log(request)
+                jQuery('.app_two_con').html(request);
+                $("#ajax-load").hide();
+                $(".salaries_top_link").removeClass('active');$(".absences_top_link").removeClass('active');$(".memorandums_top_link").removeClass('active');$(".people_top_link").addClass('active');removeNotifyMessage();
+              },
+              url:'/people/'+op[1]+'?tab=' + op[2]});
+          }
+
+          if(event.value.match(/\/people\/(\d+)\?tab=(\d+)&save=(\w+)/))  {
+            activateLayoutTwo()
+            var op = event.value.match(/\/people\/(\d+)\?tab=(\d+)&save=(\w+)/);
+            $('title').html('Human Resources Management:Data Karyawan');
+            jQuery.ajax(
+            {beforeSend:function(request){$('#spinner').show();$("#ajax-load").show();},
+              complete:function(request){$('#spinner').hide();$("#ajax-load").hide();},
+              success:function(request){
+                jQuery('.input-data').html(request);
+                $(".salaries_top_link").removeClass('active');$(".absences_top_link").removeClass('active');$(".memorandums_top_link").removeClass('active');$(".people_top_link").addClass('active');removeNotifyMessage();
+                $("#ajax-load").hide();
+              },
+              url:'/people/'+op[1]+'?tab=' + op[2] + '&save=' + op[3]});
+          }
+
+          if(event.value.match(/\/history\/(\d+)\?tab=(\d+)/))  {
+            activateLayoutOne()
+            var op = event.value.match(/\/history\/(\d+)\?tab=(\d+)/);
+            $('title').html('Human Resources Management:Mutasi');
+            jQuery.ajax(
+            {beforeSend:function(request){$('#spinner').show();$("#ajax-load").show();},
+              complete:function(request){$('#spinner').hide();$("#ajax-load").hide();},
+              success:function(request){
+                jQuery('.input-data').html(request);
+                $("#ajax-load").hide();
+                $(".salaries_top_link").removeClass('active');$(".absences_top_link").removeClass('active');$(".memorandums_top_link").removeClass('active');$(".people_top_link").addClass('active');removeNotifyMessage();
+              },
+              url:'/history/' + op[1] + '?tab=' + op[2]});
+          }
+
+          if(event.value.match(/\/history\/(\d+)\?tab=(\d+)&save=(\w+)/))  {
+            activateLayoutOne()
+            var op = event.value.match(/\/history\/(\d+)\?tab=(\d+)&save=(\w+)/);
+            $('title').html('Human Resources Management:Mutasi');
+            jQuery.ajax(
+            {beforeSend:function(request){$('#spinner').show();$("#ajax-load").show();},
+              complete:function(request){$('#spinner').hide();$("#ajax-load").hide();},
+              success:function(request){
+                jQuery('.input-data').html(request);
+                $("#ajax-load").hide();
+                $(".salaries_top_link").removeClass('active');$(".absences_top_link").removeClass('active');$(".memorandums_top_link").removeClass('active');$(".people_top_link").addClass('active');removeNotifyMessage();
+              },
+              url:'/history/' + op[1] + '?tab=' + op[2] + '&save=' + op[3]});
+          }
+
+          if(event.value.match(/\/salaries\/informasi_gaji\?person_id=(\d+)/))  {
+            activateLayoutTwo()
+            var op = event.value.match(/\/salaries\/informasi_gaji\?person_id=(\d+)/);
+            $('title').html('Human Resources Management:Data Karyawan');
+            jQuery.ajax(
+            {beforeSend:function(request){$('#spinner').show();$("#ajax-load").show();},
+              complete:function(request){$('#spinner').hide();$("#ajax-load").hide();},
+              success:function(request){
+                jQuery('.input-data').html(request);
+                $("#ajax-load").hide();
+                $(".salaries_top_link").removeClass('active');$(".absences_top_link").removeClass('active');$(".memorandums_top_link").removeClass('active');$(".people_top_link").addClass('active');removeNotifyMessage();
+              },
+              url:'/salaries/informasi_gaji?person_id=' + op[1]});
+          }
+
+          if(event.value.match(/\/salaries\/edit_informasi_gaji\?person_id=(\d+)/))  {
+            activateLayoutTwo()
+            var op = event.value.match(/\/salaries\/edit_informasi_gaji\?person_id=(\d+)/);
+            $('title').html('Human Resources Management:Data Karyawan');
+            jQuery.ajax(
+            {beforeSend:function(request){$('#spinner').show();$("#ajax-load").show();},
+              complete:function(request){$('#spinner').hide();$("#ajax-load").hide();},
+              success:function(request){
+                jQuery('.input-data').html(request);
+                $("#ajax-load").hide();
+                $(".salaries_top_link").removeClass('active');$(".absences_top_link").removeClass('active');$(".memorandums_top_link").removeClass('active');$(".people_top_link").addClass('active');removeNotifyMessage();
+              },
+              url:'/salaries/edit_informasi_gaji?person_id=' + op[1]});
+          }
+
+          if(event.value.match(/\/people\/(\d+)\/edit/))  {
+            activateLayoutTwo()
+            var op = event.value.match(/\/people\/(\d+)\/edit/);
+            $('title').html('Human Resources Management:Mutasi');
+            jQuery.ajax(
+            {beforeSend:function(request){$('#spinner').show();$("#ajax-load").show();},
+              complete:function(request){$('#spinner').hide();$("#ajax-load").hide();},
+              success:function(request){
+                jQuery('.input-data').html(request);
+                $("#ajax-load").hide();
+                $(".salaries_top_link").removeClass('active');$(".absences_top_link").removeClass('active');$(".memorandums_top_link").removeClass('active');$(".people_top_link").addClass('active');removeNotifyMessage();
+              },
+              url:'/people/' + op[1] + '/edit'});
+          }
+          if(event.value.match(/\/salary_master_data\/edit\/(\d+)/))  {
+            activateLayoutTwo()
+            var op = event.value.match(/\/salary_master_data\/edit\/(\d+)/);
+
+            $('title').html('Human Resources Management:Edit Salary Master Data');
+            jQuery.ajax(
+            {beforeSend:function(request){$('#spinner').show();$("#ajax-load").show();},
+              complete:function(request){$('#spinner').hide();$("#ajax-load").hide();},
+              success:function(request){
+                jQuery('.input-data').html(request);
+                $("#ajax-load").hide();
+                $(".salaries_top_link").addClass('active');$(".absences_top_link").removeClass('active');$(".memorandums_top_link").removeClass('active');$(".people_top_link").removeClass('active');removeNotifyMessage();
+              },
+              url:'/salary_master_datas/' + op[1] + '/edit'});
+          }
+          if(event.value.match(/\/salary_master_new$/))  {
+            activateLayoutTwo()
+            $('title').html('Human Resources Management:Tambah Master Gaji');
+            jQuery.ajax(
+            {beforeSend:function(request){$('#spinner').show();$("#ajax-load").show();},
+              complete:function(request){$('#spinner').hide();},
+              success:function(request){
+                jQuery('.input-data').html(request);
+                $("#ajax-load").hide();removeNotifyMessage();removeNotifyMessage();
+              },
+              url:'/salary_master_datas/new'});
+          }
+          if(event.value.match(/\/edit_health\/(\d+)/))  {
+            activateLayoutOne()
+            var op = event.value.match(/\/edit_health\/(\d+)/);
+            $('title').html('Human Resources Management:Mutasi');
+            jQuery.ajax(
+            {beforeSend:function(request){$('#spinner').show();$("#ajax-load").show();},
+              complete:function(request){$('#spinner').hide();$("#ajax-load").hide();},
+              success:function(request){
+                jQuery('.input-data').html(request);
+                $("#ajax-load").hide();
+                $(".salaries_top_link").removeClass('active');$(".absences_top_link").removeClass('active');$(".memorandums_top_link").removeClass('active');$(".people_top_link").addClass('active');removeNotifyMessage();
+              },
+              url:'/edit_health/' + op[1]});
+          }
+          if(event.value.match(/\/people\/(\d+)\/trainings\/new/))  {
+            activateLayoutTwo()
+            var op = event.value.match(/\/people\/(\d+)\/trainings\/new/);
+            $('title').html('Human Resources Management:Mutasi');
+            jQuery.ajax(
+            {beforeSend:function(request){$('#spinner').show();$("#ajax-load").show();},
+              complete:function(request){$('#spinner').hide();$("#ajax-load").hide();},
+              success:function(request){
+                jQuery('.input-data').html(request);
+                $("#ajax-load").hide();removeNotifyMessage();
+              },
+              url:'/people/' + op[1] + '/trainings/new'});
+          }
+          if(event.value.match(/\/people\/(\d+)\/trainings\/(\d+)\/edit/))  {
+            activateLayoutTwo()
+            var op = event.value.match(/\/people\/(\d+)\/trainings\/(\d+)\/edit/);
+            $('title').html('Human Resources Management:Mutasi');
+            jQuery.ajax(
+            {beforeSend:function(request){$('#spinner').show();$("#ajax-load").show();},
+              complete:function(request){$('#spinner').hide();$("#ajax-load").hide();},
+              success:function(request){
+                jQuery('.input-data').html(request);
+                $("#ajax-load").hide();removeNotifyMessage();
+              },
+              url:'/people/' + op[1] + '/trainings/' + op[2] + '/edit'});
+          }
+          if(event.value.match(/\/memorandums\/new\?pers_id\=(\d+)/))  {
+            activateLayoutTwo()
+            var op = event.value.match(/\/memorandums\/new\?pers_id\=(\d+)/);
+            $('title').html('Human Resources Management:Mutasi');
+            jQuery.ajax(
+            {beforeSend:function(request){$('#spinner').show();$("#ajax-load").show();},
+              complete:function(request){$('#spinner').hide();$("#ajax-load").hide();},
+              success:function(request){
+                jQuery('.input-data').html(request);
+                $("#ajax-load").hide();removeNotifyMessage();
+              },
+              url:'/memorandums/new?pers_id=' + op[1]});
+          }
+          if(event.value.match(/\/memorandums\/(\d+)\/edit\?pers_id\=(\d+)/))  {
+            activateLayoutTwo()
+            var op = event.value.match(/\/memorandums\/(\d+)\/edit\?pers_id\=(\d+)/);
+            $('title').html('Human Resources Management:Mutasi');
+            jQuery.ajax(
+            {beforeSend:function(request){$('#spinner').show();$("#ajax-load").show();},
+              complete:function(request){$('#spinner').hide();$("#ajax-load").hide();},
+              success:function(request){
+                jQuery('.input-data').html(request);
+                $("#ajax-load").hide();removeNotifyMessage();
+              },
+              url:'/memorandums/' + op[1] + '/edit?pers_id=' + op[2]});
+          }
+
+          if(event.value.match(/\/people\/(\d+)\/violations\/(\d+)\/edit/))  {
+            activateLayoutTwo()
+            var op = event.value.match(/\/people\/(\d+)\/violations\/(\d+)\/edit/);
+            $('title').html('Human Resources Management:Mutasi');
+            jQuery.ajax(
+            {beforeSend:function(request){$('#spinner').show();$("#ajax-load").show();},
+              complete:function(request){$('#spinner').hide();$("#ajax-load").hide();},
+              success:function(request){
+                jQuery('.input-data').html(request);
+                $("#ajax-load").hide();removeNotifyMessage();
+              },
+              url:'/people/' + op[1] + '/violations/' + op[2] + '/edit'});
+          }
+          if(event.value.match(/\/job_accidents\/new\?pers_id\=(\d+)/))  {
+            activateLayoutTwo()
+            var op = event.value.match(/\/job_accidents\/new\?pers_id\=(\d+)/);
+            $('title').html('Human Resources Management:Mutasi');
+            jQuery.ajax(
+            {beforeSend:function(request){$('#spinner').show();$("#ajax-load").show();
+            },
+              complete:function(request){$('#spinner').hide();$("#ajax-load").hide();},
+              success:function(request){
+                jQuery('.input-data').html(request);
+                $("#ajax-load").hide();removeNotifyMessage();
+              },
+              url:'/job_accidents/new?pers_id=' + op[1]});
+          }
+          if(event.value.match(/\/job_accidents\/(\d+)\/edit\?pers_id\=(\d+)/))  {
+            activateLayoutTwo()
+            var op = event.value.match(/\/job_accidents\/(\d+)\/edit\?pers_id\=(\d+)/);
+            $('title').html('Human Resources Management:Mutasi');
+            jQuery.ajax(
+            {beforeSend:function(request){$('#spinner').show();$("#ajax-load").show();},
+              complete:function(request){$('#spinner').hide();$("#ajax-load").hide();},
+              success:function(request){
+                jQuery('.input-data').html(request);
+                $("#ajax-load").hide();removeNotifyMessage();
+              },
+              url:'/job_accidents/' + op[1] + '/edit?pers_id=' + op[2]});
+          }
+          if(event.value.match(/\/memorandums\/new$/))  {
+            activateLayoutTwo()
+            var op = event.value.match(/\/job_accidents\/new/);
+            $('title').html('Human Resources Management:Mutasi');
+            jQuery.ajax(
+            {beforeSend:function(request){$('#spinner').show();$("#ajax-load").show();},
+              complete:function(request){$('#spinner').hide();$("#ajax-load").hide();},
+              success:function(request){
+                jQuery('.app_two_con').html(request);
+                $("#ajax-load").hide();removeNotifyMessage();
+              },
+              url:'/memorandums/new'});
+          }
+          if(event.value.match(/\/job_accidents\/new$/))  {
+            activateLayoutTwo()
+            var op = event.value.match(/\/job_accidents\/new/);
+            $('title').html('Human Resources Management:Mutasi');
+            jQuery.ajax(
+            {beforeSend:function(request){$('#spinner').show();$("#ajax-load").show();},
+              complete:function(request){$('#spinner').hide();$("#ajax-load").hide();},
+              success:function(request){
+                jQuery('.input-data').html(request);
+                $("#ajax-load").hide();removeNotifyMessage();
+              },
+              url:'/job_accidents/new'});
+          }
+          if(event.value.match(/\/memorandums\/(\d+)\/edit$/))  {
+            activateLayoutTwo()
+            var op = event.value.match(/\/memorandums\/(\d+)\/edit/);
+            $('title').html('Human Resources Management:Mutasi');
+            jQuery.ajax(
+            {beforeSend:function(request){$('#spinner').show();$("#ajax-load").show();},
+              complete:function(request){$('#spinner').hide();$("#ajax-load").hide();},
+              success:function(request){
+                jQuery('.app_two_con').html(request);
+                $("#ajax-load").hide();removeNotifyMessage();
+              },
+              url:'/memorandums/' + op[1] + '/edit'});
+          }
+          if(event.value.match(/\/job_accidents\/(\d+)\/edit$/))  {
+            activateLayoutTwo()
+            var op = event.value.match(/\/job_accidents\/(\d+)\/edit/);
+            $('title').html('Human Resources Management:Mutasi');
+            jQuery.ajax(
+            {beforeSend:function(request){$('#spinner').show();$("#ajax-load").show();},
+              complete:function(request){$('#spinner').hide();$("#ajax-load").hide();},
+              success:function(request){
+                jQuery('.app_two_con').html(request);
+                $("#ajax-load").hide();removeNotifyMessage();
+              },
+              url:'/job_accidents/' + op[1] + '/edit'});
+          }
+          if(event.value.match(/\/new_cuti_sakit/))  {
+            activateLayoutSetting();
+            $('title').html('Human Resources Management: Cuti Sakit');
+            jQuery.ajax(
+            {beforeSend:function(request){$('#spinner').show();$("#ajax-load").show();},
+              complete:function(request){
+                activate_menu("cuti_sakit_menu");
+                $("#ajax-load").hide();
+                $('#spinner').hide();
+                $('.top_link').removeClass('active');
+                $('.holiday_top_link').addClass('active')},
+              success:function(request){jQuery('.setting-con').html(request);removeNotifyMessage();},
+              url:'/settings/new_cuti_sakit'});
+          }
+          if(event.value.match(/\/sett\/edit_cuti_sakit\/(\d+)/))  {
+            activateLayoutSetting();
+            var op = event.value.match(/\/sett\/edit_cuti_sakit\/(\d+)/);
+            $('title').html('Human Resources Management:Sakit');
+            jQuery.ajax(
+            {beforeSend:function(request){$('#spinner').show();$("#ajax-load").show();},
+              complete:function(request){$('#spinner').hide();$("#ajax-load").hide();activate_menu("cuti_sakit_menu");},
+              success:function(request){jQuery('.setting-con').html(request);removeNotifyMessage();},
+              url:'/settings/edit_cuti_sakit?id='+op[1]});
+          }
+          if(event.value.match(/\/shift\/new/))  {
+            activateLayoutSetting();
+            $('title').html('Human Resources Management:Shift');
+            jQuery.ajax(
+            {beforeSend:function(request){$('#spinner').show();$("#ajax-load").show();},
+              complete:function(request){$('#spinner').hide();$("#ajax-load").hide();
+                activate_menu("shift_menu");},
+              success:function(request){jQuery('.setting-con').html(request);removeNotifyMessage();},
+              url:'/shifts/new'});
+          }
+          if(event.value.match(/\/sh\/edit\/(\d+)/))  {
+            activateLayoutSetting();
+            var op = event.value.match(/\/sh\/edit\/(\d+)/);
+            $('title').html('Human Resources Management:Sakit');
+            jQuery.ajax(
+            {beforeSend:function(request){$('#spinner').show();$("#ajax-load").show();},
+              complete:function(request){$('#spinner').hide();$("#ajax-load").hide();
+                activate_menu("shift_menu");},
+              success:function(request){jQuery('.setting-con').html(request);removeNotifyMessage();},
+              url:'/shifts/'+op[1]+'/edit'});
+          }
+          if(event.value.match(/\/schedule\/new/))  {
+            activateLayoutSetting();
+            $('title').html('Human Resources Management:Schedule');
+            jQuery.ajax(
+            {beforeSend:function(request){$('#spinner').show();$("#ajax-load").show();},
+              complete:function(request){$('#spinner').hide();$("#ajax-load").hide();
+                activate_menu("schedule_menu");},
+              success:function(request){jQuery('.setting-con').html(request);removeNotifyMessage();},
+              url:'/schedules/new'});
+          }
+          if(event.value.match(/\/sch\/edit\/(\d+)/))  {
+            activateLayoutSetting();
+            var op = event.value.match(/\/sch\/edit\/(\d+)/);
+            var split = op[0].split("/")
+            $('title').html('Human Resources Management:Scheduling');
+            jQuery.ajax(
+            {beforeSend:function(request){$('#spinner').show();$("#ajax-load").show();},
+              complete:function(request){$('#spinner').hide();$("#ajax-load").hide();},
+              success:function(request){jQuery('.setting-con').html(request);removeNotifyMessage();},
+              url:'/schedules/'+op[1]+'/edit?'+event.queryString});
+          }
+          if(event.value.match(/\/organization_structure\/divisions/))  {
+            activateLayoutSetting();
+            $('title').html('Human Resources Management:Struktur Organisasi / Bagian');
+            jQuery.ajax(
+            {beforeSend:function(request){$('#spinner').show(); $("#ajax-load").show();},
+              complete:function(request){
+                $('#spinner').hide();
+                $("#ajax-load").hide();
+                // $('#div_menu_name_setting').html("<a href=\"#person_index\">Dashboard</a>");
+                $('.top_link').removeClass('active');
+                $('.holiday_top_link').addClass('active')},
+              success:function(request){jQuery('.setting-con').html(request);removeNotifyMessage();},
+              url:event.value});
+          }
+          if(event.value.match(/\/positionGroup\/(\d+)/))  {
+            activateLayoutSetting()
+            var op = event.value.match(/\/positionGroup\/(\d+)/);
+            $('title').html('Human Resources Management:Work Group');
+            jQuery.ajax(
+            {beforeSend:function(request){$('#spinner').show(); $("#ajax-load").show();},
+              complete:function(request){
+                $('#spinner').hide();
+                $("#ajax-load").hide();
+                activate_menu("org_menu");},
+              success:function(request){
+                jQuery('.setting-con').html(request);
+                $("#ajax-load").hide();removeNotifyMessage();
+              },
+              url:'/organization_structure/positions?group=' + op[1]});
+          }
+          if(event.value.match(/\/peopleGroup\/(\d+)/))  {
+            activateLayoutSetting()
+            var op = event.value.match(/\/peopleGroup\/(\d+)/);
+            $('title').html('Human Resources Management:Work Group');
+            jQuery.ajax(
+            {beforeSend:function(request){$('#spinner').show(); $("#ajax-load").show();},
+              complete:function(request){
+                $('#spinner').hide();
+                $("#ajax-load").hide();},
+              success:function(request){
+                jQuery('.setting-con').html(request);
+                $("#ajax-load").hide();removeNotifyMessage();
+              },
+              url:'/people?group=' + op[1]});
+          }
+          if(event.value.match(/\/new_position/))  {
+            activateLayoutSetting()
+            $('title').html('Human Resources Management:Jabatan');
+            jQuery.ajax(
+            {beforeSend:function(request){$('#spinner').show(); $("#ajax-load").show();},
+              complete:function(request){
+                $('#spinner').hide();
+                $("#ajax-load").hide();},
+              success:function(request){
+                jQuery('.setting-con').html(request);
+                $("#ajax-load").hide();removeNotifyMessage();
+              },
+              url:'/organization_structure/positions/new'});
+          }
+          if(event.value.match(/\/peoplePosition\/(\d+)/))  {
+            activateLayoutTwo();
+            var op = event.value.match(/\/peoplePosition\/(\d+)/);
+            $('title').html('Human Resources Management:Jabatan');
+            jQuery.ajax(
+            {beforeSend:function(request){$('#spinner').show(); $("#ajax-load").show();},
+              complete:function(request){
+                $('#spinner').hide();
+                $("#ajax-load").hide();},
+              success:function(request){
+                jQuery('.app_two_con').html(request);
+                $("#ajax-load").hide();
+                $('.top_link').removeClass('active');removeNotifyMessage();
+                // $('#div_menu_name_setting').html("<a href=\"#settings\"  id=\"link_setting\"> <span class='icons setting_ico2'>&nbsp;</span></a>");
+              },
+              url:'/people?position=' + op[1]});
+          }
+
+          if(event.value.match(/\/peopleDepartment\/(\d+)/))  {
+            activateLayoutTwo();
+            var op = event.value.match(/\/peopleDepartment\/(\d+)/);
+            $('title').html('Human Resources Management:Karyawan');
+            jQuery.ajax(
+            {beforeSend:function(request){$('#spinner').show(); $("#ajax-load").show();},
+              complete:function(request){
+                $('#spinner').hide();
+                $("#ajax-load").hide();},
+              success:function(request){
+                jQuery('.app_two_con').html(request);
+                $("#ajax-load").hide();
+                $('.top_link').removeClass('active');removeNotifyMessage();
+                // $('#div_menu_name_setting').html("<a href=\"#settings\" id=\"link_setting\"> <span class='icons setting_ico2'>&nbsp;</span></a>");
+                onRemoveTooltipOnSetting();
+              },
+              url:'/people?department=' + op[1]});
+          }
+
+          if(event.value.match(/\/peopleDivision\/(\d+)/))  {
+            activateLayoutTwo();
+            var op = event.value.match(/\/peopleDivision\/(\d+)/);
+            $('title').html('Human Resources Management:Karyawan');
+            jQuery.ajax(
+            {beforeSend:function(request){$('#spinner').show(); $("#ajax-load").show();},
+              complete:function(request){
+                $('#spinner').hide();
+                $("#ajax-load").hide();},
+              success:function(request){
+                jQuery('.app_two_con').html(request);
+                $("#ajax-load").hide();
+                $('.top_link').removeClass('active');removeNotifyMessage();
+                // $('#div_menu_name_setting').html("<a href=\"#settings\"> <span class='icons setting_ico2'>&nbsp;</span></a>");
+              },
+              url:'/people?division=' + op[1]});
+          }
+
+          if(event.value.match(/\/peopleGroup\/(\d+)/))  {
+            activateLayoutTwo();
+            var op = event.value.match(/\/peopleGroup\/(\d+)/);
+            $('title').html('Human Resources Management:Karyawan');
+            jQuery.ajax(
+            {beforeSend:function(request){$('#spinner').show(); $("#ajax-load").show();},
+              complete:function(request){
+                $('#spinner').hide();
+                $("#ajax-load").hide();},
+              success:function(request){
+                jQuery('.app_two_con').html(request);
+                $("#ajax-load").hide();
+                $('.top_link').removeClass('active');removeNotifyMessage();
+                // $('#div_menu_name_setting').html("<a href=\"#settings\"> <span class='icons setting_ico2'>&nbsp;</span></a>");
+              },
+              url:'/people?group=' + op[1]});
+          }
+
+          if(event.value.match(/\/my_salaries/))  {
+            activateLayoutTwo()
+            $('title').html('Human Resources Management:Gaji');
+            jQuery.ajax(
+            {beforeSend:function(request){$('#spinner').show();$("#ajax-load").show();},
+              complete:function(request){$('#spinner').hide();$("#ajax-load").hide();},
+              success:function(request){
+                jQuery('.app_two_con').html(request);
+                $("#ajax-load").hide();removeNotifyMessage();
+              },
+              url:'/salaries/mine'});
+          }
+          if(event.value.match(/\/new_salary/)){
+            $('title').html('Human Resources Management:Tambah Gaji');
+            jQuery.ajax(
+            {beforeSend:function(request){$('#spinner').show(); $("#ajax-load").show();},
+              complete:function(request){$('#spinner').hide();$("#ajax-load").hide();},
+              success:function(request){jQuery('.input-data').html(request);$(".salaries_top_link").addClass('active');$(".absences_top_link").removeClass('active');$(".memorandums_top_link").removeClass('active');$(".people_top_link").removeClass('active');removeNotifyMessage();},
+              url:'/salaries/new'
+            });
+          }
+          if(event.value.match(/\/salary\/(\d+)/))  {
+            activateLayoutTwo()
+            var op = event.value.match(/\/salary\/(\d+)/);
+            $('title').html('Human Resources Management:Gaji');
+            jQuery.ajax(
+            {beforeSend:function(request){$('#spinner').show();$("#ajax-load").show();},
+              complete:function(request){$('#spinner').hide();$("#ajax-load").hide();},
+              success:function(request){
+                jQuery('.app_two_con').html(request);
+                $("#ajax-load").hide();
+                $(".salaries_top_link").addClass('active');$(".absences_top_link").removeClass('active');$(".memorandums_top_link").removeClass('active');$(".people_top_link").removeClass('active');removeNotifyMessage();
+              },
+              url:'/salaries/'+op[1]});
+          }
+          if(event.value.match(/\/salary\/edit\/(\d+)/))  {
+            activateLayoutTwo()
+            var op = event.value.match(/\/salary\/edit\/(\d+)/);
+            $('title').html('Human Resources Management:Gaji');
+            jQuery.ajax(
+            {beforeSend:function(request){$('#spinner').show();$("#ajax-load").show();},
+              complete:function(request){$('#spinner').hide();$("#ajax-load").hide();},
+              success:function(request){
+                jQuery('.app_two_con').html(request);
+                $("#ajax-load").hide();
+                $(".salaries_top_link").addClass('active');$(".absences_top_link").removeClass('active');$(".memorandums_top_link").removeClass('active');$(".people_top_link").removeClass('active');removeNotifyMessage();
+              },
+              url:'/salaries/'+op[1]+'/edit'});
+          }
+          if(event.value.match(/\/holidays/))  {
+            activateLayoutSetting();
+            $('title').html('Human Resources Management:Liburan');
+            jQuery.ajax(
+            {beforeSend:function(request){$('#spinner').show();$("#ajax-load").show();},
+              complete:function(request){
+                activate_menu("holiday_menu");
+                $('#spinner').hide();
+                $('.top_link').removeClass('active');
+                $("#ajax-load").hide();
+                // $('#div_menu_name_setting').html("<a href=\"#person_index\">Dashboard</a>");
+                $('.holiday_top_link').addClass('active')},
+              success:function(request){
+                jQuery('.setting-con').html(request);
+                $(".salaries_top_link").addClass('active');$(".absences_top_link").removeClass('active');$(".memorandums_top_link").removeClass('active');$(".people_top_link").removeClass('active');removeNotifyMessage();
+              },
+              url:'/holidays'});
+          }
+          if(event.value.match(/\/new_holiday_allowance/)){
+            activateLayoutTwo();
+            $('title').html('Human Resources Management:Tambah THR');
+            jQuery.ajax(
+            {beforeSend:function(request){$('#spinner').show();$("#ajax-load").show();},
+              complete:function(request){$('#spinner').hide();$("#ajax-load").hide();},
+              success:function(request){jQuery('.app_two_con').html(request);$(".salaries_top_link").addClass('active');$(".absences_top_link").removeClass('active');$(".memorandums_top_link").removeClass('active');$(".people_top_link").removeClass('active');removeNotifyMessage();},
+              url:'/holiday_allowances/new'
+            });
+          }
+          else if(event.value.match(/\/editHoliday\/(\d+)/))  {
+            activateLayoutSetting()
+            var op = event.value.match(/\/editHoliday\/(\d+)/);
+            $('title').html('Human Resources Management:Hari Libur');
+            jQuery.ajax(
+            {beforeSend:function(request){$('#spinner').show();$("#ajax-load").show();},
+              complete:function(request){$('#spinner').hide();$("#ajax-load").hide();activate_menu("holiday_menu");},
+              success:function(request){
+                jQuery('.setting-con').html(request);
+                $("#ajax-load").hide();
+                $(".salaries_top_link").addClass('active');$(".absences_top_link").removeClass('active');$(".memorandums_top_link").removeClass('active');$(".people_top_link").removeClass('active');removeNotifyMessage();
+              },
+              url:'/holidays/'+op[1]+'/edit'});
+          }
+          else if(event.value.match(/\/person_index$/))  {
+            activateLayoutTwo();              
+            $('title').html('Human Resources Management:Karyawan');
+            jQuery.ajax({
+              beforeSend:function(request){
+                $('#spinner').show();
+                $("#ajax-load").show();
+                $('.top_link').removeClass('active');
+                // $('#div_menu_name_setting').html("<a href=\"#settings\" id=\"link_setting\"> <span class='icons setting_ico2'>&nbsp;</span></a>");                
+              },
+              complete:function(request){$('#spinner').hide();$("#ajax-load").hide();},
+              success:function(request){                
+                jQuery('.fm-table').remove();
+                jQuery('.app_two_con').html(request);
+                $("#ajax-load").hide();
+                $(".salaries_top_link").removeClass('active');$(".absences_top_link").removeClass('active');$(".memorandums_top_link").removeClass('active');$(".people_top_link").addClass('active');removeNotifyMessage();
+              },
+              url:'/people'
+             });
+          }
+          
+          else if(event.value.match(/\/person_index\?tab=is_login/))  {
+            activateLayoutTwo();
+            $('title').html('Human Resources Management:Karyawan');
+            jQuery.ajax({
+              beforeSend:function(request){
+                $('#spinner').show();
+                $("#ajax-load").show();
+                $('.top_link').removeClass('active');
+                // $('#div_menu_name_setting').html("<a href=\"#settings\" id=\"link_setting\"> <span class='icons setting_ico2'>&nbsp;</span></a>");
+              },
+              complete:function(request){$('#spinner').hide();$("#ajax-load").hide();},
+              success:function(request){
+                jQuery('.fm-table').remove();
+                jQuery('.app_two_con').html(request);
+                $("#ajax-load").hide();
+                error_handle('Login telah berhasil');
+                $(".salaries_top_link").removeClass('active');$(".absences_top_link").removeClass('active');$(".memorandums_top_link").removeClass('active');$(".people_top_link").addClass('active');removeNotifyMessage();
+              },
+              url:'/people'
+             });
+          }
+          
+          else if(event.value.match(/\/person_index\?tab=is_simpan/))  {
+            activateLayoutTwo();
+            $('title').html('Human Resources Management:Karyawan');
+            jQuery.ajax({
+              beforeSend:function(request){
+                $('#spinner').show();
+                $("#ajax-load").show();
+                $('.top_link').removeClass('active');
+                // $('#div_menu_name_setting').html("<a href=\"#settings\" id=\"link_setting\"> <span class='icons setting_ico2'>&nbsp;</span></a>");
+              },
+              complete:function(request){$('#spinner').hide();$("#ajax-load").hide();},
+              success:function(request){
+                jQuery('.fm-table').remove();
+                jQuery('.app_two_con').html(request);
+                $("#ajax-load").hide();
+                error_handle('Data karyawan berhasil disimpan');
+                $(".salaries_top_link").removeClass('active');$(".absences_top_link").removeClass('active');$(".memorandums_top_link").removeClass('active');$(".people_top_link").addClass('active');removeNotifyMessage();
+              },
+              url:'/people'
+             });
+          }
+
+
+          else if(event.value.match(/\/person_not_schedule$/))  {
+            activateLayoutTwo();
+            $('title').html('Human Resources Management:Karyawan');
+            jQuery.ajax({
+              beforeSend:function(request){
+                $('#spinner').show();
+                $("#ajax-load").show();
+                $('.top_link').removeClass('active');
+                // $('#div_menu_name_setting').html("<a href=\"#settings\" id=\"link_setting\"> <span class='icons setting_ico2'>&nbsp;</span></a>");
+              },
+              complete:function(request){$('#spinner').hide();$("#ajax-load").hide();},
+              success:function(request){
+                jQuery('.fm-table').remove();
+                jQuery('.app_two_con').html(request);
+                $("#ajax-load").hide();
+                onRemoveTooltipOnSetting();
+                onRemoveTooltipOnDashboard();
+                $(".salaries_top_link").removeClass('active');$(".absences_top_link").removeClass('active');$(".memorandums_top_link").removeClass('active');$(".people_top_link").addClass('active');removeNotifyMessage();
+              },
+              url:'/people/person_not_schedule'
+             });
+          }
+        });
+      });
+
+      function CloseNotify(){
+          $('.notify_error').hide();
+      }
+
+      function onCancel(url){
+        $("#ajax-load").show();
+        window.location.href = url
+      }
+
+      function activate_menu(id_menu){
+        $('.top_menu').removeClass('active');
+        $("."+id_menu).addClass('active');
+      }
+
+      function stop_load_filter(){
+        $('#button_absensi_submit').show();
+        $('#ajax-load1').hide();
+      }
+
+      function ajaxLoad1(div_btn, div_load){
+        $("#" + div_load + "").show();
+        $("#" + div_btn + "").hide();
+      }
+
+      function changeProduk(){
+        $('#nm_produk').removeAttr('disabled').val('');
+      }
+
+      function onCancel(url){
+        $("#ajax-load").show();
+        window.location.href = url
+      }
+
+      function onDisplay() {
+        document.getElementById("periode").innerHTML = ""
+        var strToAdd = '';
+        a = $('#cbtype').val()
+        if (a == 'Bulanan'){
+          strToAdd += '<select class="left">';
+          strToAdd += '<option>Januari</option>';
+          strToAdd += '<option>February</option>';
+          strToAdd += '<option>Maret</option>';
+          strToAdd += '<option>April</option>';
+          strToAdd += '<option>Mei</option>';
+          strToAdd += '<option>Juni</option>';
+          strToAdd += '<option>Juli</option>';
+          strToAdd += '<option>Agustus</option>';
+          strToAdd += '<option>September</option>';
+          strToAdd += '<option>October</option>';
+          strToAdd += '<option>November</option>';
+          strToAdd += '<option>December</option>';
+          strToAdd += '</select>';
+        }else{
+          strToAdd += '<select class="left" id="cbHarian" onchange="javascript:onCustom()">';
+          strToAdd += '<option>Kemaren</option>';
+          strToAdd += '<option>Sekarang</option>';
+          strToAdd += '<option>Custom</option>';
+          strToAdd += '</select>';
+        }
+        $('#periode').append(strToAdd);
+      }
+
+      function onCustom() {
+        a = $('#cbHarian').val()
+        if (a == 'Custom'){
+          document.getElementById("periode").innerHTML = ""
+          var strToAdd = '';
+          strToAdd += '<input type="text" id="datepicker">';
+          $('#periode').append(strToAdd);
+        }
+      }
+
+      function onRemoveTooltipOnSetting(){
+        $('.edit_setting').addClass("hide-tooltip");
+        $('.edit_cls_holiday_name').addClass("hide-tooltip");
+        $('.add_cls_holiday_name').addClass("hide-tooltip");
+        $('.click_link_holiday').addClass("hide-tooltip");
+        $('.cls_shift').addClass("hide-tooltip");
+        $('.cls_add_shift').addClass("hide-tooltip");
+        $('.cls_edit_shift').addClass("hide-tooltip");
+        $('.cls_delete_shift').addClass("hide-tooltip");
+        $('.cls_org').addClass("hide-tooltip");
+        $('.cls_add_department').addClass("hide-tooltip");
+        $('.cls_department_name').addClass("hide-tooltip");
+        $('.cls_delete_department').addClass("hide-tooltip");
+        $('.cls_add_division').addClass("hide-tooltip");
+        $('.cls_division_name').addClass("hide-tooltip");
+        $('.cls_delete_division').addClass("hide-tooltip");
+        $('.cls_add_group').addClass("hide-tooltip");
+        $('.cls_edit_group').addClass("hide-tooltip");
+        $('.cls_delete_group').addClass("hide-tooltip");
+        $('.cls_add_position').addClass("hide-tooltip");
+        $('.cls_position_name').addClass("hide-tooltip");
+        $('.cls_delete_position').addClass("hide-tooltip");
+        $('.cls_payroll_menu').addClass("hide-tooltip");
+        $('.cls_edit_payroll').addClass("hide-tooltip");
+        $('.cls_edit_ptkp').addClass("hide-tooltip");
+        $('.cls_edit_premium').addClass("hide-tooltip");
+        $('.cls_dashboard_menu').addClass("hide-tooltip");
+        $('.cls_fingerprint_menu').addClass("hide-tooltip");
+        $('.cls_cuti_sakit_menu').addClass("hide-tooltip");
+        $('.cls_schedule_menu').addClass("hide-tooltip");
+      }
+
+      function onRemoveTooltipOnDashboard(){
+        $('.db').addClass("hide-tooltip");
+        $('.db1').addClass("hide-tooltip");
+      }
+
+      function activateLayoutOne(){
+        if ($('#application_one_container').val() != undefined ){
+          app_one = $('#application_one_container').detach();}
+        if ($('#application_two_container').val() != undefined){
+          app_two = $('#application_two_container').detach();}
+        if ($('#application_setting_container').val() != undefined){
+          app_setting = $('#application_setting_container').detach();}
+          $('#div_menu_name_setting').html("<a href=\"#settings\" id=\"link_setting\"> <span class='icons setting_ico2'>&nbsp;</span></a>");
+        app_one.insertAfter("#header");
+      }
+
+      function activateLayoutTwo(){
+        if ($('#application_one_container').val() != undefined ){
+          app_one = $('#application_one_container').detach();}
+        if ($('#application_two_container').val() != undefined){
+          app_two = $('#application_two_container').detach();}
+        if ($('#application_setting_container').val() != undefined){
+          app_setting = $('#application_setting_container').detach();}
+          $('#div_menu_name_setting').html("<a href=\"#settings\" id=\"link_setting\"> <span class='icons setting_ico2'>&nbsp;</span></a>");
+        app_two.insertAfter("#header");
+      }
+
+      function activateLayoutSetting(){
+        if ($('#application_one_container').val() != undefined ){
+          app_one = $('#application_one_container').detach();
+        }
+        if ($('#application_two_container').val() != undefined){
+          app_two = $('#application_two_container').detach();
+        }
+        if ($('#application_setting_container').val() != undefined){
+          app_setting = $('#application_setting_container').detach();
+        }
+        app_setting.insertAfter("#header");
+        $('#div_menu_name_setting').html("<a href=\"#person_index\">Dashboard</a>");
+      }
+
+     function liveStats(){
+        $.ajax({
+          url : "<%= ApplicationController::BASE_URL %>/logout_by_checkloginstatus",
+          success : function (data) {
+           //$("#targetStatusUser").html(data);
+           if(data == '1') { //if user still login
+             return false;
+           }else if (data == '0'){
+             window.location='<%= ApplicationController::BASE_URL %>/logout';
+           }
+         }
+       });
+       setTimeout("liveStats()", 300000);
+    }
+
+    function error_handle(msg){
+      if (msg!=""){
+        $('.message').text(msg);
+        $('.notify_error').show();
+      }else{
+        $('.message').text("");
+        $('.notify_error').hide();
+      }
+    }
+  </script>
+
+  </head>
+ 
+  <body class="setting_body">
+ <%= render :partial => "layouts/shared/tooltip_css" %>
+    <div id="page-wrap">
+      <div id="inside">
+        <style type="text/css">
+          .input-data .input-help label, .input-data .box-form .input-help label, .input-data .input-help-wide label, .input-data .box-form .input-help-wide label {
+            float: none;
+          }
+          .full-width {
+              width: 1190px !important;
+          }
+          .frm-popup .input-help label {
+              float: none;
+          }
+          .pagination, .pager {
+              float: right;
+          }
+        </style>
+        <%=render :partial=> "layouts/header" %>
+          <div class="clear"></div>
+          
+          <div id="application_one_container">
+            <div id="main-content">
+              <div class="contentTable">
+                <div class="panelNav">
+                  <ul>
+                    <%= render :partial=>"layouts/top_side" %>
+                  </ul>
+                </div>
+                <%= render :partial=> "layouts/shared/breadcrumbs" %>
+                <div class="clear"></div>
+                <div class="input-data">
+                  <div class="title-page-name"></div>
+                  <%=yield%>
+                </div>
+                <div class="clear"></div>
+              </div>
+            </div>
+            <div class="clear"></div>
+          </div>
+
+          <div id="application_two_container">
+            <div id="main-content" class="main-content-setting">
+              <div class="contentTable">
+                <div class="panelNav">
+                  <ul>
+                    <%= render :partial=>"layouts/top_side" %>
+                  </ul>
+                </div>                               
+                <div class="input-data app_two_con" id="app_two_con">
+                  <%= yield %>
+                </div>
+                <div class="clear"></div>
+              </div>
+            </div>
+            <div class="clear"></div>
+          </div>
+
+          <div id="application_setting_container">
+            <div id="main-content" class="main-content-setting">
+              <div class="contentTable">
+                <div class="panelNav panelNavTab-setting">
+                  <ul>
+                    <%= render :partial=>"layouts/top_side_setting" %>
+                  </ul>
+                </div>
+                <div class="input-data setting-con" id="setting-con">
+                  <%= yield %>
+                </div>
+                <div class="clear"></div>
+              </div>
+            </div>
+            <div class="clear"></div>
+          </div>
+          <span class="copyright">Copyright © <%= Time.now().strftime('%Y') %>  <%= session[:platform_user]['user']['software_brand_name'] if session[:platform_user]['user']['software_brand_name'] %>. All rights reserved.</span>
+        </div>        
+      </div>
+      <div class="clear"></div>
+      
+      <%= yield :script %>
+  </body>
+</html>
+

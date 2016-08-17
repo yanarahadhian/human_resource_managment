@@ -1,0 +1,13 @@
+$("#person-details").show();
+$("#honor-details").show();
+$("#person-details").html('<%= escape_javascript(render(:partial => "person_details")) %>');
+<% unless @person.blank? %>
+  $("#honor-details").html('<%= escape_javascript(render(:partial => "honor_details")) %>');
+<% end %>
+<% unless @last_honor.blank? %> 
+  <% @last_honor.premium_in_honors.each do |pih| %>
+  	<% unless pih.premium.blank?%>
+    	$('#premium_<%= pih.premium.id %>').showhide();
+      <% end %>
+  <% end %>
+<% end %>

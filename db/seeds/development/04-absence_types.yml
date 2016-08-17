@@ -1,0 +1,22 @@
+absence_type01:
+  absence_type_name: "Ijin"
+  is_salary_paid: false
+absence_type02:
+  absence_type_name: "Cuti"
+  is_salary_paid: true
+absence_type03:
+  absence_type_name: "Sakit"
+  is_salary_paid: true
+absence_type04:
+  absence_type_name: "Mangkir"
+  is_salary_paid: false
+absence_type05:
+  absence_type_name: "Cuti Khusus"
+  is_salary_paid: true
+absence_type06:
+  absence_type_name: "Cuti Melahirkan"
+  is_salary_paid: true
+absence_type07:
+  absence_type_name: "Sakit Kecelakaan"
+  is_salary_paid: true
+

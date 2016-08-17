@@ -1,0 +1,280 @@
+<script language=javascript type='text/javascript'>
+$.datepicker.setDefaults({
+        showOn: "button",
+        buttonImage: "<%=ApplicationController::APPSCHEF_URL%>/images/calendar.gif",
+        changeMonth: true,
+        changeYear: true,
+        dateFormat: 'dd/mm/yy',
+        altFormat: 'dd MM yy',
+        firstDay: 1
+      });
+
+     
+function hidediv() {
+if (document.getElementById) { // DOM3 = IE5, NS6
+  
+  document.getElementById('hideshow').style.display = 'none';
+  document.getElementById('employment_employment_end').value = "now"  ;
+  $("#ui-date2").val("");
+  }
+  else {
+    if (document.layers) { // Netscape 4
+      document.hideshow.display = 'none';
+    }
+    else { // IE 4
+      document.all.hideshow.style.display = 'none';
+    }
+  }
+}
+
+function showdiv() {
+  if (document.getElementById) { // DOM3 = IE5, NS6
+    document.getElementById('hideshow').style.display = 'block';
+  }
+  else {
+    if (document.layers) { // Netscape 4
+      document.hideshow.display = 'block';
+    }
+    else { // IE 4
+      document.all.hideshow.style.display = 'block';
+    }
+  }
+}
+
+function checkvalue(){
+  if (document.getElementById('employment_employment_end').value == 'pilih')
+  {
+    showdiv();
+  }
+  else {
+    hidediv();
+  }
+}
+
+function hidedivkontrak() {
+if (document.getElementById) { // DOM3 = IE5, NS6
+  document.getElementById('hidesampai').style.display = 'none';
+  document.getElementById('employment_employment_type').value = "tetap"  ;
+  }
+  else {
+    if (document.layers) { // Netscape 4
+      document.hidesampai.display = 'none';
+    }
+    else { // IE 4
+      document.all.hidesampai.style.display = 'none';
+    }
+  }
+}
+
+function hidedivkeluar() {
+  if (document.getElementById) { // DOM3 = IE5, NS6
+    document.getElementById('NonTermination').style.display = 'none';   
+  }
+  else {
+    if (document.layers) { // Netscape 4
+      document.NonTermination.display = 'none';
+    }
+    else { // IE 4
+      document.all.NonTermination.style.display = 'none';
+    }
+  }
+}
+
+function showdivkontrak() {
+  if (document.getElementById) { // DOM3 = IE5, NS6
+    document.getElementById('hidesampai').style.display = 'block';
+  }
+  else {
+    if (document.layers) { // Netscape 4
+      document.hidesampai.display = 'block';
+    }
+    else { // IE 4
+      document.all.hidesampai.style.display = 'block';
+    }
+  }
+}
+
+function checkvaluekontrak(){
+  if (document.getElementById('employment_employment_type').value == 'kontrak')
+  {
+    showdivkontrak();
+  }
+  else if (document.getElementById('employment_employment_type').value == 'tetap')
+  {
+    hidedivkontrak();
+  }
+  else
+  {
+    hidedivkeluar();
+  }
+}
+
+function onDepartment(data){
+    $("#div_unit").empty();
+    $("#div_group").empty();
+    $.ajax({
+        url: "/change_divisi/" + data.value,
+        data: "a=a",
+        type: "GET"
+      });
+  }
+  
+ function onDivision(data){
+    $("#div_group").empty();
+      $.ajax({
+        url: "/change_group/" + data.value,
+        data: "",
+        type: "GET"
+      });
+  }
+
+  $(document).ready(function(){
+    $("#employment_employment_start").val($("#employment_employment_start").val());
+  })
+</script>
+
+<% input_thn_masuk = "input-field" %>
+<% err_thn_masuk = error_message_on :employment, :employment_start %>
+<% input_thn_masuk = "input-error" unless err_thn_masuk.blank? %>
+
+
+<div class="input">
+   <%= link_to "<span class='icons edit-icon'>&nbsp;</span>Edit", "#", :onclick => "onChangeField()", :class=> "grey_button_a top-right" %>     
+  <span class="<%= input_thn_masuk %>">
+    <label>Tanggal Mulai<span class="redstar">*</span></label><span class="left">:&nbsp;</span>
+    <div id="field_start" style="display:none;">
+      <%= f.text_field :employment_start, :class => "ui-date" %>
+      <%= err_thn_masuk %>
+    </div>
+    <div id="label_start">
+      <%= employment.employment_start.blank? ? "-" : employment.employment_start.strftime('%d/%m/%Y') %>
+    </div>
+  </span>
+  <span class="clear"></span>
+
+  <span class="input-field">
+    <label>Perubahan</label><span class="left">:&nbsp;</span>
+     <div id="field_perubahan" style="display:none;">
+       <select name="employment[change_from_before]" id="employment_change_from_before">
+           <% employment.perubahan.each do |x| %>
+             <% sel = '' %>
+             <% sel = 'selected="selected"' if x == employment.change_from_before %>
+             <option value="<%= x %>" <%=sel%>><%= x.capitalize! %></option>
+           <% end %>
+       </select>
+    </div>
+    <div id="label_perubahan">
+      <%= employment.change_from_before.capitalize! %>
+    </div>
+  </span>
+  <span class="clear"></span>
+
+  <span class="input-field" id="sampai_tgl">
+    <label>Tanggal Selesai</label><span class="left">:&nbsp;</span>
+    <div id="field_end" style="display:none;">
+      <%= f.select(:employment_end, "<option value='now' #{employment.employment_end.to_s.empty? ? 'selected=selected' : ''}>Sekarang</option><option value ='pilih' #{employment.employment_end.to_s.empty? ? '' : 'selected=selected' }>Pilih</option>", {},:onchange => 'checkvalue();') %>
+      <div id="hideshow" style="display:<%= employment.employment_end.to_s.empty? ? 'none' : 'block' %>;margin-left:150px;"><br/>
+        <div class="left" style="margin-left:23px;"><%= f.text_field :employment_end, :id => "ui-date2", :class => "ui-date"%></div>
+        <a href="javascript:hidediv()">Kembali</a>
+      </div>
+    </div>
+    <div id="label_end">
+      <%= employment.employment_end.blank? ? "-" : employment.employment_end.strftime('%d/%m/%Y') %>
+    </div>
+  </span>
+  <span class="clear"></span>
+
+  <span class="input-field">
+    <label>Departmen</label><span class="left">:&nbsp;</span>
+    <div id="field_department" style="display:none;">
+      <select onchange="onDepartment(this)" name="employment[department_id]" id="employment_department_id">
+        <option value="">Pilih Departemen</option>
+        <% Department.by_company(current_company_id).all.each do |x|  %>
+          <% select ="" %>
+          <% select =" selected='selected'" if x.id==employment.department_id %>
+          <option value='<%=x.id%>'<%=select%>> <%= x.department_name %></option>
+        <% end %>
+      </select>
+    </div>
+    <div id="label_department">
+      <%= employment.department.blank? ? "-" : employment.department.department_name %>
+    </div>
+  </span>
+  <span class="clear"></span>
+
+  <% divisi = set_data_bagian(employment, current_company_id) %>
+  <div id="div_divisi" style="<%= divisi[:style] %>">
+      <span class="input-field">
+      <label>Bagian</label><span class="left">:&nbsp;</span>
+      <div id="field_divisi" style="display:none;">
+        <select onchange="onDivision(this)" name="employment[work_division_id]" id="employment_work_division_id">
+          <option value="">Pilih Bagian</option>
+          <% divisi[:division].each do |x| %>
+            <% select ="" %>
+            <% select =" selected='selected'" if x.id==employment.work_division_id %>
+            <option value="<%= x.id %>"<%= select %>> <%= x.name %> </option>
+          <% end %>
+        </select>
+      </div>
+      <div id="label_divisi">
+        <%= employment.division.blank? ? "-" : employment.division.name %>
+      </div>
+      </span>
+      <span class="clear"></span>
+  </div>
+
+  <% group = set_data_group(employment, current_company_id) %>
+
+  <div id="div_group" style="<%= group[:style] %>">
+      <span class="input-field">
+      <label>Group</label><span class="left">:&nbsp;</span>
+      <div id="field_group" style="display:none;">
+        <select name="employment[work_group_id]" id="employment_work_group_id">
+          <option value="">Pilih</option>
+          <% group[:group].each do |x| %>
+            <% select ="" %>
+            <% select =" selected='selected'" if x.id==employment.work_group_id %>
+            <option value="<%= x.id %>"<%= select %>> <%= x.work_group_name %> </option>
+          <% end %>
+        </select>
+      </div>
+      <div id="label_group">
+        <%= employment.work_group.blank? ? "-" : employment.work_group.work_group_name %>
+      </div>
+
+      </span>
+      <span class="clear"></span>
+  </div>
+
+   <span class="input-field">
+    <label>Jabatan</label><span class="left">:&nbsp;</span>
+    <div id="field_jabatan" style="display:none;">
+      <select name="employment[position_id]" id="employment_position_id">
+        <option value="">Pilih</option>
+        <% Position.by_company(current_company_id).all.each do |x| %>
+          <% select ="" %>
+          <% select =" selected='selected'" if x.id==employment.position_id %>
+          <option value="<%= x.id %>"<%= select %>><%= x.position_name %></option>
+        <% end %>
+      </select>
+    </div>
+    <div id="label_jabatan">
+      <%= employment.position.blank? ? "-" : employment.position.position_name %>
+    </div>
+   </span>
+   <span class="clear"></span>
+
+  <%= f.hidden_field :type_employment %>
+  <%= f.hidden_field :employment_type_check, :id=>"employment_type_check_#{employment.id}" %>
+
+  <span class="input-field">
+    <label>Alasan perubahan </label><span class="left">:&nbsp;</span>
+    <div id="field_reason" style="display:none;">
+      <%= f.text_area :reason_for_change, :rows => 3, :cols => 25 %>
+    </div>
+    <div id="label_reason">
+      <%= employment.reason_for_change.blank? ? "-" : employment.reason_for_change %>
+    </div>
+  </span>
+  <span class="clear"></span>
+</div>

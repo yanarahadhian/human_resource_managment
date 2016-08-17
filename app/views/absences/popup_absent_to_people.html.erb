@@ -1,0 +1,224 @@
+<!DOCTYPE html PUBLIC"-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="description" content="AppsChef" />
+    <meta name="keywords" content="AppsChef" />
+    <link rel="icon" href="/images/favicon.ico" type="image/x-icon"/>
+    <%= stylesheet_link_tag  "#{ApplicationController::APPSCHEF_URL}/stylesheets/private2.css",
+      "#{ApplicationController::APPSCHEF_URL}/stylesheets/fm_form.css",
+      "#{ApplicationController::APPSCHEF_URL}/stylesheets/960gs/fluid_grid.css"%>
+    <title>Human Resources Management: <%= render :partial => "layouts/title" %></title>
+
+    <% if session[:platform_user]['user']['app_mode'] == 'on_premise' %>
+      <%= stylesheet_link_tag  "#{ApplicationController::APPSCHEF_URL}/stylesheets/private2.css",
+        "#{ApplicationController::APPSCHEF_URL}/stylesheets/blue_werp.css",
+        "#{ApplicationController::APPSCHEF_URL}/stylesheets/960gs/fluid_grid.css",
+        "#{ApplicationController::APPSCHEF_URL}/stylesheets/colorbox.css",
+        "#{ApplicationController::APPSCHEF_URL}/stylesheets/footpanel.css",
+        "#{ApplicationController::APPSCHEF_URL}/stylesheets/redmond/jquery-ui-1.8.7.custom.css",
+        "#{ApplicationController::APPSCHEF_URL}/stylesheets/app.css",
+        "jquery.autocomplete.css"%>
+    <% else %>
+      <%= stylesheet_link_tag  "#{ApplicationController::APPSCHEF_URL}/stylesheets/private2.css",
+        "#{ApplicationController::APPSCHEF_URL}/stylesheets/fm_form.css",
+        "#{ApplicationController::APPSCHEF_URL}/stylesheets/960gs/fluid_grid.css",
+        "#{ApplicationController::APPSCHEF_URL}/stylesheets/colorbox.css",
+        "#{ApplicationController::APPSCHEF_URL}/stylesheets/footpanel.css",
+        "#{ApplicationController::APPSCHEF_URL}/stylesheets/redmond/jquery-ui-1.8.7.custom.css",
+        "#{ApplicationController::APPSCHEF_URL}/stylesheets/app.css",
+        "jquery.autocomplete.css"%>
+    <% end %>
+
+    <title>Human Resources Management: <%= render :partial => "layouts/title" %></title>
+    <style>.ui-date{background:#FFF !important; width:140px !important;}</style>
+
+    <%= javascript_include_tag "#{ApplicationController::APPSCHEF_URL}/javascripts/jquery-1.4.2.min.js",
+      'jrails',
+      "#{ApplicationController::APPSCHEF_URL}/javascripts/jquery.spinner.js",
+      "#{ApplicationController::APPSCHEF_URL}/javascripts/jquery-ui-1.8.7.custom.min.js",
+      "jquery-ui-1.8.7.custom/development-bundle/ui/jquery.ui.core.js",
+      "jquery-ui-1.8.7.custom/development-bundle/ui/jquery.ui.widget.js",
+      "jquery-ui-1.8.7.custom/development-bundle/ui/jquery.ui.datepicker.js",
+      "jquery-ui-1.8.7.custom/development-bundle/ui/i18n/jquery.ui.datepicker-id.js",
+      "#{ApplicationController::APPSCHEF_URL}/javascripts/jquery.colorbox.js",
+      "#{ApplicationController::APPSCHEF_URL}/javascripts/mobilyslider.js",
+      "#{ApplicationController::APPSCHEF_URL}/javascripts/jquery.hint.js",
+      "#{ApplicationController::APPSCHEF_URL}/javascripts/jquery.tooltip.min.js",
+      "#{ApplicationController::APPSCHEF_URL}/javascripts/ui.spinner.js", "pagination.js","jquery.alphanumeric.pack.js",
+      "ac_style_script.js",
+      "#{ApplicationController::APPSCHEF_URL}/javascripts/ac_cross_script.js" %>
+
+    <%= javascript_include_tag 'jquery.tablesorter.js','jquery.tablesorter.pager.js', "jquery.dataTables.min",
+      'jquery.address-1.3.2.min', 'application.js', 'jquery.labelify.js', 'jquery.qtip', 'jquery.autocomplete',
+      'autologout_timeout.js'%>
+
+  </head>
+  <body class="body-popup">
+    <style type="text/css">
+      .frm-popup .input-help label {
+        float: none;
+      }
+    </style>
+    <% input_nama = "input-field" %>
+    <% err_nama = "" %>
+    <% if is_error_name(@str_error) %>
+      <% err_nama = @str_error["person-name"] %>
+      <% input_nama = "input-error" %>
+    <% end %>
+
+    <% input_alasan = "input-field" %>
+    <% err_alasan = "" %>
+    <% if is_error_reason(@str_error) %>
+      <% err_alasan = @str_error["alasan"] %>
+      <% input_alasan = "input-error" %>
+    <% end %>
+
+    <div class="frm-popup" id="popup_present">
+      <div class="title-page-tambah">Absenkan Karyawan</div>
+      <fieldset>
+        <% form_for :absent, :url => employee_present_absences_path do |f| %>
+
+          <div class="input">
+            <span class="<%= input_nama %>">
+              <label>Nama Karyawan<span class="redstar">*</span></label>:
+              <%= text_field_tag "person-name",{},{:style => "width:140px !important;"}%>
+              <div class="formError"><%= err_nama  %></div>
+            </span>
+            <div class="clear"></div>
+            <span class="input-field">
+              <label>Tanggal</label> :
+              <%= text_field_tag "present_temp_date",{},{:style => "width:140px !important;"}%>
+              <%= hidden_field_tag :date,{},{:id => "present_date_pick"} %>
+            </span>
+            <div class="clear"></div>
+            <span class="input-field">
+              <label>Kehadiran</label><span class="left"> :</span>
+              <label class="label-radio"><input type="radio" value="0" name="absen" <%= is_absent(@absent_type)? 'checked="checked"' : '' %>/>Hadir</label>
+              <label class="label-radio"><input type="radio" value="1" name="absen" <%= !is_absent(@absent_type)? 'checked="checked"' : '' %>/>Tidak Hadir</label>
+            </span>
+            <div class="clear"></div>
+
+
+            <div id="target_tdk_hadir" style="display: none; ">
+              <span class="<%= input_alasan %>">
+                <label>Alasan<span class="redstar">*</span></label><span class="left">:&nbsp;</span>
+                <%= collection_select(:employee, :absence_type, AbsenceType.all(:conditions => {:company_id => current_company_id}, :order => :type_id), :id, :absence_type_name, options ={:prompt => "Pilih Alasan"}) %>
+                <%= err_alasan %>
+              </span>
+              <div class="clear"></div>
+              <span class="input-field">
+                <label>Keterangan</label><span class="vtop">:</span>
+                <textarea rows="3" cols="35" id="absence_reason"></textarea>
+              </span>
+            </div>
+
+            <div id="target_hadir" style="display: block; ">
+              <span class="input-field" id="time_start">
+                <label>Jam Mulai Kerja</label>:
+                <%= select_time(Time.now, {:time_separator => " : ", :minute_step => 5, :prefix => "start_working"}, {:class => "small-text"}) %>
+              </span>
+              <div class="clear"></div>
+              <span class="input-field" id="time_end" style="display:none;">
+                <label>Jam Selesai Kerja</label>:
+                <%= select_time(Time.now + 4.hours, {:time_separator => " : ", :minute_step => 5, :prefix => "end_working"}, {:class => "small-text"}) %>
+              </span>
+              <div class="clear"></div>
+              <span class="input-field" id="rest_time" style="display:none;">
+                <label>Istirahat</label> :
+                <%= text_field_tag "rest_time",{},{:style => "width:140px !important;"}%>
+              </span>
+            </div>
+          </div>
+
+          <div class="clear"></div>
+          <div class="center-text block-btn-form">
+            <%= render :partial => "layouts/button_loader"  %>
+            <div id="button">
+              <input type="reset" id="info_section_cancel_basic" class="grey_button" value="Batal" name="info_section_cancel_basic" onclick="parent.$.fn.colorbox.close();"/>
+              <input type="submit" value="Simpan" name="info_section_save_basic" id="info_section_save_basic" class="blue_button" onclick="ajaxLoad1('button','ajax-load1')"/>
+            </div>
+          </div>
+        <% end %>
+      </fieldset>
+    </div>
+  </body>
+</html>
+
+<script type="text/javascript" >
+
+  var ar_name = <%= current_people.map { |x| "#{x.full_data_name}" }.to_json %>;
+  var ar_id = <%= current_people.map { |x| x.id }.to_json %>
+
+  function ajaxLoad1(div_btn, div_load){
+    $("#" + div_load + "").show();
+    $("#" + div_btn + "").hide();
+  }
+
+  $(document).ready(function() {
+    $('#target_tdk_hadir').hide();
+    var absen = document.getElementsByName("absen");
+    $(absen[0]).click(function(){
+      $('#target_tdk_hadir').hide();
+      $('#target_hadir').show();
+      $.fn.colorbox.resize();
+    });
+    $(absen[1]).click(function(){
+      $('#target_hadir').hide();
+      $('#target_tdk_hadir').show();
+      $.fn.colorbox.resize();
+    });
+
+<% if @absent_type == 1 %>
+      $('#target_tdk_hadir').show();
+<% end %>
+
+    $("#person-name").autocomplete(ar_name);
+
+    $.datepicker.setDefaults({
+      showOn: "button",
+      buttonImage: "<%=ApplicationController::APPSCHEF_URL%>/images/calendar.gif",
+      changeMonth: true,
+      changeYear: true,
+      dateFormat: 'dd/mm/yy',
+      altFormat: 'yy-mm-dd',
+      firstDay: 1
+    });
+
+    $('#present_temp_date').val('<%="#{Date.today.strftime("%d/%m/%Y")}"%>');
+
+    $("#present_temp_date").datepicker({
+      buttonImageOnly: true,
+      altField: '#present_temp_date',
+      altFormat: 'dd/mm/yy',
+      dateFormat: 'yy-mm-dd',
+      buttonImageOnly: true,
+      maxDate: '+0',
+      onSelect: function(dateText, inst) {
+        var date = dateText;
+        var today = '<%= Date.today.strftime("%Y-%m-%d")%>';
+        if(date == today){
+          $('#rest_time').hide();
+          $('#time_end').hide();
+          $('#time_start').show();
+        }
+        else{
+          $('#rest_time').show();
+          $('#time_end').show();
+          $('#time_start').show();
+        }
+      }
+    })
+
+
+  });
+
+</script>
+
+<% content_for :head do%>
+  <style type="text/css">
+    .input-data.dashboard_hr .input, .input-hidden {
+      width: 540px;
+    }
+  </style>
+<%- end %>

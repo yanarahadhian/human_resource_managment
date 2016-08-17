@@ -1,0 +1,30 @@
+{
+"sEcho": <%=h @sEcho %>,
+"iTotalRecords": <%= @iTotalRecords %>,
+"iTotalDisplayRecords": <%= @iTotalDisplayRecords %>,
+"iDataExist": <%= @more_rest_exist %>,
+"aaData" : [
+<%- @more_rests.each do |more_rest| %>
+[
+  <%- if more_rest[:is_acted_upon] %>
+    "<%= "<input id='more_#{more_rest[:more_id]}' name='more_ids[]' type='checkbox' value=#{more_rest[:more_id]} disabled='disabled'/>" %>",
+  <% else %>
+    "<%= "<input id='more_#{more_rest[:more_id]}' name='more_ids[]' type='checkbox' value=#{more_rest[:more_id]} />" %>",
+  <% end %>
+  "<%= "<a href='#dailyabsence?id=#{more_rest[:person_id]}&date=#{more_rest[:date].strftime("%Y-%m-%d")}'> #{h more_rest[:person_name].titleize} </a>" %>",
+  "<%=h more_rest[:department].just_display unless more_rest[:department].blank? %>",
+  "<%=h more_rest[:division].just_display unless more_rest[:division].blank? %>",
+  "<%= l more_rest[:date] %>",
+  "<%= Presence.minutes_to_hour_text(more_rest[:break_length]) %>",
+  <%- if more_rest[:is_acted_upon] %>
+    "<%=h more_rest[:status] %>"
+  <%- else %>
+    "Belum ditindak lanjuti"
+  <%- end %>,
+  "<%=h more_rest[:description] %>"
+  <%= "]," unless more_rest == @more_rests.last %>
+<% end %>
+<%= "]" unless @more_rests.blank? %>
+]
+}
+

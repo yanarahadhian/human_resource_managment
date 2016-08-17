@@ -1,0 +1,17 @@
+{
+"sEcho": <%=h @sEcho %>,
+"iTotalRecords": <%= @iTotalRecords %>,
+"iTotalDisplayRecords": <%= @iTotalDisplayRecords %>,
+"sColumns": "id,name,personel",
+"aaData" : [
+<% @positions.each do |position| %>
+   [  "<%= "<input id='position_#{position.id}' name='position_ids[]' type='checkbox' value=#{position.id} />" %>",
+      "<%= "<a href='#position/#{position.id}'> #{position.position_code.display} </a>" %>",
+      "<%= "<a href='#position/#{position.id}'> #{position.position_name.display} </a>" %>",
+      "<%= "<a href='#peoplePosition/#{position.id}'>#{position.personel_count.to_s.just_display}</a>" %>"
+   <%= "]," unless position == @positions.last %>
+<% end %>
+<%= "]" unless @positions.blank? %>
+]
+}
+

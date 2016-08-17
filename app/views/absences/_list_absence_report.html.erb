@@ -1,0 +1,134 @@
+  <table id="absence_report_table">
+      <thead>
+        <tr>
+          <th width="70">NIK</th>
+          <th width="105">Nama</th>
+          <th width="120">Jumlah ketidakhadiran</th>
+          <th width="120">Jumlah Keterlambatan (<= 15 menit)</th>
+          <th width="120">Jumlah Keterlambatan (> 15 menit)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% if @reports.blank? %>
+          <tr class="no-data">
+            <td colspan="10" class="center-text">
+              <div class="description">
+                <% if params[:filter] %>
+                  Data Tidak Ditemukan
+                <% else %>
+                  Belum Ada Data karyawan
+                <% end %>
+              </div>
+            </td>
+          </tr>
+        <% else %>
+          <% @reports.each_with_index do |report, i|%>
+            <tr>
+              <td class="left-text"><%= link_to report[:employee_reg_id].to_s, "#people/#{report[:employee_id].to_s}?tab=0" %></td>
+              <td class="left-text"><%= link_to report[:name].to_s, "#people/#{report[:employee_id].to_s}?tab=0"%></td>
+              <td class="left-text"><%= report[:total_absence].to_s %></td>
+              <td class="left-text"><%= report[:late_before_and_at_15_minutes_count] %></td>
+              <td class="left-text"><%= report[:late_after_15_minutes_count] %></td>
+            </tr>
+          <% end %>
+        <% end %>
+      </tbody>
+  </table>
+
+  <div class="clear"></div>
+  <div class="panelFilter">
+    <table cellpadding="0" cellspacing="0">
+      <tbody>
+        <tr>
+          <td></td>
+          <td>&nbsp;</td>
+          <td class="right-text">
+            <div class="pagination right">
+              <span class="paginationResult">
+                <% if !@iTotalRecords.nil? && (@iTotalRecords > 0) %>
+                  <%= "#{@start_index + 1} - #{@start_index + @iTotalDisplayRecords} dari " %>
+                  <span id="totalAbsenceRecords"> <%= "#{@iTotalRecords}" %>
+                  </span>
+                <% end %>
+              </span>
+              <% if !@iTotalRecords.nil? && (@iTotalRecords > 25) %>
+                <a ><span class="icons last_ico" id="last_page">&nbsp;</span></a>
+                <a ><span class="icons next_ico" id="next_page">&nbsp;</span></a>
+                <a ><span class="icons prev_ico" id="prev_page">&nbsp;</span></a>
+                <a ><span class="icons first_ico" id="first_page">&nbsp;</span></a>
+              <% end %>
+              <div class="clear"></div>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <script type="text/javascript" >
+    var displayStart = <%= @start_index.to_i %>;
+    var dataLength = 25;
+
+    $(document).ready(function() {
+      $('#next_page').click(function(e){
+        e.preventDefault();
+        if (displayStart + dataLength < $('#totalAbsenceRecords').text()){
+          $("#ajax-load").show();
+          displayStart = displayStart + dataLength;
+          resetTablePage($('#date_pick_absen').val(), $('#date_pick_absen2').val(), $("#names").val(), dataLength, displayStart);
+          $("#ajax-load").hide();
+        }
+        return false;
+      });
+
+      $('#last_page').click(function(e){
+        e.preventDefault();
+        if (displayStart + dataLength < $('#totalAbsenceRecords').text()){
+          $("#ajax-load").show();
+          displayStart = (Math.floor((parseInt($('#totalAbsenceRecords').text()-1)/dataLength))*dataLength);
+          resetTablePage($('#date_pick_absen').val(), $('#date_pick_absen2').val(), $("#names").val(), dataLength, displayStart);
+          $("#ajax-load").hide();
+        }
+        return false;
+      });
+
+      $('#prev_page').click(function(e){
+        e.preventDefault();
+        if (displayStart > 0){
+          $("#ajax-load").show();
+          displayStart = displayStart - dataLength;
+          resetTablePage($('#date_pick_absen').val(), $('#date_pick_absen2').val(), dataLength, displayStart);
+          $("#ajax-load").hide();
+        }
+        return false;
+      });
+
+      $('#first_page').click(function(e){
+        e.preventDefault();
+        if (displayStart > 0){
+          $("#ajax-load").show();
+          displayStart = 0;
+          resetTablePage($('#date_pick_absen').val(), $('#date_pick_absen2').val(), dataLength, displayStart);
+          $("#ajax-load").hide();
+        }
+        return false;
+      });
+    });
+
+    function resetTablePage(date_start, date_end, name, iDisplayLength, iDisplayStart ){
+      $("#ajax-load").show();
+      $.ajax({
+          type: "get",
+          url: "/absences/absence_report_table",
+          data:{"date_start": date_start,
+            "date_end": date_end,
+            "name": name,
+            "iDisplayLength": iDisplayLength,
+            "iDisplayStart": iDisplayStart},
+          dataType: 'script',
+            success: function(){
+              $("#ajax-load").hide();
+            }
+       });
+    }
+  </script>

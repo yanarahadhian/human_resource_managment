@@ -1,0 +1,261 @@
+<%= render :partial=> "layouts/shared/breadcrumbs" %>
+<%= render :partial => "layouts/howto_menu" %>
+<fieldset class="fm-table">
+  <legend><a href="#" id="help_dash" class="icons help-top-icon" title="Click to show/hide information">&nbsp;</a>
+   Data Tunjangan Hari Raya (THR)</legend>
+  <%= render :partial => "layouts/howto/howto_content"%>
+  <%= render :partial => "layouts/delete_message" %>
+  <div class="panelFilter">
+    <table cellspacing="0" cellpadding="0">
+      <tbody>
+        <tr>
+           <td style="width:97px;" id="id_more_action">
+              <div id="action_menu">
+                <ul>
+                  <li>
+                    <a class="grey_button2">
+                      <span class="left">More Actions</span>
+                      <span class="icons drop_arrow_ico">&nbsp;</span>
+                    </a>
+                    <div class="clear"></div>
+                    <ul>
+                      <% if current_features.include?('thr_delete') %>
+                        <li>
+                          <a class="list" href="#holiday_allowances" id="delete" onclick="onDelete()">Delete</a>
+                        </li>
+                      <% end %>
+                    </ul>
+                  </li>
+                </ul>
+              </div>
+            </td>
+            <td id="id_filter">
+              <a class="grey_button2" id="filter_trigger" style="color: rgb(89, 119, 156); ">
+                <span class="icons filter-ico">&nbsp;</span> Filter
+              </a>
+            </td>
+          <td style="width:278px;" id="id_export">
+              <div class="pagination">
+                <%= link_to "<span class='icons add_ico'>&nbsp;</span>Hitung THR", '#new_holiday_allowance', :class => "grey_button2", :id=>"add_keluarga" %>
+                <% unless @honors.blank? %>
+                  <div class="action_menu">
+                    <span id ="export-menu">
+                      <%= render :partial => 'export_menu' %>
+                    </span>
+                  </div>
+                <% end %>
+              </div>
+              <div class="clear"></div>
+            </td>
+        </tr>
+          <tr id="filter_block" style="display: table-row; ">
+            <td colspan="3">
+              <div class="expand_filter">
+                <div id="filter_st" style="display: block; ">
+                  <% form_remote_tag :url => {:action => "index" }, :method => :get do |form| %>
+                    <div class="left-filter">
+                      <div class="filter_opt">
+                        <%= render :partial => "periode" %>
+                      </div>
+
+                      <div id="filter_opt_0">
+                        <div class="clear"></div>
+                        <div class="filter_opt">
+                          <label class="left">NIK</label>
+                          <%= text_field :filter, :nik %>
+                        </div>
+                      </div>
+
+                      <div id="filter_opt_1">
+                        <div class="clear"></div>
+                        <div class="filter_opt">
+                          <label class="left">Nama</label>
+                          <%= text_field :filter, :name %>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="right-filter">
+                      <div id="filter_opt_2">
+                        <div class="clear"></div>
+                        <div class="filter_opt">
+                          <label class="left">Departmen</label>
+                          <%= collection_select :filter, :department_id , Department.by_company(current_company_id).all, :id,
+                            :department_name, {:prompt => "Pilih Departemen"}, :onchange => "onDepartment(this)" %>
+                        </div>
+                      </div>
+
+                      <div id="filter_opt_3">
+                        <div class="clear"></div>
+                        <div class="filter_opt">
+                          <label class="left">Bagian</label>
+                          <%= collection_select :filter, :division_id , Division.by_company(current_company_id).all,
+                            :id, :name, {:prompt => true} %>
+                        </div>
+                      </div>
+
+                      <div id="filter_opt_4">
+                        <div class="clear"></div>
+                        <div class="filter_opt">
+                          <label class="left">Status</label>
+                          <%= collection_select :filter, :contract_type_id , ContractType.by_company(current_company_id).all, :id, :contract_type_name, {:prompt => "Pilih"} %>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="clear"></div>
+                    <div class="center filter-btn">
+                      <%= render :partial => "layouts/button_loader" %>
+                      <span style="display:inline-block;">
+                        <div id="div_button">
+                          <%= submit_tag 'Tampilkan', :class=>"grey_button2", :onclick=> "progress_filter()", :style => 'float :none; margin-bottom :3px;' %>
+                        </div>
+                      </span>
+                    </div>
+                  <% end %>
+                </div>
+              </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="clear"></div>
+  <div id="honors">
+    <%= render :partial => "list_thr" %>
+  </div>
+</fieldset>
+
+<script type="text/javascript">
+  //Javascript Filter
+  $(document).ready(function(){
+    removeNotifyMessage();
+    $("#filter_division_id").attr('disabled', 'disabled');
+    $('#filter_trigger').addClass("filter-active");
+    $('#filter_block').show();
+    $('#filter_trigger').click(function(){
+      $(this).toggleClass("filter-active");
+      $('#filter_block').toggle();
+    });
+    $('.expand_filter .reset-filter-ico').click(function(){
+      $('#filter_block').hide();
+      $('#filter_trigger').removeClass("filter-active")
+    });
+    //Filter_Step
+    $('#filter_nd').hide();
+    $('#next_step').click(function(){
+      $('#filter_st').hide();
+      $('#filter_nd').show();
+    });
+    $('#save_create, #cancel_create').click(function(){
+      $('#filter_st').show();
+      $('#filter_nd').hide();
+    });
+  });
+
+
+  function onDepartment(data){
+    $.ajax({
+      url: "/change_divisi_filter/" + data.value,
+      type: "GET"
+    });
+  }
+
+  function progress_filter(){
+     $('#ajax-load1').show();
+     $('#div_button').hide();
+   }
+
+   function stop_filter2(){
+     $('#ajax-load1').hide();
+     $('#div_button').show();
+   }
+
+</script>
+
+<script  type="text/javascript">
+  $(document).ready(function(){
+
+    $('#link_opt_0').live('click', function (e){
+      e.preventDefault();
+      $('#filter_opt_0').show();
+    });
+
+    $('#icon_cancel_opt0').click(function(){
+      $('#filter_opt_0').hide();
+      $('#filter_nik').val('');
+    });
+      
+    $('#link_opt_1').live('click', function (e){
+      e.preventDefault();
+      $('#filter_opt_1').show();
+    });
+
+    $('#icon_cancel_opt1').click(function(){
+      $('#filter_opt_1').hide();
+      $('#filter_name').val('');
+    });
+
+    $('#link_opt_2').live('click', function (e){
+      $('#filter_opt_2').show();
+    });
+
+    $('#icon_cancel_opt2').click(function(){
+      $('#filter_opt_2').hide();
+      $('#filter_department_id').val('');
+    });
+
+    $('#link_opt_3').click(function (e){
+      $('#filter_opt_3').show();
+    });
+
+    $('#icon_cancel_opt3').click(function(){
+      $('#filter_opt_3').hide();
+      $('#filter_division_id').val('');
+    });
+
+    $('#link_opt_4').click(function (e){
+      e.preventDefault();
+      $('#filter_opt_4').show();
+    });
+
+    $('#icon_cancel_opt4').click(function(){
+      $('#filter_opt_4').hide();
+      $('#filter_contract_type_id').val('');
+    });
+
+    $.address.change(function(event) {
+      if(event.value.match(/\/new_salary/)){
+        $('title').html('Human Resources Management:Tambah Gaji');
+        jQuery.ajax(
+        {beforeSend:function(request){$('#spinner').show();},
+          complete:function(request){$('#spinner').hide();},
+          success:function(request){jQuery('.input-data').html(request);},
+          url:'/salaries/new'
+        });
+      }
+    });
+  });
+
+  function onBtnReset(url_name){
+    onReset();
+    $.ajax({
+      url: url_name,
+      type: 'get',
+      dataType: 'script',
+      data: { '_method': 'get'},
+      success: function() {
+        $("span.result_filter").hide();
+        set_default_date();
+        $("#filter-period").show();
+      }
+    });
+  }
+  
+  function onReset(){
+    $('#filter_nik').val('');
+    $('#filter_name').val('');
+    $('#filter_division_id').val('');
+    $('#filter_department_id').val('');
+    $('#filter_contract_type_id').val('');
+  }
+
+</script>

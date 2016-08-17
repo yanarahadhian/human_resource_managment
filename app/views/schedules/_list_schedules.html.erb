@@ -1,0 +1,112 @@
+<script type="text/javascript">
+  $(".tablesorter").tablesorter({
+    widgets: ['zebra']
+  });
+  $('#reset_filter').live('click', function (e) {
+    $.ajax({
+      url: '/schedules',
+      type: 'get',
+      dataType: 'script',
+      data: {'_method': 'get',"":gaiSelected },
+      success: function() {
+        window.location='#schedules';
+      }
+    });
+  });
+
+  $(document).ready(function(){
+    $('#filter-load').hide();
+    $('#filter_button').show();
+    <%= render :partial => "layouts/shared/tooltip_hr_setting" %>
+  })
+</script>
+<%= javascript_include_tag 'pagination' %>
+<table class="tablesorter">
+  <thead>
+    <tr>
+      <th width="296">
+        <span class="center-text">Nama Shift</span>
+      </th>
+      <th width="309">
+        <a href="">Nama Bagian<span class="icons sorter_ico">&nbsp;</span></a>
+      </th>
+      <th width="290" class="center-text">
+        <a href=""> Nama Group<span class="icons sorter_ico">&nbsp;</span></a>
+      </th>
+      <th width="290" class="center-text">
+        <a href="">Nama Karyawan<span class="icons sorter_ico">&nbsp;</span></a>
+      </th>
+      <th width="290" class="center-text">
+        <a href=""> Periode Berlaku Shift<span class="icons sorter_ico">&nbsp;</span></a>
+      </th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <%unless @schedulelist.blank? %>
+      <% @schedulelist.each_with_index do |e, i| %>
+        <% start = ((e.shift_from).strftime()) %>
+        <% end_s =  ((e.shift_to).strftime())%>
+        <tr>
+          <td class="left-text">
+            <%unless e.shift.nil?%>
+              <%= link_to  e.shift.shift_name, "#sch/edit/#{e.shift.id}?start=#{start}&end=#{end_s}" %>
+            <%else%>
+              No Shift
+            <%end%>
+          </td>
+          <td class="left-text">
+            <% a =  "Tidak terdaftar di divisi mana pun" %>
+            <% unless e.person.division(e.shift_from).nil? %>
+              <% a = e.person.division(e.shift_from).name %>
+            <% end unless e.person.blank? %>
+            <%=h a %>
+
+          </td>
+          <td class="center-text">
+            <%unless e.work_group.nil?%>
+              <%=h e.work_group.work_group_name %>
+            <%else%>
+              Tidak terdaftar di work group mana pun
+            <%end%>
+
+          </td>
+          <td class="left-text"><%=h e.person.full_name unless e.person.blank? %></td>
+          <td class="center-text"><%=h "#{e.shift_from.strftime("%d/%m/%Y")} - #{e.shift_to.strftime("%d/%m/%Y")}"  %></td>
+        </tr>
+      <%end%>
+    <%else%>
+      <% unless @filtering == 1 %>
+        <tr class="no-data">
+          <td class="center-text" colspan="7">
+            <div class="description">Belum Ada Data Penjadwalan. </div>
+            <div class="info">Silahkan  <%= link_to 'Susun Jadwal Kerja', "#schedule/new" %> untuk menambah data</div>
+          </td>
+        </tr>
+      <%else%>
+        <tr class="no-data">
+          <td colspan="5" class="center-text">
+            <div class="description">Data Tidak Ditemukan</div>
+            <div class="info">Silahkan <a href="#schedules" id="reset_filter">Reset Filter</a> atau mengubah parameter Anda</div>
+          </td>
+        </tr>
+      <%end%>
+
+    <%end%>
+
+  </tbody>
+</table>
+
+<div class="panelFilter">
+
+  <div class="pagination">
+    <% unless @schedulelist.blank? %>
+      <span class="paginationResult">
+        <% a = format_paginate1(@schedulelist, @per_page, @schedulelist.total_entries) %>
+        <%= a[:a] %> - <%= a[:b] %> dari <%= @schedulelist.total_entries %>
+      </span>
+      <%= a[:paginate] %>
+    <% end %>
+    <div class="clear"></div>
+  </div>
+</div>

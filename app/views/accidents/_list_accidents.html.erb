@@ -1,0 +1,116 @@
+<div class="panelFilter">
+  <table cellspacing="0" cellpadding="0">
+    <tbody><tr>
+        <td width="103px">
+          <div id="action_menu">
+            <ul>
+              <li>
+                <a class="grey_button2">
+                  <span class="left">More Actions</span>
+                  <span class="icons drop_arrow_ico">&nbsp;</span>
+                </a>
+                <div class="clear"></div>
+                <ul>
+                  <li style="cursor: default; list-style-image: none;"><a onclick="onDelete(4)" class="list">Delete</a></li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </td>
+        <td>
+          <div class="pagination">
+            <span class="add-button right">
+              <a href="#job_accidents/new?pers_id=<%= @person.id %>" class="grey_button2">
+                <span class="icons add_ico">&nbsp;</span>
+                Tambah Kecelakaan
+              </a>
+            </span>
+          </div>
+          <div class="clear"></div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<div class="clear"></div>
+<table id="accident_table">
+  <thead>
+    <tr>
+      <th width="30"><input type="checkbox"/></th>
+      <th width="113" >Kategori</th>
+      <th width="120" class="center-text">Tanggal</th>
+      <th width="188" class="left-text">Deskripsi penyebab</th>
+      <th width="128" class="left-text">Tindakan</th>
+      <th width="70" class="left-text">Edit</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% unless @accidents.blank? -%>
+      <% @accidents.each do |accident| %>
+        <tr>
+          <td class="center-text"><%= check_box_tag'myrow[ids][]', accident.id, false %></td>
+          <td class="left-text"><%= accident.accident_category.blank? ? "-" : accident.accident_category %></td>
+          <td class="left-text"><%= accident.accident_date.strftime("%d/%m/%Y") %></td>
+          <td><%= accident.causes.blank? ? "-" : accident.causes %></td>
+          <td><%= accident.action_taken.blank? ? "-" : accident.action_taken %></td>
+          <td class="center-text">
+            <span class="icons edit-icon">&nbsp;</span>
+            <a href="#job_accidents/<%= accident.id %>/edit?pers_id=<%= @person.id%>" class="grey_button4" onclick = "ajaxLoad('#job_accidents/<%= accident.id %>/edit?pers_id=<%= @person.id%>')">Edit</a>
+          </td>
+        </tr>
+      <%end%>
+    <% else -%>
+      <tr class="no-data">
+        <td colspan="7" class="center-text"><div class="description">Belum Ada Data Kecelakaan. </div><div class="info">Silahkan klik<a href="#job_accidents/new?pers_id=<%= @person.id %>" onclick="ajaxLoad('#job_accidents/new?pers_id=<%= @person.id %>')"> Tambah Kecelakaan</a> untuk menambah data</div></td>
+      </tr>
+    <% end -%>
+  </tbody>
+</table>
+
+<script>
+
+
+  $(document).ready(function(){
+    var gaiSelectedAccident = []
+    $('#accident_table thead tr th input').live('click', function () {
+      if ($(this).is(":checked")) {
+        $('#accident_table tbody tr td input').each(function (){
+          $(this).attr( 'checked', true );
+          $(this).parent().parent().addClass('row_selected');
+          var iId = this ;
+          if ( jQuery.inArray(iId.value, gaiSelectedAccident) == -1 ){
+            gaiSelectedAccident[gaiSelectedAccident.length++] = iId.value;
+          }
+        });
+      }
+      else{
+        $('#accident_table tbody tr').each(function (){
+          $(this).removeClass('row_selected');
+          var iId = $('#accident_table tbody tr td input');
+          gaiSelectedAccident = [];
+          iId.attr( 'checked', false );
+        });
+      }
+    });
+ });
+
+  function delete_kecelakaan(){
+    var arr_params = new Array();
+    $('#accident_table tbody input:checked').each(function() {
+      arr_params = arr_params.concat($(this).val());
+    });
+    var controller = "/accidents/delete_multiple";
+    $("#ajax-load").show();
+    $.ajax({
+      type: "delete",
+      success: function(){
+        $("#ajax-load").hide();
+        $.fn.colorbox.close();
+        $('.notify_error').html("<span class='message'>Data kecelakaan berhasil dihapus!</span><a class='icons close-error-icon right' onclick='CloseNotify()'>&nbsp;</a>").show();
+      },
+      url: escape(controller),
+      data:{'_method': 'post',"ids":arr_params,"person_id":<%= @person.id %>},
+      dataType: 'script'      
+    });
+  }
+ </script>

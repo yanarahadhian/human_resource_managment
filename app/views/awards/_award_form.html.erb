@@ -1,0 +1,29 @@
+<span class="input">
+  <label>Nama Penghargaan</label>:
+  <%= f.text_field :award_name %><%= error_message_on @award, :award_name %>
+  <% if params[:type] == 'exp' %>
+    <%= hidden_field_tag :experience_id, params[:experience_id]%>
+  <%else %>
+    <%= hidden_field_tag :employment_id, params[:employment_id]%>
+  <% end %>
+
+  <%= hidden_field_tag :person_id, params[:person_id]%>
+  <%= hidden_field_tag :id, params[:id]%>
+  <%= hidden_field_tag :type, params[:type]%>
+  <%= f.hidden_field :person_id%>
+  
+</span>
+<span class="clear"></span>
+
+<span class="input">
+  <label>Pemberi Penghargaan</label>:
+  <%= f.text_field :awards_giver %><%= error_message_on @award, :awards_giver %>
+</span>
+<span class="clear"></span>
+
+<span class="input">
+  <label>Tanggal Penghargaan</label>:
+  <%#= f.date_select :award_date, {:order => [:day, :month, :year], :start_year => (Time.now.year - 100), :end_year => (Time.now.year)}  %>
+  <%= f.text_field :award_date, :class => "ui-date", :id => "ui-date" %>
+</span>
+<span class="clear"></span>

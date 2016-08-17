@@ -1,0 +1,17 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+   id: 1
+   gender: "Pria"
+   city_of_birth: "Bandung"
+   birth_date: "1981-11-10"
+   religion: "Menikah"   
+   employment_date: "2001-03-01"
+   company_id: 32
+   jamsostek_number: "01KB0071839"
+   latest_work_contract_id: 1
+   tax_status_id: 1
+   no_npwp: "3242424242222"
+#
+# two:
+#   column: value

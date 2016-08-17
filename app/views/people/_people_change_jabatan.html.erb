@@ -1,0 +1,7 @@
+<select name="filter[position_id]" id="filter_position_id">
+  <option value="">Please select</option>
+    <% @positions.each do |x| %>
+    <option value="<%=x.id%>"><%=x.position_name %></option>
+     <% end %>
+</select>
+  

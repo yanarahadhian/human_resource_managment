@@ -1,0 +1,50 @@
+<script>
+  function addFromGroup(vals){
+     $.ajax({
+       url: '/get_person_by_javascript',
+       data: "id=" + parseInt($(vals).val()),
+       type: "POST"
+     });
+    $("#employee_name").val("");
+    $(vals).parent().parent().remove();    
+  }
+</script>
+<table id="tb_gradex">
+  <thead>
+    <tr>
+      <th width="202" class="center-text">Nama </th>
+      <th width="184" class="center-text">Group</th>
+      <th width="36" class="center-text">&nbsp;</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <%unless @people.blank?%>
+      <% @people.each_with_index do |person,j| %>
+        <tr>
+          <td class="left-text line_<%=j%>">
+            <span id="antara1" class="antara" style="display: none; "></span>
+            <%unless person.full_name.blank?%>
+              <%= person.full_name%> <%= hidden_field_tag "group_#{j}" ,  person.id %>
+            <%else%>
+              Karyawan Tidak Memiliki Nama
+            <%end%>
+          </td>
+          <td class="center-text">
+            <%= person.work_group(Date.today) ? person.work_group(Date.today).work_group_name : "-"  %>
+          </td>
+          <td class="center-text">
+            <%= link_to_function "" , :class=> "addKaryawanGroup icons cek-icon" ,
+              :onclick=> "addFromGroup(document.getElementById('group_#{j}'))",
+              :confirm => 'Tambah ke shift?'%>
+          </td>
+        </tr>
+      <%end%>
+    <%else%>
+      <tr>
+        <td>Tidak ada Data</td>
+      </tr>
+    <%end%>
+  </tbody>
+</table>
+

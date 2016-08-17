@@ -1,0 +1,211 @@
+<table class="tablesorter" id="premiums">
+  <thead>
+    <%= render :partial => 'premium_table_header' %>
+  </thead>
+  <tbody>
+    <%unless @premiums.blank?%>
+      <%@premiums.each_with_index do |premium,i|%>
+        <tr id=<%= "tr_#{i}" %> >
+          <td class="center-text">
+            <%=h premium.premium_name %>
+          </td>
+          <td><%=h premium.calculated_on_overtime? ? "Ya" : "Tidak" %></td>
+          <td><%=h premium.calculated_on_salary_cut? ? "Ya" : "Tidak" %></td>
+          <td><%=h premium.count_daily? ? "Harian" : "Bulanan" %></td>
+          <% if current_features.include?('payroll_edit') %>
+            <td>
+              <div id="link_button_<%= i %>">
+                <a onclick="editPremium(<%= i %>, <%= premium.id %>)" id="editpremium_<%= i %>">Edit</a>
+                <% if premium.premium_master_datas.count == 0 %>
+                  | <a onclick="deletePremium(<%= i %>, <%= premium.id %>)">Hapus</a>
+                <% end %>
+              </div>
+            </td>
+          <% end %>
+        </tr>
+      <%end%>
+    <%else%>
+      <tr>
+        <td colspan="5">
+          Belum ada Tunjangan yang Terdaftar
+        </td>
+      </tr>
+    <%end%>
+  </tbody>
+</table>
+<span class="left">
+  <% if current_features.include?('payroll_edit') %>
+    <a class="grey_button_notext add_barang" onclick="addPremiums()">
+      <span style="margin-right: 0pt;" class="icons add_ico add_premium">&nbsp;</span>
+    </a>
+  <% end %>
+</span>
+
+<script type="text/javascript">
+  var current = 0 ;
+
+  function addPremiums(){
+    var data = "<tr id='tr_" + <%=@row%> + "'>";
+    data += '<td><input type="text" id="premi_name_' + <%=@row%> + '" style="width:200px;" ></td>';
+    data += "<td>"+get_calculate_on_overtime(<%= @row %>,'')+"</td>";
+    data += "<td>"+get_calculate_on_salary_cut(<%= @row %>,'')+"</td>";
+    data += "<td>"+get_count_dialy(<%= @row %>,'')+"</td>";
+
+    data += '<td><div id="link_button_' + <%=@row%> + '"><a onclick="savePremium(<%=@row%>)" class="left">Save</a>';
+    data += "&nbsp;|&nbsp;<a onclick='removePremium(<%=@row%>)'>Cancel</a></div></td>";
+
+    data += "</tr>";
+
+    $('table#premiums').append(data);
+    current++;
+    $('.cls_add_premium').addClass("hide-tooltip");
+  }
+
+  function get_calculate_on_overtime(row, val){
+    var sel_ya = '';
+    if (val =='Ya'){
+      sel_ya =' selected="selected"';
+    }
+    var data ='<select class="small-text" name="calculated_on_overtime[' + row +']" id="calculated_on_overtime_' + row +'">';
+    data +='<option value="0">Tidak</option>';
+    data +='<option value="1"' + sel_ya + '>Ya</option>';
+    data +='</select>';
+    return data;
+  }
+
+  function get_calculate_on_salary_cut(row,val){
+    var sel_ya = '';
+    if (val =='Ya'){
+      sel_ya =' selected="selected"';
+    }
+    var data ='<select class="small-text" name="calculated_on_salary_cut[' + row +']" id="calculated_on_salary_cut_' + row +'">';
+    data +='<option value="0">Tidak</option>';
+    data +='<option value="1"' + sel_ya +'>Ya</option>';
+    data +='</select>';
+    return data;
+  }
+
+  function get_count_dialy(row,val){
+    var sel_bln = '';
+    if (val =='Bulanan'){
+      sel_bln =' selected="selected"';
+    }
+    var data ='<select class="small-text" name="count_daily[' + row +']" id="count_daily_' + row +'">';
+    data +='<option value="1">Harian</option>';
+    data +='<option value="0"' + sel_bln + '>Bulanan</option>';
+    data +='</select>';
+    return data;
+  }
+
+  function savePremium(row){
+    var premium_name = $('#premi_name_'+row ).val();
+    var on_overtime = $('#calculated_on_overtime_'+row ).val();
+    var on_salary_cut = $('#calculated_on_salary_cut_'+row ).val();
+    var count_daily = $('#count_daily_'+row).val();
+    $.ajax({
+      type: 'POST',
+      beforeSend:function(request){$('#spinner').show(); $("#ajax-load").show();CloseNotify();$('#link_button_'+row).hide();},
+      complete:function(request){
+        $('#spinner').hide();
+        $("#ajax-load").hide();},
+      success:function(request){
+        $('.notify_error').show();
+        $('#link_button_'+row).show();
+      },
+      url: '/payroll/create_premium',
+      data: 'row=' + row + '&premium_name=' + premium_name + '&on_overtime=' + on_overtime + '&on_salary_cut=' + on_salary_cut + '&count_daily=' + count_daily
+    });
+  }
+
+  function removePremium(row){
+    $('#tr_'+row).remove();
+  }
+
+  function editPremium(row, id){
+    var old_row = row
+
+    $('#tr_'+row).each(function() {
+      if (!this.rowIndex) return; // skip first row
+      var premium_name = jQuery.trim(this.cells[0].innerHTML);
+      var on_overtime = jQuery.trim(this.cells[1].innerHTML);
+      var on_salary_cut = jQuery.trim(this.cells[2].innerHTML);
+      var count_daily = jQuery.trim(this.cells[3].innerHTML);
+
+      var data = "<tr id='tr_" + <%=@row%> + "'>";
+      data += '<td><input type="text" id="premi_name_' + <%=@row%> + '" value="'+jQuery('<pre>').html(premium_name).html().replace(/"/g, "&quot;")+'" style="width:200px;" ></td>';
+
+      data += "<td>"+get_calculate_on_overtime(<%= @row %>,on_overtime)+"</td>"
+      data += "<td>"+get_calculate_on_salary_cut(<%= @row %>,on_salary_cut)+"</td>"
+      data += "<td>"+get_count_dialy(<%= @row %>,count_daily)+"</td>"
+
+
+      data += "<td><div id=\"link_button_" + <%=@row%> + "\"><a onclick=\"updatePremium('" + <%=@row%> + "')\" class='left'>Update</a>";
+      data += "&nbsp;|&nbsp;<a onclick=\"cancelEdit('" + row + "', '" + <%=@row%> + "')\">Cancel</a>";
+      data += '<input type="hidden" value="'+id+'" name="id" id="premium_id_'+<%=@row%>+'"></div></td>';
+
+      data += "</tr>";
+
+      $('#tr_'+old_row).after(data);
+      current++;
+      $('#tr_'+row).hide();
+    });
+  }
+
+
+  function cancelEdit(row, old_row){
+    $('#tr_'+old_row).remove();
+    $('#tr_'+row).show();
+  }
+
+  function updatePremium(row){
+    var premium_id = $('#premium_id_'+row).val();
+    var premium_name = $('#premi_name_'+row ).val();
+    var on_overtime = $('#calculated_on_overtime_'+row).val();
+    var on_salary_cut = $('#calculated_on_salary_cut_'+row).val();
+    var count_daily = $('#count_daily_'+row).val();
+
+    $.ajax({
+      type: 'POST',
+      beforeSend:function(request){$('#spinner').show(); $("#ajax-load").show();CloseNotify();$('#link_button_'+row).hide();},
+      complete:function(request){
+        $('#spinner').hide();
+        $("#ajax-load").hide();},
+      success:function(request){
+        $('.notify_error').show();
+        $('#link_button_'+row).show();
+      },
+      url: '/payrolls/update_premium',
+      data: 'premium_name=' + premium_name + '&premium_id=' + premium_id + '&on_overtime=' + on_overtime + '&on_salary_cut=' + on_salary_cut + '&count_daily=' + count_daily
+    });
+  }
+
+  function deletePremium1(row, id){
+    $.ajax({
+      type: 'POST',
+      beforeSend:function(request){$('#spinner').show(); $("#ajax-load").show();CloseNotify();},
+      complete:function(request){
+        $('#spinner').hide();
+        $("#ajax-load").hide();},
+      success:function(request){
+        $('.notify_error').show();
+        parent.$.fn.colorbox.close();
+      },
+      url: '/payrolls/delete_premium',
+     data: 'row=' + row + '&id=' + id
+    });
+  }
+
+  function deletePremium(row, id){
+     $('#div_sign').html('Tunjangan');
+     $('#div_btn_hapus').html('<input type="button" value="Ya" class="blue_button" onclick="deletePremium1(' + row + ',' +id +')"/>');
+     jQuery().colorbox({width:"auto",height:"auto", inline:true,href:"#message_delete",
+       onClosed:function(){
+     }
+    });
+  }
+
+  function removePremium(row){
+    $('#tr_'+row).remove();
+  }
+
+</script>

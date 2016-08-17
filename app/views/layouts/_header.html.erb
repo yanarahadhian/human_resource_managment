@@ -1,0 +1,93 @@
+<div id="header">
+  <div class="headerContent">    
+    <div class="listSubscribe">      
+      <ul>
+        <li class="company-name">
+          <%= current_company %>
+        </li>
+        <% session[:product].uniq.each do |product| %>
+          <li>
+            <% if product['name'] == SERVICE_NAME %>
+              <a href="#">
+                <span class="desc_ico" style='border-left:none'><%= product['name']%></span>
+              </a>
+            <% else %>
+              <a href="<%= product['url'] %>" target="_blank">
+                <span class="desc_ico" style='border-left:none' ><%= product['name']%></span>
+              </a>
+            <% end %>
+          </li>
+        <% end unless session[:product].blank?%>
+      </ul>
+    </div>
+
+    <div id="ajax-load" class="ajax-load" style="display: none"><img src="<%=  ApplicationController::APPSCHEF_URL %>/images/ajax-loader.gif"/>
+      Silahkan tunggu...</div>    
+
+    <div class="secondNavigation">
+      <ul>
+          <li>
+            <div id="div_menu_name_setting" class="left class_menu_tooltip_setting">
+              <a href="#settings" id="link_setting"><span class="icons setting_ico2">&nbsp;</span></a>
+            </div>
+          </li>
+      </ul>
+    </div>
+
+    <div id="notification">
+      <%= render :partial => "layouts/shared/notification" %>
+    </div>
+
+    <div class="secondNavigation account-menu-trigger-disable" id="account_menu_trigger">
+      <ul>
+        <li>
+          <a class="user-name left">
+            <span class="bold left">
+              <%= session[:platform_user]['user']['first_name'].titleize unless session[:platform_user]['user']['first_name'].blank?%>
+            </span>
+            <span class="icons drop_arrow_ico2">&nbsp;</span>
+          </a>
+          <ul class="account-menu" id="account_menu" style="display:none">
+            <li><%= link_to 'Profile', "#{ApplicationController::APPSCHEF_URL}/users/#{session[:platform_user]['user']['id']}" %></li>
+            <hr />
+            <li><a href="/logout" onclick="ajaxLoad('/logout')">Log Out</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+
+    <div class="secondNavigation welcome">
+      <ul>
+        <li>Selamat Datang,</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="notify_error" <% if flash[:notice].blank? %>style="display: none"<% end %>>
+      <span class="message"><%= flash[:notice] %></span>
+        <a class="icons close-error-icon right" onclick="CloseNotify()">&nbsp;</a>
+    </div>
+</div>
+
+<!-- End -->
+<script type="text/javascript">
+  $(document).ready(function(){
+    $('#account_menu').hide()
+    $('#account_menu_trigger').click(function(){
+      $('#account_menu').toggle();
+      $(this).toggleClass('account-menu-trigger');
+      $(this).toggleClass('account-menu-trigger-disable');
+    })
+    $('#account_menu')
+    .bind('mouseover',function(){
+      $(this).show();
+    });
+
+    $('#top, #left-sidebar, #main-content, #footer').click(function(){
+      $('#account_menu').hide();
+      $('#account_menu_trigger').removeClass('account-menu-trigger');
+      $('#account_menu_trigger').addClass('account-menu-trigger-disable');
+    });     
+  })
+
+</script>

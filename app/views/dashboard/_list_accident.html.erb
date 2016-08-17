@@ -1,0 +1,62 @@
+<div id="main-content" style="border-left:0px">
+<div class="contentTable">
+<% if !values.blank? %> 
+  <div id="app_two_con" class="input-data app_two_con">
+    <table id="tb2">
+	    <thead>
+		    <tr>
+          <th width="5%" class="center-text">No.</th>
+          <th>NIK</th>
+          <th width="23%" class="center-text">
+            <a href="javascript:void(0)" onClick="<%= sortablecol("firstname",sortby,direction,"accident") %>" id="firstnameColumn">
+              Nama
+              <span class="icons sorter_ico">&nbsp;</span>
+            </a>
+          </th>
+          <th>Departemen</th>
+          <th>Bagian</th>
+          <th>Tanggal Kecelakaan</th>
+          <th class="center-text">Kategori</th>
+          <th>Penyebab</th>
+          <th>Tindakan</th>
+          <th>Penanggung Jawab</th>
+        </tr>
+	    </thead>
+	    <tbody>
+        <% values.each_with_index do |c,i| %>
+          <tr class="<%= i%2 == 0 ? "" : "alt"%>">
+            <td><%= (25*(pagenum.to_i - 1))+i+1 %></td>
+            <td class="left-text"><%= c.person.employee_identification_number if !c.person.nil? %></td>
+            <td class="left-text"><%= c.person.full_name  if !c.person.nil?%></td>
+            <td class="left-text"><%= (c.person.current_employment.blank? ? "&nbsp;" : c.person.current_employment.department.blank? ? "&nbsp;" : c.person.current_employment.department.department_name) if !c.person.nil?%></td>
+            <td class="left-text"><%= (c.person.current_employment.blank? ? "&nbsp;" : c.person.current_employment.division.blank? ? "&nbsp;" : c.person.current_employment.division.name) if !c.person.nil? %></td>
+            <td class="left-text"><%= c.accident_date %></td>
+            <td class="left-text"><%= c.accident_category.blank? ? "&nbsp;" : c.accident_category %></td>
+            <td class="left-text"><%= c.causes %></td>
+            <td class="left-text"><%= c.action_taken %></td>
+            <td class="left-text"><%= c.accident_person_in_charge %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+<% else %>
+  <div class="control-box"></div>
+    <div no-chart="">
+      <div id="desc_role" class="no-data-chart">Belum ada data
+    </div>
+  </div>
+<% end %>
+</div></div>
+<%= hidden_field_tag "page_num_accident",pagenum %>
+<%= hidden_field_tag "sort_accident",sortby %>
+<%= hidden_field_tag "direction_accident",direction %>
+<script type="text/javascript">
+  $(document).ready(function(){
+    var h = $('#tb2').height();
+    var p = h/2-5;
+    var h2 = h +2
+    $('.bar-show-chart').css({paddingTop: p, paddingBottom: p});
+    $('.chart-block-table').css({height: h2});
+  });
+</script>

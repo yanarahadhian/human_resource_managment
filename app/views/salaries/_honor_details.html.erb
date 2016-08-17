@@ -1,0 +1,364 @@
+<%= javascript_include_tag  'application' %>
+<script type="text/javascript">
+  function ErrorMessage(text){
+  ShowNotifyMessage(text);
+  }
+
+  function SuccessMessage(text){
+  ShowNotifyMessage(text);
+  $.address.value('salaries');
+  }
+
+  function SuccessMessage2(text){
+  ShowNotifyMessage(text);
+  $.address.value('new_salary');
+  }
+
+  function ShowNotifyMessage(text){
+  $(".notify_error").slideDown("fast").html('<span class="message">'+ text +'</span><a class="icons close-error-icon right" onclick="CloseNotify()";return false;">&nbsp;</a>');
+  }
+  $(document).ready(function(){
+  $.fn.showhide = function(){
+  $(this).click(function(event){
+  var  this_trigger = this.id;
+  var target = 'target_'+this_trigger ;
+  $('#'+target).parents('div:first').toggle();
+  $('#'+this_trigger+" span:first").toggleClass("arrow");
+  $('#'+this_trigger+" span:first > span").toggleClass("arrow_ico").toggleClass("drop_arrow_ico3");
+  })
+  }
+  var premiums = "<%= @premiums_in_companies.map(&:premiums_in_company_id) unless @premiums_in_companies.blank? %>"
+  $.each(premiums, function(index, value) {
+  $('#premium_' + value).showhide();
+  });
+  $('#trigger1, #trigger2,  #trigger3, #trigger4, #trigger5, #trigger22').showhide();
+  })
+
+  function ajaxLoad2(url, div_btn, div_load,item){
+  $("#" + div_load + "").show();
+  $("#" + div_btn + "").hide();
+  $("#honor_item_kembali").val(item);
+  var val = $("#honor_item_kembali").val();
+  var form = document.getElementById('form_ajax_gaji')
+  if(form.onsubmit()){
+  form.submit();
+  }
+  }
+</script>
+
+<style>
+  .no_arrow{
+    width:7px;
+    height:9px;
+    float:left;
+    margin-right:7px;
+    position:relative;
+    top:3px;
+  }
+</style>
+<% input_salary = "input" %>
+<% err_salary = error_message_on @honor, :salary %>
+<% input_salary = "input-error" unless err_salary.blank? %>
+
+<% url = nil %>
+<% if params[:action] == "edit" || params[:action] == "update" %>
+  <% url = salary_path(@honor) %>
+<% else %>
+  <% url = salaries_path %>
+<% end %>
+
+<% form_remote_for @honor, :honor, :url => url, :html => { :class => '', :id => "form_ajax_gaji"} do |f| -%>
+  <% unless @person.blank? %>
+    <%= f.hidden_field :person_id, :value => @person.id %>
+    <%= f.hidden_field :start_period, :value => @start_period %>
+    <%= f.hidden_field :end_period, :value => @end_period %>
+    <%= f.hidden_field :company_id, :value => @person.company_id %>
+    <%= f.hidden_field :item_kembali %>
+  <% end %>
+
+
+  <div class="fifty-fifty left">
+    <div class="clear"></div><br/>
+    <fieldset class="fm-form">
+      <legend> Gaji & Tunjangan </legend>
+      <div class=" box-form">
+        <span class=<%= input_salary %>>
+          <div id="trigger1">
+            <span class=""><span class="icons arrow_ico">&nbsp;</span></span>
+            <label>Gaji pokok <span class="redstar">*</span></label>
+          </div> :
+          
+          <% if @salary == 0 %>
+            <% @salary = (@person.current_salary.salary || @person.current_salary_data_master.basic_salary) rescue 0 %>
+          <% end %>
+          
+          <%= format_currency(@salary) %>
+          <%= f.hidden_field :salary, :value => @salary %>
+          <div style="display:none">
+            <div class="detail" id="target_trigger1">
+              <label>Gaji pokok sebelumnya</label> :
+              <% unless @person.current_salary.blank? %>
+                <%= format_currency(@current_salary) %>
+              <% else %>
+                -
+              <% end %>
+            </div>
+          </div>
+          <div class="clear"></div>
+          <div><%= err_salary %></div>
+        </span>
+        <span class="clear"></span>
+        <% unless @overtimes.blank? %>
+          <span class="input">
+            <div id="trigger2">
+              <span class=""><span class="icons arrow_ico">&nbsp;</span></span>
+              <label>Lembur</label>
+            </div> :
+            <%= format_currency(@total_overtime_values) %>
+            <small><%= '(Karyawan belum punya Shift atau Penjadwalan)' if @person.current_shift(@start_period).blank? %></small>
+            <div class="clear"></div>
+            <div style="display:none">
+              <div class="detail" id="target_trigger2">
+
+                <% unless @person.company_hr_setting.is_company_overtime %>
+                  <label>Tarif lembur</label> :
+                  <%= format_no_currency_with_precision(@overtime_hourly_rate) %> /jam
+                  <div class="clear"></div>
+                <% end %>
+
+                <% unless @person.company_hr_setting.is_company_overtime %>
+                  <label>&nbsp;</label>:
+                  1/173 x (GP + Tunjangan yg disertakan)
+                  <div class="clear"></div>
+                <% end %>
+
+                <label>Total lembur</label>:
+                <span class="bold">
+                  <%= number_with_precision(@total_overtime_hours, :precision => 2) %>
+                  /jam
+                </span>
+                <div class="clear"></div>
+                <div class="frm-popup">
+                  <fieldset>
+                    <table>
+                      <thead>
+                        <tr>
+                          <th class="center-text">Tanggal</th>
+                          <th class="center-text">Lama</th>
+                          <th class="center-text">Keterangan</th>
+                        </tr>
+                        <% @overtimes.each do |overtime| %>
+                          <tr class="<%= cycle("alt", " ") %>">
+                            <td class="center-text">
+                              <%= overtime.overtime_date.strftime('%d %b %Y')%>
+                            </td>
+                            <td class="center-text">
+                              <%= Presence.minutes_to_hour(overtime.overtime_length_in_minutes) %>
+                            </td>
+                            <td class="left-text">
+                              <%= overtime.overtime_description %>
+                            </td>
+                          </tr>
+                        <% end %>
+                      </thead>
+                    </table>
+                  </fieldset>
+                </div>
+              </div>
+            </div>
+          </span>
+        <% end %>
+        <div class="clear"></div>
+        <% unless @premiums_in_companies.blank? %>
+          <% @premiums_in_companies.each do |pih| %>
+            <% unless pih.premium.blank?%>
+              <span class="input">
+                <div id="premium_<%= pih.premiums_in_company_id %>">
+                  <span class=""><span class="icons arrow_ico">&nbsp;</span></span>
+                  <label><%= pih.premium.premium_name %></label>
+                </div> :
+
+                <% @t_work_days = !pih.premium.count_daily? ? 1 : @total_work_days %>
+
+                <% value = pih.value? ? pih.value : 0 %>
+                <% @premium_value = @t_work_days.blank? ? 0 : (value*@t_work_days) %>
+                <% @premium_cut = @honor.attendance_premium_cut(@person, pih.premium, @premium_value, @start_period, @end_period) %>
+                <%= format_currency(@premium_value-@premium_cut) %>
+                <div style="display:none">
+                  <div class="detail" id="target_premium_<%= pih.premiums_in_company_id %>">
+                    <div class="clear"></div>
+                    <% if pih.premium.count_daily? %>
+                      <div class="clear"></div>
+                      <label>Jumlah hari kerja</label> : <%= @total_work_days.blank? ? 0 : @total_work_days%> Hari
+                      <div class="clear"></div>
+                      <label>Masa kerja</label>: <%= seconds_to_year(@person.total_length_of_service(@person)) %> Tahun
+                      <div class="clear"></div>
+                      <label>Tarif/hari </label>:
+                      <span class="bold">
+                        <%= format_currency(pih.value) %>
+                      </span>
+                    <% end %>
+                    <div class="clear"></div>
+                  </div>
+                </div>
+              </span>
+            <% end %>
+            <div class="clear"></div>
+          <% end %>
+        <% end %>
+        <div class="clear"></div>
+      </div>
+    </fieldset>
+    <div class="clear"></div>
+
+    <div class="clear"></div><br/>
+    <fieldset class="fm-form">
+      <legend>Pemasukan Lain</legend>
+      <div class="input">
+        <span class="clear"></span>
+        <% if (@last_year_quota && @last_year_quota.is_redeem_to_money && @last_year_quota.paid_redeem_date.blank?) || !@honor.leaves_redemption.blank? %>
+          <span class="input-field">
+            <div id="trigger22"><span class=""><span class="icons arrow_ico">&nbsp;</span></span><label>Cuti Diuangkan</label></div> :
+            Rp. <%= f.text_field :leaves_redemption, :class => "right-text small-text-table" %> ,-
+            <div style="display:none">
+              <div class="detail" id="target_trigger22">
+                <div class="clear"></div>
+                <label>Tarif /hari </label>:
+                <span class="bold">
+                  <%= format_currency(@salary_in_a_day) %>
+                </span>
+                <div class="clear"></div>
+                <label>Jumlah hari diuangkan</label>: <%= @last_year_quota.redeemed_days %> Hari
+                <div class="clear"></div>
+              </div>
+            </div>
+          </span>
+        <% end %>
+        <div class="clear"></div>
+        <span class="input-field">
+          <div><span class=""><span class="no_arrow">&nbsp;</span></span><label>Bonus</label></div> :
+          Rp. <%= f.text_field :bonus, :class => "right-text small-text-table" %> ,-
+        </span>
+        <div class=" clear"></div>
+        <span class="input-field">
+          <div><span class=""><span class="no_arrow">&nbsp;</span></span><label title='Kekurangan bayar dari Perusahaan bulan lalu'>Kekurangan bayar</label></div> :
+          Rp. <%= f.text_field :less_adjustment, :class => "right-text small-text-table" %> ,-
+        </span>
+        <div class="clear"></div>
+      </div>
+    </fieldset>
+    <div class="clear"></div>
+  </div>
+
+  <div class="fifty-fifty left">
+    <div class="clear"></div><br/>
+    <fieldset class="fm-form">
+      <legend>Potongan</legend>
+      <div class="input">
+        <span class="clear"></span>
+        <span class="input-field">
+          <% if @honor.salary_cut and @honor.salary_cut > 0 %>
+            <div id="trigger3"><span class=""><span class="icons arrow_ico">&nbsp;</span></span><label>Potongan absensi</label></div>:
+          <% else %>
+            <div id="trigger3"><span class=""><span class="icons no_arrow">&nbsp;</span></span><label>Potongan absensi</label></div>:
+          <% end %>
+          Rp. <%= f.text_field :salary_cut, :class => "right-text small-text-table" %> ,-
+          <% if @honor.salary_cut and @honor.salary_cut > 0 %>
+            <div style="display:none">
+              <div class="detail" id="target_trigger3">
+                <table>
+                  <thead>
+                    <tr>
+                      <th width="21%" class="center-text">Tanggal</th>
+                      <th width="14%" class="center-text">Jenis</th>
+                      <th width="46%" class="center-text">Keterangan</th>
+                    </tr>
+                    <% @list_unpaid.each do |unpaid|%>
+                      <tr class="alt">
+                        <td class="center-text"><%= unpaid.absence_date.strftime('%d %b %Y') %></td>
+                        <td class="left-text"><%= unpaid.absence_type.absence_type_name %></td>
+                        <td class="center-text"><%= unpaid.absence_reason %></td>
+                      </tr>
+                    <% end %>
+                    <tr class="total2">
+                      <td class="center-text">Total :</td>
+                      <td class="center-text">
+                        <%= @list_unpaid.size %>
+                        /<%= @person.company_payroll_setting.full_working_days %>
+                      </td>
+                      <td class="right-text"><span class="bold"><%= format_currency(@honor.salary_cut) %></span></td>
+                    </tr>
+                  </thead>
+                </table>
+              </div>
+            </div>
+          <% end %>
+        </span>
+
+
+        <span class="clear"></span>
+        <span class="input-field">
+          <div>
+            <span class=""><span class="no_arrow">&nbsp;</span></span>
+            <label>Potongan jamsostek</label>
+          </div>:
+          <%= format_currency(@honor.count_jamsostek_cut(@person)) %>
+        </span>
+
+        <span class="clear"></span>
+        <span class="input-field">
+          <div id="trigger4x"><span class=""><span class="no_arrow">&nbsp;</span></span><label>Potongan pinjaman</label></div> :
+          Rp. <%= f.text_field :debt, :class => "right-text small-text-table" %> ,-
+          <div style="display:none">
+            <div class="detail" id="target_trigger4">
+              <textarea rows="3" cols="46"></textarea>
+            </div>
+          </div>
+        </span>
+        <div class="clear"></div>
+        <span class="clear"></span>
+        <span class="input-field">
+          <div><span class=""><span class="no_arrow">&nbsp;</span></span><label>Potongan PUMP Jamsostek</label></div> :
+          Rp. <%= f.text_field :jamsostek_house_cut, :class => "right-text small-text-table" %> ,-
+        </span>
+        <div class="clear"></div>
+
+        <span class="clear"></span>
+        <span class="input-field">
+          <div><span class=""><span class="no_arrow">&nbsp;</span></span><label>Potongan koperasi</label></div> :
+          Rp. <%= f.text_field :cooperation_cut, :class => "right-text small-text-table" %> ,-
+        </span>
+        <div class="clear"></div>
+        <span class="input-field">
+          <div><span class=""><span class="no_arrow">&nbsp;</span></span><label title='Kelebihan bayar kepada Perusahaan bulan lalu'>Kelebihan bayar</label></div> :
+          Rp. <%= f.text_field :more_adjustment, :class => "right-text small-text-table" %> ,-
+        </span>
+        <div class="clear"></div>
+      </div>
+    </fieldset>
+    <div class="clear"></div>
+  </div>
+  <div class="clear"></div>
+  <div class="box-form">
+    <fieldset class="fm-form">
+      <legend>Catatan :</legend>
+      <span class="input note" id="target_trigger5">
+        <%= f.text_area :note_for_employee, :size => '70x2' %>
+      </span>
+    </fieldset>
+  </div>
+  <div class="clear"></div>
+  <div class="box-form center-text">
+    <%= render :partial => "layouts/button_loader"  %>
+    <span id="button">
+      <input id="info_section_cancel_basic" class="grey_button" type="reset" value="Batal" name="info_section_cancel_basic" onclick="onCancel('#salaries')"/>
+      <% if params[:action] == "edit" || params[:action] == "update" %>
+        <input type="button" value="Update" name="info_section_save_basic" id="info_section_save_basic" class="blue_button" onclick="ajaxLoad2('#person_index', 'button', 'ajax-load1','kembali')"/>
+      <% else %>
+        <input type="button" value="Simpan dan Lanjut" name="info_section_save_basic" id="info_section_save_basic" class="blue_button" onclick="ajaxLoad2('#person_index', 'button', 'ajax-load1','lanjut')"/>
+        <input type="button" value="Simpan dan Kembali" name="info_section_save_basic" id="info_section_save_basic" class="blue_button" onclick="ajaxLoad2('#person_index', 'button', 'ajax-load1','kembali')"/>
+      <% end %>
+    </span>
+  </div>
+<% end %>
+

@@ -1,0 +1,5 @@
+<div class="clear"></div>
+<div class="filter_opt">
+  <label class="left">Bagian</label>
+  <%= collection_select :filter, :division_id , divisions, :id, :name, {:prompt => true}, :disabled => divisions.blank?? true : false %>
+</div>

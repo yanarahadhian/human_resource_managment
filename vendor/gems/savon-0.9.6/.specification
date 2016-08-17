@@ -1,0 +1,301 @@
+--- !ruby/object:Gem::Specification 
+name: savon
+version: !ruby/object:Gem::Version 
+  hash: 55
+  prerelease: 
+  segments: 
+  - 0
+  - 9
+  - 6
+  version: 0.9.6
+platform: ruby
+authors: 
+- Daniel Harrington
+autorequire: 
+bindir: bin
+cert_chain: []
+
+date: 2011-07-07 00:00:00 +07:00
+default_executable: 
+dependencies: 
+- !ruby/object:Gem::Dependency 
+  name: builder
+  prerelease: false
+  requirement: &id001 !ruby/object:Gem::Requirement 
+    none: false
+    requirements: 
+    - - ">="
+      - !ruby/object:Gem::Version 
+        hash: 15
+        segments: 
+        - 2
+        - 1
+        - 2
+        version: 2.1.2
+  type: :runtime
+  version_requirements: *id001
+- !ruby/object:Gem::Dependency 
+  name: nori
+  prerelease: false
+  requirement: &id002 !ruby/object:Gem::Requirement 
+    none: false
+    requirements: 
+    - - ~>
+      - !ruby/object:Gem::Version 
+        hash: 15
+        segments: 
+        - 1
+        - 0
+        version: "1.0"
+  type: :runtime
+  version_requirements: *id002
+- !ruby/object:Gem::Dependency 
+  name: httpi
+  prerelease: false
+  requirement: &id003 !ruby/object:Gem::Requirement 
+    none: false
+    requirements: 
+    - - ~>
+      - !ruby/object:Gem::Version 
+        hash: 25
+        segments: 
+        - 0
+        - 9
+        version: "0.9"
+  type: :runtime
+  version_requirements: *id003
+- !ruby/object:Gem::Dependency 
+  name: wasabi
+  prerelease: false
+  requirement: &id004 !ruby/object:Gem::Requirement 
+    none: false
+    requirements: 
+    - - ~>
+      - !ruby/object:Gem::Version 
+        hash: 3
+        segments: 
+        - 2
+        - 0
+        version: "2.0"
+  type: :runtime
+  version_requirements: *id004
+- !ruby/object:Gem::Dependency 
+  name: akami
+  prerelease: false
+  requirement: &id005 !ruby/object:Gem::Requirement 
+    none: false
+    requirements: 
+    - - ~>
+      - !ruby/object:Gem::Version 
+        hash: 15
+        segments: 
+        - 1
+        - 0
+        version: "1.0"
+  type: :runtime
+  version_requirements: *id005
+- !ruby/object:Gem::Dependency 
+  name: gyoku
+  prerelease: false
+  requirement: &id006 !ruby/object:Gem::Requirement 
+    none: false
+    requirements: 
+    - - ">="
+      - !ruby/object:Gem::Version 
+        hash: 15
+        segments: 
+        - 0
+        - 4
+        - 0
+        version: 0.4.0
+  type: :runtime
+  version_requirements: *id006
+- !ruby/object:Gem::Dependency 
+  name: nokogiri
+  prerelease: false
+  requirement: &id007 !ruby/object:Gem::Requirement 
+    none: false
+    requirements: 
+    - - ">="
+      - !ruby/object:Gem::Version 
+        hash: 7
+        segments: 
+        - 1
+        - 4
+        - 0
+        version: 1.4.0
+  type: :runtime
+  version_requirements: *id007
+- !ruby/object:Gem::Dependency 
+  name: rake
+  prerelease: false
+  requirement: &id008 !ruby/object:Gem::Requirement 
+    none: false
+    requirements: 
+    - - ~>
+      - !ruby/object:Gem::Version 
+        hash: 49
+        segments: 
+        - 0
+        - 8
+        - 7
+        version: 0.8.7
+  type: :development
+  version_requirements: *id008
+- !ruby/object:Gem::Dependency 
+  name: rspec
+  prerelease: false
+  requirement: &id009 !ruby/object:Gem::Requirement 
+    none: false
+    requirements: 
+    - - ~>
+      - !ruby/object:Gem::Version 
+        hash: 27
+        segments: 
+        - 2
+        - 5
+        - 0
+        version: 2.5.0
+  type: :development
+  version_requirements: *id009
+- !ruby/object:Gem::Dependency 
+  name: mocha
+  prerelease: false
+  requirement: &id010 !ruby/object:Gem::Requirement 
+    none: false
+    requirements: 
+    - - ~>
+      - !ruby/object:Gem::Version 
+        hash: 43
+        segments: 
+        - 0
+        - 9
+        - 8
+        version: 0.9.8
+  type: :development
+  version_requirements: *id010
+- !ruby/object:Gem::Dependency 
+  name: timecop
+  prerelease: false
+  requirement: &id011 !ruby/object:Gem::Requirement 
+    none: false
+    requirements: 
+    - - ~>
+      - !ruby/object:Gem::Version 
+        hash: 25
+        segments: 
+        - 0
+        - 3
+        - 5
+        version: 0.3.5
+  type: :development
+  version_requirements: *id011
+- !ruby/object:Gem::Dependency 
+  name: autotest
+  prerelease: false
+  requirement: &id012 !ruby/object:Gem::Requirement 
+    none: false
+    requirements: 
+    - - ">="
+      - !ruby/object:Gem::Version 
+        hash: 3
+        segments: 
+        - 0
+        version: "0"
+  type: :development
+  version_requirements: *id012
+description: Ruby's heavy metal SOAP client
+email: me@rubiii.com
+executables: []
+
+extensions: []
+
+extra_rdoc_files: []
+
+files: 
+- .gitignore
+- .rspec
+- .travis.yml
+- .yardopts
+- CHANGELOG.md
+- Gemfile
+- LICENSE
+- README.md
+- Rakefile
+- lib/savon.rb
+- lib/savon/client.rb
+- lib/savon/core_ext/object.rb
+- lib/savon/core_ext/string.rb
+- lib/savon/error.rb
+- lib/savon/global.rb
+- lib/savon/http/error.rb
+- lib/savon/soap.rb
+- lib/savon/soap/fault.rb
+- lib/savon/soap/request.rb
+- lib/savon/soap/response.rb
+- lib/savon/soap/xml.rb
+- lib/savon/version.rb
+- lib/savon/wasabi/document.rb
+- savon.gemspec
+- spec/fixtures/gzip/message.gz
+- spec/fixtures/response/another_soap_fault.xml
+- spec/fixtures/response/authentication.xml
+- spec/fixtures/response/header.xml
+- spec/fixtures/response/list.xml
+- spec/fixtures/response/multi_ref.xml
+- spec/fixtures/response/soap_fault.xml
+- spec/fixtures/response/soap_fault12.xml
+- spec/fixtures/wsdl/authentication.xml
+- spec/fixtures/wsdl/lower_camel.xml
+- spec/fixtures/wsdl/multiple_namespaces.xml
+- spec/fixtures/wsdl/multiple_types.xml
+- spec/savon/client_spec.rb
+- spec/savon/core_ext/object_spec.rb
+- spec/savon/core_ext/string_spec.rb
+- spec/savon/http/error_spec.rb
+- spec/savon/savon_spec.rb
+- spec/savon/soap/fault_spec.rb
+- spec/savon/soap/request_spec.rb
+- spec/savon/soap/response_spec.rb
+- spec/savon/soap/xml_spec.rb
+- spec/savon/soap_spec.rb
+- spec/savon/wasabi/document_spec.rb
+- spec/spec_helper.rb
+- spec/support/endpoint.rb
+- spec/support/fixture.rb
+has_rdoc: true
+homepage: http://savonrb.com
+licenses: []
+
+post_install_message: 
+rdoc_options: []
+
+require_paths: 
+- lib
+required_ruby_version: !ruby/object:Gem::Requirement 
+  none: false
+  requirements: 
+  - - ">="
+    - !ruby/object:Gem::Version 
+      hash: 3
+      segments: 
+      - 0
+      version: "0"
+required_rubygems_version: !ruby/object:Gem::Requirement 
+  none: false
+  requirements: 
+  - - ">="
+    - !ruby/object:Gem::Version 
+      hash: 3
+      segments: 
+      - 0
+      version: "0"
+requirements: []
+
+rubyforge_project: savon
+rubygems_version: 1.5.2
+signing_key: 
+specification_version: 3
+summary: Heavy metal Ruby SOAP client
+test_files: []
+

@@ -1,0 +1,65 @@
+<%= render :partial => "layouts/howto_menu" %>
+<fieldset class="fm-table">
+  <legend>
+    <a href="#" id="help_dash" class="icons help-top-icon" title="Click to show/hide information">&nbsp;</a>
+    Setting Tunjangan Diluar Gaji
+  </legend>
+  <%= render :partial => "layouts/howto/howto_content"%>
+  <div class="input data-tabel width1200px">
+    <div class="frm-input width1200px">
+      <div class="panelFilter">
+        <div class="pagination">
+          <%= link_to ' <span class="icons add_ico">&nbsp;</span> Tambah Tunjangan Diluar Gaji' , new_allowance_path, :class=>'grey_button2 positionLeft' %>
+        </div>
+      </div>
+      <div class="clear"></div>
+      <input type="hidden" value="0" id="counter"/>
+      <table id="tb_grade">
+        <thead>
+          <tr>
+            <th width="62" class="center-text">No.</th>
+
+            <th width="191" class="left-text">
+              <a href="">
+                <span class="left-text">Nama Tunjangan</span></a>
+            </th>
+            <th width="163" class="left-text">Waktu Pemberian</th>
+            <th width="195" class="left-text">Aturan Besarnya Tunjangan</th>
+            <th width="323" class="left-text">
+              <a href="">
+                <span class="center-text">Waktu Pemberian</span></a>
+            </th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr>
+            <td class="center-text">1.</td>
+
+            <td class="left-text"><%= link_to 'Tunjangan Makan' ,show_allowance_allowances_path %></td>
+            <td class="center-text">Setiap Minggu</td>
+            <td class="center-text">Sama setiap orang</td>
+            <td class="left-text">Hanya jika hadir</td>
+          </tr>
+          <tr class="alt">
+            <td class="center-text">2.</td>
+
+            <td class="left-text"><%= link_to 'Tunjangan Hadir' , show_allowance_allowances_path %></td>
+            <td class="center-text">Setiap Hari</td>
+            <td class="center-text">Tergantung jabatan</td>
+            <td class="left-text">Hanya jika hadir dan masa kerja lebih dari 1 Tahun</td>
+          </tr>
+          <tr>
+            <td class="center-text">3.</td>
+
+            <td class="left-text"><%= link_to 'Tunjangan Transport' , show_allowance_allowances_path %></td>
+            <td class="center-text">Setiap Bulan</td>
+            <td class="center-text">Tergantung jabatan</td>
+            <td class="left-text">Hanya jika hadir dan masa kerja lebih dari 1 Tahun</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="clear"></div>
+</fieldset>

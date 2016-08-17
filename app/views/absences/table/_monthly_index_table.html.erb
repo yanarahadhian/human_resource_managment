@@ -1,0 +1,23 @@
+{
+"sEcho": <%=h @sEcho %>,
+"iTotalRecords": <%= @iTotalRecords %>,
+"iTotalDisplayRecords": <%= @iTotalDisplayRecords %>,
+"sColumns": "id,name,department,division,present,leave,sick,awol",
+"aaData" : [
+<%- @presences.each do |presence| %>
+  [ "<%= "<input id='person_#{presence.id}' name='person_ids[]' type='checkbox' value=#{presence.id} />" %>",
+  "<%= "<a href='#monthlyabsence/#{presence.id}'> #{h presence.full_name.titleize} </a>" %>",
+  "<%=h presence.department(@date_end).department_name.just_display if presence.department(@date_end) %>",
+  "<%=h presence.division(@date_end).name.just_display if presence.division(@date_end) %>",
+  "<%= "#{presence.presences.total_attendance_days(@date_start.month, @date_start.year)}" %>",
+  <% leave = presence.absences.total_by_type([1,2,5,6], @date_start, @date_end, current_company_id) %>
+  "<%= "#{leave}" %>",
+  <% sick = presence.absences.total_by_type([3,7], @date_start, @date_end, current_company_id) %>
+  "<%= "#{sick}" %>",
+  <% awol = presence.absences.total_by_type([4], @date_start, @date_end, current_company_id) %>
+  "<%= "#{awol}" %>"
+  <%= "]," unless presence == @presences.last %>
+<% end %>
+<%= "]" unless @presences.blank? %>
+]
+}

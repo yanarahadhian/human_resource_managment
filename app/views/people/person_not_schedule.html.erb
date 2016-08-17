@@ -1,0 +1,29 @@
+<%= render :partial=> "layouts/shared/breadcrumbs" %>
+<fieldset class="fm-table">
+  <legend><a id="help_dash" class="icons help-top-icon" title="Click to show/hide information">&nbsp;</a>
+   Karyawan Tanpa Schedule</legend>
+  <%= render :partial => "layouts/howto/howto_content"%>
+  <div class="clear"></div>
+  <div class="panelFilter">
+    <table cellspacing="0" cellpadding="0">
+      <tbody><tr>
+          <td>
+            <div class="pagination">
+                <span class="add-button right">
+                  <a id="import" class="grey_button2" href="#schedules">
+                    <span class="icons add_ico">&nbsp;</span>
+                    Penjadwalan
+                  </a>
+                </span>
+            </div>
+            <div class="clear"></div>
+          </td>
+        </tr>
+       
+        </tbody></table>
+    </div>
+    <div class="clear"></div>
+    <div id="div_list_persons">
+      <%= render :partial => "person_not_schedule" %>
+    </div>
+</fieldset>

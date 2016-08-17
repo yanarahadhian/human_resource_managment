@@ -1,0 +1,38 @@
+<fieldset class="fm-form" style="width: 400px; margin-left: 20pt;">
+  <legend><a href="#" id="help_dash" class="icons help-top-icon" title="Click to show/hide information">&nbsp;</a>
+   DAFTAR KARYAWAN PADA BAGIAN <%= @division.name.upcase if @division %></legend>
+  <%= render :partial => "layouts/howto/howto_content"%>
+  <span class="input" style="margin-left:10pt;width:390px;">
+    Nama
+    <input type="text"/><input type="submit" value="Search" name="info_section_save_basic" id="info_section_save_basic" class="blue_button"/>
+  </span>
+  <span class="clear"></span>
+  <%- @personels.each do |personel| %>
+    <span class="input" style="margin-left:10pt;width:390px;">
+      <div class="right"><a href="#">Add</a></div>
+      <input type="radio"/><%= personel.full_name %><br/>
+    </span>
+  <%- end %>
+  <span class="clear"></span>
+  <%- if @group %>
+    <table style="width: 420px; margin-left: 10pt;">
+      <thead>
+        <tr>
+          <th width="90"> <a href=""> <span class="center-text">Nama</span></a> </th>
+          <th width="20" class="left-text">Hapus</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Andri parman</td><td>X</td></tr>
+        <tr><td>Rudi pasha</td><td>X</td></tr>
+        <tr><td>Anti Rahayu</td><td>X</td></tr>
+        <tr><td>Hadi kusuma</td><td>X</td></tr>
+        <tr><td>Indra pranata</td><td>X</td></tr>
+        <tr><td>Acong anda</td><td>X</td></tr>
+        <tr><td>David voler</td><td>X</td></tr>
+        <tr><td>Angita devi</td><td>X</td></tr>
+      </tbody>
+    </table>
+  <%- end %>
+</fieldset>
+

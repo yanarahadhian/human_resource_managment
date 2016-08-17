@@ -1,0 +1,156 @@
+<script type="text/javascript">
+
+  function openColor(index){
+    $(".coba_"+index).colorbox({width:"auto",height:"auto", inline:true,
+      href:"#schedule_delete_"+index});
+  }
+
+  function get_row_data(id,nama,group){
+    var data = '<tr id="line_' + id + '">';
+        data += get_first_row(id,nama);
+        data += get_second_row(group);
+        data += '<td class="left-text">';
+        data += '<a onclick="openColor(' + id + '); return false;" href="#" class="icons delete-icon marginL40 coba_' + id + '"></a>';
+        data += get_popup_delete(id);
+        data += '</td></tr>';
+    $(data).insertBefore($('#last'));
+  }
+
+  function get_first_row(id, nama){
+    var data = '<td class="center vtop line5">';
+        data += nama;
+        data += '<input type="hidden" value="' + id + '" name="emp_ids[]" id="emp_ids_">';
+        data += '</td>';
+    return data;
+  }
+
+  function get_second_row(group){
+    var data = '<td class="left-text">';
+        data += group;
+        data += '</td>';
+    return data;
+  }
+
+  function get_popup_delete(id){
+    var data = '<div style="display: none;" id="dis">';
+        data += '<div class="popup" id="schedule_delete_' + id + '">';
+        data += '<div class="popup" id="message_delete">';
+        data += '<br>';
+        data += '<div class="title-page-small">';
+        data += 'Konfirmasi Penghapusan Data';
+        data += '</div>';
+        data += '<div class="popup-confirmation">';
+        data += '<span class="alert_big_ico">&nbsp;</span>';
+        data += 'Apakah Anda yakin akan menghapus Data Ini?';
+        data += '<div class="clear"></div>';
+        data += '<p>Note : Jika Anda memilih Ya, aksi ini tidak dapat di batalkan.</p>';
+        data += '</div>';
+        data += '<div class="box-form">';
+        data += '<input type="hidden" name="tamp" id="tamp">';
+        data += '<div class="right">';
+        data += "<input type=\"button\" onclick=\"deleteFromEmployee('" + id + "')\" class=\"blue_button\" value=\"Ya\">";
+        data += '<input type="button" class="grey_button" value="Tidak">&nbsp;&nbsp;&nbsp;';
+        data += '</div></div></div></div></div>';
+     return data;
+  }
+
+  function deleteFromEmployee(id){
+    $("#line_" + id).remove();
+    $.colorbox.close();
+  }
+
+  function add_karyawan(){
+    id = ar_id[jQuery.inArray($("#employee_name").val(), ar_name)];
+   
+    $.ajax({
+       url: '/get_person_by_javascript',
+       data: "id=" + id,
+       type: "POST"
+     });
+     $("#employee_name").val("");
+      idx = ar_id.indexOf(id);
+
+      new_ar_id = ar_id;
+      new_ar_name = ar_name;
+
+      new_ar_id.splice(idx, 1);
+      new_ar_name.splice(idx, 1);
+
+      $("#employee_name").autocomplete(new_ar_name);
+           
+  }
+
+  $(document).ready(function(){
+    var current_count = <%= current_count_people.count %>;
+    if (ar_name.length != current_count){
+      ar_name = <%= current_people.map { |x| "#{x.full_data_name}" }.to_json %>;
+      ar_id = <%= current_people.map { |x| x.id }.to_json %>
+    }
+    $("#employee_name").autocomplete(ar_name);
+    $('#employee_name').keydown(function (e){
+    if(e.keyCode == 13){
+        return false;
+    }
+})
+
+  });
+</script>
+<div class="input auto-size">
+<table class="tableforschedulling">
+  <thead>
+    <tr>
+      <th width="74">
+        <span>Nama</span>
+      </th>
+      <th width="125">
+        <span class="center-text">
+          Group
+        </span>
+        <span class="icons sorter_ico">&nbsp;</span>
+      </th>
+      <th width="74">
+        <span class="center-text">
+        </span>
+        <span class="icons sorter_ico">&nbsp;</span>
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <%  unless @people.nil? %>
+      <% @people.each_with_index do |person,i| %>
+        <tr id="line_<%= person.id %>">
+          <td class="center vtop line<%= i%>">
+            <%=h person.full_name %>
+            <%= hidden_field_tag i ,  person.id %>
+            <%= hidden_field_tag "emp_ids[]", person.id  %>
+          </td>
+          <td class="left-text">
+            <% employment = person.current_employment %>
+            <%unless employment.blank?%>
+              <%=h  employment.work_group.work_group_name unless employment.work_group.blank?%>
+            <%else%>
+              Tidak ada employments
+            <%end%>
+          </td>
+          <td class="left-text">
+            <%= link_to_function "", "openColor(#{i})",
+              :class=>"icons delete-icon marginL40 coba_#{i}" %>
+            <div id="dis" style="display:none">
+              <% id= "schedule_delete_#{i}" %>
+              <div id="<%= id %>" class="popup">
+                <%= render :partial => "message_delete", :locals=> {:id => person.id}%>
+              </div>
+            </div>
+          </td>
+        </tr>
+      <%end%>
+    <%end%>
+    <tr id="last">
+      <td>
+        <%= text_field_tag :employee_name, "", :class=>'autoComplete width150px' %>
+        <a class="icons cek-icon importantRight" onclick="add_karyawan()"></a>
+      </td>
+    </tr>
+  </tbody>
+</table>
+</div>

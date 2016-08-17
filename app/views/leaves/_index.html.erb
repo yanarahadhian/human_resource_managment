@@ -1,0 +1,94 @@
+<%= render :partial=> "layouts/shared/breadcrumbs" %>
+<fieldset class="fm-table">
+  <legend>
+    <a href="#" id="help_dash" class="icons help-top-icon" title="Click to show/hide information">&nbsp;</a>
+    Daftar Cuti Karyawan
+  </legend>
+  <%= render :partial => "layouts/howto/howto_content"%>
+  <%= render :partial => "layouts/delete_message" %>
+  <div class="panelFilter">
+    <table cellspacing="0" cellpadding="0">
+      <tbody><tr>
+          <td style="width:103px;">
+            <% unless @leaves.blank? %>
+              <div class="action_menu">
+                <ul>
+                  <li>
+                    <a class="grey_button2">
+                      <span class="left">More Actions</span>
+                      <span class="icons drop_arrow_ico">&nbsp;</span>
+                    </a>
+                    <div class="clear"></div>
+                    <ul>
+                      <% if current_features.include?('employee_leave_management_delete') %>
+                        <li>
+                          <a class="list" onclick="onDelete('leaves')">Delete</a>
+                        </li>
+                      <% end %>
+                      <% if current_features.include?('employee_leave_management_change_status') %>
+                        <li>
+                          <a class="list" onclick="onApprove('approved')">Approve</a>
+                        </li>
+                      <% end %>
+                      <% if current_features.include?('employee_leave_management_change_status') %>
+                        <li>
+                          <a class="list" onclick="onApprove('rejected')">Reject</a>
+                        </li>
+                      <% end %>
+                    </ul>
+                  </li>
+                </ul>
+              </div>
+            <% else %>
+              <div class="clear"></div>
+            <% end %>
+          </td>
+          <td>
+
+          </td>
+          <% if current_features.include?('employee_leave_management_add') %>
+            <td style="width:270px;">
+              <div class="pagination">
+                <a class="grey_button2" id="import" href="#leaves/new ">
+                  <span class="icons add_ico">&nbsp;</span>
+                  Tambah Cuti
+                </a>
+              </div>
+              <div class="clear"></div>
+            </td>
+          <% end %>
+        </tr>
+        <tr>
+          <td></td>
+          <td>
+            <% unless @leaves.blank? %>
+              <div class="expand_filter" style="display:none;">
+                <% form_remote_tag :url => {:action=>:index}, :method => :get  do -%>
+                  <div id="filter_opt_1" style="display:none;">
+                    <div class="clear"></div>
+                    <div class="filter_opt">
+                      <label class="left">Departemen</label>
+                      <%= text_field :filter, :nama %>
+                      <a href="#people" class="icons cancel_ico" id="icon_cancel_opt1">&nbsp;</a>
+                    </div>
+                  </div>
+                  <%= render :partial => "layouts/button_loader"  %>
+                  <a id="filter_button" style="display:none;">
+                    <span class="left"><%= submit_tag 'Go', :class=>"grey_button2", :onclick=> "progress_filter()" %></span>
+                    <div class="clear"></div>
+                  </a>
+                <% end %>
+              </div>
+            <% else %>
+              <div class="clear"></div>
+            <% end %>
+          </td>
+          <td></td>
+        </tr>
+      </tbody></table>
+  </div>
+  <div class="clear"></div>
+  <div id="div_leaves">
+    <%= render :partial => "list_leaves"  %>
+  </div>
+</fieldset>

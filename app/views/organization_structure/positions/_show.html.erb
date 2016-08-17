@@ -1,0 +1,88 @@
+<%= render :partial=> "layouts/shared/breadcrumbs" %>
+<div class="clear"></div>
+<%- if @position %>
+<fieldset class="fm-table">
+  <legend><a href="#" id="help_dash" class="icons help-top-icon" title="Click to show/hide information">&nbsp;</a>
+   Informasi Detail Jabatan <%=h @position.position_name %></legend>
+  <%= render :partial => "layouts/howto/howto_content"%>
+
+  <div class=" box-form">
+  <span class="edit_field"  style="display:none;">
+  <div class="input-help-wide">
+    <label>Field dengan tanda <span class="redstar">*</span> harus diisi</label>
+  </div>
+  </span>
+
+   <% input_name = "input-field" %>
+   <% err_name= error_message_on @position, :position_name %>
+   <% input_name = "input-error" unless err_name.blank? %>
+
+    <%- form_remote_for [:organization_structure, @position], :html => { :multipart => true }  do |f| %>
+      <div class="input big">
+        <a id="edit_info" class="grey_button_a top-right">
+          <span class="icons edit-icon">&nbsp;</span>
+          Edit
+        </a>
+        <span class="input-field show_field">
+          <label>Kode Jabatan</label>:
+          <%=h @position.position_code.just_display %>
+        </span>
+        <span class="input-field edit_field" style="max-width:600px; display:none;">
+          <span class="left"><%= f.label :position_code, "Kode Jabatan" %>: &nbsp;</span>
+          <%= f.text_field :position_code %>
+        </span>
+        <span class="clear"></span>
+        <span class="input-field show_field">
+          <label>Nama Jabatan</label>:
+          <%=h @position.position_name.just_display %>
+        </span>
+        <span class="<%= input_name %> edit_field" style="max-width:600px; display:none;">
+          <span class="left"><%= f.label :position_name, "Nama Jabatan <span class='redstar'>*</span>" %>: &nbsp;</span>
+          <%= f.text_field :position_name %>
+          <%= err_name %>
+        </span>
+      </div>
+      <div class=" clear"></div>
+
+      <div class="block-btn-form">
+        <%= render :partial => "layouts/button_loader"  %>
+      </div>
+      <div id="button" style="display:none">
+        <div class="center-text box-form" id="submit">
+          <input id="info_section_cancel_basic" class="grey_button" type="reset" value="Batal" name="info_section_cancel_basic"/>
+          <input type="submit" value="Simpan" name="info_section_save_basic" id="info_section_save_basic" class="blue_button" onclick="ajaxLoad1('#organization_structure/divisions','button','ajax-load1')"/>
+        </div>
+      </div>
+    <%- end %>
+  </div>
+</fieldset>
+<%- else %>
+  <div class="center-text">
+    Maaf tidak ada jabatan dengan id <%= params[:id] %> di perusahaan ini
+  </div>
+<%- end %>
+<script>
+  $(document).ready(function() {
+    $('#edit_info').click(function(e){
+      e.preventDefault()
+      edit_info();
+      $(this).hide();
+    });
+
+    $('#info_section_cancel_basic').click(function(e){
+      e.preventDefault()
+      $('.show_field').show();
+      $('.edit_field').hide();
+      $('#button').hide();
+      $('#edit_info').show();
+    });
+
+  });
+
+  function edit_info(){
+    $('.show_field').hide();
+    $('.edit_field').show();
+    $('#button').show();
+  }
+</script>
+

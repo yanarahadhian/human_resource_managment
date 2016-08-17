@@ -1,0 +1,257 @@
+<%= render :partial=> "layouts/shared/breadcrumbs" %>
+<fieldset class="fm-table">
+  <legend>
+    <a href="#" id="help_dash" class="icons help-top-icon" title="Click to show/hide information">&nbsp;</a>  
+    Data Karyawan
+  </legend>
+  <%= render :partial => "layouts/howto/howto_content"%>
+  <%= render :partial => 'layouts/profile_frame'%>
+
+  <div class="right-information">
+    <%= render :partial=> "layouts/top_menu_detail_karyawan" %>
+    <div id="content-dynamic">
+      <fieldset class="fm-table2">
+        <div id="content-dynamic">
+          <%= render :partial => "layouts/delete_message" %>
+          <div class="box-form">
+            <div id="box_retur_0">
+              <fieldset class="fm-table-notab">
+                <legend><a id="trigger_jabatan">
+                    <span class="icons arrow_ico" id="arrow1">&nbsp;</span>
+                    Data Jabatan</a></legend>
+                <div id="info_jabatan">
+                  <%= render :partial=> "employments/history_jabatan"%>
+                </div>
+              </fieldset>
+              <!-- End View Informasi Pribadi -->
+
+              <!-- Table Work_contracts Begin -->
+              <fieldset class="fm-table-notab">
+                <legend>
+                  <a id="trigger_work_contract">
+                    <span class="icons arrow_ico" id="arrow5">&nbsp;</span>Kontrak Kerja
+                  </a>
+                </legend>
+                <div class="kategori-transaksi" id="info_work_contracts">
+                  <div id="div_work_contract">
+                    <%= render :partial=>"work_contracts/list_work_contracts"  %>
+                  </div>
+                </div>
+              </fieldset>
+              <!-- End Table Pelatihan -->
+
+              <!-- Table Pelatihan Begin -->
+              <fieldset class="fm-table-notab">
+                <legend>
+                  <a id="trigger_pelatihan">
+                    <span class="icons arrow_ico" id="arrow2">&nbsp;</span>Data Pelatihan
+                  </a>
+                </legend>
+                <div class="kategori-transaksi" id="info_pelatihan">
+                  <%= render :partial=>"trainings/list_trainings"  %>
+                </div>
+              </fieldset>
+              <!-- End Table Pelatihan -->
+
+              
+
+              <!-- Table Pelanggaran Begin -->
+
+              <fieldset class="fm-table-notab">
+                <legend>
+                  <a id="trigger_pelanggaran"><span class="icons arrow_ico" id="arrow3">&nbsp;</span>Data Pelanggaran</a>
+                </legend>
+                <div class="kategori-transaksi" id="info_pelanggaran">
+                  <%= render :partial=>"violations/list_violations"  %>
+                </div>
+              </fieldset>
+              <!-- End Table Pelanggaran -->
+              
+
+              <!-- Table Kecelakaan Begin -->
+              <fieldset class="fm-table-notab">
+                <legend>
+                  <a id="trigger_kecelakaan"><span class="icons arrow_ico" id="arrow4">&nbsp;</span>Informasi Kecelakaan</a>
+                </legend>
+                <div id="info_kecelakaan">
+                  <%= render :partial => "accidents/list_accidents" %>
+                </div>
+              </fieldset>
+
+              <!-- End Table Kecelakaan -->
+            </div>
+          </div>
+        </div>
+      </fieldset>
+    </div>
+  </div>
+</fieldset>
+
+<script type="text/javascript">
+  $(document).ready(function(){
+    error_handle("");
+    <% unless params[:save].blank? %>      
+      <% if params[:save] == "create_employments" %>
+        error_handle("Data jabatan berhasil ditambah");
+      <% elsif params[:save] == "terminasi" %>
+        error_handle("Data jabatan berhasil diterminasi!");
+      <% elsif params[:save] == "update_employments" %>
+        error_handle("Data jabatan berhasil dimodifikasi!");
+      <% elsif params[:save] == "create_trainings" %>
+        error_handle("Data pelatihan berhasil ditambahkan");
+      <% elsif params[:save] == "update_trainings" %>
+        error_handle("Data pelatihan berhasil diupdate");
+      <% end %>
+    <% end %>
+    $('#info_jabatan, #info_pelatihan, #info_pelanggaran, #info_kecelakaan, #info_work_contracts').hide();
+    <% if params[:tab]=="2" %>
+      $('#info_pelatihan').show();
+      $('#arrow2').removeClass('icons arrow_ico');
+      $('#arrow2').addClass('icons drop_arrow_ico');
+    <% elsif params[:tab]=="3" %>
+      $('#info_pelanggaran').show();
+      $('#arrow2').addClass('icons arrow_ico');
+      $('#arrow3').removeClass('icons arrow_ico');
+      $('#arrow3').addClass('icons drop_arrow_ico');
+    <% elsif params[:tab]=="4" %>
+      $('#info_kecelakaan').show();
+      $('#arrow4').removeClass('icons arrow_ico');
+      $('#arrow4').addClass('icons drop_arrow_ico');
+    <% elsif params[:tab]=="5" %>
+      $('#info_work_contracts').show();
+      $('#arrow5').removeClass('icons arrow_ico');
+      $('#arrow5').addClass('icons drop_arrow_ico');
+    <% else %>
+      $('#info_jabatan').show();
+      $('#arrow1').removeClass('icons arrow_ico');
+      $('#arrow1').addClass('icons drop_arrow_ico');
+    <% end %>
+
+    $('#trigger_jabatan').click(function(){
+      if($('#info_jabatan').is(':hidden')){
+        $('#info_jabatan').show();
+        $('#arrow1').removeClass('icons arrow_ico');
+        $('#arrow1').addClass('icons drop_arrow_ico');
+      }else{
+        $('#info_jabatan').hide();
+        $('#arrow1').removeClass('icons drop_arrow_ico');
+        $('#arrow1').addClass('icons arrow_ico');
+      }
+    });
+
+    $('#trigger_work_contract').click(function(){
+      if($('#info_work_contracts').is(':hidden')){
+        $('#info_work_contracts').show();
+        $('#arrow5').removeClass('icons arrow_ico');
+        $('#arrow5').addClass('icons drop_arrow_ico');
+      }else{
+        $('#info_work_contracts').hide();
+        $('#arrow5').removeClass('icons drop_arrow_ico');
+        $('#arrow5').addClass('icons arrow_ico');
+      }
+    });
+
+    $('#trigger_pelatihan').click(function(){
+      if($('#info_pelatihan').is(':hidden')){
+        $('#info_pelatihan').show();
+        $('#arrow2').removeClass('icons arrow_ico');
+        $('#arrow2').addClass('icons drop_arrow_ico');
+      }else{
+        $('#info_pelatihan').hide();
+        $('#arrow2').removeClass('icons drop_arrow_ico');
+        $('#arrow2').addClass('icons arrow_ico');
+      }
+    });
+
+    $('#trigger_pelanggaran').click(function(){
+      if($('#info_pelanggaran').is(':hidden')){
+        $('#info_pelanggaran').show();
+        $('#arrow3').removeClass('icons arrow_ico');
+        $('#arrow3').addClass('icons drop_arrow_ico');
+      }else{
+        $('#info_pelanggaran').hide();
+        $('#arrow3').removeClass('icons drop_arrow_ico');
+        $('#arrow3').addClass('icons arrow_ico');
+      }
+    });
+
+    $('#trigger_kecelakaan').click(function(){
+      if($('#info_kecelakaan').is(':hidden')){
+        $('#info_kecelakaan').show();
+        $('#arrow4').removeClass('icons arrow_ico');
+        $('#arrow4').addClass('icons drop_arrow_ico');
+      }else{
+        $('#info_kecelakaan').hide();
+        $('#arrow4').removeClass('icons drop_arrow_ico');
+        $('#arrow4').addClass('icons arrow_ico');
+      }
+    });
+
+  });
+
+  function onEmployment(data,people_id, emp_id){
+    //window.location.href = "/people/" + people_id + "/employments/" + emp_id + "/edit?type=" + data.value ;
+  }
+
+  function onDelete(sign){
+    if (sign==2){
+      onDelete_pelatihan();
+    }else if (sign==3){
+      onDelete_pelanggaran();
+    }else if (sign==4){
+      onDelete_kecelakaan();
+    }
+  }
+
+  function onDelete_pelatihan(){
+    var arr_params = new Array();
+    $('#training_table tbody input:checked').each(function() {
+      arr_params = arr_params.concat($(this).val());
+    });
+    if (arr_params.length > 0){
+      $('#div_sign').html('pelatihan');
+      $('#div_btn_hapus').html('<input type="button" value="Ya" class="blue_button" onclick="delete_pelatihan()"/>');
+      jQuery().colorbox({width:"auto",height:"auto", inline:true,href:"#message_delete",
+        onClosed:function(){
+        }
+      });
+    }else{
+      return false;
+    }
+  }
+
+  function onDelete_pelanggaran(){
+    var arr_params = new Array();
+    $('#violation_table tbody input:checked').each(function() {
+      arr_params = arr_params.concat($(this).val());
+    });
+    if (arr_params.length > 0){
+      $('#div_sign').html('pelanggaran');
+      $('#div_btn_hapus').html('<input type="button" value="Ya" class="blue_button" onclick="delete_pelanggaran()"/>');
+      jQuery().colorbox({width:"auto",height:"auto", inline:true,href:"#message_delete",
+        onClosed:function(){
+        }
+      });
+    }else{
+      return false;
+    }
+  }
+
+  function onDelete_kecelakaan(){
+    var arr_params = new Array();
+    $('#accident_table tbody input:checked').each(function() {
+      arr_params = arr_params.concat($(this).val());
+    });
+    if (arr_params.length > 0){
+      $('#div_sign').html('kecelakaan kerja');
+      $('#div_btn_hapus').html('<input type="button" value="Ya" class="blue_button" onclick="delete_kecelakaan()"/>');
+      jQuery().colorbox({width:"auto",height:"auto", inline:true,href:"#message_delete",
+        onClosed:function(){
+        }
+      });
+    }else{
+      return false;
+    }
+  }
+
+</script>

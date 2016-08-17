@@ -1,0 +1,68 @@
+ <% form_for @education, :url => person_education_path(@person.id, @education.id), :html => { :multipart => true } do |f| %>
+          <div id="box_retur_0">
+              <%= render :partial => 'educations/popup_edit_form', :locals => {:f => f} %>
+            <div class="clear"></div>
+     
+              <div id="button" style="display:none" class="center-text block-btn-form">
+                <%= render :partial => "layouts/button_loader"  %>
+                <input type="reset" onclick="doCancelEducationEdit();" name="info_section_cancel_basic" value="Batal" class="grey_button" id="info_section_cancel_basic">
+                <input type="submit" value="Simpan" name="info_section_save_basic" id="info_section_save_basic" class="blue_button" onclick="ajaxLoad1('<%= person_education_path(@person.id, @education.id) %>','button','ajax-load1')"/>
+              </div>
+            
+          </div>
+        <% end-%>
+
+<script>
+  $(document).ready(function(){
+    <% if @sign=="gagal" %>
+      onChangeField();
+    <% end %>
+  })
+
+  function doCancelEducationEdit(){
+    path = "<%= ApplicationController::BASE_URL %>/people/<%= params[:person_id] %>/educations/cancel_popup_detail";
+    $.ajax({
+      type: "get",
+      url: path,
+      data :"id=<%= @education.id%>",
+      dataType: 'script',
+      success: function(){
+        $('.title-page-tambah').html("Detail Pendidikan");
+      }
+    })
+  }
+  
+  function ajaxLoad1(url, div_btn, div_load){
+    $("#" + div_load + "").show();
+    $("#" + div_btn + "").hide();
+      $.get(url, function(data) {
+      $("#ajax-load").hide();
+    });
+  }
+
+  function onChangeField(){
+    $('#field_pendidikan_terakhir').show();
+    $('#label_pendidikan_terakhir').hide();
+    $('#field_institution_name').show();
+    $('#label_institution_name').hide();
+    $('#field_field_major').show();
+    $('#label_field_major').hide();
+    $('#field_entry_year').show();
+    $('#label_entry_year').hide();
+    $('#field_graduation_year').show();
+    $('#label_graduation_year').hide();
+    $('#field_gpa').show();
+    $('#label_gpa').hide();
+    $('#field_education_description').show();
+    $('#label_education_description').hide();
+    $('#field_no_ijazah').show();
+    $('#label_no_ijazah').hide();
+    $('#field_certificate').show();
+    $('#div_link_edit').hide();
+    $('#button').show();
+    $('.input-help').show();
+    $('#title_detail').html("Edit Pendidikan");
+    $('.grey_button_a.top-right').hide();
+  }
+
+</script>

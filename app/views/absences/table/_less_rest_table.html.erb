@@ -1,0 +1,25 @@
+{
+"sEcho": <%=h @sEcho %>,
+"iTotalRecords": <%= @iTotalRecords %>,
+"iTotalDisplayRecords": <%= @iTotalDisplayRecords %>,
+"iDataExist": <%= @less_rest_exist %>,
+"aaData" : [
+<%- @less_rests.each do |less_rest| %>
+  ["<%= "<input id='less_#{less_rest[:less_id]}' name='less_ids[]' type='checkbox' value=#{less_rest[:less_id]} />" %>",
+  "<%= "<a href='#dailyabsence?id=#{less_rest[:person_id]}&date=#{less_rest[:date].strftime("%Y-%m-%d")}'> #{h less_rest[:person_name].titleize} </a>" %>",
+  "<%=h less_rest[:department].just_display unless less_rest[:department].blank? %>",
+  "<%=h less_rest[:division].just_display unless less_rest[:division].blank? %>",
+  "<%= l less_rest[:date] %>",
+  "<%= Presence.minutes_to_hour_text(less_rest[:break_length]) %>",
+  <%- if less_rest[:is_acted_upon] %>
+    "<%=h less_rest[:status] %>"
+  <%- else %>
+    "Belum ditindak lanjuti"
+  <%- end %>,
+  "<%=h less_rest[:description] %>"
+  <%= "]," unless less_rest == @less_rests.last %>
+<% end %>
+<%= "]" unless @less_rests.blank? %>
+]
+}
+

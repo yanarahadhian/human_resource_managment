@@ -1,0 +1,24 @@
+<div class="left" style="width:82%;">
+  <%= render :partial=>"layouts/top_menu_detail_karyawan" %>
+  <div id="content-dynamic">
+
+    <fieldset class="fm-table">
+      <div class="inner-title">Edit Jabatan</div>
+        <div class="box-form">
+        <% form_for @employment, :url => person_employment_path(@person,@employment) do |f| %>
+           <div id="box_retur_0">
+             <%= render :partial => 'employment_form', :locals => {:f => f} %>
+             <span class="clear"></span>        
+             <hr />
+             <div class="center-text">
+               <input id="info_section_cancel_basic" class="grey_button" type="reset" value="Cancel" name="info_section_cancel_basic" onclick="javascript:window.location='<%=person_employments_path(@person)%>'"/>
+               <input type="submit" value="Simpan" name="info_section_save_basic" id="info_section_save_basic" class="blue_button"/>               
+             </div>
+           </div>
+        <% end-%>
+      </div>
+    </fieldset>
+  </div>
+</div>
+	
+			

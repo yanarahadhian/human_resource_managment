@@ -1,0 +1,223 @@
+<script language=javascript type='text/javascript'>
+  $(document).ready(function() {
+    $('#employment_work_division_id').attr('disabled', 'disabled');
+  });
+
+  function hidediv() {
+    if (document.getElementById) { // DOM3 = IE5, NS6
+
+      document.getElementById('hideshow').style.display = 'none';
+      document.getElementById('employment_employment_end').value = "now"  ;
+      $("#datepicker2").val();
+    }
+    else {
+      if (document.layers) { // Netscape 4
+        document.hideshow.display = 'none';
+      }
+      else { // IE 4
+        document.all.hideshow.style.display = 'none';
+      }
+    }
+  }
+
+  function showdiv() {
+    if (document.getElementById) { // DOM3 = IE5, NS6
+      document.getElementById('hideshow').style.display = 'block';
+    }
+    else {
+      if (document.layers) { // Netscape 4
+        document.hideshow.display = 'block';
+      }
+      else { // IE 4
+        document.all.hideshow.style.display = 'block';
+      }
+    }
+  }
+
+  function checkvalue(){
+    if (document.getElementById('employment_employment_end').value == 'pilih')
+    {
+      showdiv();
+    }
+    else {
+      hidediv();
+    }
+  }
+
+  function hidedivkontrak() {
+    if (document.getElementById) { // DOM3 = IE5, NS6
+      document.getElementById('hidesampai').style.display = 'none';
+      document.getElementById('employment_employment_type').value = "tetap"  ;
+    }
+    else {
+      if (document.layers) { // Netscape 4
+        document.hidesampai.display = 'none';
+      }
+      else { // IE 4
+        document.all.hidesampai.style.display = 'none';
+      }
+    }
+  }
+
+  function hidedivkeluar() {
+    if (document.getElementById) { // DOM3 = IE5, NS6
+      document.getElementById('NonTermination').style.display = 'none';
+    }
+    else {
+      if (document.layers) { // Netscape 4
+        document.NonTermination.display = 'none';
+      }
+      else { // IE 4
+        document.all.NonTermination.style.display = 'none';
+      }
+    }
+  }
+
+  function showdivkontrak() {
+    if (document.getElementById) { // DOM3 = IE5, NS6
+      document.getElementById('hidesampai').style.display = 'block';
+    }
+    else {
+      if (document.layers) { // Netscape 4
+        document.hidesampai.display = 'block';
+      }
+      else { // IE 4
+        document.all.hidesampai.style.display = 'block';
+      }
+    }
+  }
+
+  function checkvaluekontrak(){
+    if (document.getElementById('employment_employment_type').value == 'kontrak')
+    {
+      showdivkontrak();
+    }
+    else if (document.getElementById('employment_employment_type').value == 'tetap')
+    {
+      hidedivkontrak();
+    }
+    else
+    {
+      hidedivkeluar();
+    }
+  }
+
+  function onDepartment(data){
+    $("#div_unit").empty();
+    $("#div_group").empty();
+    $.ajax({
+      url: "/change_divisi/" + data.value,
+      type: "GET"
+    });
+    if(data.value=="")
+      {
+         $("#div_divisi").empty();
+      }
+    else
+      {$("#div_divisi").removeAttr("disabled");}
+  }
+
+  function onDivision(data){
+    $("#div_group").empty();
+    $.ajax({
+      url: "/change_group/" + data.value,
+      data: "",
+      type: "GET"
+    });
+    $("#div_group").show();
+  }
+
+</script>
+
+<% input_thn_masuk = "input-field" %>
+<% err_thn_masuk = error_message_on :employment, :employment_start %>
+<% input_thn_masuk = "input-error" unless err_thn_masuk.blank? %>
+
+<% input_thn_keluar = "input-field" %>
+<% err_thn_keluar = error_message_on :employment, :employment_end %>
+<% input_thn_keluar = "input-error" unless err_thn_keluar.blank? %>
+<div class="input">
+<span class="<%= input_thn_masuk %>">
+  <label>Tanggal Mulai<span class="redstar">*</span></label><span class="left">:&nbsp;</span>
+  <% val = "" %>
+  <% val = params[:employment][:employment_start]  if params[:employment] %>
+  <%= f.text_field :employment_start, :class => "ui-date", :size => "40px", :value => val %>
+  <%= err_thn_masuk %>
+</span>
+<span class="clear"></span>
+
+<span class="input-field">
+  <label>Perubahan</label><span class="left">:&nbsp;</span>
+  <select name="employment[change_from_before]" id="employment_change_from_before" class="capital-case">
+      <% employment.perubahan.each do |x| %>
+        <option value="<%= x %>"><%= x %></option>
+      <% end %>
+  </select>
+  <%= error_message_on employment, :employment_start %>
+</span>
+<span class="clear"></span>
+
+
+<span class="<%=  input_thn_keluar %>" id="sampai_tgl">
+  <label>Tanggal Selesai</label><span class="left">:&nbsp;</span>
+  <%= f.select (:employment_end,
+    "<option value='n/a' #{employment.employment_end.to_s.empty? ? 'selected=selected' : ''}>Tidak Ditentukan</option>
+     <option value ='pilih' #{employment.employment_end.to_s.empty? ? '' : 'selected=selected' }>Pilih</option>", {},:onchange => 'checkvalue();') %>
+  <%= err_thn_keluar %>
+  <div class="clear"></div>
+  <div id="hideshow" style="display:<%= employment.employment_end.to_s.empty? ? 'none' : 'block' %>;margin-top:6px;">
+    <label>&nbsp;</label>&nbsp;&nbsp;<%= f.text_field :employment_end, :id => "ui-date2", :class => "ui-date"%>
+    <a href="javascript:hidediv()">Kembali</a>
+  </div>
+
+</span>
+<span class="clear"></span>
+
+<span class="input-field hide">
+  <label>Departemen</label><span class="left">:&nbsp;</span>
+  <%= f.collection_select :department_id , Department.by_company(current_company_id).all, :id, :department_name ,
+    {:selected => employment.department_id, :prompt => 'Pilih Departemen'}, :onChange => "onDepartment(this)" %>
+</span>
+<span class="clear"></span>
+
+<div id="div_divisi" style="display:none;">
+  <span class="input-field">
+    <label>Bagian</label><span class="left">:&nbsp;</span>
+    <% unless employment.division.blank? || employment.department.blank?%>
+      <%= f.collection_select :work_division_id , Division.by_company(current_company_id).all(:conditions=> "department_id=#{employment.department_id}"), :id, :name , {:selected => employment.work_division_id, :prompt => "Pilih"},
+        :onChange => "onDivision(this)" %>
+    <% else %>
+      <%= f.collection_select :work_division_id , Division.by_company(current_company_id).all, :id, :name , {:selected => employment.work_division_id, :prompt => "Pilih"},
+        :onChange => "onDivision(this)" %>
+    <% end %>
+  </span>
+  <span class="clear"></span>
+</div>
+
+<div id="div_group" style="display:none;">
+  <span class="input-field">
+    <label>Group</label><span class="left">:&nbsp;</span>
+    <% unless employment.work_group.blank? || employment.division.blank? %>
+      <%= f.collection_select :work_group_id , WorkGroup.by_company(current_company_id).all(:conditions=> "division_id=#{employment.work_division_id}"), :id, :work_group_name , {:selected => employment.work_division_id, :prompt => 'Pilih'}%>
+    <% else %>
+      <%= f.collection_select :work_group_id , WorkGroup.by_company(current_company_id).all, :id, :work_group_name , {:selected => employment.work_division_id, :prompt => 'Pilih'}%>
+    <% end %>
+  </span>
+  <span class="clear"></span>
+</div>
+
+<span class="input-field">
+  <label>Jabatan</label><span class="left">:&nbsp;</span>
+  <%= f.collection_select :position_id , Position.by_company(current_company_id).all, :id, :position_name , {:selected => employment.position_id, :prompt => 'Pilih'} %>
+</span>
+<span class="clear"></span>
+
+<%= f.hidden_field :type_employment %>
+<%= f.hidden_field :employment_type_check, :id=>"employment_type_check_#{employment.id}"  %>
+
+<span class="input-field">
+  <label>Alasan perubahan </label><span class="left">:&nbsp;</span>
+  <%= f.text_area :reason_for_change, :rows => 3, :cols => 25 %>
+</span>
+<span class="clear"></span>
+</div>

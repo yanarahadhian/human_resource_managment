@@ -1,0 +1,239 @@
+<%= render :partial=> "layouts/shared/breadcrumbs" %>
+<fieldset class="fm-table">
+  <legend>
+    <a href="#" id="help_dash" class="icons help-top-icon" title="Click to show/hide information">&nbsp;</a>
+    Formasi Departemen
+  </legend>
+  <%= render :partial => "layouts/howto/howto_content"%>
+  <div class="box-form">
+    <div class="panelFilter">
+      <table cellpadding="0" cellspacing="0">
+        <tbody>
+          <tr>
+            <td>
+              <a  class="grey_button2" id="filter_trigger_formasi_departemen"> 
+                <span class="icons filter-ico">&nbsp;</span> Filter 
+              </a>
+            </td>
+          </tr>
+          <tr id="filter_block_formasi_departemen">
+            <td>
+            	<div class="expand_filter"> 
+                <div id="filter_st">
+                  <% form_remote_for :filter_formasi_departemen, :url => {:action => :find_statistik_get} , :method => :get, :html => {:id => "ajax_form_departemen"} do |f| %>
+                    <div class="left-filter">
+                      <div class="filter_opt">
+                        <label>Formasi pada tanggal:</label>
+                        <%= f.text_field :employment_start, :class => "ui-date" %>
+                      </div>
+                    </div>
+                    
+                    <div class="right-filter">
+                      <div class="filter_opt">
+                        <label>Departemen:</label>
+                        <%= f.collection_select :department_id , Department.by_company(current_company_id).all, :id, :department_name, {:prompt => "Semua Departemen"}, :onChange => "onDepartmentFormasiDepartemen(this)" %>
+                      </div>
+                      <div class="clear"></div>
+                      <div id="div_divisi_formasi_departemen">
+                        <div class="filter_opt">
+                          <label>Bagian:</label>
+                          <%= f.collection_select :work_division_id , Division.by_company(current_company_id).all, :id, :name, {:prompt => "Semua Bagian"}, {:disabled => "disabled"} %>
+                        </div>
+                      </div>
+                      <div class="clear"></div>
+                    </div>
+                    <div class="clear"></div>
+                    <div class="center-text filter-btn" id="b1">
+                      <input type="hidden" name="txt_action" value="formasi_departemen"/>
+                      <div id="load_formasi_departemen" class="ajax-load" style="display: none">
+                        <img alt=""  src="<%=  ApplicationController::APPSCHEF_URL %>/images/ajax-loader.gif" />Processing...
+                      </div>
+                      <div id="button_formasi_departemen_submit">
+                        <input type="button" class="grey_button2 none" value="Lihat statistik" name="commit" id="filter_formasi_departemen_submit" onclick="cekValidateFormasiDepartemen()"/>
+                      </div>
+                    </div>
+                  <% end %>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="clear"></div>  
+  <div style="display:none" id="table-fix_formasi_departemen">
+  <div id="parent_auto_formasi_departemen">
+      <div class="table-over3 showed" id="content_formasi_departemen_table" style="width:50%">     
+        <%= hidden_field_tag "page_num_formasi_departemen",1 %>
+        <%= hidden_field_tag "sort_formasi_departemen","firstname" %>
+        <%= hidden_field_tag "direction_formasi_departemen","asc" %>         
+      </div>
+      <div class="chart-auto" id="chart_auto_formasi_departemen" style="width: 50%;">
+        <table class="no-border chart-block-table no-hover">
+          <tr>
+            <td valign="top" class="center-text" id="div_content_formasi_departemen">
+            	<div class="title">Absensi</div>
+                <img src="img_chart/c1.jpg" alt="c1" style="width:190px"/>
+                <div class="clear"></div>
+                <div class="title">Detail Absensi</div>
+            	<img src="img_chart/c2.jpg" alt="c2" style="width:540px" />
+             </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+ 
+  <div class="clear"></div>
+
+  <div class="panelFilter">
+    <div class="pagination" id="pagination">
+      <%= render :partial => "formasi_paginate" %>
+    </div>
+  </div>
+</fieldset>
+
+<script type="text/javascript">
+  $(document).ready(function(){
+    $('#filter_block_formasi_departemen').show();
+    $('#filter_trigger_formasi_departemen').addClass("filter-active")
+    $('#filter_trigger_formasi_departemen').click(function(){
+      $(this).toggleClass("filter-active");
+      $('#filter_block_formasi_departemen').toggle();
+    });
+    $('.expand_filter .reset-filter-ico').click(function(){
+      $('#filter_block_formasi_departemen').hide();
+      $('#filter_trigger_formasi_departemen').removeClass("filter-active");
+    });
+  });
+</script>
+
+<script type="text/javascript">
+    //Tooltip
+    $(document).ready(function(){
+      var background = 'rgba(255,255,255,0.9)';
+      var border = '#A9D5F2';
+      var font_color = '#56626a';
+      $('.bar-show-chartX').bt({
+        showTip: function(box) {
+	        $(box).fadeIn('fast');
+        },
+        shrinkToFit: true,
+        hoverIntentOpts: {
+	        interval: 0,
+	        timeout: 9999
+        },
+        positions: ['right', 'right'],
+        fill: background,
+        strokeStyle: border,
+        overlap: 0,
+        centerPointY: 1,
+        centerPointX: 0,
+        cornerRadius: 4,
+        right: 20,
+        cssStyles: {
+	        fontFamily: 'Arial,"Lucida Grande",Helvetica,Arial,Verdana,sans-serif',
+	        fontSize: '12px',
+	        color: font_color,
+	        width: 'auto',
+	        padding: 5,
+        },
+        shadow: true,
+        shadowColor: 'rgba(0,0,0,.2)',
+        shadowBlur: 5,
+        shadowOffsetX: 0,
+        hadowOffsetY: 0
+      });
+    });
+    //Chart
+    function sliderChart7(size){
+      var w;
+      switch(size){
+        case "small" : w = 40; break;
+        case "medium" : w = 70; break;
+        case "large" : w = 100;
+      }
+      var size_table = 100 - w;
+      if(!($('#content_formasi_departemen_table').hasClass("showed"))){
+	        $('#chart_auto_formasi_departemen').css({width: w+"%"},"medium");
+	        $('#content_formasi_departemen_table').css({width: size_table+"%"},"medium");
+	        $('#parent_auto_formasi_departemen').removeAttr("style")
+	        $('#content_formasi_departemen_table').toggleClass("showed");
+      }else{
+	        $('#content_formasi_departemen_table').toggleClass("showed");
+	        $('#chart_auto_formasi_departemen').css({width: 1000+"px"},"medium");
+	        $('#content_formasi_departemen_table').css({width: 1050+"px"},"medium");
+	        $('#parent_auto_formasi_departemen').css("width","200%");
+      }
+    }
+</script>
+
+<script type="text/javascript">
+  $(document).ready(function(){
+    $('#div_formasi_departemen').hide();
+    var dt = new Date;
+    year = dt.getFullYear();
+
+    $( ".ui-date, .ui-date2" ).datepicker({
+      buttonImageOnly: true
+    })
+
+  })
+
+  $("#filter_formasi_departemen_employment_start").datepicker('setDate', new Date());
+  $("#filter_formasi_departemen_employment_end").datepicker('setDate', new Date());
+
+  function showResultformasi_departemen(page){
+    var action = '/dashboard/get_formasi_table?employment_start='+$('#filter_formasi_departemen_employment_start').val()+'&department_id='+$('#filter_formasi_departemen_department_id').val()+'&work_division_id='+$('#filter_formasi_departemen_work_division_id').val()+'&filter=formasi_departemen&page='+page;
+    var params = '&sort='+$('#sort_formasi_departemen').val()+'&direction='+$('#direction_formasi_departemen').val();
+    $.get(action+params,function(data){}); 
+  }
+
+  function sortResultformasi_departemen(field_name,direction){
+    var page_num = $("#page_num_formasi_departemen").val();
+    var action = '/dashboard/get_formasi_table?employment_start='+$('#filter_formasi_departemen_employment_start').val()+'&department_id='+$('#filter_formasi_departemen_department_id').val()+'&work_division_id='+$('#filter_formasi_departemen_work_division_id').val()+'&filter=formasi_departemen&page='+page_num+'&sort='+field_name+'&direction='+direction;
+    $.get(action,function(data){}); 
+  }
+
+  function cekValidateFormasiDepartemen(){
+    sdate = $("#filter_formasi_departemen_employment_start").val();
+    if (sdate == ""){
+      $('#div_formasi_departemen').show();
+      $('#div_formasi_departemen').html(htmlValidateFormasiDepartemen('Formasi Perusahaan pada tanggal tidak boleh kosong'));
+      $('#formasi_desc_role').show();
+      $('#formasi_desc_role').html(htmlValidateFormasiDepartemen('Formasi Perusahaan pada tanggal tidak boleh kosong'));
+      return false;
+    } else {
+      var form = document.getElementById('ajax_form_departemen')
+      $('#button_formasi_departemen_submit').hide();
+      $('#load_formasi_departemen').show();
+      if(form.onsubmit()){
+        form.submit();
+      }
+      $.get('/dashboard/get_formasi_table?employment_start='+$('#filter_formasi_departemen_employment_start').val()+'&department_id='+$('#filter_formasi_departemen_department_id').val()+'&work_division_id='+$('#filter_formasi_departemen_work_division_id').val()+'&filter=formasi_departemen', function(data){});
+    }
+  }
+
+  function onDepartmentFormasiDepartemen(data){
+    $.ajax({
+      url: "/change_divisi/" + data.value,
+      data: "type=report_formasi_departemen",
+      type: "GET"
+    });
+  }
+
+  function htmlValidateFormasiDepartemen(say){
+    var data = '';
+    data += '<div class="dashboard-chart" id="c3">';
+    data += '<fieldset class="chart-block4">';
+    data += '<div class="control-box"></div>';
+    data += '<div no-chart="">';
+    data += '<div id="desc_role" class="no-data-chart">' + say;
+    data += '</div>';
+    data += '</div>';
+    data += '</fieldset>';
+    data += '</div>';
+    return data;
+  }
+</script>

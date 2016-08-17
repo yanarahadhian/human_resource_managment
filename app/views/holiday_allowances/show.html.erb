@@ -1,0 +1,214 @@
+
+<%= render :partial => "layouts/howto_menu" %>
+<fieldset class="fm-table">
+  <legend> <a href="#" id="help_dash" class="icons help-top-icon" title="Click to show/hide information">&nbsp;</a>
+  THR</legend>
+  <%= render :partial => "layouts/howto/howto_content"%>
+  <div class="box-form">
+
+    <div class=" clear"></div>
+    <form action="/holiday_allowances/<%= @id %>/download" class="form" method="get" onsubmit="">
+      <div id="product_form_0">
+        <div class="clear"></div>
+        <div class="potrait-report">
+          <div class="page" style="border: none; padding-top:0">
+            
+           <div class="input" >
+            <% if current_features.include?('thr_edit') %>
+                <%= link_to "<span class='icons edit-icon'>&nbsp;</span> Edit Data THR", "#edit_holiday_allowances/#{@thr.id}", :class => "grey_button_a top-right", :id=>"add_barang" %>
+            <% end %>
+            <div class="fifty-fifty left">
+              <span class="input-field">
+                <label>Bulan</label> : <%= @honor_month %> <%= @thr.honor_year %>
+              </span>
+              <div class="clear"></div>
+              <span class="input-field">
+                <label>Nama</label> : <%= @thr.person.full_name %>
+              </span>
+              <div class="clear"></div>
+              <span class="input-field">
+                <label>Tanggal dibuat</label> : <%= @thr.honor_date.strftime('%e %b %Y') unless @thr.honor_date.blank? %>
+              </span>
+            </div>
+            
+            <div class="fifty-fifty left">
+              <div class="clear"></div>
+              <span class="input-field">
+                <label>KTP</label> : <%= @thr.person.no_ktp %>
+              </span>
+              <div class="clear"></div>
+              <span class="input-field">
+                <label>NPWP</label> : <%= @thr.person.no_npwp %>
+              </span>
+            </div>
+           </div>
+            <div class="clear"></div>
+            <br />
+            <table class="no-border no-hover">
+              <tbody>
+                <tr class="total2">
+                 <td width="30%" class="left-text bold">Perhitungan PPH 21 Tanpa THR</td>
+                  <td width="30%">&nbsp;</td>
+                  <td width="19%" class="right-text bold" style="margin-right:20px">
+                    &nbsp;
+                  </td>
+                  <td width="21%" class="right-text bold">&nbsp;</td>
+                </tr>
+
+                <tr class="left-alt">
+                  <td class="left-text">Pendapatan Bruto Pertahun</td>
+                  <td class="center-text">&nbsp;</td>
+                  <td class="right-text">
+                    <span>
+                      <%= number_to_currency(@last_honor.gross_income * @last_honor.count_month, :unit => "Rp. ", :delimiter => ".", :precision => 0, :format => "%u %n") + " ,-" unless @last_honor.gross_income.blank? %>
+                    </span>
+                  </td>
+                  <td class="right-text">&nbsp;</td>
+                </tr>
+
+                <tr class="left-alt">
+                  <td class="left-text">Pendapatan Netto Pertahun</td>
+                  <td class="center-text">&nbsp;</td>
+                  <td class="right-text">
+                    <span>
+                      <%= number_to_currency(@last_honor.year_net_income, :unit => "Rp. ", :delimiter => ".", :precision => 0, :format => "%u %n") + " ,-" unless @last_honor.year_net_income.blank? %>
+                    </span>
+                  </td>
+                  <td class="right-text">&nbsp;</td>
+                </tr>
+
+                <tr>
+                  <td class="left-alt"><span> PPH 21 Pertahun</span></td>
+                  <td class="center-text">&nbsp;</td>
+                  <td class="right-text">
+                    <span class="bold">
+                      <%= number_to_currency(@last_honor.pph_indebted_per_year, :unit => "Rp. ", :delimiter => ".", :precision => 0, :format => "%u %n") + " ,-" unless @last_honor.pph_indebted_per_year.blank? %>
+                    </span>
+                  </td>
+                  <td class="right-text">&nbsp;</td>
+                </tr>
+
+              </tbody>
+            </table>
+            <div class="clear"></div>
+            <br/>
+            <table class="no-border no-hover">
+              <tbody>
+
+                 <tr class="total2">
+                 <td width="30%" class="left-text bold">Perhitungan PPH 21 Dengan THR / Bonus</td>
+                  <td width="30%">&nbsp;</td>
+                  <td width="19%" class="right-text bold" style="margin-right:20px">
+                    &nbsp;
+                  </td>
+                  <td width="21%" class="right-text bold">&nbsp;</td>
+                </tr>
+                
+                <tr>
+                  <td width="30%" class="left-text">Penghasilan Bruto Pertahun </td>
+                  <td width="30%" class="center-text"></td>
+                  <td width="19%" class="right-text">
+                    <%= number_to_currency((@thr.gross_income * @thr.count_month)+@thr.salary, :unit => "Rp. ", :delimiter => ".", :precision => 0, :format => "%u %n") + " ,-" unless @thr.gross_income.blank? %>
+                  </td>
+                  <td width="21%" class="right-text">&nbsp;</td>
+                </tr>
+                <tr>
+                  <td class="left-text"> Penghasilan Netto Pertahun</td>
+                  <td class="center-text">&nbsp;</td>
+                  <td class="right-text">
+                    <%= number_to_currency(@thr.year_net_income, :unit => "Rp. ", :delimiter => ".", :precision => 0, :format => "%u %n") + " ,-" unless @thr.year_net_income.blank? %>
+                  </td>
+                  <td class="right-text">&nbsp;</td>
+                </tr>
+                <tr class="alt">
+                  <td class="left-text">PPH 21 Pertahun</td>
+                  <td class="center-text">&nbsp;</td>
+                  <td class="right-text">
+                    <span class="bold">
+                      <% pph_for_thr = @thr.pph_with_thr %>
+                      <%= number_to_currency(pph_for_thr, :unit => "Rp. ", :delimiter => ".", :precision => 0, :format => "%u %n") + " ,-" unless pph_for_thr.blank? %>
+                    </span>
+                  </td>
+                  <td class="right-text">&nbsp;</td>
+                </tr>
+            
+              </tbody>
+            </table>
+            <div class="clear"></div>
+            <br />
+            <table class="no-border no-hover">
+              <tbody>
+                <tr bordercolor="#D2E8FF">
+                  <td width="30%" class="left-text">PPh 21 Untuk THR / Bonus </td>
+                  <td width="30%" class="center-text">
+                    <span> <%= number_to_currency(pph_for_thr, :unit => "Rp. ", :delimiter => ".", :precision => 0, :format => "%u %n") %> - <%= number_to_currency(@last_honor.pph_indebted_per_year, :unit => "Rp. ", :delimiter => ".", :precision => 0, :format => "%u %n") %> </span>
+                  </td>
+                  <td width="19%" class="right-text">
+                    <%= number_to_currency(@thr.pph_indebted_per_year, :unit => "Rp. ", :delimiter => ".", :precision => 0, :format => "%u %n") + " ,-" unless @thr.pph_indebted_per_year.blank? %>
+                  </td>
+                  <td width="21%" class="right-text">&nbsp;</td>
+                </tr>
+              
+              </tbody>
+            </table>
+            <br />
+            <div class="clear"></div>
+            <table class="total no-border no-hover">
+              <tbody>
+                <tr>
+                  <td width="30%" class="left-text">Total THR / Bonus Dibayarkan</td>
+                  <td width="30%" class="right-text">&nbsp;</td>
+                  <td class="right-text">
+                    <span class="bold">
+                      <%= number_to_currency(@thr.salary, :unit => "Rp. ", :delimiter => ".", :precision => 0, :format => "%u %n") + " ,-" unless @thr.gross_income.blank? %>
+                    </span>
+                  </td>
+                  <td width="21%" class="right-text">&nbsp;</td>
+                </tr>
+                <tr>
+                  <td class="left-text">&nbsp;</td>
+                  <td class="right-text ">&nbsp;</td>
+                  <td class="right-text">-
+                    <%= number_to_currency(@thr.pph_indebted_per_year, :unit => "Rp. ", :delimiter => ".", :precision => 0, :format => "%u %n") + " ,-" unless @thr.pph_indebted_per_month.blank? %>
+                  </td>
+                  <td class="left-text"><span class="right-text">(PPh 21)</span></td>
+                </tr>
+
+                <tr class="total2">
+                  <td class="left-text">&nbsp;</td>
+                  <td class="right-text">&nbsp;</td>
+                  <td class="right-text">
+                    <span class="bold">
+                      <%= number_to_currency(@thr.final_take_home_pay, :unit => "Rp. ", :delimiter => ".", :precision => 0, :format => "%u %n") + " ,-" unless @thr.final_take_home_pay.blank? %>
+                    </span>
+                  </td>
+                  <td class="right-text">&nbsp;</td>
+                </tr>
+                <tr>
+                  <td colspan="4"></td>
+                </tr>
+              </tbody>
+            </table>
+            <table class="no-hover">
+              <tr>
+                <td colspan="4" class="left-text">
+                  <label class="label-radio">Note</label> : <%= @thr.note_for_employee %>
+                </td>
+              </tr>
+            </table>
+            <div class="clear"></div>
+            <br />
+          </div>
+        </div>
+        <div>
+          
+          <span class="clear"></span>
+          <div class="block-btn-form center-text">
+            <input value="Cetak" name="info_section_save_basic" id="ior_save" class="blue_button" type="submit"/>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</fieldset>
+

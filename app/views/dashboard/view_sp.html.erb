@@ -1,0 +1,226 @@
+<%= render :partial=> "layouts/shared/breadcrumbs" %>
+<fieldset class="fm-table">
+  <legend>
+    <a href="#" id="help_dash" class="icons help-top-icon" title="Click to show/hide information">&nbsp;</a>
+    Surat Peringatan
+  </legend>
+  <%= render :partial => "layouts/howto/howto_content"%>
+  <div class="box-form">
+    <div class="panelFilter">
+      <table cellpadding="0" cellspacing="0">
+        <tbody>
+          <tr>
+            <td>
+              <a class="grey_button2" id="filter_trigger_sp"> 
+                <span class="icons filter-ico">&nbsp;</span> Filter 
+              </a>
+            </td>
+          </tr>
+          <tr id="filter_block_sp">
+            <td>
+            	<div class="expand_filter"> 
+                <div id="filter_st">
+                  <% form_remote_for :filter_sp, :url => {:action => :find_statistik_get}, :method => :get, :html => {:id => "form_ajax_sp"} do |f|  %>
+                   
+                      <div class="filter_opt filter-inline center">
+                        <label class="none auto-size">Tahun:</label>
+                        <select name="filter_sp[tahun]" id="filter_sp_tahun">
+                          <option value="">Pilih Tahun</option>
+                          <% year = value_year_for_combo %>
+                          <% for i in year[:first]..year[:last] do %>
+                            <% if i == year[:year_now] %>
+                              <option selected="selected" value="<%= i %>"><%= i %></option>
+                            <% else %>
+                              <option value="<%= i %>"><%= i %></option>
+                            <% end %>
+                          <% end %>
+                        </select>
+			<label class="none auto-size">Bulan:</label>
+			<select name="filter_sp[bulan]" id="filter_sp_bulan">
+                          <option value="">Semua bulan</option>
+                          <option value="01" <%= value_month_for_combo(1) %> >Januari</option>
+                          <option value="02" <%= value_month_for_combo(2) %> >Februari</option>
+                          <option value="03" <%= value_month_for_combo(3) %> >Maret</option>
+                          <option value="04" <%= value_month_for_combo(4) %> >April</option>
+                          <option value="05" <%= value_month_for_combo(5) %> >Mei</option>
+                          <option value="06" <%= value_month_for_combo(6) %> >Juni</option>
+                          <option value="07" <%= value_month_for_combo(7) %> >Juli</option>
+                          <option value="08" <%= value_month_for_combo(8) %> >Agustus</option>
+                          <option value="09" <%= value_month_for_combo(9) %> >September</option>
+                          <option value="10" <%= value_month_for_combo(10) %> >Oktober</option>
+                          <option value="11" <%= value_month_for_combo(11) %> >November</option>
+                          <option value="12" <%= value_month_for_combo(12) %> >Desember</option>
+                        </select>
+			<input type="hidden" name="txt_action" value="sp"/>
+			<input type="button" class="grey_button2 none" value="Lihat statistik" name="commit" id="filter_sp_submit" onclick="cekValidateSP()"/>
+			<span id="load_sp" class="ajax-load" style="display: none">
+                          <img alt=""  src="<%=  ApplicationController::APPSCHEF_URL %>/images/ajax-loader.gif"/>Processing...
+			</span>
+                      </div>
+                  <% end %>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="clear"></div>  
+  <div style="display:none" id="table-fix_sp">
+  	<div id="parent_auto_sp">
+      <div class="table-over3 showed" id="content_sp_table" style="width:45%">     
+        <%= hidden_field_tag "page_num_sp",1 %>
+        <%= hidden_field_tag "sort_sp","firstname" %>
+        <%= hidden_field_tag "direction_sp","asc" %>         
+      </div>
+      <div class="chart-auto" id="chart_auto_sp" style="width: 55%;">
+        <div class="bar-show-chart" title="Tampilkan Grafik" id="show_chart" onClick="sliderChart('medium');$(this).children('span').toggleClass('prev-ads-ico');">
+          <span class="icons next-ads-ico">&nbsp;</span>
+        </div>
+        <table class="no-border chart-block-table no-hover">
+          <tr>
+            <td valign="top" class="center-text" id="div_content_sp">
+            	<div class="title">Absensi</div>
+                <img src="img_chart/c1.jpg" alt="c1" style="width:190px"/>
+                <div class="clear"></div>
+                <div class="title">Detail Absensi</div>
+            	<img src="img_chart/c2.jpg" alt="c2" style="width:540px" />
+             </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+  <script type="text/javascript">
+    //Tooltip
+    $(document).ready(function(){
+      var background = 'rgba(255,255,255,0.9)';
+      var border = '#A9D5F2';
+      var font_color = '#56626a';
+      $('.bar-show-chartX').bt({
+        showTip: function(box) {
+	        $(box).fadeIn('fast');
+        },
+        shrinkToFit: true,
+        hoverIntentOpts: {
+	        interval: 0,
+	        timeout: 9999
+        },
+        positions: ['right', 'right'],
+        fill: background,
+        strokeStyle: border,
+        overlap: 0,
+        centerPointY: 1,
+        centerPointX: 0,
+        cornerRadius: 4,
+        right: 20,
+        cssStyles: {
+	        fontFamily: 'Arial,"Lucida Grande",Helvetica,Arial,Verdana,sans-serif',
+	        fontSize: '12px',
+	        color: font_color,
+	        width: 'auto',
+	        padding: 5,
+        },
+        shadow: true,
+        shadowColor: 'rgba(0,0,0,.2)',
+        shadowBlur: 5,
+        shadowOffsetX: 0,
+        hadowOffsetY: 0
+      });						
+    });
+    //Chart 
+    function sliderChart(size){
+      var w;
+      switch(size){
+        case "small" : w = 40; break;
+        case "medium" : w = 70; break;
+        case "large" : w = 100;
+      }
+      var size_table = 100 - w;
+      if(!($('#content_sp_table').hasClass("showed"))){
+	        $('#chart_auto_sp').css({width: w+"%"},"medium");
+	        $('#content_sp_table').css({width: size_table+"%"},"medium");
+	        $('#parent_auto_sp').removeAttr("style")
+	        $('#content_sp_table').toggleClass("showed");
+      }else{
+	        $('#content_sp_table').toggleClass("showed");
+	        $('#chart_auto_sp').css({width: 1000+"px"},"medium");
+	        $('#content_sp_table').css({width: 1050+"px"},"medium");
+	        $('#parent_auto_sp').css("width","200%");
+      }
+    }
+  </script>
+  <div class="clear"></div>
+  <div class="panelFilter" id="panelFiltersp">
+    <div class="pagination" style="display:none;">
+      <span class="paginationResult"><span id="pagefirstsp"></span>-<span id="pagelastsp"></span> of <span id="totalpagesp"></span></span>
+      <div id="pager" class="pager" style="float:right;">
+        <a href="javascript:void(0)" onClick="" id="lastPagesp" title="Halaman Terakhir"><span class="icons last_ico last">&nbsp;</span></a>
+        <a href="javascript:void(0)" onClick="" id="nextPagesp" title="Halaman Selanjutnya"><span class="icons next_ico next">&nbsp;</span></a>
+        <a href="javascript:void(0)" onClick="" id="prevPagesp"><span class="icons prev_ico prev" title="Halaman Sebelumnya">&nbsp;</span></a>
+        <a href="javascript:void(0)" onClick="showResult(1)" id="firstPage" title="Halaman Pertama"><span class="icons first_ico first">&nbsp;</span></a>
+      </div>
+    </div>
+  </div>
+</fieldset>
+
+<script type="text/javascript">
+  $(document).ready(function(){
+    $('#filter_block_sp').show();
+		$('#filter_trigger_sp').addClass("filter-active")
+		$('#filter_trigger_sp').click(function(){
+			$(this).toggleClass("filter-active");
+			$('#filter_block_sp').toggle();
+		});
+		$('.expand_filter .reset-filter-ico').click(function(){
+			$('#filter_block_sp').hide();
+			$('#filter_trigger_sp').removeClass("filter-active");
+		});
+	  $('#div_sp').hide();
+  });
+
+  function showResult(page){
+    var action = '/dashboard/get_sp_table?tahun='+$('#filter_sp_tahun').val()+'&bulan='+$('#filter_sp_bulan').val()+'&filter=sp&page='+page;
+    var params = '&sort='+$('#sort_sp').val()+'&direction='+$('#direction_sp').val();
+    $.get(action+params,function(data){}); 
+  }
+
+  function sortResult(field_name,direction){
+    var page_num = $("#page_num_sp").val();
+    var action = '/dashboard/get_sp_table?tahun='+$('#filter_sp_tahun').val()+'&bulan='+$('#filter_sp_bulan').val()+'&filter=sp&page='+page_num+'&sort='+field_name+'&direction='+direction;
+    $.get(action,function(data){}); 
+  }
+
+  function cekValidateSP(){
+    sdate = $("#filter_sp_tahun").val();
+    if (sdate == ""){
+      $('#sp_desc_role').show();
+      $('#sp_desc_role').html(htmlValidateSP('Tahun tidak boleh kosong'));
+      $('#div_sp').show();
+      $('#div_sp').html(htmlValidateSP('Tahun tidak boleh kosong'));
+    } else {
+      var form = document.getElementById('form_ajax_sp')
+      $('#button_sp_submit').hide();
+      $('#load_sp').show();
+      if(form.onsubmit()){
+         form.submit();
+      }
+      $.get('/dashboard/get_sp_table?tahun='+$('#filter_sp_tahun').val()+'&bulan='+$('#filter_sp_bulan').val()+'&filter=sp', function(data){});
+    }
+  }
+
+  function htmlValidateSP(say){
+    var data = '';
+    data += '<div class="dashboard-chart" id="c3">';
+    data += '<fieldset class="chart-block4">';
+    data += '<div class="control-box"></div>';
+    data += '<div no-chart="">';
+    data += '<div id="desc_role" class="no-data-chart">' + say;
+    data += '</div>';
+    data += '</div>';
+    data += '</fieldset>';
+    data += '</div>';
+    return data;
+  }
+</script>

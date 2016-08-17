@@ -1,0 +1,15 @@
+<label class="left">Periode</label>
+<%= select_month(Date.today, {:field_name => 'start_month'}, {:style=>"width:100px;"}) %>
+
+<% if item == "absence_bulanan" %>
+  <%= select_year(Date.today, {:field_name => 'start_year', :end_year => Time.now.year}, {:style=>"width:60px;"}) %>
+<% else %>
+  <%= select_year(Date.today, {:field_name => 'start_year'}, {:style=>"width:60px;"}) %>
+<% end %>
+ s.d.
+<%= select_month(Date.today, {:field_name => 'end_month'}, {:style=>"width:100px;"}) %>
+<% if item == "absence_bulanan" %>
+  <%= select_year(Date.today, {:field_name => 'end_year', :end_year => Time.now.year}, {:style=>"width:60px;"}) %>
+<% else %>
+  <%= select_year(Date.today, {:field_name => 'end_year'}, {:style=>"width:60px;"}) %>
+<% end %>

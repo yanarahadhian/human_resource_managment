@@ -1,0 +1,46 @@
+<% notifications =  nil %>
+<% number_of_notifications = notifications.count if !notifications.blank? %>
+<% if !notifications.blank? && number_of_notifications > 0 %>
+  <div class="secondNavigation" id="notify_trigger">
+    <ul>
+      <li>
+        <div class="head-notify"><span class="notification-header active"><%= number_of_notifications %></span></div>
+        <ul class="notification-list">
+          <% notifications.each do |notification| %>
+            <li>
+              <%= link_to "<span class='title'>#{notification[0]}</span><span class='desc'>#{notification[1]}</span>" , "#{notification[2]}" %>
+            </li>
+          <% end %>
+        </ul>
+      </li>
+    </ul>
+  </div>
+  <script type="text/javascript">
+    $(function(){
+      $('.notification-list').hide();
+        $('.notification-header').click(function(){
+          if($('.notification-list').is(':hidden')){
+            $('.notification-list').fadeIn('fast');
+            $('#notify_trigger').addClass("notify-trigger-active");
+          }else{
+            $('.notification-list').fadeOut('fast');
+            $('#notify_trigger').removeClass("notify-trigger-active");
+          }
+        });
+        $('#main-content, .panelNav').click(function(){
+          $('.notification-list').fadeOut('fast');
+          $('#notify_trigger').removeClass("notify-trigger-active")
+        });
+        $('.notification-list .hide').hide();
+        $('.notification-list .more span').click(function(){
+        if($('.notification-list .hide').is(':hidden')){
+          $('.notification-list .hide').slideDown('medium').css("opacity",0).animate({opacity: 1},'medium');
+          $(this).html("Tampilkan 5 Notifikasi terbaru <i class='icons drop_arrow_ico_white2'>&nbsp;</i>");
+        }else{
+          $('.notification-list .hide').animate({opacity: 0},'medium').slideUp('medium');
+          $(this).html("Tampilkan semua notifikasi <i class='icons drop_arrow_ico_white'>&nbsp;</i>");
+        }
+      });
+    });
+  </script>
+<% end %>

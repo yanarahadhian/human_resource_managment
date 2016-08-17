@@ -1,0 +1,10 @@
+01:
+  person_id: 1
+  relationship_to_person: "Ayah"
+  full_name: "M Rudi sujatmo"
+  gender: "Laki-laki"
+  city_of_birth: "Bandung"
+  birth_date: "1955-05-23"
+  current_job: "Peg. swasta"
+  live_together: 1
+

@@ -1,0 +1,36 @@
+<!-- popup -->
+<div style="display:none;">
+  <div class="frm-popup" id="popup_fingerprint">
+    <div id="popup2">
+      <%- if @person %>
+        <div class="title-page-tambah"><%= "Edit ID sidik jari #{@person.full_name.titleize}" %></div>
+        <% form_for @person, :url => person_path(@person), :method => :put, :remote => :true do |f| %>
+          <fieldset>
+            <span class="input">
+              <label>ID sidik jari </label>
+              <%= f.text_field :fingerprint_user %>
+            </span>
+            <%= f.hidden_field :tab_name, :value => "absen" %>
+            <span class="clear"></span>
+            <hr/>
+            <div class="center-text  box-form">
+              <%= render :partial => "layouts/button_loader"  %>
+              <div id="button">
+                <input type="reset" id="info_section_cancel_basic" class="grey_button buttonFingerprint" value="Batal" name="info_section_cancel_basic" onclick="javascript:$.colorbox.close();"/>
+                <%= submit_to_remote 'save_button', 'Simpan', :url => person_path(@person),
+                      :method => :put,
+                      :update => "content_ajax",
+                      :loading => "$('.ajax-load').show();$('.buttonFingerprint').css('display', 'none');",
+                      :failure => "ShowNotifyMessage('Data ID sidik jari karyawan tidak berhasil diupdate');$('.buttonFingerprint').css('display', 'inline-block');",
+                      :success => "$.colorbox.close();refresh_page('absences/mine?profiles=1&id=#{@person.id}');ShowNotifyMessage('Data ID sidik jari karyawan berhasil diupdate');",
+                      :html => {:class => 'blue_button_a buttonFingerprint'} %>
+              </div>
+            </div>
+          </fieldset>
+        <%- end %>
+      <%- end %>
+    </div>
+  </div>
+</div>
+<!-- end popup -->
+

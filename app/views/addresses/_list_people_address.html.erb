@@ -1,0 +1,175 @@
+<input type="hidden" id="barang_counter" value="0"/>
+
+<div class="panelFilter">
+  <table cellspacing="0" cellpadding="0">
+    <tbody>
+      <% unless @is_user_login %>
+        <tr>
+          <td width="103px">
+            <div id="action_menu">
+              <ul>
+                <li>
+                  <a class="grey_button2">
+                    <span class="left">More Actions</span>
+                    <span class="icons drop_arrow_ico">&nbsp;</span>
+                  </a>
+                  <div class="clear"></div>
+                  <ul>
+                    <li style="cursor: default; list-style-image: none;"><a onclick="onDelete(1)" class="list">Delete</a></li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+          </td>
+          <td>
+            <div class="pagination">
+              <span class="add-button right">
+                <a id="add_address" href="/popup_add_address/<%= @person.id %>" class="grey_button2">
+                  <span class="icons add_ico">&nbsp;</span>
+                  Tambah Alamat
+                </a>
+              </span>
+            </div>
+            <div class="clear"></div>
+          </td>
+        </tr>
+      <% else %>
+        <tr><td colspan="8">&nbsp;</td></tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+<div class="clear"></div>
+<table id="address_table">
+  <thead>
+    <tr>
+      <% unless @is_user_login %>
+        <th><input type="checkbox"/></th>
+      <% end %>
+      <th>Alamat</th>
+      <th class="right-text">RT/RW</th>
+      <th class="center-text">Kel/Kec</th>
+      <th>Kota/Kab</th>
+      <th>Propinsi</th>
+      <th>Kode Pos</th>
+      <th>Telp</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% unless @person.addresses.blank? %>
+      <% @person.addresses.each do |p| %>
+        <tr>
+          <% unless @is_user_login %>
+            <td class="center-text"><%= check_box_tag'myrow[ids][]', p.id, false %></td>
+          <% end %>
+          <td><a id="popup_edit_address_<%= p.id %>" href="/popup_edit_address/<%= @person.id %>/<%= p.id %>"><%= p.street1 %></a></td>
+          <td class="left-text"><%= p.rt.blank? ? "-" : p.rt %> <%= p.rw.blank? ? "-" : " / #{p.rw}" %> </td>
+          <td class="center-text"><%= p.kelurahan.blank? ? "-" : " #{p.kelurahan}" %> <%= p.kecamatan.blank? ? "-" : " / #{p.kecamatan}"%> </td>
+          <td><%= p.city  %></td>
+          <td class="center-text"><%= p.state %></td>
+          <td class="center-text"><%= p.kode_pos.blank? ? "-" : p.kode_pos %></td>
+          <td class="center-text"><%= p.no_telp.blank? ? "-" : p.no_telp %></td>
+        </tr>
+      <% end %>
+    <% else %>
+      <tr class="no-data">
+        <td colspan="8" class="center-text"><div class="description">Belum Ada Data Alamat. </div><div class="info">Silahkan klik<a id="add_address_link" href="/popup_add_address/<%= @person.id %>"> Tambah Alamat</a> untuk menambah data</div></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<script type="text/javascript">
+  function addRecord(){
+					var index = document.getElementById("barang_counter").value;
+					index++;
+					document.getElementById("barang_counter").value = index;
+					NO = index + 1;
+					var alamat 		= "<td class='center-text'><input type='text' name='address[street1][" + index + "]'/></td>";
+					var rt_rw 	  = "<td class='center-text'><input type='text' class='small-text' name='address[rt][" + index + "]' /><input type='text' class='small-text' name='address[rw][" + index + "]'/></td>";
+					var kel_kec 	= "<td class='center-text'><input type='text' class='small-text'name='address[kelurahan][" + index + "]'/><input type='text' class='small-text' name='address[kecamatan][" + index + "]'/></td>";
+					var kot_kab		= "<td class='center-text'><input type='text' class='small-text' name='address[city][" + index + "]'/></td>";
+					var propinsi  = "<td class='left-text'><input type='text' class='small-text' name='address[state][" + index + "]'/></td>";
+          var kd_pos		= "<td class='left-text'><input type='text' class='small-text' name='address[kode_pos][" + index + "]'/></td>";
+          var telp		  = "<td class='left-text'><input type='text' class='small-text' name='address[no_telp][" + index + "]'/></td>";
+					var perlakuan = "<td><span class='icons delete-icon'>&nbsp;</span><a class='grey_button4' onclick='removeRecord("+NO+")'>Hapus</a></td>";
+					var alt;
+					if (NO % 2 == 0){
+						alt = 'alt';
+					}else{
+						alt = '';
+					}
+					$('#produk').append("<tr id='"+NO+"' class='"+alt+"'>"+alamat+rt_rw+kel_kec+kot_kab+propinsi+kd_pos+telp+perlakuan+"</tr>");
+				}
+
+				function removeRecord(id){
+					$('#'+id).remove();
+				}
+
+  var gaiSelectedAddress =  [];
+  $(document).ready(function(){
+      <% @person.addresses.each do |p| %>
+        $("#popup_edit_address_<%= p.id %>").colorbox({width:"550px",height:"440px", iframe:true,
+          onClosed:function(){
+            $('#info_alamat').load('<%= ApplicationController::BASE_URL %>/people/<%= @person.id %>/addresses');            
+          }
+        });
+      <% end %>
+      $("#add_address").colorbox({width:"600px",height:"440px", iframe:true,
+        onClosed:function(){
+          $('#info_alamat').load('<%= ApplicationController::BASE_URL %>/people/<%= @person.id %>/addresses');
+        }
+      });
+
+      $("#add_address_link").colorbox({width:"600px",height:"530px", iframe:true,
+        onClosed:function(){
+          $('#info_alamat').load('<%= ApplicationController::BASE_URL %>/people/<%= @person.id %>/addresses');
+        }
+      });
+    
+      $('#address_table thead tr th input').live('click', function () {
+        if ($(this).is(":checked")) {
+          $('#address_table tbody tr td input').each(function (){
+            $(this).attr( 'checked', true );
+            $(this).parent().parent().addClass('row_selected');
+            var iId = this ;
+            if ( jQuery.inArray(iId.value, gaiSelectedAddress) == -1 ){
+              gaiSelectedAddress[gaiSelectedAddress.length++] = iId.value;
+            }
+          });
+        }
+       else{
+         $('#address_table tbody tr').each(function (){
+            $(this).removeClass('row_selected');
+            var iId = $('#address_table tbody tr td input');
+            gaiSelectedAddress = [];
+            iId.attr( 'checked', false );
+         });
+       }
+    });
+  });
+
+  <% if params[:save] == 1 %>
+    $('.notify_error').show();$('.message').html('Pendidikan berhasil tambah!');
+  <% end %>
+  
+  function delete_alamat(){
+    var arr_params = new Array();
+    $('#address_table tbody input:checked').each(function() {
+      arr_params = arr_params.concat($(this).val());
+    });
+    var controller = "/addresses/delete_multiple/";
+    $("#ajax-load").show();
+    $.ajax({
+      type: "post",
+      url: escape(controller),
+      data:{'_method': 'post',"ids":arr_params,"person_id":<%= @person.id %>},
+      dataType: 'script',
+      success: function(){
+        $('#info_alamat').load('<%= ApplicationController::BASE_URL %>/people/<%= @person.id %>/addresses');
+        $("#ajax-load").hide();
+        $.fn.colorbox.close();
+      }
+    });
+   }
+</script>

@@ -1,0 +1,121 @@
+<script type="text/javascript">
+  $(".addPremium").click(function(){
+    var name = $('#premium_name').val().replace(/\s/g,"%20");
+      var calculated_automatically = $('#calculated_automatically').val();
+      var calculated_on_overtime = $('#calculated_on_overtime').val();
+      var calculated_on_salary_cut = $('#calculated_on_salary_cut').val();
+      var count_daily = $('#count_daily').val();
+      var url = "/premium_table?premium_name="+ name
+      + "&calculated_automatically=" + calculated_automatically
+      + "&calculated_on_overtime=" + calculated_on_overtime
+      + "&calculated_on_salary_cut=" + calculated_on_salary_cut
+      + "&count_daily=" + count_daily;
+    $('#table_premium').load(url);
+  });
+  function deletePremiums(vals){
+    $('#table_premium').load("/premium_table?premium_id="+ $(vals).val() +"&del=1");
+      $.colorbox.close();
+  }
+  function openColor(index){
+    $(".coba_"+index).colorbox({width:"auto",height:"auto", inline:true,
+      href:"#premium_delete_"+index});
+
+  }
+</script>
+<table style="width: 610px; margin-left: 80px; margin-top: 10px;">
+  <thead>
+    <tr>
+      <th width="202" class="center-text">
+        <a href="">
+          <span class="center-text">Nama Tunjangan</span></a>
+      </th>
+      <th width="202" class="center-text">
+                      <a href="">
+                        <span class="center-text">Dihitung otomatis</span></a>
+                    </th>
+                    <th width="202" class="center-text">
+                      <a href="">
+                        <span class="center-text">Dihitung pada lembur</span></a>
+                    </th>
+                    <th width="202" class="center-text">
+                      <a href="">
+                        <span class="center-text">Dihitung pada pemotongan gaji</span></a>
+                    </th>
+                    <th width="202" class="center-text">
+                      <a href="">
+                        <span class="center-text">Harian/Bulanan</span></a>
+                    </th>
+      <th width="36" class="center-text">&nbsp;</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <%unless @premiums.blank?%>
+      <%@premiums.each_with_index do |p,i|%>
+
+        <tr>
+          <td class="center">
+            <%= hidden_field_tag i ,  p.id %>
+            <%=h p.premium_name %>
+          </td>
+          <td><%=h p.calculated_automatically? ? "Ya" : "Tidak" %></td>
+          <td><%=h p.calculated_on_overtime? ? "Ya" : "Tidak" %></td>
+          <td><%=h p.calculated_on_salary_cut? ? "Ya" : "Tidak" %></td>
+          <td><%=h p.count_daily? ? "Harian" : "Bulanan" %></td>
+          <td>
+            <% @apa = "deletePremiums(document.getElementById(#{i}))" %>
+            <%= link_to_function "", "openColor(#{i})",
+              :class=>"icons delete-icon coba_#{i}" %>
+            <div id="dis" style="display:none">
+              <% id= "premium_delete_#{i}" %>
+              <div id="<%= id %>" class="popup">
+                <%= render :partial => "message_delete"%>
+              </div>
+            </div>
+          </td>
+        </tr>
+      <%end%>
+    <%else%>
+      <tr>
+        <td colspan="5">
+          Belum Ada Nama Premium yang Terdaftar
+        </td>
+        <td>
+          &nbsp;
+        </td>
+      </tr>
+    <%end%>
+
+    <tr>
+      <td>
+        <%= text_field_tag "premium_name" %>
+      </td>
+      <td>
+        <select id="calculated_automatically" name="calculated_automatically">
+          <option value="1">Ya</option>
+          <option value="0">Tidak</option>
+        </select>
+      <td>
+        <select id="calculated_on_overtime" name="calculated_on_overtime">
+          <option value="1">Ya</option>
+          <option value="0">Tidak</option>
+        </select>
+      </td>
+      <td>
+        <select id="calculated_on_salary_cut" name="calculated_on_salary_cut">
+          <option value="1">Ya</option>
+          <option value="0">Tidak</option>
+        </select>
+      </td>
+      <td>
+        <select id="count_daily" name="count_daily">
+          <option value="1">Harian</option>
+          <option value="0">Bulanan</option>
+        </select>
+      </td>
+      <td class="center-text">
+        <%= link_to_function "" , :class=> "addPremium icons cek-icon"%>
+      </td>
+    </tr>
+  </tbody>
+</table>

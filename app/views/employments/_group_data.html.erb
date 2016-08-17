@@ -1,0 +1,32 @@
+<% disabled_status = @groups.blank?? "disabled" : "" %>
+<% if params[:type] && (params[:type] == "view_mutasi") %>
+  <div class="filter_opt">
+    <label>Group:</label>
+    <select name="filter_mutasi[work_group_id]" id="filter_mutasi_work_group_id" <%= disabled_status %>>
+      <% if @view == "view_mutasi" %>
+        <option value="">Semua group</option>
+      <% else %>
+        <option value="">Pilih</option>
+      <% end %>
+      <% @groups.each do |x| %>
+        <option value="<%=x.id%>"><%=x.work_group_name %></option>
+      <% end %>
+    </select>
+ </div>
+<% else %>
+  <span class="input-field">
+    <label>Group</label> :
+      <select name="employment[work_group_id]" id="employment_work_group_id">
+        <% if @view == "view_mutasi" %>
+          <option value="">Semua group</option>
+        <% else %>
+          <option value="">Pilih</option>
+        <% end %>
+        <% @groups.each do |x| %>
+        <option value="<%=x.id%>"><%=x.work_group_name %></option>
+        <% end %>
+      </select>
+    </span>
+  <span class="clear"></span>
+<% end %>
+

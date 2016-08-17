@@ -1,0 +1,32 @@
+{
+"sEcho": <%=h @sEcho %>,
+"iTotalRecords": <%= @iTotalRecords %>,
+"iTotalDisplayRecords": <%= @iTotalDisplayRecords %>,
+"iTotalLessHourAll": <%= @total_less_hours_all %>,
+"sColumns": "id,name,department,division,shift,date,start,late,reason,status",
+"aaData" : [
+<%- @less_hours.each do |less_hour| %>
+  [
+  <%- if less_hour[:is_acted_upon] %>
+    "<%= "<input id='less_#{less_hour[:less_id]}' name='less_ids[]' type='checkbox' value=#{less_hour[:less_id]} disabled='disabled'/>" %>",
+  <% else %>
+    "<%= "<input id='less_#{less_hour[:less_id]}' name='less_ids[]' type='checkbox' value=#{less_hour[:less_id]}/>" %>",
+  <% end %>
+  "<%= "<a href='#dailyabsence?id=#{less_hour[:person_id]}&date=#{less_hour[:start_work].strftime("%Y-%m-%d")}'> #{h less_hour[:person_name].titleize} </a>" %>",
+  "<%=h less_hour[:department].just_display unless less_hour[:department].blank? %>",
+  "<%=h less_hour[:division].just_display unless less_hour[:division].blank? %>",
+  "<%= l less_hour[:date] %>",
+  "<%= less_hour[:start_work].strftime("%H:%M") %>",
+  "<%= less_hour[:end_work].strftime("%H:%M") unless less_hour[:end_work].blank? %>",
+  "<%= Presence.hours_to_hour_text(less_hour[:work_length]) %>",
+  <%- if less_hour[:is_acted_upon] %>
+    "<%=h less_hour[:description] %>"
+  <%- else %>
+    "Belum ditindak lanjuti"
+  <%- end %>
+  <%= "]," unless less_hour == @less_hours.last %>
+<% end %>
+<%= "]" unless @less_hours.blank? %>
+]
+}
+

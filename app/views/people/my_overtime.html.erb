@@ -1,0 +1,104 @@
+<legend>Lembur</legend>
+<div class="panelFilter">
+  <table cellspacing="0" cellpadding="0">
+    <tbody><tr>
+        <td width="103px">
+          <div id="action_menu">
+            <ul>
+              <li>
+                <a href="" class="grey_button2">
+                  <span class="left">More Actions</span>
+                  <span class="icons drop_arrow_ico">&nbsp;</span>
+                </a>
+                <div class="clear"></div>
+                <ul>
+                  <li><a href="#" class="list">Diabaikan</a></li>
+                  <li><a onclick="onDelete()" id="delete" href="#" class="list">Delete</a></li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </td>
+
+        <td>
+          <div id="action_menu">
+            <ul>
+              <li>
+                <a href="" class="grey_button2">
+                  <span class="left">Tambah Filter</span>
+                  <span class="icons drop_arrow_ico">&nbsp;</span>
+                </a>
+                <div class="clear"></div>
+                <ul>
+                  <li><a href="" class="list">Nama</a></li>
+                  <li><a href="" class="list">Status</a></li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+          <a href="" class="grey_button2">
+            <span class="left">Reset Filter</span>
+          </a>
+
+        </td>
+        <td width="260px">
+          <div class="pagination">
+            <span class="paginationResult">1-2 dari 500</span><a href=""><span class="icons next_ico">&nbsp;</span></a><a href=""><span class="icons prev_ico">&nbsp;</span></a>
+            <div id="action_menu">
+              <ul>
+                <li>
+                  <a href="" class="grey_button2">
+                    <span class="left">Export Data to</span>
+                    <span class="icons drop_arrow_ico">&nbsp;</span>
+                  </a>
+                  <div class="clear"></div>
+                  <ul>
+                    <li><a href="" class="list"><span class="icons doc_ico">&nbsp;</span><span class="left">DOC File</span></a></li>
+                    <li><a href="" class="list"><span class="icons pdf_ico">&nbsp;</span><span class="left">PDF File</span></a></li>
+                    <li><a href="" class="list"><span class="icons xls_ico">&nbsp;</span><span class="left">XLS File</span></a></li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="clear"></div>
+        </td>
+
+      </tr>
+      <tr>
+        <td></td>
+        <td>
+          <div class="expand_filter">
+            <div class="filter_opt">
+              <label class="left">Periode</label>
+              <span class="left result_filter">1 Mei 2011 - 1 Mei 2012</span>
+              <a class="icons cancel_ico" href="">&nbsp;</a>
+              <div class="clear"></div>
+            </div>
+            <div class="clear"></div>
+
+            <div class="filter_opt">
+              <label class="left">Nama</label>
+              <input type="text" class="left">
+              <div class="clear"></div>
+            </div>
+            <a href="" class="grey_button2">
+              <span class="left">Go</span>
+              <div class="clear"></div>
+
+
+            </a>
+          </div>
+        </td>
+        <td></td>
+      </tr>
+    </tbody></table>
+</div>
+<div class="clear"></div>
+<%= render :partial => "list_my_overtime" %>
+<div class="panelFilter">
+  <div class="pagination">
+    <span class="paginationResult">1-12 dari 20</span> <a href=""><span class="icons last_ico">&nbsp;</span></a> <a href=""><span class="icons next_ico">&nbsp;</span></a> <a href=""><span class="icons prev_ico">&nbsp;</span></a> <a href=""><span class="icons first_ico">&nbsp;</span></a>
+  </div>
+  <div class="clear"></div>
+</div>

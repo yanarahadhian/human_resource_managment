@@ -1,0 +1,125 @@
+<%= render :partial=> "layouts/shared/breadcrumbs" %>
+<%= render :partial => "layouts/howto_menu" %>
+<div class="clear"></div>
+<%- if @division %>
+<fieldset class="fm-table">
+  <legend><a href="#" id="help_dash" class="icons help-top-icon" title="Click to show/hide information">&nbsp;</a>
+   Informasi Detail Bagian <%=h @division.name.humanize %></legend>
+  <%= render :partial => "layouts/howto/howto_content"%>
+
+  <div class=" box-form">
+  <div class="edit_field"  style="display:none;">
+  <div class="input-help-wide">
+    <label>Field dengan tanda <span class="redstar">*</span> harus diisi</label>
+  </div>
+  </div>
+
+   <% input_name = "input-field" %>
+   <% err_name= error_message_on @division, :name %>
+   <% input_name = "input-error" unless err_name.blank? %>
+
+   <% input_dept = "input-field" %>
+   <% err_dept = error_message_on @division, :department_id %>
+   <% input_dept = "input-error" unless err_dept.blank? %>
+
+   <% input_kode = "input-field" %>
+   <% err_kode = error_message_on @division, :division_code %>
+   <% input_kode = "input-error" unless err_kode.blank? %>
+
+    <% form_remote_for [:organization_structure, @division], :html => { :multipart => true }  do |f| %>
+      <div class="input big">
+        <div class="top-right" style="top: 7px; right: 4px;">
+          <a id="edit_info" class="grey_button_a no-margin">
+            <span class="icons edit-icon">&nbsp;</span>
+            Edit
+          </a>
+        </div>
+        <span class="input-field show_field">
+          <label>Kode Bagian</label>:
+          <%=h @division.division_code %>
+        </span>
+        <span class="<%= input_kode %> edit_field" style="display:none;">
+          <span class="left"><%= f.label :name, "Kode Bagian" %>: &nbsp;</span>
+          <%= f.text_field :division_code %>
+          <%= err_kode %>
+        </span>
+        <span class="clear"></span>
+        <span class="input-field show_field">
+          <label>Nama Bagian</label>:
+          <%=h @division.name.just_display %>
+        </span>
+        <span class="<%= input_name %> edit_field" style="display:none;">
+          <span class="left"><%= f.label :name, "Nama Bagian <span class='redstar'>*</span>" %>: &nbsp;</span>
+          <%= f.text_field :name %>
+          <%= err_name %>
+        </span>
+        <span class="clear"></span>
+        <span class="input-field show_field">
+          <label>Nama Departemen</label>:
+          <%=h @division.department.department_name.just_display if @division.department %>
+        </span>
+        <span class="<%= input_dept %> edit_field" style="display:none;">
+          <span class="left"><label>Pilih Departemen<span class="redstar">*</span></label>: &nbsp;</span>
+          <%= collection_select(:division, :department_id, @departments, :id, :department_name, options ={:index => @division.department_id}) %>
+          <%= err_dept %>
+        </span>
+        <span class="clear"></span>
+        <%- unless @division.work_groups.blank? %>
+          <span class="input-field">
+            <label>Jumlah Bagian</label>:
+            <%= @division.groups_count %>
+          </span>
+          <span class="clear"></span>
+          <span class="input-field">
+            <label>Daftar Group</label>:
+            <%- @division.work_groups.each do |group| %>
+              <span class="content"><%=h group.work_group_name.titleize %></span>
+              <%= ", " unless group == @division.work_groups.last %>
+            <%- end %>
+          </span>
+        <%- end %>
+      </div>
+      <div class=" clear"></div>
+      <hr/>
+      <div class="center-text box-form">
+        <%= render :partial => "layouts/button_loader"  %>
+      </div>
+      <div id="button" style="display:none">
+        <div class="center-text box-form" id="submit">
+          <input id="info_section_cancel_basic" class="grey_button" type="reset" value="Batal" name="info_section_cancel_basic"/>
+          <input type="submit" value="Simpan" name="info_section_save_basic" id="info_section_save_basic" class="blue_button" onclick="ajaxLoad1('#organization_structure/divisions','button','ajax-load1')"/>
+        </div>
+      </div>
+    <%- end %>
+  </div>
+</fieldset>
+<%- else %>
+  <div class="center-text">
+    Maaf tidak ada bagian dengan id <%= params[:id] %> di perusahaan ini
+  </div>
+<%- end %>
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('#edit_info').click(function(e){
+      e.preventDefault()
+      edit_info();
+    });
+
+    $('#info_section_cancel_basic').click(function(e){
+      e.preventDefault()
+      $('.show_field').show();
+      $('.edit_field').hide();
+      $('#button').hide();
+    });
+
+    $('#errorExplanation ul').hide();
+  });
+
+  function edit_info(){
+    $('.show_field').hide();
+    $('.edit_field').show();
+    $('#button').show();
+  }
+
+</script>
+

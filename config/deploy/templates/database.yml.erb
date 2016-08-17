@@ -1,0 +1,9 @@
+<%=rails_env%>:
+  adapter: mysql
+  encoding: utf8
+  reconnect: false
+  database: <%=database[:name]%>
+  pool: 5
+  username: <%=database[:user]%>
+  password: <%= Capistrano::CLI.password_prompt "Enter MySQL password: " %>
+  host: localhost

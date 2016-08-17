@@ -1,0 +1,110 @@
+<!DOCTYPE html PUBLIC"-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="description" content="AppsChef" />
+    <meta name="keywords" content="AppsChef" />
+    <link rel="icon" href="/images/favicon.ico" type="image/x-icon"/>
+    <%= stylesheet_link_tag  "#{ApplicationController::APPSCHEF_URL}/stylesheets/private2.css",
+      "#{ApplicationController::APPSCHEF_URL}/stylesheets/fm_form.css",
+      "#{ApplicationController::APPSCHEF_URL}/stylesheets/960gs/fluid_grid.css"%>
+    <title>Human Resources Management: <%= render :partial => "layouts/title" %></title>
+
+    <!-- jquery -->
+    <%= javascript_include_tag 'jquery.colorbox.js' %>
+    <%= stylesheet_link_tag 'colorbox.css' %>
+
+    <%= stylesheet_link_tag 'jquery-ui-1.8.7.custom/css/custom-theme/jquery-ui-1.8.7.custom.css'%>
+    <style>.ui-date{background:none !important; width:140px !important;}</style>
+
+    <%= javascript_include_tag "#{ApplicationController::APPSCHEF_URL}/javascripts/jquery.js",'jrails',
+      'application.js','jquery-idleTimeout.js',
+      'jquery-ui-1.8.7.custom/js/jquery-ui-1.8.7.custom.min.js',
+      'jquery-ui-1.8.7.custom/development-bundle/ui/jquery.ui.core.js',
+      'jquery-ui-1.8.7.custom/development-bundle/ui/jquery.ui.widget.js',
+      'jquery-ui-1.8.7.custom/development-bundle/ui/jquery.ui.datepicker.js',
+      'jquery-ui-1.8.7.custom/development-bundle/ui/i18n/jquery.ui.datepicker-id.js'%>
+
+    <%= javascript_include_tag 'jquery.tablesorter.js','jquery.tablesorter.pager.js' %>
+    <style type="text/css">
+      .fe_error {
+        background: none repeat scroll 0 0 #FFEEEE;
+        border: 1px solid #FF4444;
+        color: #75777E;
+      }
+    </style>
+    <script>
+      function ajaxLoad1(url, div_btn, div_load){
+        $("#" + div_btn).hide();
+        $("#" + div_load).show();
+        var tampung = 0;
+        var stat = $('#cbStatus').val();
+        var tk = $('#experience_end_date').val();
+        if (stat=="tidak_aktif"){
+          if (tk==""){
+            tampung = 0;
+          }else{
+            tampung = 1;
+          }
+        }else{
+          tampung = 1;
+        }
+
+        if (tampung != 0){
+          $("#new_experience").submit();
+          $.get(url, function(data) {
+            $("#ajax-load").hide();
+          });
+        }else{
+          $("#fe").show();
+          $('#experience_end_date').addClass('fe_error');
+          $('#if_error').addClass('input-error');
+          $("#ajax-load1").hide();
+          $("#button").show();
+        }
+      }
+    
+      function checkvalue(cb){
+        if (cb.value=='tidak_aktif'){
+          $('#hideshow').show();
+          $("#fe").hide();
+          $('#experience_end_date').removeClass('fe_error');
+          $('#if_error').removeClass('input-error');
+        }else{
+          hidediv();
+        }
+      }
+      function hidediv(){
+        $('#cbStatus').val('tidak_aktif')
+        $('#experience_end_date').val('');
+        $('#hideshow').hide();
+      }
+    
+    </script>
+  </head>
+  <body class="bg-iframe"><div class="frm-popup" id="<%= popup_add_name(@data_type) %>">
+      <div class="title-page-tambah">Tambah <%= data_type(@data_type) %></div>
+      <div class="input-help">
+        <label>Field dengan tanda <span class="redstar">*</span> harus diisi</label>
+      </div><div class="clear"></div>
+      <div class="box-form">
+        <% form_for @experience, :url => person_experiences_path(@person.id) do |f| %>
+          <div id="box_retur_0">
+            <div id="block-option" style=" overflow-x:hidden">
+              <%= f.hidden_field :data_type, :value => @data_type %>
+              <%= render :partial => 'experiences/popup_add_form', :locals => {:f => f, :pdata_type => @data_type} %>
+            </div>
+            <span class="clear"></span>
+            <div class="center-text block-btn-form">
+              <%= render :partial => "layouts/button_loader"  %>
+              <div id="button">
+                <input type="reset" id="info_section_cancel_basic" class="grey_button" value="Batal" name="info_section_cancel_basic" onclick="parent.$.fn.colorbox.close();">
+                <input type="button" value="Simpan" name="info_section_save_basic" id="info_section_save_basic" class="blue_button" onclick="ajaxLoad1('<%= person_experiences_path(@person.id) %>','button','ajax-load1')"/>
+              </div>
+            </div>
+          </div>
+        <% end-%>
+      </div>
+    </div>
+  </body>
+</html>

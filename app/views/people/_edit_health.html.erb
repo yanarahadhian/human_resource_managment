@@ -1,0 +1,235 @@
+<%= render :partial=> "layouts/shared/breadcrumbs" %>
+<fieldset class="fm-table">
+  <legend><a href="#" id="help_dash" class="icons help-top-icon" title="Click to show/hide information">&nbsp;</a>
+   Data Karyawan</legend>
+  <%= render :partial => "layouts/howto/howto_content"%>
+  <%= render :partial => 'layouts/profile_frame'%>
+  <div class="right-information">
+    <%= render :partial=>"layouts/top_menu_detail_karyawan"  %>
+    <div id="content-dynamic">
+
+      <fieldset class="fm-table2">
+        <div class="box-form">
+          <% form_remote_for @person, :url => person_path(@person), :html => {:multipart => true} do |f| %>
+          <div class="input">
+              <span class="input-field">
+                <label>Buta warna</label><span class="left">:&nbsp;</span>
+                <span class="left"><%= f.radio_button :color_blind, "ya" %>Ya &nbsp;</span>
+                <span class="left"><%= f.radio_button :color_blind, "tidak" %>Tidak</span>
+
+  <%#= f.select(:color_blind, %w[ya tidak]) %>
+              </span>
+  
+              <%#edited by visca.veronika@kiranatama.com%>
+              <%# 25 July 2013%>
+              <%# tambah gangguan plihatan%>
+              <span class="clear"></span>
+              <span class="input-field">
+                <label>Penglihatan Terganggu</label><span class="left">:&nbsp;</span>  
+                <%@upset = @person.left_minus +  @person.right_minus + @person.left_plus + @person.right_plus + @person.left_silinder + @person.right_silinder  %>
+                <%= hidden_field_tag :is_upset , @upset%>
+             
+                <span style="float:left;"><%= radio_button_tag :is_upset_eyes, "1"   %>Ya &nbsp;</span>
+                <span style="float:left;"><%= radio_button_tag :is_upset_eyes, "2"  %>Tidak</span>
+               </span>
+               <span class="clear"></span>
+              <div id="unnormal_info">
+                <table>
+                  <tbody class="unnormal_table">
+                    <tr>
+                      <td colspan="2" class="center unnormal-type1"  >Mata Kiri</th>
+                      <td colspan="2" class="center unnormal-type1"  >Mata Kanan</th>
+                    </tr >
+                    <tr >
+                      <td> 
+                        <span class="left">
+                          <%= check_box_tag 'is_left_minus', @person.left_minus > 0 , @person.left_minus > 0, :onclick => "change_left_minus(); " %> Minus <br/>                         
+                        </span>                       
+                      </td>
+                      <td>  
+                        <%= f.text_field :left_minus, :class=>"small-text", :style=>"width:36px;",:maxlength=> "3", :readonly =>  @person.left_minus <= 0 %>
+                      </td> 
+                      <td> 
+                        <span class="left ">
+                          <%= check_box_tag 'is_right_minus',nil, @person.right_minus > 0, :onclick => "change_right_minus()" %> Minus <br/>                         
+                        </span>                       
+                      </td>
+                      <td>  
+                        <%= f.text_field :right_minus, :class=>"small-text", :style=>"width:36px;",:maxlength=> "3" ,:readonly =>  @person.right_minus <= 0 %>           
+                      </td>                      
+                    </tr>
+                    <tr>
+                     <td> 
+                        <span class="left">
+                          <%= check_box_tag 'is_left_plus',nil, @person.left_plus > 0, :onclick => "change_left_plus()" %> Plus <br/>                         
+                        </span>                       
+                      </td>
+                      <td>  
+                        <%= f.text_field :left_plus, :class=>"small-text", :style=>"width:36px;",:maxlength=> "3" ,:readonly =>  @person.left_plus <= 0  %>
+                      </td>  
+                     <td> 
+                        <span class="left">
+                          <%= check_box_tag 'is_right_plus',nil, @person.right_plus > 0, :onclick => "change_right_plus()" %> Plus <br/>                         
+                        </span>                       
+                      </td>
+                      <td>  
+                        <%= f.text_field :right_plus, :class=>"small-text", :style=>"width:36px;",:maxlength=> "3" ,:readonly =>  @person.right_plus <= 0  %>
+                      </td>  
+                    </tr>
+                    <tr>
+                      <td> 
+                        <span class="left">
+                          <%= check_box_tag 'is_left_silinder',nil, @person.left_silinder > 0, :onclick => "change_left_silinder()" %> Silinder <br/>                         
+                        </span>                       
+                      </td>
+                      <td>  
+                        <%= f.text_field :left_silinder, :class=>"small-text", :style=>"width:36px;",:maxlength=> "3" ,:readonly =>  @person.left_silinder <= 0  %>
+                      </td> 
+                    <td> 
+                        <span class="left">
+                          <%= check_box_tag 'is_right_silinder',nil, @person.right_silinder > 0, :onclick => "change_right_silinder()" %> Silinder <br/>                         
+                        </span>                       
+                      </td>
+                      <td>  
+                        <%= f.text_field :right_silinder, :class=>"small-text", :style=>"width:36px;",:maxlength=> "3" ,:readonly =>  @person.right_silinder <= 0  %>
+                      </td> 
+                    </tr>
+                  </tbody>  
+                  </table>                    
+              </div>
+              <%#end edited%>
+              <span class="clear"></span>
+
+              <span class="clear"></span>
+              <span class="input-field">
+                <label>Golongan darah</label><span class="left">:&nbsp;</span>
+                <span class="left"><%= f.radio_button :blood_type, "A" %>A &nbsp;&nbsp;&nbsp;</span>
+                <span class="left"><%= f.radio_button :blood_type, "B" %>B &nbsp;&nbsp;&nbsp;</span>
+                <span class="left"><%= f.radio_button :blood_type, "AB" %>AB &nbsp;&nbsp;&nbsp;</span>
+                <span class="left"><%= f.radio_button :blood_type, "O" %>O &nbsp;&nbsp;&nbsp;</span>
+              </span>
+              <span class="clear"></span>
+
+              <span class="input-field">
+                <label>Tinggi</label><span class="left">:&nbsp;</span>
+                <%= f.text_field :height_in_cm, :class=>"small-text", :maxlength=> "3" %> cm<br class="clear"/>
+                <div style="margin-left:162px"><%= error_message_on @person, :height_in_cm %></div>
+              </span>
+              <span class="clear"></span>
+
+              <span class="input-field">
+                <label>Berat</label><span class="left">:&nbsp;</span>
+                <%= f.text_field :weight_in_kg, :class=>"small-text", :maxlength=> "3" %> kg<br class="clear"/>
+                <div style="margin-left:162px"><%= error_message_on @person, :weight_in_kg %></div>
+              </span>
+              <span class="clear"></span>
+
+              <span class="input-field">
+                <label>Riwayat penyakit</label>:
+                <%= f.text_area :known_illnesses, :rows => 3, :cols =>25 %>
+              </span>
+            </div>
+            <span class="clear"></span>
+            <%= f.hidden_field :tab_name, :value => "kesehatan" %>
+
+            <div id="group">
+            </div>
+
+            <div class="clear"></div>
+            
+            <div class="block-btn-form">
+              <%= render :partial => "layouts/button_loader"  %>
+            <div id="button">
+              <input type="reset" onclick="onCancel('#people/<%= @person.id %>?tab=3')" name="info_section_cancel_basic" value="Batal" class="grey_button" id="info_section_cancel_basic"/>
+              <input type="submit" class="blue_button" id="info_section_save_basic" name="info_section_save_basic" value="Simpan" onclick="ajaxLoad1('<%= person_path(@person) %>','button','ajax-load1')"/>
+            </div>
+           </div>
+         <% end %>
+        </div>
+      </fieldset>
+
+    </div>
+  </div>
+</fieldset>
+<script type="text/javascript">
+  $(document).ready(function(){
+
+    if($('#is_upset').val() == '0')      {
+        $("#unnormal_info").hide();
+        $("#is_upset_eyes_1").attr('checked' , false)
+        $("#is_upset_eyes_2").attr('checked' , true)
+    }
+    else if($('#is_upset').val() != '0'){
+      $("#unnormal_info").show();
+      $("#is_upset_eyes_1").attr('checked' , true)
+      $("#is_upset_eyes_2").attr('checked' , false)
+    }
+    
+  })
+  $("#is_upset_eyes_1").click(function(){
+    $("#unnormal_info").show();
+    $('#unnormal_info').find(':text').attr('readonly', true);     
+    $('#unnormal_info').find(':checkbox').attr('checked', false);
+  })
+
+  $("#is_upset_eyes_2").click(function(){  
+    $("#unnormal_info").hide();
+  })
+
+  function change_left_minus(){
+    if($('#is_left_minus').attr('checked') == true)
+      $('#person_left_minus').attr('readonly', false)
+    else{
+      $('#person_left_minus').attr('readonly', true);
+      $('#person_left_minus').val("0")
+    }
+  }
+  function change_right_minus(){
+    if($('#is_right_minus').attr('checked') == true)
+      $('#person_right_minus').attr('readonly', false)
+    else{
+      $('#person_right_minus').attr('readonly', true)
+      $('#person_right_minus').val("0") 
+     }
+  }
+  function change_left_plus(){
+    if($('#is_left_plus').attr('checked') == true)
+      $('#person_left_plus').attr('readonly', false)
+    else{
+      $('#person_left_plus').attr('readonly', true);
+      $('#person_left_plus').val("0")
+    }
+  }
+  function change_right_plus(){
+    if($('#is_right_plus').attr('checked') == true)
+      $('#person_right_plus').attr('readonly', false)
+    else{
+      $('#person_right_plus').attr('readonly', true);
+      $('#person_right_plus').val("0")
+    }
+  }
+  function change_left_silinder(){
+    if($('#is_left_silinder').attr('checked') == true)
+      $('#person_left_silinder').attr('readonly', false)
+    else{
+      $('#person_left_silinder').attr('readonly', true);
+      $('#person_left_silinder').val("0")
+    }
+  }
+  function change_right_silinder(){
+    if($('#is_right_silinder').attr('checked') == true)
+      $('#person_right_silinder').attr('readonly', false)
+    else{
+      $('#person_right_silinder').attr('readonly', true);
+      $('#person_right_silinder').val("0")
+    }
+  }
+</script>
+<style type="text/css">
+   .unnormal-type1{
+      font-weight:bold; border-bottom:1px solid #ADD1F7;
+    }
+    #unnormal_info{
+      display:none; margin:7px;
+    }
+</style> 

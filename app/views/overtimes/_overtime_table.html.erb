@@ -1,0 +1,20 @@
+{
+"sEcho": <%=h @sEcho %>,
+"iTotalRecords": <%= @iTotalRecords %>,
+"iTotalDisplayRecords": <%= @iTotalDisplayRecords %>,
+"aaData" : [
+<%- @overtimes.each do |overtime| %>
+  [ "<%= "<input id='overtime_#{overtime.id}' name='overtime_ids[]' type='checkbox' value=#{overtime.id} />" %>",
+    "<%= overtime.person.full_name.titleize %>",
+    "<%= overtime.person.department(overtime.overtime_date).department_name.just_display if overtime.person.department(overtime.overtime_date) %>",
+    "<%= overtime.person.division(overtime.overtime_date).name.just_display if overtime.person.division(overtime.overtime_date) %>",
+    "<%= l overtime.overtime_date %>",
+    "<%= Presence.minutes_to_hour_text(overtime.overtime_length_in_minutes) %>",
+    "<%= overtime.overtime_status %>",
+    "<%= overtime.overtime_description %>"
+  <%= "]," unless overtime == @overtimes.last %>
+<% end %>
+<%= "]" unless @overtimes.blank? %>
+]
+}
+

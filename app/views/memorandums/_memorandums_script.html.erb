@@ -1,0 +1,278 @@
+<script type="text/javascript">
+  var gaiSelected =  [];
+  $(document).ready(function() {
+
+    $( ".ui-date, .ui-date2" ).datepicker({
+      buttonImageOnly: true
+    })
+
+    $('#icon_cancel').click( function() {
+      onReset();
+      $('.expand_filter').hide();
+      $('#filter_opt').hide();
+      return false;
+    });
+
+    function onReset(){
+      $('#filter_nama').val("");
+    }
+
+    $('#memorandums_table thead tr th input').live('click', function () {
+      if ($(this).is(":checked")) {
+        $('#memorandums_table tbody tr td input').each(function (){
+          $(this).attr( 'checked', true );
+          $(this).parent().parent().addClass('row_selected');
+          var iId = this ;
+          if ( jQuery.inArray(iId.value, gaiSelected) == -1 ){
+            gaiSelected[gaiSelected.length++] = iId.value;
+          }
+        });
+      }
+      else{
+        $('#memorandums_table tbody tr').each(function (){
+          $(this).removeClass('row_selected');
+          var iId = $('#memorandums_table tbody tr td input');
+          gaiSelected = [];
+          iId.attr( 'checked', false );
+        });
+      }
+    });
+
+    $('#link_opt_1').click(function (e){
+      e.preventDefault();
+      $('.expand_filter').show();
+      $('#filter_opt').show();
+      $('#filter_button').show();
+    });
+
+    $('#reset_filter').live('click', function (e) {
+      onClickReset();
+    });
+
+    $('#reset_filter2').live('click', function (e) {
+      onClickReset();
+    });
+
+    $('#link_opt_1').click(function (e){
+      e.preventDefault();
+      $('.expand_filter').show();
+      $('#filter_opt_1').show();
+      $('#filter_button').show();
+    });
+
+    $('#icon_cancel_opt1').click(function(){
+      $('#filter_opt_1').hide();
+      $('#filter_nama').val("");
+      hide_all_search();
+    });
+
+    $('#link_opt_2').click(function (e){
+      e.preventDefault();
+      $('.expand_filter').show();
+      $('#filter_opt_2').show();
+      $('#filter_button').show();
+    });
+
+    $('#icon_cancel_opt2').click(function(){
+      $('#filter_opt_2').hide();
+      $('#filter_department_id').val("");
+      hide_all_search();
+    });
+
+    $('#link_opt_3').click(function (e){
+      e.preventDefault();
+      $('.expand_filter').show();
+      $('#filter_opt_3').show();
+      $('#filter_button').show();
+    });
+
+    $('#icon_cancel_opt3').click(function(){
+      $('#filter_opt_3').hide();
+      $('#filter_division_id').val("");
+      hide_all_search();
+    });
+
+    $('#link_opt_4').click(function (e){
+      e.preventDefault();
+      $('.expand_filter').show();
+      $('#filter_opt_4').show();
+      $('#filter_button').show();
+    });
+
+    $('#icon_cancel_opt4').click(function(){
+      $('#filter_opt_4').hide();
+      $('#filter_action_taken').val("");
+      hide_all_search();
+    });
+
+    $('#link_opt_5').click(function (e){
+      e.preventDefault();
+      $('.expand_filter').show();
+      $('#filter_opt_5').show();
+      $('#filter_button').show();
+    });
+
+    $('#icon_cancel_opt5').click(function(){
+      $('#filter_opt_5').hide();
+      $('#filter_violation_category').val("");
+      hide_all_search();
+    });
+
+    $('#link_opt_6').click(function (e){
+      e.preventDefault();
+      $('.expand_filter').show();
+      $('#filter_opt_6').show();
+      $('#filter_button').show();
+    });
+
+    $('#icon_cancel_opt6').click(function(){
+      $('#filter_opt_6').hide();
+      $('#filter_accurence_date').val("");
+      hide_all_search();
+    });
+
+    $('#link_opt_7').click(function (e){
+      e.preventDefault();
+      $('.expand_filter').show();
+      $('#filter_opt_7').show();
+      $('#filter_button').show();
+    });
+
+
+
+    $('#icon_cancel_opt7').click(function(){
+      $('#filter_opt_7').hide();
+      $('#filter_active_until').val("");
+      hide_all_search();
+    });
+
+  });
+
+  function onClickReset(){
+     $("#ajax-load1").show();
+     $("#filter_button").hide();
+     field_reset();
+     $.ajax({
+       url: '/memorandums',
+       type: 'get',
+       dataType: 'script',
+       data: {'_method': 'get',"":gaiSelected },
+       success: function() {
+         // the item has been deleted
+         // might want to remove it from the interface
+         // or redirect or reload by setting window.location
+         window.location='#memorandums';
+        }
+     });
+    }
+
+  
+  function field_reset(){
+      $("#filter_nama").val('');
+      $("#filter_department_id").val('');
+      $("#filter_division_id").val('');
+      $("#filter_action_taken").val('');
+      $("#filter_violation_category").val('');
+      $("#filter_accurence_date").val('');
+      $("#filter_active_until").val('');
+    }
+
+   function hide_all_search(){
+     a = false;
+     if ($('#filter_opt_1').is(":visible")){
+        a = true;
+     }
+     if ($('#filter_opt_2').is(":visible")){
+        a = true;
+     }
+     if ($('#filter_opt_3').is(":visible")){
+        a = true;
+     }
+     if ($('#filter_opt_4').is(":visible")){
+        a = true;
+     }
+     if ($('#filter_opt_5').is(":visible")){
+        a = true;
+     }
+     if ($('#filter_opt_6').is(":visible")){
+        a = true;
+     }
+     if ($('#filter_opt_7').is(":visible")){
+        a = true;
+     }     
+     if (a != true){
+       $('.expand_filter').hide();
+       select_all();
+     }
+     return a
+   }
+
+  function select_all(){
+    var url_name = "/memorandums";
+    var address = "memorandums";
+    $.ajax({
+      type: "get",
+      url: escape(url_name),
+      dataType: 'script',
+      success: function(){
+        $.address.value(address);
+        $("#ajax-load").hide();
+      }
+    })
+  }
+
+   function progress_filter(){
+     $('#ajax-load1').show();
+     $('#filter_button').hide();
+   }
+
+   function stop_filter(){
+     $('#ajax-load1').hide();
+     $('#filter_button').show();
+   }
+
+  function onDeleteMemorandums(){
+      var arr_params = new Array();
+      $('#memorandums_table tbody input:checked').each(function() {
+        arr_params = arr_params.concat($(this).val());
+      });
+      if (arr_params.length > 0){
+        $('#div_sign').html('surat peringatan');
+        $('#div_btn_hapus').html('<input type="button" value="Ya" class="blue_button" onclick="delete_sp()"/>');
+        jQuery().colorbox({width:"auto",height:"auto", inline:true,href:"#message_delete",
+          onClosed:function(){
+          }
+        });
+      }else{
+        return false;
+      }
+  }
+
+  function delete_sp(){
+      var arr_params = new Array();
+      $('#memorandums_table tbody input:checked').each(function() {
+        arr_params = arr_params.concat($(this).val());
+      });
+      var controller = "/memorandums/delete_multiple";
+      $("#ajax-load").show();
+      $.ajax({
+        type: "post",
+        url: escape(controller),
+        data:{'_method': 'post',"ids":arr_params},
+        dataType: 'script',
+        success: function(){
+          $("#ajax-load").hide();
+          $.fn.colorbox.close();
+        }
+      })
+  }
+
+  function onDepartment(data){
+    $.ajax({
+      url: "/change_divisi/" + data.value,
+      data: "type=memorandum",
+      type: "GET"
+    });
+  }
+
+</script>

@@ -1,0 +1,92 @@
+<table class="tablesorter" id="ptkp">
+  <thead>
+    <tr>
+      <th width="302" class="center-text">
+        <a href="">
+          <span class="center-text">Status Pajak</span></a>
+      </th>
+      <% if current_features.include?('payroll_edit') %>
+        <th width="202" class="center-text">
+          <a href="">
+            <span class="center-text">PTKP</span></a>
+        </th>
+      <% end %>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <%unless @tax.blank?%>
+      <%@tax.each_with_index do |tax,i|%>
+        <tr id=<%= "tr_tax_#{i}" %> >
+          <td class="center-text">
+            <%=h tax.tax_status_code %>
+          </td>
+          <td><%=h tax.ptkp %></td>
+          <% if current_features.include?('payroll_edit') %>
+            <td>
+              <a onclick="editPTKP(<%= i %>, <%= tax.id %>)" id="editptkp_<%= i %>">Edit</a>
+            </td>
+          <% end %>
+        </tr>
+      <%end%> 
+    <%else%>
+      <tr>
+        <td colspan="2">
+          Belum ada Status pajak
+        </td>
+      </tr>
+    <%end%>
+  </tbody>
+</table>
+
+<script type="text/javascript">
+   var current_ptkp = 0 ;
+   function editPTKP(row, id){
+    var old_row = row
+
+    $('#tr_tax_'+row).each(function() {
+    if (!this.rowIndex) return; // skip first row
+      var code = jQuery.trim(this.cells[0].innerHTML);
+      var ptkp = jQuery.trim(this.cells[1].innerHTML);
+
+    var data = "<tr id='tr_tax_" + <%=@row_ptkp%> + "'>";
+    data += '<td>' + code + '</td>';
+    data += '<td><input type="text" id="ptkp_value_' + <%=@row_ptkp%> + '" value="'+ptkp+'" style="width:200px;" ></td>';
+    data += "<td><a onclick=\"updatePTKP('" + <%=@row_ptkp%> + "')\" class='left'>Update</a>";
+    data += "&nbsp;|&nbsp;<a onclick=\"cancelEditPTKP('" + row + "', '" + <%= @row_ptkp %> + "')\">Cancel</a>";
+    data += '<input type="hidden" value="'+id+'" name="id" id="ptkp_id_'+<%= @row_ptkp %>+'"></td>';
+
+    data += "</tr>";
+    $('#tr_tax_'+old_row).after(data);
+    current_ptkp ++;
+    $('#tr_tax_'+row).hide();
+    });
+  }
+
+  function cancelEditPTKP(row, old_row){
+    $('#tr_tax_'+old_row).remove();
+    $('#tr_tax_'+row).show();
+  }
+
+  function updatePTKP(row){
+    var ptkp_value = $('#ptkp_value_'+row ).val();
+    var id = $('#ptkp_id_'+row ).val();
+    $.ajax({
+      type: 'POST',
+       beforeSend:function(request){$('#spinner').show(); $("#ajax-load").show();CloseNotify();},
+        complete:function(request){
+          $('#spinner').hide();
+          $("#ajax-load").hide();},
+        success:function(request){
+          $('.notify_error').show();
+        },
+      url: '/payrolls/update_ptkp',
+      data: 'row=' + row + '&ptkp_value=' + ptkp_value + '&id=' + id
+    });
+  }
+
+  function removePremium(row){
+    $('#tr_'+row).remove();
+  }
+
+</script>

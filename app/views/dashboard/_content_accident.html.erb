@@ -1,0 +1,61 @@
+<% if !@data_chart[:is_nil] %>
+<script type="text/javascript" src="http://www.google.com/jsapi"></script>
+<%= javascript_include_tag "jquery/jquery.js" %>
+<%= javascript_include_tag "jquery-1.4.2.min.js","jquery.gvChart-1.0.1.min.js" %>
+
+<script>
+  gvChartInit();
+  $(document).ready(function(){
+    jQuery('#c_accident').gvChart({
+        chartType: 'ColumnChart',
+        gvSettings: {
+            width: 650,
+            height: 300,
+            vAxis :{maxValue : 100, minValue:0 }
+            }
+    });
+});
+</script>
+<div id="div_accident">
+  <div class="dashboard-chart">
+    <fieldset class="chart-block" style="min-height:183px;width:30%">
+      <div class="control-box">
+        <p class="bold auto">Grafik Kecelakaan Kerja</p>
+      </div>
+      <div class="chart">        
+        <table id="c_accident" border="1">
+              <caption></caption>
+             <thead>
+               <th></th>
+               <% @data_chart[:bulan].each do |x| %>
+                 <th><%= x %></th>
+               <% end %>
+             </thead>
+             <tbody>
+               <tr>
+                 <th>Jumlah kecelakaan</th>
+               <% @data_chart[:value].each do |x| %>
+                 <td><%= x %></td>
+               <% end %>
+               </tr>               
+             </tbody>
+            </table>
+      </div>
+   </fieldset>
+ </div>
+</div>
+<% else %>
+  <div id="accident_desc_role">
+    <% unless params[:filter].blank? %>
+      <div class="dashboard-chart" id="c3">
+        <fieldset class="chart-block4">
+          <div class="control-box"></div>
+          <div no-chart="">
+            <div id="desc_role" class="no-data-chart">Belum ada data kecelakaan saat ini 
+            </div>
+          </div>
+        </fieldset>
+      </div>
+    <% end %>
+  </div>
+<% end %>

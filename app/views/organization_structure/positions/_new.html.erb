@@ -1,0 +1,42 @@
+<%= render :partial=> "layouts/shared/breadcrumbs" %>
+<%= render :partial => "layouts/howto_menu" %>
+<div class="clear"></div>
+<fieldset class="fm-table">
+  <legend><a href="#" id="help_dash" class="icons help-top-icon" title="Click to show/hide information">&nbsp;</a>
+   Tambah Jabatan Baru</legend>
+  <%= render :partial => "layouts/howto/howto_content"%>
+  <div class="input-data box-form">
+    <div class="input-help-wide">
+      <label>Field dengan tanda <span class="redstar">*</span> harus diisi</label>
+    </div>
+    <%- form_remote_for [:organization_structure, @position], :html => { :multipart => true }  do |f| %>
+      <div class="input-data box-form">
+        <%= render :partial => "position_form", :locals => { :f => f } %>
+      </div>
+      
+      
+      <div class="clear"></div>
+      <div class="block-btn-form">
+        <%= render :partial => "layouts/button_loader" %>
+        <div id="button">
+          
+            <input id="info_section_cancel_basic" class="grey_button" type="reset" value="Batal" name="info_section_cancel_basic" onclick="onCancel('#organization_structure/positions')"/>
+            <input type="submit" value="Simpan" name="info_section_save_basic" id="info_section_save_basic" class="blue_button" onclick="load_on_submit()"/>
+         
+        </div>
+      <%- end %>
+      </div>
+  </div>
+</fieldset>
+
+<script type="text/javascript">
+
+  $(document).ready(function(){
+    error_handle("<%= flash.now[:notice] %>");
+  });
+  
+  function load_on_submit(){
+    $("#ajax-load1").show();
+    $("#button").hide();
+  }
+</script>

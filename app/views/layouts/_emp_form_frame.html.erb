@@ -1,0 +1,79 @@
+<div class="profile_top_wash">
+  <div class="profile_color_bar">
+    <div id="pagelet_above_html"></div>
+    <div class="left_column_container">
+        <div class="left_column" id="left_column">
+          <div id="pagelet_profile_photo">
+            <div class="profileimage can_edit" id="profileimage">
+                <%= !@person.headshot_file_name.nil? && !File.exist?(@person.headshot.path.to_s) ? (link_to(image_tag(@person.headshot.url, :class => 'thumbnail'),@person.headshot.url,{:class => 'facebox', :title => link_to('download', @person.headshot.url, :target => '_blank')})) : 'No photo.' %>
+            </div>
+            <div id="pagelet_left_column">
+              <div id="basic_info_summary_box" class="box basic_info_summary">
+                <h5 class="box_header UITitle UITitle_h5">Informasi Singkat</h5>
+                <div class="inside basic_info_summary_list">
+                                    <table>
+                    <tr><th><%#= @person.holding_company.name %></th></tr>
+                    <tr><th>Unit Kerja</th><td><%= @person.current_employment.work_unit.display %></td></tr>
+                    <tr><th>Divisi</th><td><%= @person.current_employment.division.name %></td> </tr>
+                    <tr><th>Jabatan</th><td><%= @person.current_employment.position.display %></td> </tr>
+                    <tr><th>Level</th><td><%= @person.current_employment.work_assigned.display %></td> </tr>
+                    <tr><th>NIK</th><td><%= @person.employment_id %></td> </tr>
+                    <tr><th><%= link_to 'Print', people_print_employee_id_card_path(@person) %></th></tr>
+                  </table>
+                </div>
+              </div>
+              <div id="basic_info_summary_box" class="box basic_info_summary">
+                <h5 class="box_header UITitle UITitle_h5">No KTP dan No NPWP</h5>
+                <div class="inside basic_info_summary_list">
+                  <table>
+                    <tr><th>No KTP</th><td><%= link_to_if(!@person.ktp_file_name.nil?, @person.no_ktp.just_display, @person.ktp.url, {:class => 'facebox', :title => link_to('download', @person.ktp.url)}) { @person.no_ktp.just_display } %></td></tr>
+                    <tr><th>No NPWP</th><td><%= link_to_if(!@person.npwp_file_name.nil?, @person.no_npwp.just_display, @person.npwp.url, {:class => 'facebox', :title => link_to('download', @person.npwp.url)}) { @person.no_ktp.just_display } %></td></tr>
+                  </table>
+                </div>
+              </div>
+              <div id="basic_info_summary_box" class="box basic_info_summary">
+                <h5 class="box_header UITitle UITitle_h5">Alamat</h5>
+                <div class="inside basic_info_summary_list">
+                	<%= @person.current_address.street1.just_display %>
+                	<%= @person.current_address.rt.just_display %>/
+                	<%= @person.current_address.rw.just_display %>
+                	<%= @person.current_address.kelurahan.just_display %>
+                	<%= @person.current_address.kecamatan.just_display %>
+                  	<%= @person.current_address.city.just_display %> ,
+                  	<%= @person.current_address.state.just_display %>
+                  	<%= @person.current_address.kode_pos.just_display %> <br />
+					<table>
+                    <tr><th>telp</th><td> <%= @person.current_address.no_telp.just_display %> </td></tr>
+			<tr><th>hp</th><td> <%= @person.no_hp.just_display %> </td></tr>
+                                        </table>
+                </div>
+              </div>
+              <div id="basic_info_summary_box" class="box basic_info_summary">
+                <h5 class="box_header UITitle UITitle_h5">Kontak Darurat</h5>
+                <div class="inside basic_info_summary_list">
+                	<%= @person.nama_kontak_darurat.just_display %><br />
+					<%= @person.no_telp_kontak_darurat.just_display %>
+                </div>
+              </div>      
+            <div id="boxes_left" class="box_column"></div>
+          </div>
+          </div>
+        </div>
+    </div>  
+    <div id="pagelet_top_bar">
+      <div class="top_bar" id="profile_top_bar">
+        <div class="profile_top_bar_container">
+          <div class="profile_name_and_status">
+            <h1 id="profile_name"><%= link_to @person.full_name, person_path(@person.id) %></h1>
+          </div>
+          <div class="tabs_wrapper clearfix">
+            <%= emp_root_link_col(@person) %>
+          </div>
+          <div class="tabs_wrapper clearfix" style='padding-top:2px;border-top:ridge;'>
+            <%= emp_form_col(@person) %>
+          </div>
+        </div>
+      </div>
+    </div>      
+  </div>
+</div>

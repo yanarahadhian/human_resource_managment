@@ -1,0 +1,19 @@
+<% input_nama = "input-field" %>
+<% err_nama = error_message_on @position, :position_name %>
+<% input_nama = "input-error" unless err_nama.blank? %>
+
+<div class="input">
+  <span class="input-field">
+    <span class="left"><label>Kode Jabatan</label>:&nbsp;</span>
+    <%= f.text_field :position_code %>
+  </span>
+  <span class="clear"></span>
+
+  <span class="<%= input_nama %>">
+    <span class="left"><label>Nama Jabatan<span class="redstar">*</span></label>:&nbsp;</span>
+    <%= f.text_field :position_name %>
+    <%= err_nama %>
+  </span>
+</div>
+<span class="clear"></span>
+

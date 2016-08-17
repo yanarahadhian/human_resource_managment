@@ -1,0 +1,272 @@
+<%= render :partial=> "layouts/shared/breadcrumbs" %>
+<fieldset class="fm-table">
+  <legend>
+    <a href="#" id="help_dash" class="icons help-top-icon" title="Click to show/hide information">&nbsp;</a>
+    Statistik Absensi
+  </legend>
+  <%= render :partial => "layouts/howto/howto_content"%>
+  <div class="box-form">
+    <div class="panelFilter">
+      <table cellpadding="0" cellspacing="0">
+        <tbody>
+          <tr>
+            <td>
+              <a class="grey_button2" id="filter_trigger"> 
+                <span class="icons filter-ico">&nbsp;</span> Filter 
+              </a>
+            </td>
+          </tr>
+          <tr id="filter_block">
+            <td>
+              <div class="expand_filter">
+                <div id="filter_st">
+                  <% form_remote_for :filter_absensi, :url => {:action => :show_statistik_page}, :method => :get, :html => {:id => "ajax_form_absensi", :name => "show_statistik_page"} do |f|  %>
+                    <div class="left-filter">
+                      <div class="filter_opt">
+                        <label>Departemen:</label>
+                        <%= f.collection_select :department_id , Department.by_company(current_company_id).all, :id,
+                          :department_name , {:prompt => "Semua Departemen"}, :onChange => "onDepartmentAbsensi(this)" %>
+                      </div>
+                      <div class="clear"></div>
+                      <div id="div_divisi_absensi">
+                        <div class="filter_opt">
+                          <label>Bagian:</label>
+                          <%= f.collection_select :work_division_id , Division.by_company(current_company_id).all,
+                            :id, :name , {:prompt => "Semua Bagian"}, {:disabled => "disabled"} %>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="right-filter">
+                      <div class="filter_opt">
+                        <label>Bulan:</label>
+                        <select name="filter_absensi[bulan]" id="filter_absensi_bulan">
+                          <option value="">Semua bulan</option>
+                          <option value="01" <%= value_month_for_combo(1) %> >Januari</option>
+                          <option value="02" <%= value_month_for_combo(2) %> >Februari</option>
+                          <option value="03" <%= value_month_for_combo(3) %> >Maret</option>
+                          <option value="04" <%= value_month_for_combo(4) %> >April</option>
+                          <option value="05" <%= value_month_for_combo(5) %> >Mei</option>
+                          <option value="06" <%= value_month_for_combo(6) %> >Juni</option>
+                          <option value="07" <%= value_month_for_combo(7) %> >Juli</option>
+                          <option value="08" <%= value_month_for_combo(8) %> >Agustus</option>
+                          <option value="09" <%= value_month_for_combo(9) %> >September</option>
+                          <option value="10" <%= value_month_for_combo(10) %> >Oktober</option>
+                          <option value="11" <%= value_month_for_combo(11) %> >November</option>
+                          <option value="12" <%= value_month_for_combo(12) %> >Desember</option>
+                        </select>
+                      </div>
+                      <div class="clear"></div>
+                      <div class="filter_opt">
+                        <label>Tahun:</label>
+                        <select name="filter_absensi[tahun]" id="filter_absensi_tahun">
+                          <option value="">Pilih Tahun</option>
+                          <% year = value_year_for_combo %>
+                          <% for i in year[:first]..year[:last] do %>
+                              <% if i == year[:year_now] %>
+                                <option selected="selected" value="<%= i %>"><%= i %></option>
+                              <% else %>
+                                <option value="<%= i %>"><%= i %></option>
+                              <% end %>
+                            <% end %>
+                          </select>
+                        </div>
+                        <input type="hidden" name="txt_action" value="absensi"/>
+                        <%= hidden_field_tag 'txt_page' %>
+                        <div class="clear"></div>
+                      </div>
+                      <div class="clear"></div>
+                      <div class="center-text filter-btn" id="b1">
+                        <%= render :partial => "layouts/button_loader" %>
+                        <div id="button_absensi_submit" style="display: block">
+                          <input type="button" class="grey_button2 none" value="Tampilkan" name="commit" id="filter_absensi_submit" onclick="document.show_statistik_page.txt_page.value='statistik';cekValidateabsensi()"/>
+                        </div>
+                      </div>
+                    <% end %>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="clear"></div>
+    <div class="table-fix" style="display:none" id="table-fix_absensi">
+      <div id="parent_auto_absensi">
+        <div class="table-over3 showed" id="content_absensi_table" style="width:30%">
+          <%= hidden_field_tag "page_num_absensi",1 %>
+          <%= hidden_field_tag "sort_absensi","firstname" %>
+          <%= hidden_field_tag "direction_absensi","asc" %>
+        </div>
+        <div class="chart-auto" id="chart_auto_absensi" style="width: 70%;">
+          <div class="bar-show-chart" title="Tampilkan Grafik" id="show_chart" onClick="sliderChart9('medium');$(this).children('span').toggleClass('prev-ads-ico');">
+            <span class="icons next-ads-ico">&nbsp;</span>
+          </div>
+          <table class="no-border chart-block-table no-hover">
+            <tr>
+              <td valign="top" class="center-text" id="div_content_absensi">
+                <div class="title">Absensi</div>
+                <img src="img_chart/c1.jpg" alt="c1" style="width:190px"/>
+                <div class="clear"></div>
+                <div class="title">Detail Absensi</div>
+                <img src="img_chart/c2.jpg" alt="c2" style="width:540px" />
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <script type="text/javascript">
+      //Tooltip
+      $(document).ready(function(){
+        error_handle("<%= flash.now[:notice] %>");
+        $('#filter_block').show();
+        $('#filter_trigger').addClass("filter-active")
+        $('#filter_trigger').click(function(){
+          $(this).toggleClass("filter-active");
+          $('#filter_block').toggle();
+        });
+        $('.expand_filter .reset-filter-ico').click(function(){
+          $('#filter_block').hide();
+          $('#filter_trigger').removeClass("filter-active");
+        });
+        var background = 'rgba(255,255,255,0.9)';
+        var border = '#A9D5F2';
+        var font_color = '#56626a';
+        $('.bar-show-chartX').bt({
+          showTip: function(box) {
+            $(box).fadeIn('fast');
+          },
+          shrinkToFit: true,
+          hoverIntentOpts: {
+            interval: 0,
+            timeout: 9999
+          },
+          positions: ['right', 'right'],
+          fill: background,
+          strokeStyle: border,
+          overlap: 0,
+          centerPointY: 1,
+          centerPointX: 0,
+          cornerRadius: 4,
+          right: 20,
+          cssStyles: {
+            fontFamily: 'Arial,"Lucida Grande",Helvetica,Arial,Verdana,sans-serif',
+            fontSize: '12px',
+            color: font_color,
+            width: 'auto',
+            padding: 5,
+          },
+          shadow: true,
+          shadowColor: 'rgba(0,0,0,.2)',
+          shadowBlur: 5,
+          shadowOffsetX: 0,
+          hadowOffsetY: 0
+        });
+      });
+      //Chart
+      function sliderChart9(size){
+        var w;
+        switch(size){
+          case "small" : w = 40; break;
+          case "medium" : w = 70; break;
+          case "large" : w = 100;
+        }
+        var size_table = 100 - w;
+        if(!($('#content_absensi_table').hasClass("showed"))){
+          $('#chart_auto_absensi').css({width: w+"%"},"medium");
+          $('#content_absensi_table').css({width: size_table+"%"},"medium");
+          $('#parent_auto_absensi').removeAttr("style")
+          $('#content_absensi_table').toggleClass("showed");
+        }else{
+          $('#content_absensi_table').toggleClass("showed");
+          $('#chart_auto_absensi').css({width: 1000+"px"},"medium");
+          $('#content_absensi_table').css({width: 1050+"px"},"medium");
+          $('#parent_auto_absensi').css("width","200%");
+        }
+      }
+    </script>
+    <div class="clear"></div>
+    <div class="panelFilter" id="panelFilterabsensi">
+      <div class="pagination" style="display:none;">
+          <span class="paginationResult"><span id="pagefirstabsensi"></span>-<span id="pagelastabsensi"></span> of <span id="totalpageabsensi"></span></span>
+          <div id="pager" class="pager">
+            <a href="javascript:void(0)" onClick="" id="lastPageabsensi" title="Halaman Terakhir"><span class="icons last_ico last">&nbsp;</span></a>
+            <a href="javascript:void(0)" onClick="" id="nextPageabsensi" title="Halaman Selanjutnya"><span class="icons next_ico next">&nbsp;</span></a>
+            <a href="javascript:void(0)" onClick="" id="prevPageabsensi"><span class="icons prev_ico prev" title="Halaman Sebelumnya">&nbsp;</span></a>
+            <a href="javascript:void(0)" onClick="showResultabsensi(1)" id="firstPage" title="Halaman Pertama"><span class="icons first_ico first">&nbsp;</span></a>
+          </div>
+      </div>
+    </div>
+  </fieldset>
+
+  <script type="text/javascript">
+    $(function(){
+      $('.spinner, .small-text').spinner({min: 0, max: 100000});
+      $('.spinner-10').spinner({max: 10, min: 0});
+    });
+
+    function showResultabsensi(page){
+      var action = '/dashboard/get_absensi_table?tahun='+$('#filter_absensi_tahun').val()+'&bulan='+$('#filter_absensi_bulan').val()+'&department_id='+$('#filter_absensi_department_id').val()+'&work_division_id='+$('#filter_absensi_work_division_id').val()+'&filter=absensi&page='+page;
+      var params = '&sort='+$('#sort_absensi').val()+'&direction='+$('#direction_absensi').val();
+      $.get(action+params,function(data){});
+    }
+
+    function sortResultabsensi(field_name,direction){
+      var page_num = $("#page_num_absensi").val();
+      var action = '/dashboard/get_absensi_table?tahun='+$('#filter_absensi_tahun').val()+'&bulan='+$('#filter_absensi_bulan').val()+'&department_id='+$('#filter_absensi_department_id').val()+'&work_division_id='+$('#filter_absensi_work_division_id').val()+'&filter=absensi&page='+page_num+'&sort='+field_name+'&direction='+direction;
+      $.get(action,function(data){});
+    }
+
+    function onDepartmentAbsensi(data){
+      $.ajax({
+        url: "/change_divisi/" + data.value,
+        data: "view=view_absensi&type=view_absensi",
+        type: "GET"
+      });
+    }
+
+    function cekValidateabsensi(){
+      sdate = $("#filter_absensi_tahun").val();
+      if (sdate == ""){
+        $('#absensi_desc_role').show();
+        $('#absensi_desc_role').html(htmlValidateabsensi('Tahun tidak boleh kosong'));
+        $('#div_absensi').show();
+        $('#div_absensi').html(htmlValidateabsensi('Tahun tidak boleh kosong'));
+      } else {
+        var form = document.getElementById('ajax_form_absensi')
+        $('#button_absensi_submit').hide();
+        $('#ajax-load1').show();
+        if(form.onsubmit()){
+          form.submit();
+        }
+        $.get('/dashboard/get_absensi_table?tahun='+$('#filter_absensi_tahun').val()+'&bulan='+$('#filter_absensi_bulan').val()+'&department_id='+$('#filter_absensi_department_id').val()+'&work_division_id='+$('#filter_absensi_work_division_id').val()+'&filter=absensi', function(data){});
+      }
+    }
+
+    function submitAbsensiPage(){
+      var form = document.getElementById('ajax_form_absensi_page')
+      $('#button_absensi_page').hide();
+      $('#ajax-load1').show();
+      $('#div_absensi').show();
+      if(form.onsubmit()){
+        form.submit();
+      }
+    }
+
+    function htmlValidateabsensi(say){
+      var data = '';
+      data += '<div class="dashboard-chart" id="c3">';
+      data += '<fieldset class="chart-block4">';
+      data += '<div class="control-box"></div>';
+      data += '<div no-chart="">';
+      data += '<div id="desc_role" class="no-data-chart">' + say;
+      data += '</div>';
+      data += '</div>';
+      data += '</fieldset>';
+      data += '</div>';
+      return data;
+    }
+
+  </script>

@@ -1,0 +1,11 @@
+<%= render :partial=> "layouts/shared/breadcrumbs" %>
+<%= render :partial => "people_script" %>
+<fieldset class="fm-table">
+  <legend><a href="#" id="help_dash" class="icons help-top-icon" title="Click to show/hide information">&nbsp;</a>
+   Mutasi Karyawan</legend>
+  <%= render :partial => "layouts/howto/howto_content"%>
+  <%= render :partial => "layouts/delete_message" %>
+  <div id="div_mutasi">
+    <%= render :partial => "mutasi" %>
+  </div>
+</fieldset>

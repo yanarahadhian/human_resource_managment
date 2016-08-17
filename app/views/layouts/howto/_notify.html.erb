@@ -1,0 +1,1538 @@
+<%#= "#{controller_name} | #{action_name} :<br>" %>
+<% if controller_name == "departments"%>
+  <div class="content-howto">
+    <% if action_name == "index"%>
+      <h2 class="topic">Bagaiman mencari data departemen dengan filter?</h2>
+      <ul>
+        <li>Silahkan klik tombol ‘Filter’ yang ada, kemudian isikan data pada filter yang disediakan:
+          <ul class="alphabet-lower">
+            <li>Nama departemen   : untuk mencari data berdasarkan nama departemen yang dimasukkan.</li>
+            <li>Jumlah karyawan   : untuk mencari data berdasarkan jumlah karyawan yang ada pada departemen tersebut.</li>
+          </ul>
+        </li>
+        <li>Klik tombol ‘Tampilkan’ untuk mencari data berdasarkan nilai yang Anda masukkan.</li>
+      </ul>
+      <% if current_features.include?('department_new') %>
+        <h2 class="topic">Bagaimana menambah departemen baru?</h2>
+        <ul>
+          <li>Silahkan klik tombol ‘Tambah Departemen’ yang ada pada sisi kanan atas.</li>
+        </ul>
+      <% end %> <!-- end current_features -->
+      <% if current_features.include?('department_edit') %>
+        <h2 class="topic">Bagaimana mengedit data departemen?</h2>
+        <ul>
+          <li>Silahkan pilih nama departemen yang ingin Anda edit, klik nama departemen tersebut.</li>
+          <li>Anda akan masuk ke halaman detail departemen, kemudian silahkan klik ‘edit’ yang ada di sisi kanan atas, sehingga Anda akan masuk ke halaman edit departemen.</li>
+        </ul>
+      <% end %> <!-- end current_features -->
+      <% if current_features.include?('department_delete') %>
+        <h2 class="topic">Bagaimana menghapus data departemen?</h2>
+        <ul>
+          <li>Silahkan ceklist data departemen yang ingin Anda hapus, kemudian pada tombol ‘More Actions’ pilih ‘Delete’.</li>
+          <li>Untuk menghapus data silahkan klik ‘Ya’ pada konfirmasi hapus yang dimunculkan.</li>
+        </ul>
+      <% end %> <!-- end current_features -->
+      * Hapus departemen bisa dilakukan jika departemen belum tercantum di data karyawan.
+      <br class="clear"/>
+    <%  elsif action_name == "new" %>
+      <h2 class="topic">Bagaimana menambahkan departemen baru?</h2>
+      <ul>
+        <li>Anda isi informasi:
+          <ul class="alphabet-lower">
+            <li>Kode Departemen   : Isi dengan kode departemen yang terdaftar.</li>
+            <li>Nama Bagian       : Isi dengan nama departemen yang ingin Anda masukkan.</li>
+          </ul>
+        </li>
+        <li>Klik tombol ‘Simpan’ untuk menyimpan data atau,</li>
+        <li>klik tombol ‘Batal’ untuk membatalkan penyimpanan data</li>
+      </ul>
+      <br class="clear"/>
+    <% elsif action_name == "show" %>
+      <h2 class="topic">Bagaimana mengedit data departemen?</h2>
+      <ul>
+        <li>Silahkan klik button ‘Edit’ yang ada di sisi kanan atas, kemudian Anda akan masuk ke halaman edit. Silahkan rubah data yang ingin Anda update dengan informasi:
+          <ul class="alphabet-lower">
+            <li>Kode Departemen   : Isi dengan kode departemen yang terdaftar.</li>
+            <li>Nama Bagian       : Isi dengan nama departemen yang ingin Anda masukkan.</li>
+          </ul>
+        </li>
+        <li>Klik tombol ‘Simpan’ untuk menyimpan data atau,</li>
+        <li> klik tombol ‘Batal’ untuk membatalkan penyimpanan data</li>
+      </ul>
+    <% else %>
+      Tidak ada panduan untuk halaman ini.
+    <% end %> <!-- end if  action_name-->
+  </div>
+
+<% elsif controller_name == "divisions" %>
+  <div class="content-howto">
+    <% if action_name == "index" %>
+      <h2 class="topic">Bagaimana mencari data bagian menggunakan filter?</h2>
+      <ul>
+        <li>Silahkan klik tombol ‘Filter’, kemudian masukkan data pada filter yang ingin Anda manfaatkan.
+          <ul class="alphabet-lower">
+            <li>Nama bagian       : mencari data bagian berdasarkan nama yang dimasukkan.</li>
+            <li>Jumlah karyawan   : mencari data bagian berdasarkan jumlah karyawan yang dimasukkan.</li>
+          </ul>
+        </li>
+        <li>Klik tombol ‘Tampilkan’ untuk mencari data berdasarkan parameter yang Anda masukkan.</li>
+      </ul>
+      <% if current_features.include?('division_new') %>
+        <h2 class="topic">Bagaimana menambah data bagian baru?</h2>
+        <ul>
+          <li>Silahkan klik tombol ‘Tambah Bagian’ yang ada di kanan atas. Anda akan masuk ke halaman tambah bagian baru.</li>
+        </ul>
+      <% end %> <!-- end current_features -->
+      <% if current_features.include?('division_edit') %>
+        <h2 class="topic">Bagaimana mengedit data bagian?</h2>
+        <ul>
+          <li>Silahkan klik nama bagian yang Anda ingin edit, kemudian Anda akan masuk ke halaman detail bagian tersebut yang dapat Anda edit.</li>
+        </ul>
+      <% end %> <!-- end current_features -->
+      <% if current_features.include?('division_delete') %>
+        <h2 class="topic">Bagaimana menghapus data bagian yang sudah tidak digunakan?</h2>
+        <ul>
+          <li>Silahkan ceklist nama bagian yang ingin Anda hapus, kemudian pada tombol ‘More Actions’ klik ‘Delete’.</li>
+          <li>Silahkan klik ‘Ya’ pada konfirmasi hapus yang dimunculkan.</li>
+        </ul>
+      <% end %> <!-- end current_features -->
+      * Hapus bagian bisa dilakukan jika bagian belum tercantum di data karyawan.
+      <br class="clear"/>
+    <% elsif action_name == "new" %>
+      <h2 class="topic">Bagaimana menambah data bagian baru?</h2>
+      <ul>
+        <li>Anda isi informasi:
+          <ul class="alphabet-lower">
+            <li>Kode Bagian        : Isi dengan kode bagian baru.  </li>
+            <li>Nama Bagian        : Isi dengan nama bagian baru.</li>
+            <li>Pilih Departemen   : Pilih salah satu departemen di mana bagian tersebut berada.</li>
+          </ul>
+        </li>
+        <li>Klik tombol ‘Simpan’ untuk menyimpan data atau,</li>
+        <li>Klik tombol ‘Batal’ untuk membatalkan penyimpanan data.</li>
+      </ul>
+      <br class="clear"/>
+    <% elsif action_name == "show" %>
+      <h2 class="topic">Bagaimana mengedit data bagian?</h2>
+      <ul>
+        <li>Silahkan klik nama bagian yang ingin Anda edit, kemudian Anda akan masuk ke halaman detail
+          bagian tersebut. Silahkan klik button ‘edit’ yang ada di sisi kanan atas untuk melakukan pengeditan terhadap data bagian tersebut.</li>
+        <li>Silahkan Anda edit data yang perlu dengan informasi:
+          <ul class="alphabet-lower">
+            <li>Kode Bagian        : Isi dengan kode bagian baru.</li>
+            <li>Nama Bagian        : Isi dengan nama bagian baru.</li>
+            <li>Pilih Departemen   : Pilih salah satu departemen di mana bagian tersebut berada.</li>
+          </ul>
+        </li>
+        <li>Klik tombol ‘Simpan’ untuk mengupdate data atau,</li>
+        <li>Klik tombol ‘Batal’ untuk membatalkan penyimpanan data.</li>
+      </ul>
+    <% else %>
+      Tidak ada panduan untuk halaman ini.
+    <% end %> <!-- end if  action_name-->
+  </div>
+
+<% elsif controller_name == "positions" %>
+  <div class="content-howto">
+    <% if action_name == "index" %>
+      <h2 class="topic">Bagaimana mencari data jabatan menggunakan filter?</h2>
+      <ul>
+        <li>Silahkan klik tombol ‘Filter’, kemudian masukkan data pada filter yang ingin Anda manfaatkan.
+          <ul class="alphabet-lower">
+            <li>Nama jabatan    : mencari data bagian berdasarkan nama yang dimasukkan.</li>
+            <li>Jumlah karyawan : mencari data jabatan berdasarkan jumlah karyawan yang dimasukkan. </li>
+          </ul>
+        </li>
+        <li>Klik tombol ‘Tampilkan’ untuk mencari data berdasarkan parameter yang Anda masukkan.</li>
+      </ul>
+      <% if current_features.include?('position_new') %>
+        <h2 class="topic">Bagaimana menambah data jabatan baru baru?</h2>
+        <ul>
+          <li>Silahkan klik tombol ‘Tambah Jabatan’ yang ada di kanan atas. Anda akan masuk ke halaman tambah bagian baru.</li>
+        </ul>
+      <% end %> <!-- end current_features -->
+      <% if current_features.include?('position_edit') %>
+        <h2 class="topic">Bagaimana mengedit data jabatan?</h2>
+        <ul>
+          <li>Silahkan klik nama bagian yang Anda ingin edit, kemudian Anda akan masuk ke halaman detail jabatan tersebut yang dapat Anda edit.</li>
+        </ul>
+      <% end %> <!-- end current_features -->
+      <% if current_features.include?('position_delete') %>
+        <h2 class="topic">Bagaimana menghapus data jabatan?</h2>
+        <ul>
+          <li>Silahkan ceklist nama bagian yang ingin Anda hapus, kemudian pada tombol ‘More Actions’ klik ‘Delete’.</li>
+          <li>Silahkan klik ‘Ya’ pada konfirmasi hapus yang dimunculkan.</li>
+        </ul>
+      <% end %> <!-- end current_features -->
+      * Hapus jabatan bisa dilakukan jika jabatan belum tercantum di data karyawan.
+      <br class="clear"/>
+    <% elsif action_name == "new" %>
+      <h2 class="topic">Bagaimana menambah data jabatan baru?</h2>
+      <ul>
+        <li>Anda isi informasi:
+          <ul class="alphabet-lower">
+            <li>Kode Jabatan   : Isi dengan kode jabatan.</li>
+            <li>Nama Jabatan   : Isi dengan nama jabatan.</li>
+          </ul>
+        </li>
+        <li>Klik tombol ‘Simpan’ untuk mengupdate data atau,</li>
+        <li>Klik tombol ‘Batal’ untuk membatalkan penyimpanan data.</li>
+      </ul>
+      <br class="clear"/>
+    <% elsif action_name == "show" %>
+      <h2 class="topic">Bagaimana mengedit data jabatan?</h2>
+      <ul>
+        <li>Silahkan rubah data yang perlu dirubah pada masing-masing field dengan informasi:
+          <ul class="alphabet-lower">
+            <li>Kode Jabatan       : Isi dengan kode jabatan.</li>
+            <li>Nama Jabatan       : Isi dengan nama jabatan.</li>
+            <li>Pilih Departemen   : Pilih salah satu departemen di mana bagian tersebut berada.</li>
+          </ul>
+        </li>
+        <li>Klik tombol ‘Simpan’ untuk mengupdate data atau,</li>
+        <li>Klik tombol ‘Batal’ untuk membatalkan penyimpanan data.</li>
+      </ul>
+    <% else %>
+      Tidak ada panduan untuk halaman ini.
+    <% end %> <!-- end if  action_name-->
+  </div>
+
+
+<% elsif controller_name == "work_groups" %>
+  <div class="content-howto">
+    <% if action_name == "index" %>
+      <% if current_features.include?('group_new') %>
+        <h2 class="topic">Bagaimana mencari data group menggunakan filter?</h2>
+        <ul>
+          <li>Silahkan klik tombol ‘Filter’, kemudian masukkan data pada filter yang ingin Anda manfaatkan.</li>
+          <ul class="alphabet-lower">
+            <li>Nama group             : mencari data group berdasarkan nama yang dimasukkan.</li>
+            <li>Assign group ke bagian : menetapkan group ke bagian, ini berfungsi untuk memudahkan dalam pengelolaan karyawan.</li>
+          </ul>
+          <li>Klik tombol ‘Tampilkan’ untuk mencari data berdasarkan parameter yang Anda masukkan.</li>
+        </ul>
+
+        <h2 class="topic">Bagaimana menambah departemen baru?</h2>
+        <ul>
+          <li>Silahkan klik tombol ‘Tambah Departemen’ yang ada pada sisi kanan atas.</li>
+        </ul>
+      <% end %> <!-- end current_features -->
+      <% if current_features.include?('group_new') %>
+        <h2 class="topic">Bagaimana menambah data group baru?</h2>
+        <ul>
+          <li>Silahkan klik tombol ‘Tambah Group’ yang ada di kanan atas. Anda akan masuk ke halaman tambah bagian baru.</li>
+        </ul>
+      <% end %> <!-- end current_features -->
+      <% if current_features.include?('group_edit') %>
+        <h2 class="topic">Bagaimana mengedit data departemen?</h2>
+        <ul>
+          <li>Silahkan klik nama group yang Anda ingin edit, kemudian Anda akan masuk ke halaman detail group tersebut yang dapat Anda edit.</li>
+        </ul>
+      <% end %> <!-- end current_features -->
+      <% if current_features.include?('group_delete') %>
+        <h2 class="topic">Bagaimana menghapus data group?</h2>
+        <ul>
+          <li>Silahkan ceklist nama group yang ingin Anda hapus, kemudian pada tombol ‘More Actions’ klik ‘Delete’.</li>
+          <li>Silahkan klik ‘Ya’ pada konfirmasi hapus yang dimunculkan.</li>
+        </ul>
+      <% end %> <!-- end current_features -->
+      * Hapus group bisa dilakukan jika departemen belum tercantum di data karyawan.
+      <br class="clear"/>
+    <% elsif action_name == "new" %>
+      <h2 class="topic">Bagaimana menambah data grup baru?</h2>
+      <ul>
+        <li>Anda isi informasi:
+          <ul class="alphabet-lower">
+            <li>Nama Group               : Isi dengan nama group.</li>
+            <li>Assign group ke bagian   : Pilih salah satu divisi dimana group tersebut berada pada daftar divisi yang telah tersedia.</li>
+            <li>Pilih Departemen         : Pilih salah satu departemen di mana bagian tersebut berada.</li>
+          </ul>
+        </li>
+        <li>Klik tombol ‘Simpan’ untuk mengupdate data atau,</li>
+        <li>Klik tombol ‘Batal’ untuk membatalkan penyimpanan data.</li>
+      </ul>
+      <br class="clear"/>
+    <% elsif action_name == "show" %>
+      <h2 class="topic">Bagaimana mengedit data grup yang ada?</h2>
+      <ul>
+        <li>Silahkan rubah nilai yang perlu dirubah dengan informasi:
+          <ul class="alphabet-lower">
+            <li>Nama Group               : Isi dengan nama group.</li>
+            <li>Assign group ke bagian   : Pilih salah satu divisi dimana group tersebut berada pada daftar divisi yang telah tersedia.</li>
+          </ul>
+        </li>
+        <li>Klik tombol ‘Simpan’ untuk mengupdate data atau,</li>
+        <li>Klik tombol ‘Batal’ untuk membatalkan penyimpanan data.</li>
+      </ul>
+    <% else %>
+      Tidak ada panduan untuk halaman ini.
+    <% end %> <!-- end if  action_name-->
+  </div>
+
+<% elsif controller_name == "employments"%>
+  <div class="content-howto">
+    <% if action_name == "index" %>
+    <h2 class="topic">Bagaimana melakukan terminasi karyawan?</h2>
+    <ul>
+      <li>Silahkan masuk ke tab 'Data Pekerjaan' karyawan, kemudian akses bagian Data Jabatan. Ada tombol 'Terminasi' yang bisa Anda klik untuk menterminasi karyawan.</li>
+      <li>Silahkan akses tab 'Data Absensi' karyawan, kemudian lihat pada bagian ID sidik jari. Ada tombol 'Edit' yang dapat Anda klik untuk mengedit ID sidik jari karyawan tersebut.</li>
+    </ul>
+    <br class="clear"/>
+    <h2 class="topic">Bagaimana mengisi data pekerjaan karyawan?</h2>
+    <ul>
+      <li>Silahkan klik tombol Tambah di setiap hide menu yang ingin anda isi.</li>
+    </ul>
+    <% end %>
+  </div>
+
+<% elsif controller_name == "absences"%>
+  <div class="content-howto">
+    <% if action_name == "index" %>
+      <% if current_features.include?('present_employee') %>
+        <h2 class="topic">Bagaimana mengabsensikan karyawan?</h2>
+        <ul>
+          <li>Silahkan klik tombol 'Absenkan Karyawan' yang ada di sisi kanan atas daftar absensi karyawan, sistem akan memunculkan pop up absensi tersebut.</li>
+          <li>Anda dapat mengisi nama karyawan, tanggal kehadiran, keterangan hadir/tidak hadir yang disertai kelengkapan data yang diperlukan.</li>
+          <li>Klik tombol ‘Simpan’ untuk mengabsenkan karyawan atau,</li>
+          <li>Klik 'Keluar' untuk batal mengabsensikan karyawan.</li>
+        </ul>
+      <% end %> <!-- end current_features -->
+    <% elsif action_name == "late" %>
+      <% if current_features.include?('override') %>
+        <h2 class="topic">Bagaimana mengoverride keterlambatan karyawan?</h2>
+        <ul>
+          <li>Silahkan Anda ceklist nama karyawan yang keterlambatannya akan dioverride, kemudian pada tombol 'More Actions' silahkan pilih 'Override'.</li>
+          <li>Pop up keterangan pengoverride an keterlambatan akan muncul.</li>
+          <li>Silahkan isi alasan Anda mengoverride keterlambatan karyawan pada field yang sudah disediakan.</li>
+          <li>Jika Anda menceklist lebih dari satu nama karyawan, silahkan ceklist opsi 'Anggap semua sama' untuk menganggap semua override keterlambatan karyawan sama.</li>
+          <li>Klik 'Simpan' jika Anda ingin mengoverride keterlambatan karyawan.</li>
+          <li>Klik 'Batal' jika Anda ingin membatalkan override keterlambatan karyawan.</li>
+        </ul>
+      <% end %> <!-- end current_features -->
+    <% elsif action_name == "more_hour" %>
+       <h2 class="topic">Bagaimana mengabaikan jam kerja lebih karyawan?</h2>
+       <ul>
+         <li>Silahkan ceklist nama karyawan yang jam kerja lebihnya ingin Anda abaikan, kemudian pada tombol 'More Actions' silahkan pilih 'Diabaikan'.</li>
+         <li>Akan ada konfirmasi mengabaikan jam kerja lebih yang muncul.</li>
+         <li>Silahkan klik 'Ya' jika Anda ingin mengabaikan jam kerja lebih, silahkan klik 'Batal' jika Anda ingin batal mengabaikan jam kerja lebih karyawan.</li>
+       </ul>
+       <br class="clear"/>
+       <h2 class="topic">Bagaimana menganggap lembur jam kerja lebih karyawan?</h2>
+       <ul>
+         <li>Silahkan ceklist nama karyawan yang jam kerja lebihnya ingin Anda anggap lembur, kemudian pada tombol 'More Actions' silahkan pilih 'Dianggap lembur'.</li>
+         <li>Sistem akan memunculkan data keterangan mengenai jam kerja normal karyawan tsb, jam kerja lebih, dan field yang akan Anda anggap sebagai lembur karyawan
+           , serta field alasan mengapa Anda ingin menganggap jam kerja lebih karyawan tersebut sebagai lembur(opsional, dapat dikosongkan atau diisi).</li>
+       </ul>
+       <br class="clear"/>
+       <h2 class="topic">Bagaimana menganggap jam kerja lebih karyawan sebagai kerja di hari lain?</h2>
+       <ul>
+         <li>Silahkan ceklist nama karyawan yang jam kerja lebihnya akan Anda anggap sebagai kerja di hari lain, kemudian pada tombol 'More Actions'
+             silahkan pilih 'Dianggap kerja di hari lain'.</li>
+         <li>Pop up akan dimunculkan untuk menampilkan tanggal berapa jam kerja ini akan dipindahkan, akan ada keterangan jam kerja normal dan jam kerja
+           lebih karyawan tersebut, beserta field lama jam kerja yang akan dianggap kerja di hari lain dan field alasan mengapa dianggap kerja
+           di hari lain.</li>
+         <li>Untuk semua tindak lanjut di atas, silahkan klik 'Simpan' untuk merubah data</li>
+         <li>Silahkan klik 'Batal' untuk membatalkan merubah data.</li>
+       </ul>
+    <% elsif action_name == "less_hour" %>
+       <h2 class="topic">Bagaimana menganggap jam kerja karyawan kurang?</h2>
+       <ul>
+         <li>Silahkan ceklist data karyawan yang ingin Anda anggap bekerja kurang, kemudian pada tombol 'More Actions' silahkan klik 'Anggap jam kerja kurang'.</li>
+         <li>Nantinya sistem akan memunculkan konfirmasi untuk hal ini.</li>
+       </ul>
+       <br class="clear"/>
+       <h2 class="topic">Bagaimana menganggap jam kerja kurang karyawan sebagai kerja dinas?</h2>
+       <ul>
+         <li>Silahkan ceklist data karyawan yang kerja kurangnya ingin Anda anggap dinas, kemudian pada tombol 'More Actions' silahkan klik 'Dianggap kerja dinas'.</li>
+         <li>Sistem juga akan memunculkan konfirmasi untuk tindak lanjut ini.</li>
+       </ul>
+       <br class="clear"/>
+       <h2 class="topic">Bagaimana menganggap jam kerja kurang karyawan sebagai cuti?</h2>
+       <ul>
+         <li>Silahkan ceklist data karyawan yang kerja kurangnya ingin dianggap cuti, kemudian pada tombol 'More Actions' silahkan klik 'Dicutikan'.</li>
+         <li>Sistem akan memunculkan konfirmasi untuk tindak lanjut ini.</li>
+       </ul>
+       <br class="clear"/>
+       <h2 class="topic">Bagaimana menganggap jam kerja kurang karyawan sebagai ijin?</h2>
+       <ul>
+         <li>Silahkan ceklist data karyawan yang jam kerja kurangnya ingin dianggap ijin, kemudian pada tombol 'More Actions' silahkan klik 'Dianggap ijin'.</li>
+         <li>Sistem juga akan memunculkan konfirmasi untuk tindak lanjut ini.</li>
+       </ul>
+    <% elsif action_name == "more_rest" %>
+      <h2 class="topic">Bagaimana menyesuaikan jam istirahat lebih karyawan?</h2>
+       <ul>
+         <li>Silahkan ceklist data karyawan yang istirahat lebihnya ingin Anda sesuaikan sehingga jam istirahatnya tidak menjadi lebih,
+           kemudian pada tombol 'More Actions' silahkan pilih 'Disesuaikan'.</li>
+         <li>Sistem akan memunculkan konfirmasi untuk memastikan data yang Anda pilih benar-benar akan disesuaikan istirahatnya.</li>
+       </ul>
+       <br class="clear"/>
+       <h2 class="topic">Bagaimana memberi keterangan pada jam istirahat lebih karyawan?</h2>
+       <ul>
+         <li>Silahkan ceklist data karyawan yang istirahat lebihnya ingin Anda beri keterangan, kemudian pada tombo; 'More Actions' silahkan pilih 'Beri keterangan'.</li>
+         <li>Pop up akan muncul yang memungkinkan Anda memberikan keterangan istirahat lebih karyawan pada field yang tersedia.</li>
+       </ul>
+    <% elsif action_name == "less_rest" %>
+       <h2 class="topic">Bagaimana menyesuaikan jam istirahat kurang karyawan?</h2>
+       <ul>
+         <li>Silahkan ceklist data karyawan yang istirahat kurangnya ingin Anda sesuaikan sehingga jumlah jam istirahatnya tidak
+           menjadi kurang, kemudian pada tombol 'More Actions' silahkan pilih 'Disesuaikan'.</li>
+         <li>Konfirmasi akan muncul untuk memastikan data yang Anda pilih jumlah jam istirahat kurangnya benar-benar akan Anda sesuaikan.</li>
+       </ul>
+    <% elsif action_name == "absent" %>
+       <h2 class="topic">Bagaimana mengabsenkan masuk karyawan yang tidak masuk?</h2>
+       <ul>
+         <li>Silahkan ceklist data karyawan yang ingin diabsenkan masuk, kemudian pada tombol 'More Actions' silahkan pilih 'Kerja'.</li>
+         <li>Pop up akan dimunculkan untuk menerima data jam mulai kerja, jam selesai kerja, dan lama istirahat karyawan.</li>
+       </ul>
+        <br class="clear"/>
+       <h2 class="topic">Bagaimana memberi alasan tidak masuknya karyawan?</h2>
+       <ul>
+         <li>Silahkan ceklist data karyawan tidak masuk yang ingin ditindaklanjuti, kemudian pada tombol 'More Actions' silahkan pilih jenis tidak masuk yang ingin digunakan.</li>
+         <li>Ada pop up atau konfirmasi yang dimunculkan untuk menindaklanjuti hal yang Anda lakukan.</li>
+       </ul>
+     <% elsif action_name == "no_logout" %>
+       <h2 class="topic">Bagaimana melengkapi data absensi karyawan yang tidak lengkap?</h2>
+       <ul>
+         <li>Silahkan ceklist nama karyawan yang absensinya ingin Anda lengkapi, kemudian pada tombol 'More Actions' silahkan pilih 'Lengkapi Absen'. Pop up akan dimunculkan
+           yang memungkinkan Anda untuk melengkapi data absensi karyawan tersebut. Silahkan lengkapi data jam kerja karyawan.</li>
+         <li>Klik 'Simpan' untuk menyimpan data.</li>
+         <li>Klik 'Batal' untuk batal menyimpan data.</li>
+       </ul>
+      <% elsif action_name == "mine" %>
+       <h2 class="topic">Bagaimana menindaklanjuti sisa jatah cuti karyawan di tahun kemarin?</h2>
+        <ul>
+          <li>Pada bagian jatah cuti akan ditampilkan, opsi yang dapat Anda lakukan untuk sisa jatah cuti karyawan tahun lalu dengan keterangan:</li>
+          <li style="list-style-type: none;">- Uangkan sisa jatah cuti : yang berarti pengguna dapat menguangkan sisa jatah cuti,</li>
+          <li style="list-style-type: none;">- Tambahkan sisa jatah cuti ke jatah cuti tahun ini : yang berarti pengguna menambahkan sisa jatah cuti tahun lalu ke jatah cuti tahun ini.</li>
+        </ul>
+        <br class="clear"/>
+    <% else %>
+      Tidak ada panduan untuk halaman ini.
+    <% end %><!-- end action_name -->
+  </div>
+
+<% elsif controller_name == "fingerprint_settings" %>
+  <div class="content-howto">
+    <% if action_name == "index" %>
+      <% if current_features.include?('fingerprint_new') %>
+        <h2 class="topic">Bagaimana menambah data alat sidik jari yang digunakan perusahaan?</h2>
+        <ul>
+          <li>Silahkan klik tombol ‘Tambah Alat Sidik Jari’ yang ada di sisi kanan atas daftar alat yang ada.</li>
+          <li>Anda akan masuk ke halaman tambah alat sidik jari baru.</li>
+          <li>Silahkan masukkan data pada halaman tersebut.</li>
+        </ul>
+      <% end %> <!-- end current_features -->
+      <% if current_features.include?('fingerprint_edit') %>
+        <h2 class="topic">Bagaimana mengedit data alat sidik jari yang sudah terdaftar?</h2>
+        <ul>
+          <li>Silahkan pilih nama alat yang ingin Anda edit.</li>
+          <li>Anda kemudian akan masuk ke halaman detail alat sidik jari tersebut yang di sisi kanan atasnya terdapat button ‘Edit’.</li>
+          <li>Silahkan klik button tersebut untuk melakukan pengeditan pada alat sidik jari tersebut.</li>
+        </ul>
+      <% end %> <!-- end current_features -->
+      <% if current_features.include?('fingerprint_delete') %>
+        <h2 class="topic">Bagaimana menghapus data alat sidik jari yang sudah tidak digunakan?</h2>
+        <ul>
+          <li>Silahkan ceklist nama alat sidik jari yang ingin Anda hapus, kemudian pada tombol ‘More actions’ pilih Delete.</li>
+          <li>Pada konfirmasi hapus silahkan klik ‘Ya’, maka data alat sidik jari yang Anda pilih akan terhapus.</li>
+        </ul>
+      <% end %> <!-- end current_features -->
+    <% elsif action_name == "new" %>
+      <h2 class="topic">Bagaimana menambahkan data alat sidik jari karyawan yang ada pada perusahaan?</h2>
+      <ul>
+        <li>Anda isi informasi:
+          <ul class="alphabet-lower">
+            <li>Nama alat         : Isi dengan nama alat sidik jari yang ingin ditambahkan.</li>
+            <li>IP address alat   : Isi dengan ip address alat tersebut.</li>
+            <li>Port              : Isi dengan port yang digunakan alat tersebut.</li>
+          </ul>
+        </li>
+        <li>Klik tombol ‘Simpan’ untuk menyimpan data atau,</li>
+        <li>Klik tombol ‘Batal’ untuk membatalkan penyimpanan data.</li>
+      </ul>
+      <br class="clear"/>
+    <% elsif action_name == "show" || action_name == "edit"%>
+      <h2 class="topic">Bagaimana mengedit data sidik jari?</h2>
+      <ul>
+        <li>Silahkan klik tombol ‘Edit’ yang ada di sisi kanan, kemudian Anda akan masuk ke halaman edit sidik jari.</li>
+        <li>Silahkan rubah data yang perlu Anda rubah pada masing-masing field dengan informasi:
+          <ul class="alphabet-lower">
+            <li>Nama alat         : Isi dengan nama alat sidik jari yang ingin ditambahkan.</li>
+            <li>IP address alat   : Isi dengan ip address alat tersebut.</li>
+            <li>Port              : Isi dengan port yang digunakan alat tersebut.</li>
+          </ul>
+        </li>
+        <li>Klik tombol ‘Simpan’ untuk mengupdate data atau,</li>
+        <li>Klik tombol ‘Batal’ untuk membatalkan penyimpanan data.</li>
+      </ul>
+    <% else %>
+      Tidak ada panduan untuk halaman ini.
+    <% end %> <!-- end if  action_name-->
+  </div>
+
+<% elsif controller_name == "holiday_allowances"%>
+    <div class="content-howto">
+    <% if action_name == "index" %>
+      <% if current_features.include?('thr_new') %>
+        <h2 class="topic">Bagaimana menghitung THR baru untuk karyawan?</h2>
+        <ul>
+          <li>Silahkan klik tombol 'Tambah THR' yang ada di sisi kanan atas, kemudian Anda akan masuk ke halaman tambah
+            THR baru di mana Anda dapat memberikan nilai THR untuk karyawan.</li>
+        </ul>
+      <% end %> <!-- end current_features -->
+      <% if current_features.include?('thr_edit') %>
+       <h2 class="topic">Bagaimana mengedit THR yang sudah ada?</h2>
+        <ul>
+          <li>Silahkan klik nilai bruto/bulan pada THR karyawan yang ingin Anda edit, kemudian Anda akan masuk ke halaman detail THR yang Anda pilih.</li>
+          <li>Klik tombol 'Edit Data THR' yang ada di sisi kanan atas halaman detail THR, Anda akan masuk ke halaman edit THR.</li>
+        </ul>
+      <% end %> <!-- end current_features -->
+    <% else %>
+      Tidak ada panduan untuk halaman ini.
+    <% end %> <!-- end if  action_name-->
+  </div>
+
+<% elsif controller_name == "holidays" %>
+  <div class="content-howto">
+    <% if action_name == "index" %>
+      <h2 class="topic">Bagaimana memfilter data hari libur perusahaan?</h2>
+      <ul>
+        <li>Silahkan klik tombol ‘Filter’ yang ada di sisi kanan tombol ‘More Actions’, nantinya Anda akan melihat filter yang dapat digunakan untuk mencari data hari libur perusahaan.
+          <ul class="alphabet-lower">
+            <li>Nama hari libur     : mencari data hari libur berdasarkan nama hari liburnya.</li>
+            <li>Lama hari libur     : mencari data hari libur berdasarkan lama hari liburnya.</li>
+            <li>Jumlah cuti bersama : mencari data hari libur berdasarkan jumlah cuti bersama yang ada pada hari libur tersebut.</li>
+            <li>Jumlah cuti bersama : mencari data hari libur berdasarkan jumlah cuti bersama yang ada pada hari libur tersebut.</li>
+            <li>Periode             : mencari data hari libur berdasarkan periode libur yang ditentukan.</li>
+          </ul>
+        </li>
+        <li>Klik tombol ‘Tampilkan’ untuk mencari data berdasarkan nilai yang Anda masukkan.</li>
+      </ul>
+    <% if current_features.include?('holiday_delete') %>
+      <h2 class="topic">Bagaimana menghapus data hari libur perusahaan?</h2>
+      <ul>
+        <li>Silahkan pilih data hari libur yang ingin Anda hapus dengan menceklist data kemudian pada tombol ‘More Actions’ silahkan klik ‘Delete'.</li>
+        <li>Klik ‘Ya’ pada konfirmasi hapus yang muncul.</li>
+      </ul>
+    <% end %> <!-- end current_features -->
+    <% if current_features.include?('holiday_new') %>
+     <h2 class="topic">Bagaimana menambah data hari libur perusahaan?</h2>
+      <ul>
+        <li>Silahkan pilih data hari libur yang ingin Anda hapus dengan menceklist data kemudian pada tombol ‘More Actions’ silahkan klik ‘Delete'.</li>
+        <li>Silahkan klik tombol ‘Tambah Hari Libur’ yang ada di kanan atas, Anda akan masuk ke halaman tambah hari libur perusahaan.</li>
+      </ul>
+    <% end %> <!-- end current_features -->
+    <% if current_features.include?('holiday_edit') %>
+      <h2 class="topic">Bagaimana mengedit data hari libur perusahaan?</h2>
+      <ul>
+        <li>Silahkan klik nama hari libur perusahaan, Anda akan masuk ke halaman detail hari libur yang dapat diedit.</li>
+      </ul>
+    <%  end %> <!-- end current_features -->
+    <br class="clear"/>
+    <% elsif action_name == "new" %>
+      <h2 class="topic">Bagaimana menambahkan data hari libur perusahaan?</h2>
+      <ul>
+        <li>Anda isi informasi:
+          <ul class="alphabet-lower">
+            <li>Nama hari libur   : Isi nama hari libur yang ingin ditambahkan</li>
+            <li>Tanggal           : Isi dengan tanggal berapa hari libur tersebut dilakukan.</li>
+            <li>Lama libur        : Isi dengan berapa lamanya libur.</li>
+            <li>Cuti bersama      : Checklist kotak kecil yang telah tersedia jika terdapat cuti bersama.</li>
+            <li>Kemudian isi berapa hari lamanya cuti bersama.</li>
+          </ul>
+        </li>
+        <li>Klik tombol ‘Simpan’ untuk menyimpan data atau,</li>
+        <li> klik tombol ‘Batal’ untuk membatalkan penyimpanan data.</li>
+      </ul>
+      <br class="clear"/>
+    <% elsif action_name == "edit" %>
+      <h2 class="topic">Bagaimana mengedit data hari libur perusahaan?</h2>
+      <ul>
+        <li>Silahkan Anda rubah data sesuai dengan yang Anda butuhkan:
+          <ul class="alphabet-lower">
+            <li>Nama hari libur   : Isi nama hari libur yang ingin diedit</li>
+            <li>Tanggal           : Isi dengan tanggal berapa hari libur tersebut dilakukan.</li>
+            <li>Lama libur        : Isi dengan berapa lamanya libur.</li>
+            <li>Cuti bersama      : Checklist kotak kecil yang telah tersedia jika terdapat cuti bersama.</li>
+          </ul>
+        </li>
+        <li>Klik tombol ‘Simpan’ untuk menyimpan data atau,</li>
+        <li> klik tombol ‘Batal’ untuk membatalkan penyimpanan data.</li>
+      </ul>
+    <% else %>
+      Tidak ada panduan untuk halaman ini.
+    <% end %> <!-- end if  action_name-->
+  </div>
+
+<% elsif controller_name == "job_accidents" %>
+  <div class="content-howto">
+    <% if action_name == "index"%>
+      <% if current_features.include?('accident_new') %>
+        <h2 class="topic">Bagaimana menambah data kecelakaan kerja baru?</h2>
+        <ul>
+          <li>Silahkan Anda klik tombol 'Tambah Kecelakaan Kerja' yang ada di sisi kanan atas daftar kecelakaan kerja yang dialami karyawan.</li>
+          <li>Anda akan masuk ke halaman tambah kecelakaan kerja baru.</li>
+        </ul>
+      <% end %> <!-- end current_features -->
+      <% if current_features.include?('accident_edit') %>
+        <h2 class="topic">Bagaimana mengedit data kecelakaan kerja yang ada?</h2>
+        <ul>
+          <li>Silahkan Anda klik tanggal kecelakaan kerja yang terjadi, maka Anda akan masuk ke halaman edit kecelakaan kerja tersebut.</li>
+        </ul>
+      <% end %> <!-- end current_features -->
+      <% if current_features.include?('accident_delete') %>
+        <h2 class="topic">Bagaimana menghapus data kecelakaan kerja yang sudah tidak digunakan?</h2>
+        <ul>
+          <li>Silahkan Anda ceklist data kecelakaan kerja yang ingin Anda hapus, kemudian pada tombol 'More Actions' silahkan klik 'Delete'.</li>
+          <li>Jika Anda yakin ingin menghapus data kecelakaan kerja, silahkan klik 'Ya' pada konfirmasi hapus yang dimunculkan.</li>
+          <li>Jika Anda ingin membatalkan penghapusan data kecelakaan kerja, silahkan klik 'Tidak' pada konfirmasi hapus yang dimunculkan.</li>
+        </ul>
+      <% end %> <!-- end current_features -->
+    <% elsif action_name == "new" %>
+      <h2 class="topic">Bagaimana menambah data kecelakaan kerja?</h2>
+      <ul>
+        <li>Anda isi informasi:
+          <ul class="alphabet-lower">
+            <li>Nama Karyawan        : Isi dengan nama karyawan yang mengalami kecelakaan kerja, field ini bersifat
+              auto complete sehingga suggestion nama karyawan yang ada muncul.</li>
+            <li>Tanggal Kejadian     : Isi dengan tanggal kejadian kecelakaan kerja yang dialami oleh karyawan tersebut.</li>
+            <li>Lokasi Kejadian      : Isi dengan lokasi kejadian terjadinya kecelakaan kerja tersebut.</li>
+            <li>Deskripsi Penyebab   : Isi dengan penjelasan mengenai penyebab kecelakaan yang dialami oleh karyawan tersebut.</li>
+            <li>Tindakan             : Tindakan yang diambil atas adanya kecelakaan tersebut.</li>
+            <li>Penanggung jawab     : Isi dengan penanggung jawab yang menangani kecelakaan yang dialami oleh karyawan tersebut.</li>
+            <li>Kategori kecelakaan  : Pilih salah satu kategori kecelakaan kerja apakah termasuk ringan, sedang atau berat.</li>
+          </ul>
+        </li>
+        <li>Klik tombol 'Simpan' untuk menyimpan data atau,</li>
+        <li>Klik tombol 'Batal' untuk membatalkan penyimpanan data.</li>
+      </ul>
+    <% elsif action_name == "edit" %>
+      <h2 class="topic">Bagaimana mengedit data kecelakaan kerja?</h2>
+      <ul>
+        <li>Anda ubah informasi:
+          <ul class="alphabet-lower">
+            <li>Nama Karyawan        : Isi dengan nama karyawan yang mengalami kecelakaan kerja, field ini bersifat
+              auto complete sehingga suggestion nama karyawan yang ada muncul.</li>
+            <li>Tanggal Kejadian     : Isi dengan tanggal kejadian kecelakaan kerja yang dialami oleh karyawan tersebut.</li>
+            <li>Lokasi Kejadian      : Isi dengan lokasi kejadian terjadinya kecelakaan kerja tersebut.</li>
+            <li>Deskripsi Penyebab   : Isi dengan penjelasan mengenai penyebab kecelakaan yang dialami oleh karyawan tersebut.</li>
+            <li>Tindakan             : Tindakan yang diambil atas adanya kecelakaan tersebut.</li>
+            <li>Penanggung jawab     : Isi dengan penanggung jawab yang menangani kecelakaan yang dialami oleh karyawan tersebut.</li>
+            <li>Kategori kecelakaan  : Pilih salah satu kategori kecelakaan kerja apakah termasuk ringan, sedang atau berat.</li>
+          </ul>
+        </li>
+        <li>Klik tombol 'Simpan' untuk menyimpan pengeditan data atau,</li>
+        <li>Klik tombol 'Batal' untuk membatalkan penyimpanan data.</li>
+      </ul>
+    <% end %>
+  </div>
+
+  <% elsif controller_name == "leaves"%>
+    <div class="content-howto">
+      <% if action_name == "index" %>
+        <% if current_features.include?('employee_leave_management_add') %>
+          <h2 class="topic">Bagaimana menambah data permintaan cuti karyawan?</h2>
+          <ul>
+            <li>Silahkan klik tombol 'Tambah Cuti' yang ada di sisi kanan atas.</li>
+            <li>Anda akan langsung masuk ke halaman tambah permintaan cuti baru karyawan.</li>
+          </ul>
+        <% end %> <!-- end current_features -->
+        <% if current_features.include?('employee_leave_management_edit') %>
+          <h2 class="topic">Bagaimana mengedit data permintaan cuti karyawan yang masih pending?</h2>
+          <ul>
+            <li>Silahkan klik tanggal cuti dari data permintaan cuti yang ingin Anda edit, kemudian
+              Anda akan langsung masuk ke halaman edit permintaan cuti karyawan.</li>
+            <li>Link hanya akan ditampilkan untuk data yang masih bisa Anda edit.</li>
+            <li>Anda dapat mengedit data permintaan cuti tersebut, atau Anda juga dapat merubah status permintaan cuti tersebut.</li>
+          </ul>
+        <% end %> <!-- end current_features -->
+        <% if current_features.include?('employee_leave_management_delete') %>
+          <h2 class="topic">Bagaimana menghapus data permintaan cuti karyawan yang ditolak?</h2>
+          <ul>
+            <li>Silahkan ceklist data permintaan cuti tersebut, kemudian pada tombol 'More Actions' silahkan pilih 'Delete'.</li>
+            <li>Link hanya akan ditampilkan untuk data yang masih bisa Anda edit.</li>
+            <li>Anda dapat mengedit data permintaan cuti tersebut, atau Anda juga dapat merubah status permintaan cuti tersebut.</li>
+          </ul>
+        <% end %> <!-- end current_features -->
+        <% if current_features.include?('employee_leave_management_change_status') %>
+          <h2 class="topic">Bagaimana menindaklanjuti permintaan cuti yang masih pending?</h2>
+          <ul>
+            <li>Silahkan ceklist data permintaan cuti karyawan yang ingin Anda tindak lanjuti, kemudian pada tombol 'More Actions' silahkan pilih:
+              <ul class="roman-lower">
+                <li>Approve: jika Anda ingin menerima permintaan cuti karyawan tersebut.</li>
+                <li>Reject: jika Anda ingin menolak permintaan cuti karyawan tersebut.</li>
+              </ul>
+            </li>
+            <li>Link hanya akan ditampilkan untuk data yang masih bisa Anda edit.</li>
+            <li>Anda dapat mengedit data permintaan cuti tersebut, atau Anda juga dapat merubah status permintaan cuti tersebut.</li>
+          </ul>
+        <% end %> <!-- end current_features -->
+      <% elsif action_name == "new" %>
+        <h2 class="topic">Bagaimana menambah data permintaan cuti baru?</h2>
+        <ul>
+          <li>Anda isi informasi:
+            <ul class="alphabet-lower">
+              <li>Nama Karyawan: isi dengan informasi nama karyawan yang meminta cuti.</li>
+              <li>Periode Cuti: isi dengan periode kapan karyawan tersebut ingin melakukan cuti.</li>
+              <li>Pilih Alasan: pilih alasan jenis cuti yang dilakukan karyawan.</li>
+              <li>Deskripsi: isi dengan deskripsi mengapa karyawan melakukan permintaan cuti, Anda dapat mengkosongkan field ini jika tidak ada
+                deskripsi permintaan cutinya.</li>
+              <li>Status cuti: pilih dengan status permintaan cuti yang ada.
+                <ul class="roman-lower">
+                  <li>Pilih pending jika Anda masih ragu akan menerima atau menolak permintaan cuti karyawan tersebut.</li>
+                  <li>Pilih approve jika Anda menerima permintaan cuti karyawan tersebut.</li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+          <li>Klik 'Simpan' untuk menyimpan data permintaan cuti.</li>
+          <li>Atau klik 'Batal' untuk membatalkan menyimpan data.</li>
+        </ul>
+      <% elsif action_name == "edit" %>
+        <h2 class="topic">Bagaimana mengedit data permintaan cuti karyawan?</h2>
+          <ul>
+            <li>Anda rubah informasi:
+              <ul class="alphabet-lower">
+                <li>Nama Karyawan: isi dengan informasi nama karyawan yang meminta cuti.</li>
+                <li>Periode Cuti: isi dengan periode kapan karyawan tersebut ingin melakukan cuti.</li>
+                <li>Pilih Alasan: pilih alasan jenis cuti yang dilakukan karyawan.</li>
+                <li>Deskripsi: isi dengan deskripsi mengapa karyawan melakukan permintaan cuti, Anda dapat mengkosongkan field ini jika tidak
+                  ada deskripsi permintaan cutinya.</li>
+                <li>Status cuti: pilih dengan status permintaan cuti yang ada.
+                <ul class="roman-lower">
+                  <li>Pilih pending jika Anda masih ragu akan menerima atau menolak permintaan cuti karyawan tersebut.</li>
+                  <li>Pilih approve jika Anda menerima permintaan cuti karyawan tersebut.</li>
+                </ul>
+              </li>
+              </ul>
+            </li>
+            <li>Klik 'Simpan' untuk menyimpan data permintaan cuti.</li>
+            <li>Atau klik 'Batal' untuk membatalkan menyimpan data.</li>
+          </ul>
+      <% else %>
+        Tidak ada panduan untuk halaman ini.
+      <% end %> <!-- end if  action_name-->
+    </div>
+
+  <% elsif controller_name == "memorandums"%>
+    <div class="content-howto">
+      <% if action_name == "index" %>
+        <% if current_features.include?('sp_new') %>
+          <h2 class="topic">Bagaimana menambahkan data Surat Peringatan baru?</h2>
+          <ul>
+            <li>Silahkan Anda klik tombol 'Tambah Surat Peringatan' yang ada pada sisi kanan atas tabel daftar Surat Peringatan yang ada.</li>
+            <li>Anda akan masuk ke halaman tambah Surat Peringatan baru.</li>
+          </ul>
+        <% end %> <!-- end current_features -->
+        <% if current_features.include?('sp_edit') %>
+          <h2 class="topic">Bagaimana mengedit data Surat Peringatan yang ada?</h2>
+          <ul>
+            <li>Silahkan Anda klik tanggal Surat Peringatan diberikan, maka Anda akan masuk ke halaman edit Surat Peringatan tersebut.</li>
+          </ul>
+        <% end %> <!-- end current_features -->
+        <% if current_features.include?('delete_sp') %>
+          <h2 class="topic">Bagaimana menghapus data Surat Peringatan yang ada?</h2>
+          <ul>
+            <li>Silahkan ceklist data Surat Peringatan yang ingin Anda hapus, kemudian pada tombol 'More Actions' silahkan pilih 'Delete'.</li>
+            <li>Jika Anda yakin ingin menghapus data Surat Peringatan yang Anda pilih, silahkan klik 'Ya' pada konfirmasi hapus yang dimunculkan.</li>
+            <li>Jika Anda ingin membatalkan penghapusan data Surat Peringatan, silahkan Anda klik 'Tidak' pada konfirmasi hapus yang dimunculkan.</li>
+          </ul>
+        <% end %> <!-- end current_features -->
+      <% elsif action_name == "new" %>
+        <h2 class="topic">Bagaimana menambah data surat peringatan baru?</h2>
+          <ul>
+            <li>Anda isi informasi:
+              <ul class="alphabet-lower">
+                <li>Nama Karyawan          : Isi dengan nama karyawan yang mendapat surat peringatan, sifat field auto complete sehingga
+                  Anda bisa memilih nama karyawan dari data auto complete yang disediakan.</li>
+                <li>Kategori               : Pilih salah satu kategori Surat Peringatan, dengan opsi ringan jika pelanggaran ringan, sedang jika pelanggaran sedang,
+                    dan berat jika pelanggaran berat.</li>
+                <li>Keterangan             : Isi dengan keterangan yang berkenaan dengan surat peringatan tersebut.</li>
+                <li>Tanggal Kejadian       : Isi dengan tanggal pemberian surat peringatan pada karyawan tersebut.</li>
+                <li>Penanggung Jawab       : Penanggung jawab atas pemberian Surat Peringatan.</li>
+                <li>Jenis Surat Peringatan : Anda pilih salah satu jenis Surat Peringatan yang telah disediakan, bisa SP 1, SP 2, atau SP 3.</li>
+                <li>Berlaku sampai         : Isi dengan tanggal habis masa berlakunya surat peringatan tersebut.</li>
+              </ul>
+            </li>
+            <li>Klik tombol 'Simpan' untuk menyimpan data atau,</li>
+            <li>Klik tombol 'Batal' untuk membatalkan penyimpanan data.</li>
+          </ul>
+      <% elsif action_name == "edit" %>
+        <h2 class="topic">Bagaimana mengedit data surat peringatan yang ada?</h2>
+          <ul>
+            <li>Silahkan Anda ubah informasi:
+              <ul class="alphabet-lower">
+                <li>Nama Karyawan          : Isi dengan nama karyawan yang mendapat surat peringatan, sifat field auto complete sehingga
+                  Anda bisa memilih nama karyawan dari data auto complete yang disediakan.</li>
+                <li>Kategori               : Pilih salah satu kategori Surat Peringatan, dengan opsi ringan jika pelanggaran ringan, sedang jika pelanggaran sedang,
+                    dan berat jika pelanggaran berat.</li>
+                <li>Keterangan             : Isi dengan keterangan yang berkenaan dengan surat peringatan tersebut.</li>
+                <li>Tanggal Kejadian       : Isi dengan tanggal pemberian surat peringatan pada karyawan tersebut.</li>
+                <li>Penanggung Jawab       : Penanggung jawab atas pemberian Surat Peringatan.</li>
+                <li>Jenis Surat Peringatan : Anda pilih salah satu jenis Surat Peringatan yang telah disediakan, bisa SP 1, SP 2, atau SP 3.</li>
+                <li>Berlaku sampai         : Isi dengan tanggal habis masa berlakunya surat peringatan tersebut.</li>
+              </ul>
+            </li>
+            <li>Klik tombol 'Simpan' menyimpan pengeditan data atau,</li>
+            <li>Klik tombol 'Batal' untuk membatalkan penyimpanan data.</li>
+          </ul>
+      <% else %>
+        Tidak ada panduan untuk halaman ini.
+      <% end %> <!-- end action_name -->
+    </div>
+
+<% elsif controller_name == "overtimes"%>
+  <div class="content-howto">
+   <% if action_name == "index" %>
+    <% if current_features.include?('overtime_new') %>
+      <h2 class="topic">Bagaimana menambahkan data rencana lembur baru karyawan?</h2>
+      <ul>
+        <li>Silahkan klik tombol 'Tambah Rencana Lembur' yang ada.</li>
+      </ul>
+    <% end %> <!-- end current_features -->
+    <% if current_features.include?('overtime_edit') %>
+      <h2 class="topic">Bagaimana mengedit data rencana lembur karyawan yang masih pending?</h2>
+      <ul>
+        <li>Silahkan klik periode lembur dari rencana lembur yang ingin Anda edit, kemudian Anda akan masuk ke halaman edit rencana lembur tersebut.</li>
+        <li>Link hanya akan ditampilkan pada data yang masih dapat Anda edit.</li>
+        <li>Anda dapat mengedit data rencana lembur tersebut, atau Anda juga dapat merubah status rencana lembur tersebut.</li>
+      </ul>
+    <% end %> <!-- end current_features -->
+    <% if current_features.include?('overtime_delete') %>
+      <h2 class="topic">Bagaimana menghapus data rencana lembur karyawan yang ditolak?</h2>
+      <ul>
+        <li>Silahkan ceklist data rencana lembur tersebut, kemudian pada tombol 'More Actions' silahkan pilih 'Delete'.</li>
+      </ul>
+    <% end %> <!-- end current_features -->
+    <% if current_features.include?('overtime_status_update') %>
+      <h2 class="topic">Bagaimana menindaklanjuti rencana lembur yang masih pending?</h2>
+      <p>Silahkan ceklist data rencana lembur karyawan yang ingin Anda tindak lanjuti, kemudian pada tombol 'More Actions' silahkan pilih:</p>
+      <ul>
+        <li>Approve: jika Anda ingin menerima rencana lembur karyawan tersebut.</li>
+        <li>Reject: jika Anda ingin menolak rencana lembur karyawan tersebut.</li>
+      </ul>
+    <% end %> <!-- end current_features -->
+  <% elsif action_name == "new" %>
+    <h2 class="topic">Bagaimana menambah data rencana lembur baru?</h2>
+      <ul>
+        <li>Anda isi informasi:
+          <ul class="alphabet-lower">
+            <li>Assign lembur ke: Pilih kepada siapa Anda akan mengassign lembur, karyawan atau grup.
+              <ul class="roman-lower">
+                <li>Pilih karyawan jika Anda ingin mengassign lembur kepada karyawan perorangan,
+                    pilih grup jika Anda ingin mengassign lembur kepada sekelompok karyawan yang ada pada grup.</li>
+                </ul>
+            </li>
+            <li>Periode: Isi pada periode kapan Anda ingin karyawan tersebut melakukan lembur.</li>
+            <li>Alasan: Isi mengapa karyawan perlu melakukan lembur.</li>
+            <li>Waktu mulai lembur: Isi pada jam berapa karyawan bisa melakukan lembur.</li>
+            <li> Status: Pilih status rencana lembur ini.
+              <ul class="roman-lower">
+                <li>Pilih pending jika Anda masih merencanakan dan belum yakin menyetujui lembur ini atau tidak.</li>
+                <li>Pilih approved jika Anda sudah setuju rencana lembur ini perlu dilakukan.</li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+        <li>Klik 'Simpan' untuk menyimpan data rencana lembur baru.</li>
+        <li>Klik 'Batal' untuk batal menyimpan data rencana lembur baru.</li>
+      </ul>
+    <% elsif action_name == "index_done" %>
+      <h2 class="topic">Bagaimana menambahkan daftar lembur karyawan?</h2>
+      <ul>
+        <li>Daftar lembur ini berasal dari halaman Kerja Lebih karyawan yang kelebihan jam kerjanya dianggap lembur.</li>
+      </ul>
+      <br class="clear"/>
+      <h2 class="topic">Bagaimana menyaring / filter data dari daftar lembur?</h2>
+      <ul>
+        <li>Silahkan input sesuai periode atau nama yang anda ingin filter.</li>
+        <li>Klik tombol “Tampilkan”.</li>
+      </ul>
+    <% else %>
+      Tidak ada panduan untuk halaman ini.
+    <% end %> <!-- end action_name -->
+  </div>
+
+<% elsif controller_name == "payrolls" %>
+<div class="content-howto" style="width:97%;">
+    <% if action_name == "index" %>
+      <% if current_features.include?('holiday_new') %>
+        <h2 class="topic">Bagaimana melakukan edit pengaturan penggajian perusahaan?</h2>
+        <ul>
+          <li>Silahkan klik tombol 'Edit' yang ada di sisi kanan atas.</li>
+          <li>Anda akan masuk ke halaman edit payroll setting.</li>
+        </ul>
+        <h2 class="topic">Bagaimana melakukan edit Informasi PTKP?</h2>
+        <ul>
+          <li>Data terisi default.</li>
+          <li>Silahkan klik link "Edit" pada tabel.</li>
+          <li>Input nilai yang ingin di edit.</li>
+          <li>Klik link "Update".</li>
+          <li>Maka akan muncul notifikasi Data PTKP berhasil diupdate.</li>
+        </ul>
+        <h2 class="topic">Bagaimana melakukan edit Informasi Tunjangan?</h2>
+        <ul>
+          <li>Klik icon tambah (+) dibawah tabel informasi tunjangan.</li>
+          <li>Input field-field di dalam tabel.</li>
+          <li>Klik link "Save".</li>
+          <li>Maka akan muncul "Data tunjangan berhasil disimpan".</li>
+        </ul>
+        <h2 class="topic">Bagaimana mengisi Informasi Tunjangan?</h2>
+        <ul>
+          <li>Silahkan klik link "Edit" pada tabel.</li>
+          <li>Input nilai yang ingin di edit.</li>
+          <li>Klik link "Update".</li>
+          <li>Maka akan muncul notifikasi Data PTKP berhasil diupdate.</li>
+        </ul>
+        <h2 class="topic">Bagaimana menghapus Informasi Tunjangan?</h2>
+        <ul>
+          <li>Silahkan klik link "Hapus" pada tabel.</li>
+          <li>Muncul konfirmasi penghapusan data.</li>
+          <li>Klik tombol "Hapus".</li>
+          <li>Maka akan muncul notifikasi "Data PTKP berhasil dihapus".</li>
+        </ul>
+        *Hapus tunjangan bisa dilakukan jika tidak ada data yang terkait di master gaji.
+      <% end %> <!-- end current_features -->
+    <% elsif action_name == "new" %>
+      <h2 class="topic">Bagaimana melakukan edit pengaturan penggajian perusahaan?</h2>
+      <ul>
+        <li>Anda isi informasi:
+          <ul class="alphabet-lower">
+            <li>Apakah perusahaan memberikan jamsostek?          : Pilih ya jika perusahaan memberikan jamsostek.</li>
+            <li>Apakah perusahaan ikut membayarkan jambsostek?   : Pilih ya jika perusahaan ikut membayarkan jamsostek.</li>
+            <li>Jumlah yang dibayarkan perusahaan                : Isi berapa persen jumlah jamsostek yang dibayarkan perusahaan.</li>
+            <li>Jumlah hari kerja yang dihitung?                 : Pilih salah satu pilihan yang telah tersedia, apakah 30 hari,
+              jumlah hari dalam setiap bulannya, atau isi dengan jumlah hari tertentu.</li>
+            <li> Pembayaran dengan rekening BCA                  : Checklist apabila pembayaran dilakukan dengan rekening BCA, di mana
+              Anda harus mengisi tambahan informasi berikut, sehingga Anda dapat memanfaatkan fasilitas klikBCA nantinya.</li>
+            <li>Kode BCA cabang                                  : Isi dengan kode cabang BCA di mana rekening perusahaan Anda dibuat.</li>
+            <li>Kode BCA milik perusahaan                                 : Isi dengan kode perusahaan Anda yang terdaftar pada Bank BCA.</li>
+            <li>Inisial perusahaan di BCA                              : Isi dengan inisial perusahaan Anda yang terdaftar pada Bank BCA.</li>
+            <li>No rekening BCA perusahaan                       : Isi dengan nomor rekening perusahaan Anda pada Bank BCA.</li>
+          </ul>
+        </li>
+        <li>Isi data Tunjangan jika ingin menambah data tunjangan, dengan cara Anda isi nama tunjangan kemudian klik tombol checklist, dengan penjelasan:
+          <ul class="alphabet-lower">
+            <li>Dihitung otomatis berarti tunjangan ini akan langsung bernilai default dari kode yang ada. Anda dapat merubah nilai tunjangan ini ketika gaji karyawan dibuat.</li>
+            <li>Dihitung pada lembur berarti tunjangan ini memberi pengaruh pada upah lembur yang didapatkan karyawan. Biasanya tunjangan berupa tunjangan jabatan.</li>
+            <li>Dihitung pada pemotongan gaji berarti tunjangan ini terpotong ketika karyawan absen/tidak masuk.</li>
+            <li>Harian/bulanan berarti tunjangan ini dihitung harian/bulanan. Jika bulanan berarti nilai tunjangan yang Anda berikan tidak akan dikalikan jumlah hari karyawan
+              tersebut masuk pada bulan itu. Jika harian berarti nilai tunjangan yang Anda berikan akan dikalikan jumlah hari karyawan tersebut masuk.</li>
+          </ul>
+        </li>
+        <li>Klik tombol ‘Simpan’ untuk menyimpan data atau,</li>
+        <li>Klik tombol ‘Batal’ untuk membatalkan penyimpanan data.</li>
+      </ul>
+    <% else %>
+      Tidak ada panduan untuk halaman ini.
+    <% end %> <!-- end if  action_name-->
+  </div>
+
+<% elsif controller_name == "people"%>
+  <div class="content-howto">
+    <% if action_name == "index" %>
+        <% if current_features.include?('employee_new') %>
+          <h2 class="topic">Bagaimana menambah data karyawan baru?</h2>
+          <ul>
+            <li>Silahkan klik tombol 'Tambah Karyawan' yang ada di sisi kanan atas daftar karyawan perusahaan. Anda akan masuk ke halaman tambah data karyawan baru.</li>
+          </ul>
+        <% end %> <!-- end current_features -->
+        <% if current_features.include?('employee_import') %>
+          <h2 class="topic">Bagaimana mengimport data karyawan perusahaan?</h2>
+          <ul>
+            <li>Silahkan klik tombol 'Import Data Karyawan' yang ada di sisi kanan atas daftar karyawan perusahaan.</li>
+            <li>Pop up import data akan muncul.</li>
+            <li>Anda dapat langsung mengimpor file yang berisi data karyawan perusahaan Anda jika Anda sudah pernah mengedit file contoh impor yang kami berikan.</li>
+            <li>Jika Anda belum pernah mendownload contoh file import dari aplikasi, silahkan download dulu contoh file import yang ada, kemudian edit data pada file tersebut.</li>
+            <li>Silahkan upload file hasil edit data karyawan yang merupakan contoh file dari aplikasi, kemudian klik Simpan untuk mengimpor data karyawan.</li>
+            <li>Silahkan klik 'Keluar' jika Anda ingin membatalkan impor data karyawan perusahaan.</li>
+          </ul>
+        <% end %> <!-- end current_features -->
+    <% elsif action_name == "new" %>
+      <h2 class="topic">Bagaimana menambah data karyawan?</h2>
+      <ul>
+        <li>Anda isi informasi:</li>
+        <ul class="alphabet-lower">
+          <li>Informasi Pribadi, pada informasi pribadi Anda isi informasi yang merupakan data pribadi dari karyawan tersebut.</li>
+          <li>Informasi pribadi meliputi:
+            <ul class="roman-lower">
+              <li>Nama Depan       : Isi dengan nama depan karyawan.</li>
+              <li>Nama Belakang    : Isi dengan nama belakang karyawan.</li>
+              <li>Jenis Kelamin    : Pilih salah satu jenis kelamin.</li>
+              <li>Kota Kelahiran   : Isi dengan kota kelahiran karyawan.</li>
+              <li>Tanggal Lahir    : Isi dengan tanggal lahir, pilih tanggal, bulan dan tahun lahir karyawan tersebut.</li>
+              <li>Agama            : Isi dengan agama karyawan tersebut dengan memilih salah satu agama yang telah disediakan.</li>
+              <li>Status           : Isi dengan status karyawan tersebut dengan memilih salah satu status yang telah disediakan.</li>
+              <li>No HP            : Isi dengan nomor handphone karyawan tersebut.</li>
+              <li>Personal Email   : Isi dengan alamat email yang dimiliki oleh karyawan.</li>
+             </ul>
+          </li>
+          <br class="clear"/>
+          <li>Informasi Kepegawaian, pada informasi kepegawaian Anda isi informasi yang berhubungan dengan kepegawaian.</li>
+          <li>Informasi kepegawaian meliputi:
+            <ul class="roman-lower">
+              <li>Nomor Induk Karyawan   : Isi dengan nomor induk karyawan tersebut.</li>
+              <li>Tanggal Mulai Kerja    : Isi dengan tanggal mulai kerjanya karyawan, pilih tanggal, bulan dan tahun yang telah disediakan.</li>
+              <li>Department             : Pilih salah satu departemen di mana karyawan ini terdaftar. Biarkan jika karyawan 
+                belum diassign ke departemen manapun.</li>
+              <li>Bagian                 : Pilih salah satu bagian/divisi pada di mana karyawan ini terdaftar. Biarkan jika 
+                karyawan belum diassign ke bagian tertentu.</li>
+              <li>Jabatan                : Pilih salah satu jabatan yang didapat karyawan pada perusahaan. Kosongkan jika 
+                karyawan belum memiliki jabatan/belum ditentukan jabatannya.</li>
+              <li>Status pajak           : Pilih salah satu status pajak pada pilihan yang telah tersedia.</li>
+            </ul>
+          </li>
+          <br class="clear"/>
+          <li>Informasi Kesehatan, pada informasi kesehatan Anda isi informasi yang berhubungan dengan kesehatan pegawai.</li>
+          <li>Informasi kesehatan meliputi:
+            <ul class="roman-lower">
+              <li>Buta Warna           : Keterangan karyawan buta warna atau tidak. Pilih ya jika karyawan buta warna, dan pilih tidak jika karyawan tidak buta warna.</li>
+              <li>Golongan Darah       : Silahkan pilih golongan darah karyawan.</li>
+              <li>Tinggi               : Isi dengan tinggi badan karyawan tersebut.</li>
+              <li>Berat                : Isi dengan berat badan karyawan tersebut.</li>
+              <li>Sejarah Penyakit     : Isi dengan sejarah penyakit yang pernah diderita oleh karyawan tersebut.</li>
+            </ul>
+          </li>
+          <br class="clear"/>
+          <li>Informasi Dokumen, pada informasi dokumen Anda isi informasi mengenai dokumen yang terkait dengan karyawan.</li>
+          <li>Informasi dokumen meliputi:
+            <ul class="roman-lower">
+              <li>Pas Foto       : Upload file foto karyawan tersebut.</li>
+              <li>CV             : Upload file resume mengenai karyawan tersebut.</li>
+              <li>No. KTP        : Isi dengan nomor KTP karyawan tersebut.</li>
+              <li>KTP            : Upload softcopy/gambar hasil scan KTP sebagai tanda bukti karyawan tersebut memiliki KTP.</li>
+              <li>No. NPWP       : Isi dengan nomor NPWP karyawan tersebut.</li>
+              <li>NPWP           : Upload softcopy NPWP/gambar hasil scan sebagai tanda bukti karyawan tersebut memiliki NPWP.</li>
+            </ul>
+          </li>
+          <br class="clear"/>
+          <li>Kontak Darurat, pada kontak darurat Anda isi informasi mengenai kontak darurat yang dapat dihubungi jika terjadi sesuatu pada karyawan tersebut.</li>
+          <li>Kontak darurat meliputi:
+            <ul class="roman-lower">
+              <li>Nama    : Isi dengan nama orang yang dapat dihubungi.</li>
+              <li>No Telp : Isi dengan nomor telepon yang dapat dihubungi.</li>
+              <li>Relasi  : Isi dengan relasi atau terdapat hubungan apa antara karyawan dengan orang yang informasinya dimasukkan ke dalam kontak darurat.</li>
+            </ul>
+          </li>
+        </ul>
+        <li>Klik tombol 'Simpan' untuk menyimpan data atau,</li>
+        <li>klik tombol 'Batal' untuk membatalkan penyimpanan data.</li>
+      </ul>
+    <% elsif action_name == "show" %>
+      <% if current_features.include?('employee_edit') %>
+        <h2 class="topic">Bagaimana mengisi dan merubah data pribadi karyawan?</h2>
+        <ul>
+          <li>Silahkan klik tombol 'Edit' pada bagian-bagian yang ingin Anda rubah.</li>
+        </ul>
+      <% end %> <!-- end current_features -->
+    <% elsif action_name == "keluar_masuk" %>
+      <h2 class="topic">Bagaimana menambahkan data keluar dan masuk karyawan?</h2>
+      <ul>
+        <li>Silahkan masuk ke tab 'Data Pekerjaan' karyawan, kemudian akses bagian Data Jabatan. Ada tombol 'Terminasi' yang bisa Anda klik untuk menterminasi karyawan.</li>
+        <li>Maka data karyawan yang diterminasi tersebut masuk ke halaman Keluar Masuk Karyawan.</li>
+      </ul>
+      <h2 class="topic">Bagaimana menghapus data keluar masuk?</h2>
+      <ul>
+        <li>Silahkan pilih data karyawan yang akan dihapus.</li>
+        <li>Sorot More Actions, klik Delete.</li>
+        <li>Data karyawan akan terhapus.</li>
+      </ul>
+    <% elsif action_name == "list_mutasi" %>
+      <h2 class="topic">Bagaimana menambahkan data mutasi?</h2>
+      <ul>
+        <li>Data mutasi ini berasal dari tab "Data Pekerjaan" pada halaman detail karyawan.</li>
+        <li>Silahkan klik link Nama Karyawan, pilih menu Data Pekerjaan.</li>
+        <li>Di hide menu Detail Jabatan anda dapat melakukan perubahan dengan mengklik link tanggal Periode.</li>
+        <li>Pop-up detail jabatan ditampilkan, klik "Edit" lalu isi field Perubahan dengan Mutasi.</li>
+        <li>Ketika klik Simpan dan muncul notifikasi, maka data karyawan tersebut masuk ke halaman Mutasi.</li>
+      </ul>
+      <br class="clear"/>
+      <h2 class="topic">Bagaimana menghapus data mutasi?</h2>
+      <ul>
+        <li>Silahkan pilih data karyawan yang akan dihapus.</li>
+        <li>Sorot More Actions, klik Delete.</li>
+        <li>Data karyawan akan terhapus.</li>
+      </ul>
+    <% elsif action_name == "list_demosi" %>
+      <h2 class="topic">Bagaimana menambahkan data demosi?</h2>
+      <ul>
+        <li>Data demosi ini berasal dari tab "Data Pekerjaan" pada halaman detail karyawan.</li>
+        <li>Silahkan klik link Nama Karyawan, pilih menu Data Pekerjaan.</li>
+        <li>Di hide menu Detail Jabatan anda dapat melakukan perubahan dengan mengklik link tanggal Periode.</li>
+        <li>Pop-up detail jabatan ditampilkan, klik "Edit" lalu isi field Perubahan dengan Demosi.</li>
+        <li>Ketika klik Simpan dan muncul notifikasi, maka data karyawan tersebut masuk ke halaman Demosi.</li>
+      </ul>
+      <br class="clear"/>
+      <h2 class="topic">Bagaimana menghapus data demosi?</h2>
+      <ul>
+        <li>Silahkan pilih data karyawan yang akan dihapus.</li>
+        <li>Sorot More Actions, klik Delete.</li>
+        <li>Data karyawan akan terhapus.</li>
+      </ul>
+    <% elsif action_name == "history" %>
+      <h2 class="topic">Bagaimana mengisi riwayat pekerjaan karyawan?</h2>
+      <ul>
+        <li>Silahkan klik tombol Tambah di setiap hide menu yang ingin anda isi.</li>
+      </ul>
+    <% else %>
+      Tidak ada panduan untuk halaman ini.
+    <% end %> <!-- end action_name -->
+  </div>
+
+<% elsif controller_name == "promotions"%>
+  <div class="content-howto">
+    <% if action_name == "index" %>
+      <h2 class="topic">Bagaimana menambahkan data mutasi?</h2>
+      <ul>
+        <li>Data promosi ini berasal dari tab "Data Pekerjaan" pada halaman detail karyawan.</li>
+        <li>Silahkan klik link Nama Karyawan, pilih menu Data Pekerjaan.</li>
+        <li>Di hide menu Detail Jabatan anda dapat melakukan perubahan dengan mengklik link tanggal Periode.</li>
+        <li>Pop-up detail jabatan ditampilkan, klik "Edit" lalu isi field Perubahan dengan Promosi.</li>
+        <li>Ketika klik Simpan dan muncul notifikasi, maka data karyawan tersebut masuk ke halaman Promosi.</li>
+      </ul>
+      <br class="clear"/>
+      <h2 class="topic">Bagaimana menambahkan data mutasiz?</h2>
+      <ul>
+        <li>Silahkan pilih data karyawan yang akan dihapus.</li>
+        <li>Sorot More Actions, klik Delete.</li>
+        <li>Data karyawan akan terhapus.</li>
+      </ul>
+    <% else %>
+      Tidak ada panduan untuk halaman ini.
+    <% end %> <!-- end action_name -->
+  </div>
+
+<% elsif controller_name == "salaries" %>
+  <div class="content-howto">
+    <% if action_name == "index"%>
+      <% if current_features.include?('salary_new') %>
+        <h2 class="topic">Bagaimana menghitung gaji karyawan?</h2>
+        <ul>
+          <li>Silahkan klik tombol 'Hitung gaji' yang ada pada bagian kanan atas daftar gaji karyawan. Anda akan secara otomatis masuk ke halaman hitung gaji karyawan.</li>
+        </ul>
+      <% end %> <!-- end current_features -->
+      <% if current_features.include?('salary_edit') %>
+        <h2 class="topic">Bagaimana mengedit data gaji karyawan?</h2>
+        <ul>
+          <li>Silahkan klik nilai bruto/bulan gaji karyawan yang ingin Anda edit, kemudian Anda akan masuk ke halaman detail gaji karyawan tersebut.</li>
+          <li>Silahkan klik tombol 'Edit' pada gaji karyawan tersebut sehingga Anda dapat melakukan edit gaji karyawan.</li>
+        </ul>
+      <% end %> <!-- end current_features -->
+      <% if current_features.include?('salary_download') %>
+        <h2 class="topic">Bagaimana mendownload slip gaji karyawan?</h2>
+        <ul>
+          <li>Jika Anda ingin mendownload slip gaji perorangan, silahkan klik link 'Download' pada kolom perlakuan pada data karyawan yang slipnya ingin Anda download.</li>
+          <li>Jika Anda ingin mendownload slip gaji beberapa karyawan sekaligus, yang pada aplikasi dimungkinkan mencetak slip gaji 8 orang sekaligus, maka silahkan ceklist
+            nama karyawan yang slip gajinya ingin Anda donwload, kemudian pada tombol 'More Actions' silahkan pilih 'Print Slip'.</li>
+        </ul>
+      <% end %> <!-- end current_features -->
+    <% elsif action_name == "new" %>
+      <h2 class="topic">Bagaimana menghitung gaji?</h2>
+      <ul>
+        <li>Anda isi informasi:
+          <ul class="alphabet-lower">
+            <li>Periode         : Anda pilih bulan pada daftar bulan yang telah disediakan dan pilih tahun pada daftar tahun yang telah disediakan.</li>
+            <li>Karyawan         : Isi dengan nama karyawan, sifat field ini adalah auto complete sehingga nama karyawan
+              yang sesuai dengan karakter yang dimasukkan muncul.</li>
+            <li>Pilih nama karyawan yang ingin Anda hitung gajinya, kemudian klik tombol Go.</li>
+            <li> Setelah klik tombol tersebut maka akan muncul data gaji karyawan tersebut, meliputi:
+            <ul class="roman-lower">
+              <li>Department                : Terisi dengan departemen mana karyawan tersebut berada.</li>
+              <li>Jabatan                   : Terisi dengan jabatan yang dimiliki oleh karyawan tersebut.</li>
+              <li>Status Pajak              : Terisi dengan status pajak karyawan, sesuai dengan yang dimasukkan pengguna ketika menambah atau memodifikasi data karyawan.</li>
+              <li>PTKP                      : Terisi dengan jumlah penghasilan tidak kena pajak.</li>
+              <li>Status                    : Terisi dengan status karyawan.</li>
+              <li>NPWP                      : Nomor NPWP atau nomor pokok wajib pajak karyawan tersebut terisi secara otomatis.</li>
+              <li>Jamsostek                 : Terisi 'Ya' jika karyawan memiliki asuransi jamsostek atau 'No' jika tidak memiliki asuransi jamsostek.</li>
+              <li>Gaji & Tunjangan          : memberikan informasi mengenai gaji pokok karyawan.</li>
+              <li>Gaji Pokok                : Isi dengan gaji pokok karyawan yang bersangkutan, jika gaji karyawan yang bersangkutan sudah pernah dihitung
+                maka gaji pokok akan muncul langsung pada field ini.</li>
+              <li>Pemasukan Lain            : memberikan informasi mengenai pemasukan lain-lain yang diterima karyawan pada bulan gaji tersebut.</li>
+              <li>Bonus                     : Isi dengan bonus yang didapat oleh karyawan yang bersangkutan.</li>
+              <li>Kekurangan bayar          : Isi dengan kekurangan bayar, hubungannya dengan jumlah perhitungan pajak yang jumlahnya lebih,
+                sehingga perusahaan memiliki kekurangan bayar terhadap karyawan.</li>
+              <li>Tunjangan-tunjangan       : Field ini hanya muncul jika pada pengaturan penggajian perusahaan disertakan tunjangan-tunjangan tertentu,
+                nilainya akan otomatis terisi jika tunjangan sudah pernah diberikan kepada karyawan yang bersangkutan pada periode sebelumnya.</li>
+              <li>Potongan                  : memberi informasi mengenai potongan gaji yang diterima karyawan, yang nilainya mengurangi jumlah gji total yang diterima karyawan.</li>
+              <li>Potongan Absensi          : Isi dengan potongan absensi yang diterima oleh karyawan, nilainya dhitung secara otomatis oleh sistem
+                sehingga Anda tidak perlu menghitung manual potongan absensi ini.</li>
+              <li>Potongan Jamsostek        : Isi dengan potongan jamsostek yang diterima oleh karyawan, nilainya sesuai dengan pengaturan
+                jamsostek yang dilakukan perusahaan dan sudah dimunculkan.</li>
+              <li>Potongan Pinjaman         : Isi dengan potongan pinjaman yang diterima oleh karyawan.</li>
+              <li>Potongan PUMP Jamsostek   : Isi dengan potongan PUMP Jamsostek yang diterima oleh karyawan, hanya berlaku untuk karyawan yang memiliki Jamsostek.</li>
+              <li>Potongan Koperasi         : Isi dengan potongan koperasi yang diterima oleh karyawan, karena karyawan mengikuti koperasi kantor.</li>
+              <li>Potongan Lain             : Isi dengan potongan lain yang diterima oleh karyawan.</li>
+              <li>Kelebihan bayar           : Isi dengan kelebihan bayar.</li>
+              <li>Note                      : Isi dengan catatan yang berhubungan dengan karyawan, mengenai perkembangan atau kemunduran yang terjadi.</li>
+            </ul>
+            </li>
+          </ul>
+        </li>
+        <li>Klik tombol 'Simpan' dan 'Lanjut' untuk menyimpan data dan melanjutkan proses selanjutnya atau,</li>
+        <li>Klik tombol 'Simpan' dan 'Kembali' untuk menyimpan data dan tidak melanjutkan proses selanjutnya atau,</li>
+        <li>Klik tombol 'Batal' untuk membatalkan penyimpanan data.</li>
+      </ul>
+    <% elsif action_name == "informasi_gaji" %>
+      <h2 class="topic">Bagaimana mengisi data gaji karyawan?</h2>
+      <ul>
+        <li>Silahkan klik tombol “Edit” lalu isi field-field yang anda inginkan.</li>
+      </ul>
+    <% else %>
+      Tidak ada panduan untuk halaman ini.
+    <% end %> <!-- end action_name -->
+  </div>
+
+<% elsif controller_name == "salary_master_datas"%>
+  <div class="content-howto">
+    <% if action_name == "index" %>
+      <% if current_features.include?('master_payroll_import') %>
+        <h2 class="topic">Bagaimana mengimpor data master gaji karyawan?</h2>
+        <ul>
+          <li>Silahkan klik tombol 'Impor Data Master Gaji' yang ada di sisi kanan atas daftar master gaji karyawan, kemudian pop up impor data master gaji akan muncul.</li>
+          <li>Anda dapat langsung mengimpor file master gaji karyawan perusahaan dengan klik browse file, atau jika Anda membutuhkan contoh file impor Anda dapat
+            langsung klik link di sini pada pop up sehingga aplikasi akan memberikan contoh file impor kepada Anda.</li>
+          <li>Contoh file ini dapat langsung Anda edit dengan data nama karyawan Anda dan jumlah tunjangan yang Anda berikan untuk masing-masing karyawan tersebut.</li>
+          <li>Untuk memasukkan data master gaji ini ke aplikasi, silahkan klik 'Simpan' pada pop up yang tersedia.</li>
+          <li>Silahkan klik 'Keluar' jika Anda ingin membatalkan pengimportan data master gaji karyawan.</li>
+        </ul>
+      <% end %> <!-- end current_features -->
+      <% if current_features.include?('master_payroll_edit') %>
+        <h2 class="topic">Bagaimana mengedit data master gaji karyawan tertentu?</h2>
+        <ul>
+          <li>Silahkan klik link 'Edit' yang disediakan pada sisi paling kanan kolom master gaji karyawan yang ingin Anda edit.</li>
+          <li>Secara otomatis Anda akan masuk ke halaman edit master gaji karyawan tersebut.</li>
+        </ul>
+      <% end %> <!-- end current_features -->
+    <% else %>
+      Tidak ada panduan untuk halaman ini.
+    <% end %> <!-- end action_name -->
+  </div>
+
+
+<% elsif controller_name == "schedules" %>
+  <div class="content-howto">
+    <% if action_name == "index"%>
+      <% if current_features.include?('schedule_new') %>
+        <h2 class="topic">Bagaimana menambah data penjadwalan baru?</h2>
+        <ul>
+          <li>Silahkan klik tombol 'Susun Jadwal Kerja' yang ada di sisi kanan atas.</li>
+          <li>Anda kemudian akan masuk ke halaman susun jadwal baru.</li>
+          <li>Silahkan masukkan data penjadwalan Anda pada halaman tersebut.</li>
+        </ul>
+      <% end %> <!-- end current_features -->
+      <% if current_features.include?('schedule_edit') %>
+        <h2 class="topic">Bagaimana mengedit data penjadwalan yang ada?</h2>
+        <ul>
+          <li>Silahkan klik periode/nama shift yang penjadwalannya akan Anda rubah.</li>
+          <li>Maka Anda akan masuk ke halaman edit penjadwalan tersebut.</li>
+          <li>Silahkan rubah data yang perlu Anda rubah.</li>
+        </ul>
+      <% end %> <!-- end current_features -->
+      *Penjadwalan bisa dibuat jika sudah menambahkan shift.
+      <br class="clear"/>
+    <% elsif action_name == "new" %>
+      <h2 class="topic">Bagaimana membuat penjadwalan baru?</h2>
+      <ul>
+        <li>Anda isi informasi:
+          <ul class="alphabet-lower">
+            <li>Periode      : Isi dengan periode penjadwalan diberlakukan, yaitu tanggal awal dan akhir periode.</li>
+            <li>Pilih jangka waktu periode selama mungkin jika shift yang digunakan adalah non-shift, sehingga Anda tidak perlu
+              terus menerus melakukan penjadwalan.</li>
+            <li>Shift        : Pilih shift yang akan dibuat penjadwalannya untuk periode tersebut.</li>
+            <li>Kedua aksi di atas akan memunculkan field nama karyawan dan field bagian yang dapat dimanfaatkan untuk mengassign
+              shift pada karyawan atau grup atau bagian tertentu.</li>
+            <li>Ketikkan nama karyawan yang akan Anda assign pada bagian Shift untuk karyawan, jika Anda ingin mengassign shift pada karyawan satu persatu.</li>
+            <li>Pilih assign shift pada banyak karyawan jika Anda ingin sekaligus mengassign shift pada banyak karyawan.</li>
+          </ul>
+        </li>
+        <li>Klik tombol ‘Simpan’ untuk menyimpan data atau,</li>
+        <li>Klik tombol ‘Batal’ untuk membatalkan penyimpanan data.</li>
+      </ul>
+      <br class="clear"/>
+    <% elsif action_name == "edit" %>
+      <h2 class="topic">Bagaimana mengedit penjadwalan?</h2>
+      <ul>
+        <li>Silahkan edit data yang perlu Anda edit dengan informasi:
+          <ul class="alphabet-lower">
+            <li>Periode      : Isi dengan periode penjadwalan diberlakukan, yaitu tanggal awal dan akhir periode.</li>
+            <li>Pilih jangka waktu periode selama mungkin jika shift yang digunakan adalah non-shift, sehingga Anda tidak perlu
+              terus menerus melakukan penjadwalan.</li>
+            <li>Shift        : Pilih shift yang akan dibuat penjadwalannya untuk periode tersebut.</li>
+            <li>Kedua aksi di atas akan memunculkan field nama karyawan dan field bagian yang dapat dimanfaatkan untuk mengassign
+              shift pada karyawan atau grup atau bagian tertentu.</li>
+            <li>Ketikkan nama karyawan yang akan Anda assign pada bagian Shift untuk karyawan, jika Anda ingin mengassign shift pada karyawan satu persatu.</li>
+            <li>Pilih assign shift pada banyak karyawan jika Anda ingin sekaligus mengassign shift pada banyak karyawan.</li>
+          </ul>
+        </li>
+        <li>Klik tombol ‘Simpan’ untuk mengupdate data atau,</li>
+        <li>Klik tombol ‘Batal’ untuk membatalkan penyimpanan data.</li>
+      </ul>
+    <% else %>
+      Tidak ada panduan untuk halaman ini.
+    <% end %> <!-- end if  action_name-->
+  </div>
+
+<% elsif controller_name == "settings" %>
+  <div class="content-howto">
+    <% if action_name == ('index') %>
+      <% if current_features.include?('hr_setting_edit') %>
+        <h2 class="topic">Bagaimana melakukan pengaturan HR setting?</h2>
+        <ul>
+          <li>Silahkan klik button 'Edit' di sisi kanan atas.</li>
+        </ul>
+      <% end %> <!-- end if  current_features -->
+      <br class="clear"/>
+    <% elsif action_name == "new" %>
+      <% if current_features.include?('hr_setting_edit') %>
+        <h2 class="topic">Bagaimana melakukan pengaturan HR setting?</h2>
+        <ul>
+          <li>Anda edit informasi:
+            <ul class="alphabet-lower">
+              <li>Toleransi keterlambatan       : Isi dengan waktu keterlambatan karyawan yang dapat ditoleransi.</li>
+              <li>Waktu Kelipatan Perhitungan   : Isi dengan waktu kelipatan untuk keterlambatan kerja karyawan.</li>
+              <li>Jatah Cuti Tahun Pertama      : Isi dengan jatah cuti untuk tahun pertama dimana karyawan bekerja.</li>
+              <li>Jatah Cuti Setiap Tahun       : Isi dengan jatah cuti yang diterima oleh karyawan setiap tahun.</li>
+            </ul>
+          </li>
+          <li>Klik tombol ‘Simpan’ untuk menyimpan data atau,</li>
+          <li>klik tombol ‘Batal’ untuk membatalkan penyimpanan data</li>
+        </ul>
+      <% end %> <!-- end current_features-->
+      <br class="clear"/>
+    <% elsif action_name == "cuti_sakit" %>
+      <% if current_features.include?('leave_new') %>
+        <h2 class="topic">Bagaimana menambah data cuti dan ijin sakit?</h2>
+        <ul>
+          <li>Silahkan klik tombol ‘Tambah Cuti dan Ijin Baru’ yang ada di sisi kanan atas, nanti Anda masuk pada halaman tambah cuti dan ijin sakit baru.</li>
+        </ul>
+      <% end %> <!-- end current_features -->
+      <% if current_features.include?('leave_edit') %>
+        <h2 class="topic">Bagaimana mengedit data cuti dan ijin sakit?</h2>
+        <ul>
+          <li>Silahkan klik nama cuti dan ijin sakit yang ingin Anda edit. Anda akan masuk ke halaman detail cuti dan ijin sakit tersebut yang dapat Anda edit.</li>
+        </ul>
+      <% end %> <!-- end current_features -->
+      <% if current_features.include?('leave_delete') %>
+        <h2 class="topic">Bagaimana menghapus data cuti dan ijin sakit?</h2>
+        <ul>
+          <li>Silahkan ceklist nama tipe cuti dan ijin sakit yang ingin Anda hapus kemudian pada tombol ‘More Actions’ klik ‘Delete’.</li>
+          <li>Jika konfirmasi hapus muncul, silahkan klik ‘ya’ untuk menghapus data.</li>
+          <li>Perlu diingat bahwa data default cuti dan ijin sakit yang muncul tidak dapat dihapus.</li>
+        </ul>
+      <% end %> <!-- end current_features-->
+      <br class="clear"/>
+    <% elsif action_name == "new_cuti_sakit" %>
+      <h2 class="topic"> Bagaimana menambahkan data cuti dan ijin sakit?</h2>
+      <ul>
+        <li>Anda edit informasi:
+          <ul class="alphabet-lower">
+            <li>Kode tidak masuk         : Isi dengan kode tidak masuk yang ingin ditambahkan.</li>
+            <li>Jenis tidak masuk        : Isi dengan jenis tidak masuk.</li>
+            <li>Jatah dalam satu tahun   : Jatah cuti (tidak masuk kerja) tersebut dalam satu tahun.</li>
+            <li>Dapat mengganti hari     : Pilih ya apabila dapat diganti dengan hari lain. Pilih tidak jika tidak dapat diganti dengan hari lain. </li>
+          </ul>
+        </li>
+        <li>Klik tombol ‘Simpan’ untuk menyimpan data atau,</li>
+        <li>klik tombol ‘Batal’ untuk membatalkan penyimpanan data</li>
+      </ul>
+      <br class="clear"/>
+    <% elsif action_name == "edit_cuti_sakit" %>
+      <% if current_features.include?('leave_edit') %>
+        <h2 class="topic">Bagaimana mengedit data cuti dan ijin sakit?</h2>
+        <ul>
+          <li>Silahkan rubah data yang ingin Anda rubah dengan informasi:
+            <ul class="alphabet-lower">
+              <li>Kode tidak masuk         : Isi dengan kode tidak masuk yang ingin diubah.</li>
+              <li>Jenis tidak masuk        : Isi dengan jenis tidak masuk.</li>
+              <li>Jatah dalam satu tahun   : Jatah cuti (tidak masuk kerja) tersebut dalam satu tahun.</li>
+              <li>Dapat mengganti hari     : Pilih ya apabila dapat diganti dengan hari lain. Pilih tidak jika tidak dapat diganti dengan hari lain. </li>
+            </ul>
+          </li>
+          <li>Klik tombol ‘Simpan’ untuk menyimpan data atau,</li>
+          <li>klik tombol ‘Batal’ untuk membatalkan penyimpanan data</li>
+        </ul>
+      <% end %> <!-- end current features -->
+    <% else %>
+      Tidak ada panduan untuk halaman ini.
+    <% end %> <!-- end if  action_name -->
+  </div>
+
+<% elsif controller_name == "shifts" %>
+  <div class="content-howto">
+  <% if action_name == "index" %>
+    <% if current_features.include?('shift_new') %>
+      <h2 class="topic">Bagaimana menambah data shift baru? </h2>
+      <ul>
+        <li>Silahkan klik tombol ‘Tambah Shift’ yang ada di kanan atas, nantinya Anda akan melihat halaman tambah shift.</li>
+      </ul>
+    <% end %> <!-- end current_features -->
+    <% if current_features.include?('shift_edit') %>
+      <h2 class="topic">Bagaimana mengedit data shift yang ada?</h2>
+      <ul>
+        <li>Silahkan pilih nama shift yang ingin Anda edit, klik nama shift tersebut. Secara otomatis Anda akan masuk ke halaman edit shift tersebut.</li>
+      </ul>
+    <% end %> <!-- end current_features -->
+    <% if current_features.include?('shift_delete') %>
+      <h2 class="topic">Bagaimana menghapus shift?</h2>
+      <ul>
+        <li>Silahkan ceklist nama shift yang ingin Anda hapus, kemudian pada tombol ‘More Actions’ silahkan klik ‘Delete’. Klik ya pada konfirmasi hapus yang keluar.</li>
+      </ul>
+    <% end %> <!-- end current features -->
+    <br class="clear"/>
+  <% elsif action_name == "new" %>
+        <h2 class="topic">Bagaimana menambahkan data shift baru?</h2>
+        <ul>
+          <li>Anda isi informasi:
+            <ul class="alphabet-lower">
+              <li>Nama shift               : Isi nama shift yang akan ditambahkan.</li>
+              <li>Jenis Shift              : Pilih jenis shift apakah shift, non-shift, atau shift-driver.</li>
+              <li>Lama Istirahat Maks      : Pilih jika jenis istirahat pada shift tersebut merupakan istirahat maksimal yang diberikan di setiap harinya.</li>
+              <li>Lama Istirahat Per Jam   : Pilih jika istirahat dilakukan per jam dalam satu hari.</li>
+              <li>Isi tabel Jadwal Kerja   :
+                <ul class="roman-lower">
+                  <li>Hari                : Keterangan hari Senin - Minggu.</li>
+                  <li>Jam Mulai Kerja     : Jam dimulainya bekerja.</li>
+                  <li>Jam Selesai Kerja   : Jam berakhirnya bekerja.</li>
+                  <li>Istirahat           : Lamanya istirahat.</li>
+                  <li>Lembur Wajib        : Lamanya lembur wajib.</li>
+                  <li>Libur               : Checklist apabila hari tersebut merupakan hari libur.</li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+          <li>Klik tombol ‘Simpan’ untuk menyimpan data atau,</li>
+          <li>klik tombol Batal untuk membatalkan penyimpanan data.</li>
+        </ul>
+        <br class="clear"/>
+      <% elsif action_name == "edit" %>
+        <h2 class="topic">Bagaimana mengedit data shift?</h2>
+        <ul>
+          <li>Silahkan edit komponen shift yang ingin Anda edit dengan informasi:
+            <ul class="alphabet-lower">
+              <li>Nama shift               : Isi nama shift yang akan ditambahkan.</li>
+              <li>Jenis Shift              : Pilih jenis shift apakah shift, non-shift, atau shift-driver.</li>
+              <li>Lama Istirahat Maks      : Pilih jika jenis istirahat pada shift tersebut merupakan istirahat maksimal yang diberikan di setiap harinya.</li>
+              <li>Lama Istirahat Per Jam   : Pilih jika istirahat dilakukan per jam dalam satu hari.</li>
+              <li>Isi tabel Jadwal Kerja   :
+                <ul class="roman-lower">
+                  <li>Hari                : Keterangan hari Senin - Minggu.</li>
+                  <li>Jam Mulai Kerja     : Jam dimulainya bekerja.</li>
+                  <li>Jam Selesai Kerja   : Jam berakhirnya bekerja.</li>
+                  <li>Istirahat           : Lamanya istirahat.</li>
+                  <li>Lembur Wajib        : Lamanya lembur wajib.</li>
+                  <li>Libur               : Checklist apabila hari tersebut merupakan hari libur.</li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+          <li>Klik tombol ‘Simpan’ untuk mengupdate data atau,</li>
+          <li>klik tombol Batal untuk membatalkan penyimpanan data.</li>
+        </ul>
+      <% else %>
+        Tidak ada panduan untuk halaman ini.
+      <%end%> <!-- end if  action_name-->
+    </div>
+<% elsif controller_name == "dashboard" %>
+
+  <% if current_features.include?('absent_report') && action_name == "view_absensi" %>
+    <h2 class="topic">Bagaimana melihat grafik absensi?</h2>
+    <ul>
+      <li>Silahkan filter menurut Departemen, Bagian, Bulan atau Tahun.</li>
+      <li>Kemudian tekan tombol "Lihat Statistik".</li>
+      <li>Grafik akan muncul dalam bentuk pie chart dan column chart berdasarkan parameter yang anda pilih.</li>
+    </ul>
+  <% end %>
+    
+  <% if current_features.include?('present_report') && action_name == "view_rekap_absensi" %>
+    <h2 class="topic">Bagaimana melihat rekap kehadiran?</h2>
+    <ul>
+      <li>Silahkan filter menurut Department, Bagian, Periode, NIK, Nama Karyawan atau Status Kontrak.</li>
+      <li>Kemudian tekan tombol "Lihat Statistik"</li>
+      <li>Data rekap akan muncul berdasarkan parameter yang anda pilih.</li>
+    </ul>
+  <% end %>
+
+  <% if action_name == "view_rekap_overtime" %>
+    <h2 class="topic">Bagaimana melihat rekap lembur?</h2>
+    <ul>
+      <li>Silahkan filter menurut Department, Bagian, Periode, NIK, Nama Karyawan atau Status Kontrak.</li>
+      <li>Kemudian tekan tombol "Lihat Statistik"</li>
+      <li>Data rekap akan muncul berdasarkan parameter yang anda pilih.</li>
+    </ul>
+  <% end %>
+    
+  <% if current_features.include?('formation_report') && action_name == "view_formasi_departemen" %>
+    <h2 class="topic">Bagaimana melihat grafik departemen?</h2>
+    <ul>
+      <li>Silahkan filter menurut Tanggal, Departemen atau Bagian.</li>
+      <li>Kemudian tekan tombol "Lihat Statistik".</li>
+      <li>Grafik akan muncul dalam bentuk pie chart berdasarkan parameter yang anda pilih.</li>
+    </ul>
+  <% end %>
+    
+  <% if current_features.include?('employee_status_report') && action_name == "view_status" %>
+    <h2 class="topic">Bagaimana melihat grafik Status Kontrak Karyawan?</h2>
+    <ul>
+      <li>Silahkan filter menurut Tanggal.</li>
+      <li>Kemudian tekan tombol "Lihat Statistik".</li>
+      <li>Grafik akan muncul dalam bentuk column chart berdasarkan tanggal.</li>
+    </ul>
+  <% end %>
+
+  <% if current_features.include?('sp_report') && action_name =="view_sp" %>
+    <h2 class="topic">Bagaimana melihat grafik Surat Peringatan?</h2>
+    <ul>
+      <li>Silahkan filter menurut Tahun dan Bulan.</li>
+      <li>Kemudian tekan tombol "Lihat Statistik".</li>
+      <li>Grafik akan muncul dalam bentuk column chart berdasarkan Parameter yang dipilih.</li>
+    </ul>
+  <% end %>
+    
+  <% if current_features.include?('accident_report') && action_name == "view_accident" %>
+    <h2 class="topic">Bagaimana melihat grafik Kecelakaan Kerja?</h2>
+    <ul>
+      <li>Silahkan filter menurut Tahun dan Bulan.</li>
+      <li>Kemudian tekan tombol "Lihat Statistik".</li>
+      <li>Grafik akan muncul dalam bentuk column chart berdasarkan Parameter yang dipilih.</li>
+    </ul>
+  <% end %>
+
+  <% if current_features.include?('formation_gender_report') && action_name == "view_formasi"%>
+    <h2 class="topic">Bagaimana melihat grafik jenis kelamin?</h2>
+    <ul>
+      <li>Silahkan filter menurut Tanggal, Departemen atau Bagian.</li>
+      <li>Kemudian tekan tombol "Lihat Statistik".</li>
+      <li>Grafik akan muncul dalam bentuk pie chart berdasarkan parameter yang anda pilih.</li>
+    </ul>
+  <% end %>
+    
+  <% if current_features.include?('formation_position_report') && action_name == "view_formasi_jabatan" %>
+    <h2 class="topic">Bagaimana melihat grafik jabatan?</h2>
+    <ul>
+      <li>Silahkan filter menurut Tanggal, Departemen atau Bagian.</li>
+      <li>Kemudian tekan tombol "Lihat Statistik".</li>
+      <li>Grafik akan muncul dalam bentuk pie chart berdasarkan parameter yang anda pilih.</li>
+    </ul>
+  <% end %>
+    
+  <% if current_features.include?('in_out_employee_report') && action_name == "view_mutasi" %>
+    <h2 class="topic">Bagaimana melihat grafik karyawan yang keluar masuk perusahaan?</h2>
+    <ul>
+      <li>Silahkan filter menurut Tahun, Bulan, Bagian, Group, Jenis Kelamin, Jabatan atau Status.</li>
+      <li>Kemudian tekan tombol "Lihat Statistik".</li>
+      <li>Grafik akan muncul dalam bentuk column chart berdasarkan parameter yang anda pilih.</li>
+    </ul>
+  <% end %>
+
+  <% if current_features.include?('formation_division_report') && action_name == "view_formasi_bagian" %>
+    <h2 class="topic">Bagaimana melihat grafik bagian?</h2>
+    <ul>
+      <li>Silahkan filter menurut Tanggal atau Departemen.</li>
+      <li>Kemudian tekan tombol "Lihat Statistik".</li>
+      <li>Grafik akan muncul dalam bentuk pie chart berdasarkan parameter yang anda pilih.</li>
+    </ul>
+  <% end %>
+
+<% else %>
+   Tidak ada panduan untuk halaman ini.
+<% end %>

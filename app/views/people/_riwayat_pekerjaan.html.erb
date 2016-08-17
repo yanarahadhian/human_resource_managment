@@ -1,0 +1,134 @@
+<div class="panelFilter">
+  <table cellspacing="0" cellpadding="0">
+    <tbody><tr>
+        <td width="103px">
+          <div id="action_menu">
+            <ul>
+              <li>
+                <a class="grey_button2">
+                  <span class="left">More Actions</span>
+                  <span class="icons drop_arrow_ico">&nbsp;</span>
+                </a>
+                <div class="clear"></div>
+                <ul>
+                  <li style="cursor: default; list-style-image: none;"><a onclick="onDelete(2)" class="list">Delete</a></li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </td>
+        <td>
+          <div class="pagination">
+            <span class="add-button right">
+              <a id="add_work" href="/popup_add_experience/<%= @person.id %>/work" class="grey_button2">
+                <span class="icons add_ico">&nbsp;</span>
+                Tambah Pekerjaan
+              </a>
+            </span>
+          </div>
+          <div class="clear"></div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<div class="clear"></div>
+<table id="work_table">
+  <thead>
+    <tr>
+      <th width="30"><input type="checkbox"/></th>
+      <th width="200" class="center-text">Periode</th>
+      <th width="208" class="right-text">Nama Perusahaan</th>
+      <th width="130" class="center-text">Posisi</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% unless @person.exp_by_type('work').blank? -%>
+      <% @person.exp_by_type('work').each do |exp| %>
+        <tr>
+          <td class="center-text"><%= check_box_tag'myrow[ids][]', exp.id, false %></td>
+          <td><%= exp.start_date.to_s + ' - ' + zero_to_now(exp.end_date) %></td>
+          <td class="left-text">
+            <a id="edit_work_<%= exp.id %>"  href="/popup_edit_experience/<%= @person.id %>/<%= exp.id %>/work">
+              <%= exp.previous_company.company_name unless exp.previous_company.blank? %>
+            </a>
+          </td>
+          <td class="left-text"><%= exp.position_held.blank? ? "-" : "#{exp.position_held} ," %><%= exp.division.blank? ? "-" : exp.division %></td>
+        </tr>
+      <% end %>
+    <% else %>
+      <tr class="no-data">
+        <td colspan="4" class="center-text"><div class="description">Belum Ada Data Pekerjaan. </div><div class="info">Silahkan klik<a id="add_work2" href="/popup_add_experience/<%= @person.id %>/work"> Tambah Pekerjaan</a> untuk menambah data</div></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+
+<script>
+
+  var gaiSelectedWorks = []
+
+  $(document).ready(function(){
+<% @person.exp_by_type('work').each do |exp| %>
+      $("#edit_work_<%= exp.id %>").colorbox({width:"550px",height:"600px", iframe:true,
+        onClosed:function(){
+          $('#riwayat_pekerjaan').load('<%= ApplicationController::BASE_URL %>/riwayat_experience/<%= @person.id %>/work');
+        }
+      });
+<%end%>
+    
+    $("#add_work").colorbox({width:"550px",height:"580px", iframe:true, iframe:true,
+      onClosed:function(){
+        $('#riwayat_pekerjaan').load('<%= ApplicationController::BASE_URL %>/riwayat_experience/<%= @person.id %>/work');
+      }
+    });
+
+    $("#add_work2").colorbox({width:"600px",height:"640px", iframe:true, iframe:true,
+      onClosed:function(){
+        $('#riwayat_pekerjaan').load('<%= ApplicationController::BASE_URL %>/riwayat_experience/<%= @person.id %>/work');
+      }
+    });
+
+    $('#work_table thead tr th input').live('click', function () {
+      if ($(this).is(":checked")) {
+        $('#work_table tbody tr td input').each(function (){
+          $(this).attr( 'checked', true );
+          $(this).parent().parent().addClass('row_selected');
+          var iId = this ;
+          if ( jQuery.inArray(iId.value, gaiSelectedWorks) == -1 ){
+            gaiSelectedWorks[gaiSelectedWorks.length++] = iId.value;
+          }
+        });
+      }
+      else{
+        $('#work_table tbody tr').each(function (){
+          $(this).removeClass('row_selected');
+          var iId = $('#work_table tbody tr td input');
+          gaiSelectedWorks = [];
+          iId.attr( 'checked', false );
+        });
+      }
+    });
+
+  });
+
+  function delete_pekerjaan(){
+    var arr_params = new Array();
+    $('#work_table tbody input:checked').each(function() {
+      arr_params = arr_params.concat($(this).val());
+    });
+    var controller = "/experiences/delete_multiple";
+    $("#ajax-load").show();
+    $.ajax({
+      type: "post",
+      url: escape(controller),
+      data:{'_method': 'post',"ids":arr_params,"person_id":<%= @person.id %>},
+      dataType: 'script',
+      success: function(){
+        $("#ajax-load").hide();
+        $.fn.colorbox.close();
+      }
+    })
+  }
+</script>

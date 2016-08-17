@@ -1,0 +1,23 @@
+<p>
+  <b>Award name:</b>
+  <%=h @award.award_name %>
+</p>
+
+<p>
+  <b>Award date:</b>
+  <%=h @award.award_date %>
+</p>
+
+<p>
+  <b>Period type:</b>
+  <%=h @award.period_type %>
+</p>
+
+<p>
+  <b>Period:</b>
+  <%=h @award.period_id %>
+</p>
+
+
+<%= link_to 'Edit', edit_award_path(@award) %> |
+<%= link_to 'Back', awards_path %>

@@ -1,0 +1,169 @@
+<%= render :partial=> "layouts/shared/breadcrumbs" %>
+<fieldset class="fm-table">
+  <legend><a href="#" id="help_dash" class="icons help-top-icon" title="Click to show/hide information">&nbsp;</a>Setting Payroll</legend>
+  <%= render :partial => "layouts/howto/howto_content"%>
+  <%= render :partial => "layouts/delete_message" %>
+  <fieldset class="fm-table-notab">
+    <legend><a>Informasi payroll setting</a></legend>
+    <div class="" id="info_payroll_setting">
+      <div class="input big">
+        <% if current_features.include?('payroll_edit') %>
+          <%= link_to '<span class="icons edit-icon">&nbsp;</span>Edit' , "#payroll/new", :class=> 'grey_button_a edit_payroll top-right' %>
+        <% end %>
+        <span class="input-field bold" id="beri_jamsostek">
+          <label class="auto-size"> <%=h @company_name %>
+          <% if !@payroll.blank? %>
+            <% if @payroll.jamsostek_by_company %>
+              memberikan Jamsostek
+            <% else %>
+              tidak memberikan Jamsostek
+            <% end %>
+          <% else %>
+             <span class="bold">Belum menentukan Jamsostek</span>
+          <% end %>
+          </label>
+        </span>
+        <div class="clear"></div>
+        <br />
+        <span class="input-field">
+          <label style="width: 200px">Total hari kerja </label>:
+          <% if !@payroll.blank? %> 
+            <% if @payroll.full_working_days == 0 %>
+              Jumlah Hari Dalam Bulan
+            <% else %>
+              <%=h @payroll.full_working_days %> hari
+            <% end %>
+          <% else %>
+              -
+          <% end %>
+        </span>
+        <div class="clear"></div>
+        <span class="input-field">
+          <label style="width:200px">Kode BCA cabang</label>:            
+          <% if !@payroll.blank? && !@payroll.bca_branch_code.blank? %>
+            <%=h @payroll.bca_branch_code %>
+          <% else %>
+            -
+          <% end %>
+        </span>
+        <span class="clear"></span>
+        <span class="input-field">
+          <label style="width: 200px">Kode BCA milik perusahaan</label>:
+          <% if !@payroll.blank? && !@payroll.bca_company_code.blank? %>
+            <%=h @payroll.bca_company_code %>
+          <% else %>
+            -
+          <% end %>
+        </span>
+        <span class="clear"></span>
+        <span class="input-field">
+          <label style="width: 200px">Inisial perusahaan di BCA</label>:
+          <% if !@payroll.blank? && !@payroll.bca_company_initial.blank?  %>
+            <%=h @payroll.bca_company_initial %>
+          <% else %>
+            -
+          <% end %>
+        </span>
+        <span class="clear"></span>
+        <span class="input-field">
+          <label style="width: 200px">BCA Company Account Number</label>:
+          <% if !@payroll.blank? && !@payroll.bca_company_account_number.blank?  %>
+            <%=h @payroll.bca_company_account_number %>
+          <% else %>
+           -
+          <% end %>
+        </span>
+        <span class="input-field">
+          <label style="width: 200px">Slip Gaji Menggunakan Logo Perusahaan </label>:
+            <%if @payroll.use_logo_in_payroll_slip.present? %>
+              <%if @payroll.use_logo_in_payroll_slip%>
+                Ya
+              <%else%>  
+                Tidak
+              <%end%>  
+            <%else%> 
+              Belum Di Setting
+            <%end%> 
+        </span>
+      </div>
+    </div>
+  </fieldset>
+
+  <div class="left" style="width: 30%">
+    <fieldset class="fm-table-notab">
+      <legend><a >Informasi PTKP</a></legend>
+      <div id="info_ptkp">
+        <div id="table_ptkp">
+          <%= render :partial => 'ptkp' %>
+        </div>
+      </div>
+    </fieldset>
+  </div>
+
+  <div class="left" style="width: 70%">
+      <fieldset class="fm-table-notab">
+      <legend><a>Informasi Tunjangan</a></legend>
+      <div id="info_premiums">
+        <div id="table_premium">
+          <%= render :partial => 'premiums' %>
+        </div>
+      </div>
+    </fieldset>
+  </div>
+
+</fieldset>
+<script type="text/javascript">
+
+  $(".tablesorter").tablesorter({
+    widgets: ['zebra']
+  });
+
+  <% if @payroll.company_cover_jamsostek == 0%>
+    $("#jlh_jamsostek").hide();
+  <% end unless @payroll.blank?%>
+
+ $(document).ready(function(){
+   error_handle("<%= flash.now[:notice] %>");
+   $('#trigger_payroll_setting').click(function(){
+     if($('#info_payroll_setting').is(':hidden')){
+        $('#info_payroll_setting').show();
+        $('#arrow1').removeClass('icons arrow_ico');
+        $('#arrow1').addClass('icons drop_arrow_ico');
+     }else{
+        $('#info_payroll_setting').hide();
+        $('#arrow1').removeClass('icons drop_arrow_ico');
+        $('#arrow1').addClass('icons arrow_ico');
+     }
+   });
+
+   $('#trigger_ptkp').click(function(){
+     if($('#info_ptkp').is(':hidden')){
+        $('#info_ptkp').show();
+        <%= render :partial => "layouts/shared/tooltip_hr_setting" %>
+        $('#arrow2').removeClass('icons arrow_ico');
+        $('#arrow2').addClass('icons drop_arrow_ico');
+     }else{
+        $('#info_ptkp').hide();
+        $('.cls_edit_ptkp').addClass("hide-tooltip");
+        $('#arrow2').removeClass('icons drop_arrow_ico');
+        $('#arrow2').addClass('icons arrow_ico');
+     }
+   });
+
+   $('#trigger_premiums').click(function(){
+      if($('#info_premiums').is(':hidden')){
+        $('#info_premiums').show();
+        <%= render :partial => "layouts/shared/tooltip_hr_setting" %>
+        $('#arrow3').removeClass('icons arrow_ico');
+        $('#arrow3').addClass('icons drop_arrow_ico');
+      }else{
+        $('.cls_edit_premium').addClass("hide-tooltip");
+        $('.cls_add_premium').addClass("hide-tooltip");
+        $('#info_premiums').hide();
+        $('#arrow3').removeClass('icons drop_arrow_ico');
+        $('#arrow3').addClass('icons arrow_ico');
+        $
+      }
+    });
+  });
+</script>

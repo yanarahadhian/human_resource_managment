@@ -1,0 +1,92 @@
+<% unless @person.blank? %>
+<% if @person.more_than_three_months %>
+  <script type="text/javascript">
+  
+    $(document).ready(function(){
+      $('.ui-date').datepicker();
+    });
+
+    function stop_filter2(){
+      $("#button").show();
+      $("#ajax-load1").hide();
+    }
+
+    function ajaxLoad2(url, div_btn, div_load,item){
+      $("#" + div_load + "").show();
+      $("#" + div_btn + "").hide();
+      $("#honor_item_kembali").val(item);
+      var val = $("#honor_item_kembali").val();
+      var form = document.getElementById('form_ajax_thr')
+      $('#button_accident_submit').hide();
+      if(form.onsubmit()){
+        form.submit();
+      }
+    }
+  </script>
+
+  <% input_salary = "input" %>
+  <% err_salary = error_message_on @honor, :salary %>
+  <% input_salary = "input-error" unless err_salary.blank? %>
+
+  <%= javascript_include_tag  'application' %>
+  <% url = nil %>
+  <% if params[:action] == "edit" || params[:action] == "update" %>
+     <% url = holiday_allowance_path(@honor) %>
+  <% else %>
+      <% url = holiday_allowances_path %>
+  <% end %>
+  <% form_remote_for @honor, :honor, :url => url, :html => { :class => '', :id => "form_ajax_thr" } do |f| -%>
+    <% unless @person.blank? %>
+      <%= f.hidden_field :person_id, :value => @person.id %>
+      <%= f.hidden_field :honor_month, :value => @honor_month %>
+      <%= f.hidden_field :honor_year, :value => @honor_year %>
+      <%= f.hidden_field :company_id, :value => @person.company_id %>
+      <%= f.hidden_field :item_kembali %>
+    <% end %>
+    <div class="fifty-fifty left">
+      <div class="clear"></div><br/>
+      <fieldset class="fm-form">
+        <legend> Tunjangan Hari Raya (THR) </legend>
+        <div class=" box-form">
+          <span class="<%= input_salary %>">
+            <div id="trigger1">
+              <span class=""><span class="icons arrow_ico">&nbsp;</span></span>
+              <label>THR <span class="redstar">*</span></label>
+            </div> :
+            Rp. <%= f.text_field :salary, :class => "right-text small-text-table" %> ,-          
+            <%= err_salary %>
+          </span>
+          <div class="clear"></div>
+        </div>
+      </fieldset>
+      <div class="clear"></div>
+    </div>
+    <div class="fifty-fifty left">
+      <div class="clear"></div>
+    </div>
+    <div class="clear"></div>
+    <div class="box-form">
+      <br />
+      <fieldset class="fm-form">
+        <legend>Note :</legend>
+      <span class="input note" id="target_trigger5">
+        <%= f.text_area :note_for_employee, :size => '70x2' %>
+      </span>
+      </fieldset>
+    </div>
+    <div class="clear"></div>
+    <div class="box-form center-text">
+      <%= render :partial => "layouts/button_loader"  %>
+      <div id="button">
+        <input id="info_section_cancel_basic" class="grey_button" type="reset" value="Batal" name="info_section_cancel_basic" onclick="onCancel('#holiday_allowances')"/>
+        <% if params[:action] == "edit" || params[:action] == "update" %>
+          <input type="button" value="Update" name="info_section_save_basic" id="info_section_save_basic" class="blue_button" onclick="ajaxLoad2('#person_index', 'button', 'ajax-load1','kembali')"/>
+        <% else %>
+          <input type="button" value="Simpan dan Lanjut" name="info_section_save_basic" id="info_section_save_basic" class="blue_button" onclick="ajaxLoad2('#person_index', 'button', 'ajax-load1','lanjut')"/>
+          <input type="button" value="Simpan dan Kembali" name="info_section_save_basic" id="info_section_save_basic" class="blue_button" onclick="ajaxLoad2('#person_index', 'button', 'ajax-load1','kembali')"/>
+        <% end %>              
+      </div>
+    </div>
+  <% end %>
+<% end %>
+<% end %>

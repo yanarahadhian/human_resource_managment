@@ -1,0 +1,241 @@
+#confirm_body {
+padding:5px;
+}
+#confirm_body #confirm_progress {
+text-align:center;
+}
+#confirm_body #confirm_status {
+margin:5px 0 10px;
+}
+#confirm_body #confirm_error {
+margin:0 0 10px;
+}
+#confirm_body #error, #confirm_body #status {
+margin:10px 0;
+}
+#confirm_body .editor {
+margin:10px auto;
+}
+#confirm_body .instructions {
+padding-bottom:5px;
+}
+#confirm_body .instruction_details {
+padding-top:5px;
+}
+#confirm_body #confirm_intro {
+padding-bottom:10px;
+}
+#confirm_body #code, #confirm_body #email {
+margin:2px 0;
+width:175px;
+}
+#confirm_body #confirm {
+margin-top:3px;
+}
+#confirm_body #confirm_form {
+margin:5px auto 10px;
+width:250px;
+}
+#confirm_body .help_links {
+font-size:9px;
+margin-top:10px;
+}
+#confirm_email_banner {
+-moz-background-clip:border;
+-moz-background-inline-policy:continuous;
+-moz-background-origin:padding;
+background:#FFF9D7 none repeat scroll 0 0;
+border-bottom:1px solid #E2C822;
+padding:7px;
+text-align:center;
+}
+#confirm_email_banner .confirm_banner_text {
+-moz-background-clip:border;
+-moz-background-inline-policy:continuous;
+-moz-background-origin:padding;
+background:transparent url(/images/7kh1isz6.gif) no-repeat scroll left center;
+display:inline-block;
+font-weight:bold;
+padding-left:20px;
+}
+#confirm_email_banner .confirm_banner_options {
+font-weight:bold;
+}
+.survey_profile {
+margin:auto;
+padding-right:180px;
+width:740px;
+}
+.survey_message {
+-moz-background-clip:border;
+-moz-background-inline-policy:continuous;
+-moz-background-origin:padding;
+background:#F1F1F7 none repeat scroll 0 0;
+border:1px solid #BBBBE9;
+font-family:"lucida grande",tahoma,verdana,arial,sans-serif;
+margin-bottom:13px;
+padding:3px 4px 8px;
+}
+.survey_message .title {
+border-bottom:1px solid #BBBBE9;
+font-size:13px;
+font-weight:bold;
+padding:4px;
+}
+.survey_message .text {
+float:left;
+font-size:11px;
+padding:4px;
+}
+.survey_message .answer_button {
+font-size:11px;
+padding:4px;
+text-align:right;
+}
+.survey_dialog .question_title {
+font-size:14px;
+font-weight:bold;
+padding:5px 3px;
+}
+.survey_dialog .question_instruction {
+font-size:12px;
+padding:6px 3px 3px;
+}
+.survey_dialog .question_checkbox_div {
+font-size:12px;
+font-weight:normal;
+padding:3px 0;
+}
+.survey_dialog .question_checkbox_div label {
+font-weight:normal;
+}
+.survey_dialog .other_instructions {
+font-size:12px;
+font-weight:lighter;
+margin:13px 3px 3px;
+}
+.UIRoundedTransparentBox {
+margin:0;
+padding:0;
+}
+.UIRoundedTransparentBox_Inner {
+margin:0;
+padding:0;
+position:relative;
+}
+.UIRoundedTransparentBox_Border {
+-moz-background-clip:border;
+-moz-background-inline-policy:continuous;
+-moz-background-origin:padding;
+background:transparent none repeat scroll 0 0;
+border:1px solid #CFCFCF;
+margin:0;
+padding:0;
+}
+.UIRoundedTransparentBox_Corner {
+-moz-background-clip:border;
+-moz-background-inline-policy:continuous;
+-moz-background-origin:padding;
+background:transparent url(/images/6jwhsirz.gif) no-repeat scroll left top;
+height:8px;
+margin:0;
+overflow:hidden;
+padding:0;
+position:absolute;
+width:8px;
+}
+.UIRoundedTransparentBox_TL {
+background-position:0 0;
+left:0;
+top:0;
+}
+.UIRoundedTransparentBox_TR {
+background-position:-8px 0;
+right:0;
+top:0;
+}
+.UIRoundedTransparentBox_BL {
+background-position:0 -8px;
+bottom:0;
+left:0;
+}
+.UIRoundedTransparentBox_BR {
+background-position:-8px -8px;
+bottom:0;
+right:0;
+}
+.UIInterstitialBox_Container {
+padding:25px 30px;
+}
+.UIRoundedTransparentBox_Striped .UIInterstitialBox_Container {
+padding:40px 30px 25px;
+}
+.UIStripe_Image {
+margin:0;
+position:absolute;
+z-index:1;
+}
+.UIInterstitialBox_Container ul {
+list-style-type:square;
+margin:0 0 0 13px;
+padding:0;
+}
+.UIInterstitialBox_Container ul li {
+color:#3B5998;
+}
+.UISimpleMessage_Container {
+margin:0;
+padding:0;
+}
+.UISimpleMessage_Title {
+border-bottom:1px solid #CCCCCC;
+margin:0;
+padding:0 0 10px;
+}
+.UISimpleMessage_Title h1 {
+font-size:22px;
+padding:0;
+}
+.UISimpleMessage_Title h2 {
+font-size:14px;
+padding:0;
+}
+.UISimpleMessage_Content {
+margin:0;
+padding:0;
+}
+.UISimpleMessage_HasIcon .UISimpleMessage_Title h1 {
+background-position:left top;
+background-repeat:no-repeat;
+padding-left:30px;
+}
+.UISimpleMessage_HasIcon .UISimpleMessage_Title h2 {
+background-position:left top;
+background-repeat:no-repeat;
+padding-left:25px;
+}
+.UISimpleMessage_HasIcon .UISimpleMessage_Content {
+padding-left:0;
+}
+#bootloader_css_4kd2ki4ug5k4w0s8_pkg_css {
+height:42px;
+}
+.title_header.add_border {
+border-bottom:1px solid #CCCCCC;
+}
+.error {
+background-color:#FFEBE8;
+border-color:#DD3C10;
+}
+.UIMessageBox {
+border-style:solid;
+border-width:1px;
+padding:10px;
+}
+#standard_status {
+margin-bottom:15px;
+}
+.status {
+background-color:#FFF9D7;
+border-color:#E2C822;
+}

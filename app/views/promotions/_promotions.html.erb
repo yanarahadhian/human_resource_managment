@@ -1,0 +1,187 @@
+<div class="panelFilter">
+  <table cellspacing="0" cellpadding="0">
+    <tbody>      
+      <tr>
+        <% unless @employments.blank? %>
+          <td style="width:100px;">
+            <div id="action_menu">
+              <ul>
+                <li>
+                  <a class="grey_button2">
+                    <span class="left">More Actions</span>
+                    <span class="icons drop_arrow_ico">&nbsp;</span>
+                  </a>
+                  <div class="clear"></div>
+                  <ul>
+                    <li><a class="list" onclick="onDelete('index')">Delete</a></li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+          </td>
+          <td>
+            <a class="grey_button2" id="filter_trigger" style="color: rgb(89, 119, 156); ">
+              <span class="icons filter-ico">&nbsp;</span> Filter
+            </a>
+          </td>
+          <td style="width:240px;">
+            <div class="pagination">
+              <div id="action_menu">
+                <ul>
+                  <li>
+                    <a class="grey_button2">
+                      <span class="left">Export Data to</span>
+                      <span class="icons drop_arrow_ico">&nbsp;</span>
+                    </a>
+                    <div class="clear"></div>
+                    <ul>
+                      <li><a class="list" href="<%= export_change_from_before_path('promosi') %>"><span class="icons xls_ico">&nbsp;</span><span class="left">XLS File</span></a></li>
+                    </ul>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div class="clear"></div>
+          </td>
+        <% else %>
+          <td>&nbsp;</td>
+        <% end %>
+      </tr>
+      <tr id="filter_block">
+          <td colspan="3">
+            <div class="expand_filter">
+              <div id="filter_st" style="display: block; ">
+                <% form_remote_tag :url => {:action=>:index}, :method => :get  do -%>
+                  <div class="left-filter">
+                    <div id="filter_opt_1">
+                      <div class="clear"></div>
+                      <div class="filter_opt">
+                        <label class="left">Nama</label>
+                        <%= text_field :filter, :name %>
+                      </div>
+                    </div>
+
+                    <div id="filter_opt_2">
+                      <div class="clear"></div>
+                      <div class="filter_opt">
+                        <label class="left">Status</label>
+                        <%= collection_select :filter, :contract_type_id , ContractType.by_company("#{session[:platform_user]['user']['user_company']['id']}").all, :id, :contract_type_name, {:prompt => "Pilih"}, :style => "width :100px" %>
+                      </div>
+                    </div>
+
+                    <div id="filter_opt_3">
+                      <div id="div_divisi">
+                        <div class="clear"></div>
+                        <div class="filter_opt">
+                          <label class="left">Bagian</label>
+                          <%= collection_select :filter, :division_id , Division.by_company("#{session[:platform_user]['user']['user_company']['id']}").all, :id, :name, {:prompt => "Pilih Bagian"}, :onChange => "onDivision(this)", :style => "width :100px" %>
+                        </div>
+                      </div>
+                    </div>
+                    <div id="filter_opt_4">
+                      <div class="clear"></div>
+                      <div class="filter_opt">
+                        <label class="left">Jabatan</label>
+                        <div id="div_jabatan" class="left">
+                          <%= collection_select :filter, :position_id , Position.by_company("#{session[:platform_user]['user']['user_company']['id']}").all, :id, :position_name, {:prompt => true}, :style => "width :100px" %>
+                        </div>
+                      </div>
+                    </div>
+                    <div id="filter_opt_5">
+                      <div class="clear"></div>
+                      <div class="filter_opt">
+                        <label class="left">Lama Kerja</label>
+                        <select style="width:101px;"  name="filter[sign_year]" id="filter_sign_year">
+                          <option> Lebih dari </option>
+                          <option> Kurang dari </option>
+                        </select>
+                        <%= text_field :filter, :year, :style => "width :75px" %>Tahun
+                      </div>
+                    </div>
+                  </div>
+                  <div class="right-filter">
+                    <div id="filter_opt_6">
+                      <div class="clear"></div>
+                      <div class="filter_opt">
+                        <label class="left">Jenis Kelamin</label>
+                        <select style="width:100px;"  name="filter[gender]" id="filter_gender">
+                          <option value="" selected>Pilih</option>
+                          <option value="pria">pria</option>
+                          <option value="wanita">wanita</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div id="filter_opt_7">
+                      <div class="clear"></div>
+                      <div class="filter_opt">
+                        <label class="left">Departmen</label>
+                        <%= collection_select :filter, :department_id , Department.by_company("#{session[:platform_user]['user']['user_company']['id']}").all, :id, :department_name, {:prompt => "Pilih Departemen"}, :style => "width :341px" %>
+                      </div>
+                    </div>
+                    <div id="filter_opt_8">
+                      <div class="clear"></div>
+                      <div class="filter_opt">
+                        <label class="left">Golongan Darah</label>
+                        <select style="width:100px;"  name="filter[blood_type]" id="filter_blood_type">
+                          <option value="" selected>Pilih</option>
+                          <option value="A">A</option>
+                          <option value="AB">AB</option>
+                          <option value="B">B</option>
+                          <option value="O">O</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div id="filter_opt_9">
+                      <div class="clear"></div>
+                      <div class="filter_opt">
+                        <label class="left">Pendidikan</label>
+                        <%= select :filter, :pendidikan_terakhir , Education.new.options[:pendidikan_terakhir].collect{|p| [p.just_display,p]}, { :include_blank => 'Pilih' }, :style => "width :100px" %>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="clear"></div>
+                  <div class="center filter-btn">
+                    <div style="display: none;" class="ajax-load" id="filter-load">
+                      <img alt=""  src="<%= ApplicationController::BASE_URL %>/images/ajax-loader.gif"/>
+                      Harap Tunggu</div>
+                    <span class="center" id="filter_button"><%= submit_tag 'Tampilkan', :class=>"grey_button2", :onclick=> "progress_filter()", :style => 'float :none; margin-bottom :3px;' %></span>
+                    <div class="clear"></div>
+                  </div>
+                <% end %>
+              </div>
+            </div>
+          </td>
+          <td></td>
+        </tr>        
+     </tbody>
+  </table>
+</div>
+<div class="clear"></div>
+<div id="div_list_promotions">
+  <%= render :partial=> "promotions/list_promotions" %>
+</div>
+
+<script type="text/javascript">
+  //Javascript Filter
+  $(document).ready(function(){
+    $('#filter_block').hide();
+    $('#filter_trigger').click(function(){
+      $(this).toggleClass("filter-active");
+      $('#filter_block').toggle();
+    });
+    $('.expand_filter .reset-filter-ico').click(function(){
+      $('#filter_block').hide();
+      $('#filter_trigger').removeClass("filter-active")
+    });
+    //Filter_Step
+    $('#filter_nd').hide();
+    $('#next_step').click(function(){
+      $('#filter_st').hide();
+      $('#filter_nd').show();
+    });
+    $('#save_create, #cancel_create').click(function(){
+      $('#filter_st').show();
+      $('#filter_nd').hide();
+    });
+  });
+</script>

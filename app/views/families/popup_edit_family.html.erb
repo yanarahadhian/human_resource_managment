@@ -1,0 +1,37 @@
+ <!DOCTYPE html PUBLIC"-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+      <meta name="description" content="AppsChef" />
+      <meta name="keywords" content="AppsChef" />
+      <link rel="icon" href="/images/favicon.ico" type="image/x-icon"/>
+      <%= stylesheet_link_tag  "#{ApplicationController::APPSCHEF_URL}/stylesheets/private2.css",
+                               "#{ApplicationController::APPSCHEF_URL}/stylesheets/fm_form.css",
+                               "#{ApplicationController::APPSCHEF_URL}/stylesheets/960gs/fluid_grid.css"%>
+  <title>Human Resources Management: <%= render :partial => "layouts/title" %></title>
+
+  <!-- jquery -->
+  <%= javascript_include_tag 'jquery.colorbox.js' %>
+  <%= stylesheet_link_tag 'colorbox.css' %>
+
+  <%= stylesheet_link_tag 'jquery-ui-1.8.7.custom/css/custom-theme/jquery-ui-1.8.7.custom.css'%>
+  <style>.ui-date{background:none !important; width:140px !important;}</style>
+
+  <%= javascript_include_tag "#{ApplicationController::APPSCHEF_URL}/javascripts/jquery.js",'jrails',
+                             'application.js','jquery-idleTimeout.js',
+                             'jquery-ui-1.8.7.custom/js/jquery-ui-1.8.7.custom.min.js',
+                             'jquery-ui-1.8.7.custom/development-bundle/ui/jquery.ui.core.js',
+                             'jquery-ui-1.8.7.custom/development-bundle/ui/jquery.ui.widget.js',
+                             'jquery-ui-1.8.7.custom/development-bundle/ui/jquery.ui.datepicker.js',
+                             'jquery-ui-1.8.7.custom/development-bundle/ui/i18n/jquery.ui.datepicker-id.js'%>
+
+<%= javascript_include_tag 'jquery.tablesorter.js','jquery.tablesorter.pager.js','jquery.alphanumeric.pack.js' %>
+
+</head>
+<body class="body-popup"><div class="frm-popup" id="popup_family_<%= @family.id %>">
+    <div class="title-page-tambah">Edit Keluarga</div>
+    <div class="box-form" id="div_edit_family_form">
+      <%= render :partial => "edit_form" %>
+    </div>
+  </div>
+</body></html>

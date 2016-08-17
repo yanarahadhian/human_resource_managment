@@ -1,0 +1,7 @@
+<% unless @groups.blank? %>
+    <%= select_tag 'group[]', "<option value=''>Pilih Group</option>#{options_from_collection_for_select(@groups,'id','work_group_name')}", :id => "groups_"+@index.to_s%>
+<% else %>
+    <select name="group[]" id="groups_0">
+      <option value="">Pilih Group</option>
+    </select>
+<% end%>

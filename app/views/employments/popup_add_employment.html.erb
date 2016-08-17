@@ -1,0 +1,106 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta name="description" content="AppsChef" />
+  <meta name="keywords" content="AppsChef" />
+  <link rel="icon" href="<%= ApplicationController::APPSCHEF_URL %>/images/favicon.ico" type="image/x-icon"/>
+  <%= javascript_include_tag "#{ApplicationController::APPSCHEF_URL}/javascripts/jquery.js",'jrails',
+                             'jquery-ui-1.8.7.custom/js/jquery-ui-1.8.7.custom.min.js',
+                             'jquery-ui-1.8.7.custom/development-bundle/ui/jquery.ui.core.js',
+                             'jquery-ui-1.8.7.custom/development-bundle/ui/jquery.ui.widget.js',
+                             'jquery-ui-1.8.7.custom/development-bundle/ui/jquery.ui.datepicker.js',
+                             'jquery.rating.js',
+                             'jquery.colorbox.js',
+                             'jquery-idleTimeout.js'
+                             %>
+
+<%= stylesheet_link_tag "#{ApplicationController::APPSCHEF_URL}/stylesheets/private2.css",
+                          "#{ApplicationController::APPSCHEF_URL}/stylesheets/fm_form.css",
+                          "#{ApplicationController::APPSCHEF_URL}/stylesheets/960gs/fluid_grid.css",
+                          'jquery.rating.css',
+                          'colorbox.css',
+                          'jquery-ui-1.8.7.custom/css/custom-theme/jquery-ui-1.8.7.custom.css' %>
+  <style>.ui-date{background:#FFFFFF !important;}</style>
+  <title>Human Resource Karyawan: <%= render :partial => "layouts/title" %></title>
+
+ <script type="text/javascript"> 
+	 function changeProduk(){
+		 $('#nm_produk').removeAttr('disabled').val('');
+	 }
+
+   function ajaxLoad(url){
+     $("#ajax-load").show();
+     $.get(url, function(data) {
+       $("#ajax-load").hide();
+     });
+   }
+
+   function ajaxLoad1(url, div_btn, div_load){
+     $("#" + div_btn + "").hide();
+     $("#" + div_load + "").show();     
+       $.get(url, function(data) {
+         $("#ajax-load").hide();
+       });
+    }
+
+	 $(document).ready(function(){
+     $.datepicker.setDefaults({
+        showOn: "button",
+        buttonImage: "<%=ApplicationController::APPSCHEF_URL%>/images/calendar.gif",
+        changeMonth: true,
+        changeYear: true,
+        dateFormat: 'dd/mm/yy',
+        altFormat: 'dd MM yy',
+        firstDay: 1
+      });
+
+      $(".ui-date, .ui-date2").datepicker({
+        buttonImageOnly: true
+      })
+
+      $("#add_product").click(function(){
+        $('#box_retur_1').show();
+      });
+    
+    });
+
+  function onCancel(url){
+    ajaxLoad(url)
+    window.location = url
+  }
+ </script>
+
+
+</head>
+  <body class="body-popup">
+    <style type="text/css">
+    .frm-popup .input-help label {
+              float: none;
+          }
+  </style>
+    <div class="frm-popup" id="popup_employment">
+      <div class="title-page-tambah">Tambah Jabatan</div>
+      <div class="input-help">
+       <label>Field dengan tanda <span class="redstar">*</span> harus diisi</label>
+      </div><div class="clear"></div>
+        <div class="box-form">          
+        <% form_for @new, :url => person_employments_path, :html => {:method => "post"}, :method => "post" do |f| %>
+           <div id="box_retur_0">
+             
+             <%= render :partial => 'employment_add_form', :locals => {:f => f, :employment => @new} %>
+             
+            <div class="clear"></div>
+             
+            
+             <%= render :partial => "layouts/button_loader"  %>
+               <div id="button" class="block-btn-form center-text">
+                 <input type="reset" onclick="parent.$.fn.colorbox.close();" name="info_section_cancel_basic" value="Batal" class="grey_button" id="info_section_cancel_basic"/>
+                 <input type="submit" value="Simpan" name="info_section_save_basic" id="info_section_save_basic" class="blue_button" onclick="ajaxLoad1('<%= person_employments_path %>','button','ajax-load1')" />
+              </div>
+           
+           </div>
+        <% end-%>
+      </div>
+      </div>
+  </body>
+     </html>

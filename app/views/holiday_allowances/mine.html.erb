@@ -1,0 +1,105 @@
+
+<%= render :partial => "layouts/howto_menu" %>
+<fieldset class="fm-table">
+  <legend>Data Gaji</legend>
+  <div class="panelFilter">
+    <table cellspacing="0" cellpadding="0">
+      <tbody><tr>
+          <td width="103px">
+            <div class="action_menu">
+              <ul>
+                <li>
+                  <a class="grey_button2" href="">
+                    <span class="left">More Actions</span>
+                    <span class="icons drop_arrow_ico">&nbsp;</span>
+                  </a>
+                  <div class="clear"></div>
+                  <ul>
+                    <li><a class="list" href="#">Diabaikan</a></li>
+                    <li>
+                      <a class="list" href="#" id="delete" onclick="onDelete()">Delete</a>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+          </td>
+          <td>
+            <div class="action_menu">
+              <ul>
+                <li>
+                  <a class="grey_button2" href="">
+                    <span class="left">Tambah Filter</span>
+                    <span class="icons drop_arrow_ico">&nbsp;</span>
+                  </a>
+                  <div class="clear"></div>
+                  <ul>
+                    <li><a class="list" href="">Nama</a></li>
+                    <li><a class="list" href="">Status</a></li>
+                    <li><a class="list" href="">Pendidikan</a></li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+            <a class="grey_button2" href="">
+              <span class="left">Reset Filter</span>
+            </a>
+          </td>
+          <td width="278px">
+            <div class="pagination">
+              <span class="add-button right">
+                <a class="grey_button2" id="add_keluarga" href="/salaries/new">
+                  <span class="icons add_ico">&nbsp;</span>Tambah Gaji
+                </a>
+              </span>
+              <div id="action_menu">
+                <span id ="export-menu">
+                  <%= render :partial => 'export_menu' %>
+                </span>
+              </div>
+            </div>
+            <div class="clear"></div>
+          </td>
+
+        </tr>
+        <tr>
+          <td></td>
+          <td>
+            <div class="expand_filter">
+
+              <div class="filter_opt">
+                <label class="left">Periode</label>
+                <span class="left result_filter" style="display:none;"></span>
+                <div id="filter-period" style="width:530px;">
+                  <% form_remote_tag :url => {:action => "index" }, :method => :get do |form| %>
+                    <%= select_month(Date.today, {:field_name => 'start_month'}, {:style=>"width:80px;"}) %>
+                    <%= select_year(Date.today, {:field_name => 'start_year'}, {:style=>"width:80px;"}) %>
+                    -
+                    <%= select_month(Date.today, {:field_name => 'end_month'}, {:style=>"width:80px;"}) %>
+                    <%= select_year(Date.today, {:field_name => 'end_year'}, {:style=>"width:80px;"}) %>
+                    <span style="display:inline-block;">
+                      <%= submit_tag "Go", :class=>"grey_button2" %>
+                    </span>
+                  <% end %>
+                </div>
+                <div class="clear"></div>
+              </div>
+              <div class="clear"></div>
+
+              <!--        <a class="grey_button2" href="">
+                       <span class="left">Go</span>
+                       <div class="clear"></div>
+                     </a> -->
+
+            </div>
+          </td>
+          <td></td>
+        </tr>
+      </tbody></table>
+
+  </div>
+  <div class="clear"></div>
+  <div id="honors">
+    <%= render :partial => "list_salaries" %>
+  </div>
+</fieldset>

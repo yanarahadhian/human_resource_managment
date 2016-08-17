@@ -1,0 +1,4 @@
+$("#person-details").show();
+$("#honor-details").show();
+$("#person-details").html('<%= escape_javascript(render(:partial => "salaries/person_details")) %>');
+$("#honor-details").html('<%= escape_javascript(render(:partial => "thr_details")) %>');

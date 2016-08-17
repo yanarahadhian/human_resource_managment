@@ -1,0 +1,163 @@
+<%= javascript_include_tag  'pagination' %>
+<table id="salary_table" class="tablesorter">
+    <thead>
+        <tr>
+          <th><input type="checkbox" /></th>
+            <th >NIK</th>
+            <th class="left-text">
+                Nama
+            </th>
+            <th class="left-text">Gaji Pokok</th>
+            <th class="left-text">Pot Koperasi</th>
+            <% @premiums.each do |x| %>
+               <th class="left-text"><%=h  x.premium_name %></th>
+            <% end %>
+            <th class="left-text">Perlakuan</th>
+            <th class="left-text">History</th>
+        </tr>
+    </thead>
+    <tbody>
+      <% unless @data_master_salaries.blank?  %>
+        <% @data_master_salaries.each do |salary| %>
+           <tr>
+              <td class="center-text">
+                <%= check_box_tag'myrow[ids][]', salary.id, false %>
+              </td>
+              <td class="center-text">
+                <%= link_to salary.person.employee_identification_number, "#people/#{salary.person.id}?tab=0" unless salary.person.blank? %>
+              </td>
+              <td class="left-text">
+                <%= link_to_if current_features.include?('salary_detail'), salary.person.full_name, "#people/#{salary.person.id}?tab=0" unless salary.person.blank? %>
+              </td>
+              <td class="right-text">
+                <%= format_currency(salary.basic_salary) %>
+              </td>
+              <td class="right-text">
+                <%= format_currency(salary.cooperation_cut) %>
+              </td>
+              <% @premiums.each do |x| %>
+              <% mast = x.premium_master_datas.collect { |x| x if x.salary_master_data_id==salary.id}.compact %>
+                <td class="right-text"><%= mast.blank? ? "" : format_currency(mast[0].value) %></td>
+              <% end %>
+              <td class="left-text">
+                <a class="grey_button4" href="#salary_master_data/edit/<%= salary.id %>"><span class="icons edit-icon">&nbsp;</span> Edit</a>
+              </td>
+              <td class="center-text">
+                <% if salary.salary_master_data_histories.count > 0 %>
+                  <span class="left">
+                    <a id="history_<%= salary.id %>" class="grey_button4" href="/salary_master_datas/history?id=<%= salary.id %>">History</a>
+                  </span>
+                <% else %>
+                  -
+                <% end %>
+              </td>
+            </tr>
+          <% end %>
+        <% else %>
+            <tr class="no-data">
+                <td class="center-text" colspan="11">
+                    <div class="description">Belum Ada Data Master Gaji. </div>
+                    <% if params[:action] != 'mine'%>
+                        <div class="info">Silahkan klik <%= link_to 'Import Data Master Gaji', "#", :class => "import_salary_master" %> untuk menambah data</div>
+                    <% end %>
+                </td>
+            </tr>
+      <% end %>
+    </tbody>
+</table>
+
+<div class="panelFilter">
+  <div class="pagination">
+    <% if @data_master_salaries.count > 0 %>
+      <span class="paginationResult">
+        <% a = format_paginate1(@data_master_salaries, @per_page, @data_master_salaries.total_entries) %>
+        <%= a[:a] %> - <%= a[:b] %> dari <%= @data_master_salaries.total_entries %>
+      </span>
+      <%= a[:paginate] %>
+    <% else %>
+      &nbsp;
+    <% end %>
+  </div>
+</div>
+
+
+<script type="text/javascript">
+
+var gaiSelected =  [];
+  $(document).ready(function() {
+    $("#salary_table").tablesorter({
+      widgets: ['zebra'],
+      headers: {
+        0: { sorter: false }
+      }
+     });
+
+     $('#salary_table thead tr th input').click(function () {
+        if ($(this).is(":checked")) {
+          $('#salary_table tbody tr td input').each(function (){
+            $(this).attr( 'checked', true );
+            $(this).parent().parent().addClass('row_selected');
+            var iId = this ;
+            if ( jQuery.inArray(iId.value, gaiSelected) == -1 ){
+              gaiSelected[gaiSelected.length++] = iId.value;
+            }
+          });
+        }
+        else{
+          $('#salary_table tbody tr').each(function (){
+            $(this).removeClass('row_selected');
+            var iId = $('#salary_table tbody tr td input');
+            gaiSelected = [];
+            iId.attr( 'checked', false );
+          });
+        }
+      } );
+
+      <% unless @data_master_salaries.blank?  %>
+        <% @data_master_salaries.each do |salary| %>
+          $("#history_<%= salary.id %>").colorbox({width:"900px",height:"300px", iframe:true,
+            onClosed:function(){
+            }
+          });
+        <% end %>
+      <% end %>
+
+   });
+
+    // Destroy salaries that selected on checboxes
+    function onDelete(){
+      var arr_params = new Array();
+      $('#salary_table tbody input:checked').each(function() {
+        arr_params = arr_params.concat($(this).val());
+      });
+      if (arr_params.length > 0){
+        $('#div_sign').html('master gaji');
+        $('#div_btn_hapus').html('<input type="button" value="Ya" class="blue_button" onclick="delete_master_gaji()"/>');
+        jQuery().colorbox({width:"auto",height:"auto", inline:true,href:"#message_delete",
+          onClosed:function(){
+          }
+        });
+      }else{
+        return false;
+      }
+    }
+
+    function delete_master_gaji(){
+       var arr_params = new Array();
+       $('#salary_table tbody input:checked').each(function() {
+         arr_params = arr_params.concat($(this).val());
+       });
+       var controller = "/salary_master_datas/destroy";
+       $("#ajax-load").show();
+       $.ajax({
+         type: "DELETE",
+         url: escape(controller),
+         data:{'_method': 'post',"ids":arr_params},
+         dataType:"script",
+         success: function(){
+           $("#ajax-load").hide();
+           $.fn.colorbox.close();
+         }
+       })
+    }
+</script>

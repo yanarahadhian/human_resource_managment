@@ -1,0 +1,16 @@
+<script>
+  $('#schedule_division').change(function(){
+    $('#change_table_2').load("/change_table_group",
+      {'value':$(this).val(),
+        'division':$('#schedule_bagian').val()
+      });
+  });
+</script>
+
+<%= label_tag :schedule_division, "Pilih Nama Group" %>
+<select name="schedule_division" id="schedule_division">
+  <option value="">Pilih Work Group</option>
+  <% @wg.each do |x | %>
+    <option value="<%= x.id %>"><%= x.work_group_name %><%= x.division.blank? ? "" : " / #{x.division.name}" %></option>
+  <% end %>
+</select>

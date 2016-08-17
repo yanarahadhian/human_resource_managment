@@ -1,0 +1,9 @@
+.DS_Store
+*.gem
+coverage
+pkg
+spec/fixtures/config/database.yml
+spec/fixtures/builds
+spec/fixtures/log
+tmp
+vendor

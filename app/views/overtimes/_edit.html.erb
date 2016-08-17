@@ -1,0 +1,74 @@
+<%= render :partial => "layouts/howto_menu" %>
+<fieldset class="fm-table">
+  <legend><a href="#" id="help_dash" class="icons help-top-icon" title="Click to show/hide information">&nbsp;</a>  Ubah Data Lembur</legend>
+  <%= render :partial => "layouts/howto/howto_content"%>
+  <div class="box-form">
+    <% form_remote_for @overtime, :url => overtime_path(@overtime.id) do |f| %>
+      <% hidden_field_tag :id ,  :value => @overtime.id.to_s %>
+    <div class="fifty-fifty">
+      <div class="input">
+      <span class="input-field">
+        <%= label_tag :start_date, "Periode"%>:
+        <%= f.text_field :start_date , :class=> 'ui-date datepicker dp1', :value=> @overtime.start_periode %> s/d
+        <%= f.text_field :end_date , :class=> 'ui-date datepicker dp2', :value=> @overtime.end_periode%>
+      </span>
+      <div class="clear"></div>
+      
+      <% unless @overtime.person.nil? %>
+        <%= render :partial=> "add_employee_edit", :locals => {:f => f} %>
+      <% else %>
+        <%= render :partial => 'add_division_edit' %>
+      <% end %>
+      <%puts "Keluar unless"%>
+
+      <div class="clear"></div>
+      <span class="input-field">
+        <%= label_tag :reason, "Alasan" %>:
+        <%= f.text_area :reason ,:value => @overtime.reason, :rows => 3%>
+      </span>
+      <div class="clear"></div>
+
+      <span class="input-field special">
+        <%= label_tag :time, "Waktu Mulai Lembur" %>:
+        <%= f.time_select :start_overtime %>
+      </span>
+      <div class="clear"></div>
+      
+      <span class="input-field special">
+        <%= label_tag :status, "Status<span class='redstar'>*</span>" %>:
+        <%= select_tag :overtime_status , options_for_select([["Pending", "Pending"], ["Approved", "Approved"], ["Finished", "Finished"]], @overtime.status), :style => 'margin: -15px 0;'%>
+      </span>      
+      </div>
+    </div>
+
+     
+     
+      
+    <div class="clear"></div>
+        <%= render :partial => "layouts/button_loader" %>
+        <div class="block-btn-form" id="button">
+          <input id="info_section_cancel_basic" class="grey_button" type="reset" value="Batal" name="info_section_cancel_basic" onclick="onCancel('#overtimes')"/>
+          <input type="submit" value="Simpan" name="info_section_save_basic" id="info_section_save_basic" class="blue_button" onclick="ajaxLoad1('button', 'ajax-load1')"/>
+        </div>
+     
+      <!-- End -->
+    <%end%>
+  </div>
+</fieldset>
+
+
+<script type="text/javascript">
+  $(document).ready(function(){
+    $('.datepicker').datepicker({buttonImageOnly: true,minDate: new Date()});
+    $('#loading').hide();
+    $('#button input[type="button"]').click(function(){
+      $('#button input').hide();
+      $('#loading').show();
+    })
+  })
+
+  function ajaxLoad1(div_btn, div_load){
+    $("#" + div_load + "").show();
+    $("#" + div_btn + "").hide();
+  }
+</script>

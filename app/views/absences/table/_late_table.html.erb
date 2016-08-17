@@ -1,0 +1,32 @@
+{
+"sEcho": <%=h @sEcho %>,
+"iTotalRecords": <%= @iTotalRecords %>,
+"iTotalDisplayRecords": <%= @iTotalDisplayRecords %>,
+"iTotalLatesAll": <%= @total_lates_all %>,
+"aaData" : [
+<%- @lates.each do |late| %>
+  [
+  <%- if late[:is_acted_upon] %>
+    "<%= "<input id='late_#{late[:late_id]}' name='late_ids[]' type='checkbox' value=#{late[:late_id]} disabled='disabled'/>" %>",
+  <%- else %>
+    "<%= "<input id='late_#{late[:late_id]}' name='late_ids[]' type='checkbox' value=#{late[:late_id]} />" %>",
+  <%- end %>
+  "<%= "<a href='#dailyabsence?id=#{late[:person_id]}&date=#{late[:start_work].strftime("%Y-%m-%d")}'> #{h late[:person_name].titleize} </a>" %>",
+  "<%=h late[:department].department_name.just_display unless late[:department].blank? %>",
+  "<%=h late[:division].name.just_display unless late[:division].blank? %>",
+  "<%=h late[:shift_name].just_display unless late[:shift_name].blank? %>",
+  "<%= l late[:date] %>",
+  "<%= late[:start_work].strftime("%H:%M") %>",
+  "<%= Presence.minutes_to_hour_text(late[:late_time]) %>",
+  "<%=h late[:late_reason] %>",
+  <%- if late[:is_acted_upon] %>
+    "<%= late[:status] %>"
+  <%- else %>
+    "Belum ditindak lanjuti"
+  <%- end %>
+  <%= "]," unless late == @lates.last %>
+<% end %>
+<%= "]" unless @lates.blank? %>
+]
+}
+

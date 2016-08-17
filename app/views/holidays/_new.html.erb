@@ -1,0 +1,183 @@
+<%= render :partial=> "layouts/shared/breadcrumbs" %>
+<script type="text/javascript">
+  $(document).ready(function() {
+    if ($("#daysCuti").val() == ""){
+      $("#daysCuti").val("0");
+    };
+    $("#date1").attr('readonly','readonly');
+    $("#date2").attr('readonly','readonly');
+    $(".ui-date").datepicker({
+      buttonImageOnly: true
+    });
+
+    $('#duration').attr('readOnly', 'readOnly');
+    $('#leave_duration_check').attr("checked", "checked");
+
+    $('#leave_duration_check').change(function() {
+      if($('#leave_duration_check').is(':checked')){
+        $("#daysCuti").removeAttr('readOnly');
+      }
+      else{
+        $("#daysCuti").attr('readOnly', 'readOnly');
+      }});
+    $('.changeDate').change(function() {
+
+      var str = ''
+      if ($("#date1").val() == "" || $("#date2").val() == ""){
+        $('#duration').val(0);
+        $('#duration').text(0);
+      }else{
+        a = $("#date1").val().split("/")
+        b = $("#date2").val().split("/")
+        time1 = a[2] + "/" + a[1] + "/" + a[0]
+        time2 = b[2] + "/" + b[1] + "/" + b[0]
+        var time1 = Date.parse(time1);
+        var time2 = Date.parse(time2);
+        var distance_in_miliseconds = 0;
+        var flag;
+        if(time1 == null || time2 == null){
+          distance_in_miliseconds =0;
+        }
+        else{
+          var distance_in_miliseconds = time2 - time1;
+          if (distance_in_miliseconds < 0)
+          {
+            //alert ("Tanggal Awal Liburan Harus Lebih Awal Dari Tanggal Berakhir");
+            //$('#date1').val("");
+            //$('#date2').val("");
+            distance_in_miliseconds = 0;
+            flag = 1;
+          }
+        }
+        if (flag == 1){
+          $('#duration').val("");
+        }
+        else{
+          str = ((time2 - time1) / (1000*60*60*24)) + 1;
+          $('#duration').val(str);
+          $('#duration').text(str);
+        }
+     }
+   });
+
+    $(".hide input").attr("disabled", true);
+    $("#daysCutiTrigger").click(function(){
+      if ($("#daysCutiTrigger").is(':checked')){
+        $(".hide input").removeAttr("disabled").focus();
+      }else{
+        $(".hide input").attr("disabled", true);
+      }
+    });
+
+    $("#daysCuti").blur(function(){
+      if ($(this).val().match(/[\d]/)){
+
+      }else{
+        $(this).val("0");
+      }
+    });
+    $("#daysCuti").click(function(){
+      $(this).val("");
+    });
+  });
+</script>
+
+<fieldset class="fm-table">
+ <legend>
+   <a href="#" id="help_dash" class="icons help-top-icon" title="Click to show/hide information">&nbsp;</a>  
+   Tambah Hari Libur
+ </legend>
+  <%= render :partial => "layouts/howto/howto_content"%>
+  
+  <div class="input-help-wide">
+    <label>Field dengan tanda <span class="redstar">*</span> harus diisi</label>
+  </div>
+  
+  <% form_remote_for :holiday,   :url => { :action => "create"} do |f| %>
+    <div class="input-data box-form">
+
+      <% input_name = "input-field" %>
+      <% err_name = error_message_on @holiday, :holiday_name %>
+      <% input_name = "input-error" unless err_name.blank? %>
+
+      <% input_periode = "input-field" %>
+      <% start_periode = error_message_on @holiday, :holiday_start_date %>
+      <% end_periode = error_message_on @holiday, :holiday_end_date %>
+      <% input_periode = "input-error" unless start_periode.blank? %>
+      <% input_periode = "input-error" unless end_periode.blank? %>
+      
+
+      <% input_lama_libur = "input-field" %>
+      <% err_lama_libur = error_message_on @holiday, :holiday_duration %>
+      <% input_lama_libur = "input-error" unless err_lama_libur.blank? %>
+      <div class="input" style=" width: 600px;">
+        <span class=" <%= input_name %>">
+          <%= f.label 'Nama Hari Libur <span class="redstar">*</span>' %>
+          <%= f.text_field :holiday_name %>
+          <a class="icons help_ico" id="tooltip_holiday_name" bt-xtitle="" title="">&nbsp;</a>
+          <%= render :partial => "layouts/jquery_tooltip", :locals => {:link=>"tooltip_holiday_name", :list=>"list_detail"} %>
+          <span class="clear"></span>
+          <%= err_name %>
+        </span>
+        <span class="clear"></span>
+
+        <span class="<%= input_periode %>">
+          <span class="left"><%= f.label 'Periode <span class="redstar">*</span>' %></span>
+          <span class="left"><%= f.text_field :holiday_start_date, :class=>'ui-date changeDate', :id=>'date1'%></span>
+          <span class="left">s/d</span>
+          <%= f.text_field :holiday_end_date, :class=>"ui-date changeDate", :id=>'date2'%>
+          <a class="icons help_ico" id="tooltip_holiday_periode" bt-xtitle="" title="">&nbsp;</a>
+          <%= render :partial => "layouts/jquery_tooltip", :locals => {:link=>"tooltip_holiday_periode", :list=>"list_periode"} %>
+          <span class="clear"></span>
+          <%= start_periode %>
+          <%= end_periode %>
+        </span>
+        <span class="clear"></span>
+
+        <span class="<%= input_lama_libur %>">
+          <label> Lama Libur<span class="redstar">*</span></label>
+          <span id="totalDays">
+            <%= f.text_field :holiday_duration,  :id=>'duration'%> Hari
+          </span>
+          <a class="icons help_ico" id="tooltip_length_holiday" bt-xtitle="" title="">&nbsp;</a>
+          <%= render :partial => "layouts/jquery_tooltip", :locals => {:link=>"tooltip_length_holiday", :list=>"list_length_holiday"} %>
+          <span class="clear"></span>
+          <%= err_lama_libur %>
+        </span>
+
+        <span class="clear"></span>
+        <span class="input-field">
+          <span class="left marginL10 marginT4 width160px">
+            <label><%= check_box_tag :leave_duration_check, true, false ,:id=>'daysCutiTrigger'%>&nbsp;Cuti Bersama</label>
+          </span>
+          <span class="hide">
+            <%= f.text_field  :leave_duration, :size=>5, :class=>'small-text left', :id=>'daysCuti' %>
+            <span class="left">&nbsp;Hari
+            </span>
+            <%= error_message_on @holiday, :leave_duration %>
+          </span>
+            <a class="icons help_ico" id="tooltip_leave_together" bt-xtitle="" title="">&nbsp;</a>
+            <%= render :partial => "layouts/jquery_tooltip", :locals => {:link=>"tooltip_leave_together", :list=>"list_leave_together"} %>
+          <span class="clear"></span>
+        </span>
+      </div>
+      <span class="clear"></span>
+      <div class="block-btn-form">
+        <%= render :partial => "layouts/button_loader" %>
+        <div id="button">
+          <input id="info_section_cancel_basic" class="grey_button" type="reset" value="Batal" name="info_section_cancel_basic" onclick="onCancel('#holidays')"/>
+          <input type="submit" value="Simpan" name="info_section_save_basic" id="info_section_save_basic" class="blue_button" onclick="ajaxLoad1('button','ajax-load1')"/>
+        </div>
+      </div>
+    </div>
+  <%  end %>
+</fieldset>
+
+<%= render :partial => "tooltip_all_field" %>
+
+<script type="text/javascript">
+  function ajaxLoad1(div_btn, div_load){
+     $("#" + div_load + "").show();
+     $("#" + div_btn + "").hide();
+   }
+</script>

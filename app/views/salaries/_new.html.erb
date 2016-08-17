@@ -1,0 +1,66 @@
+<%= render :partial=> "layouts/shared/breadcrumbs" %>
+<%= render :partial => "layouts/howto_menu" %>
+
+<fieldset class="fm-table">
+   <legend><a href="#" id="help_dash" class="icons help-top-icon" title="Click to show/hide information">&nbsp;</a>
+  Gaji Baru</legend>
+  <%= render :partial => "layouts/howto/howto_content"%>
+  <div class="clear"></div>
+  <% form_remote_for :date,
+    :url => new_salary_path,
+    :html => { :id => 'filter_date' },
+    :method => :get,
+    :before => "$('#spinner-karyawan').show();$('.grey_button').hide();",
+    :complete => "$('#spinner-karyawan').hide();$('.grey_button').show();" do |f| %>
+    
+    <div class="input-help-wide">
+          <label>Silahkan pilih Periode dan Karyawan yang akan dicetak Gaji-nya!</label>
+      </div>
+    
+    <fieldset class="header-chart fm-table">
+      <span class="input auto-size">
+        <label>Periode kerja</label> :
+        <%= text_field_tag :start_date, nil, :class => "ui-start-date", :readonly => "readonly"  %>
+        &nbsp; s.d. &nbsp;
+        <%= text_field_tag :end_date, nil, :class => "ui-start-date", :readonly => "readonly"  %>
+      </span>
+        <div class="clear"></div>
+      <span class="input">
+        <label>Nama karyawan</label>:
+        <%= text_field_tag 'person', nil, :id => "person-name" %>
+        <%= hidden_field_tag :person_id, :value => '' %>
+        <span id="spinner-karyawan" style="display:none">
+          <%= image_tag "/images/ajax-loader.gif" %>
+        </span>
+        <%= submit_tag "Go", :class => "grey_button" %>
+      </span>
+    </fieldset>
+  <% end %>
+  <div class="clear"></div>
+  
+  <% unless @ps.blank? %>
+    <div id ="person-details">
+      <%= render :partial => 'person_details' %>
+    </div>
+    <div id ="honor-details">
+      <% unless @person.blank? %>
+        <%= render :partial => 'honor_details' %>
+      <% else %>
+        
+      <% end %>
+    </div>
+  <% else %>
+     <div class="input-help-wide">
+        <label>Silahkan input payroll setting terlebih dahulu!</label>
+     </div>
+  <% end %>
+</fieldset>
+
+<script type="text/javascript">
+  $(document).ready(function(){
+    $("#person-name").autocomplete(ar_name);
+    $( ".ui-start-date" ).datepicker({
+      buttonImageOnly: true
+    })
+  });
+</script>

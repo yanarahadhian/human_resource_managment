@@ -1,0 +1,23 @@
+<tr>
+  <th class="center-text">
+    <a href="">
+      <span class="center-text">Nama Tunjangan</span></a>
+  </th>
+  <th  class="center-text">
+    <a href="">
+      <span class="center-text">Dihitung pada lembur</span></a>
+  </th>
+  <th class="center-text">
+    <a href="">
+      <span class="center-text">Dihitung pada pemotongan gaji</span></a>
+  </th>
+  <th  class="center-text">
+    <a href="">
+      <span class="center-text">Harian/Bulanan</span></a>
+  </th>
+  <% if current_features.include?('payroll_edit') %>
+    <th  class="center-text">
+      Perlakuan
+    </th>  
+  <% end %>
+</tr>

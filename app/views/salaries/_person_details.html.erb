@@ -1,0 +1,126 @@
+<% unless @person.blank? %>
+  <% unless @has_not_followed_up.blank? %>
+    <br />
+    <div class="input-help-wide">
+      <label>Karyawan <b><%= @person.full_name.titleize unless @person.blank? %></b> memiliki absensi yang belum ditindaklanjuti. </label>
+      <div class="clear"></div>
+      <label>Silahkan tindak lanjuti terlebih dahulu untuk mengakuratkan data potongan absensi!</label>
+    </div>
+  <% end %>
+
+  <% if params[:controller] != 'holiday_allowances'&& (!@tot_sakit[:bulan].blank? && @tot_sakit[:bulan] > 0) %>
+    <div class="input-help-wide">
+      <label>
+        Karyawan <b><%= @person.full_name.titleize unless @person.blank? %></b>,
+        <% if @tot_sakit > 0 %>
+          Sakit berturut turut selama <%= @tot_sakit %> bulan
+        <% end %>
+        <%= ", #{@desc}" unless @desc.blank? %>
+      </label>
+    </div>
+  <% end %>
+
+  <% if @person.presences.blank? %>
+    <div class="input-help-wide">
+      <label>Karyawan <b><%= @person.full_name.titleize unless @person.blank? %></b> belum pernah absen!</label>
+    </div>
+  <% end %>
+  <% if @person.current_salary.blank? %>
+    <div class="input-help-wide">
+      <label>Karyawan <b><%= @person.full_name.titleize unless @person.blank? %></b> belum pernah dibuatkan gaji sebelumnya!</label>
+    </div>
+  <% end %>
+  <% if params[:controller] == 'holiday_allowances' && !@person.more_than_three_months %>
+    <div class="input-help-wide">
+      <label>Karyawan <b><%= @person.full_name.titleize unless @person.blank? %></b> belum bekerja lebih dari 3 bulan!</label>
+    </div>
+  <% end %>
+
+
+  <div class="fifty-fifty left">
+    <div class="input">
+      <% if params[:action] == 'edit' %>
+        <div class="clear"></div>
+        <span class="input-field">
+          <label>Periode</label>:
+          <%= @honor.start_period.strftime('%e %b %Y') unless @honor.start_period.blank? %>
+          -
+          <%= @honor.end_period.strftime('%e %b %Y') unless @honor.end_period.blank? %>
+        </span>
+      <% end %>
+      <div class="clear"></div>
+      <span class="input-field bold">
+        <label>Karyawan</label>:
+        <%= @person.full_name.titleize unless @person.blank? %>
+      </span>
+
+      <div class="clear"></div>
+      <span class="input-field">
+        <label>NIK</label>:
+        <%= @person.employee_identification_number %>
+      </span>
+
+      <div class="clear"></div>
+      <span class="input-field">
+        <label>Mulai kerja</label>:
+        <%= @person.current_employment.blank? ? '-' : @person.began_to_work.employment_start %>
+      </span>
+
+      <div class="clear"></div>
+      <span class="input-field">
+        <label>Departemen</label>:
+        <% unless  @person.current_employment.blank? %>
+          <%= @person.current_employment.department.blank? ? '-' : @person.current_employment.department.department_name %>
+        <% else %>
+          -
+        <% end %>
+      </span>
+      <div class="clear"></div>
+      <span class="input-field">
+        <label>Jabatan</label>:
+        <% unless  @person.current_employment.blank? %>
+          <%= @person.current_employment.position.blank? ? '-' : @person.current_employment.position.position_name %>
+        <% else %>
+          -
+        <% end %>
+      </span>
+    </div>
+  </div>
+  <div class="fifty-fifty left">
+    <div class="input">
+      <span class="input-field">
+        <label>Status pajak</label>:
+        <%= @person.tax_status.tax_status_code unless @person.tax_status.blank?%>
+      </span>
+      <div class="clear"></div>
+      <span class="input-field">
+        <label>PTKP</label>:
+        <%= format_currency(@person.tax_status.ptkp) unless @person.tax_status.blank? %>
+      </span>
+
+      <% if params[:controller] == 'holiday_allowances'  %>
+        <div class="clear"></div>
+        <span class="input-field">
+          <label>Gaji pokok</label>:
+
+          <%= format_currency(@current_salary) unless @current_salary.blank?%>
+
+        </span>
+      <% end %>
+
+      <div class="clear"></div>
+      <span class="input-field">
+        <label>Status</label>: <%= @person.marital_status.titleize unless @person.marital_status.blank?%>
+      </span>
+      <div class="clear"></div>
+      <span class="input-field">
+        <label>NPWP</label>: <%= @person.no_npwp.blank? ? '-' : @person.no_npwp %>
+      </span>
+      <div class="clear"></div>
+      <span class="input-field">
+        <label>Jamsostek</label>: <%= @person.jamsostek_number.blank? ? 'No' : 'Ya' %>
+      </span>
+    </div>
+  </div>
+  <div class="clear"></div>
+<% end %>

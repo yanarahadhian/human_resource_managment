@@ -1,0 +1,19 @@
+<% index ||= "DUMMY_PRODUCT_ID" %>
+<% span = "input hideFirst_1 width500 " + index %>
+<script  type="text/javascript">
+  $(document).ready(function(){
+    $(".employee").autocomplete(ar_name);
+
+    $('.removeLine').click(function(){
+      ($(this).parent()).remove();
+    });
+  });
+
+</script>
+
+<span class=<%= span.to_s %>>
+  <%= label_tag :employee, "Nama Karyawan"  %>
+  <%= text_field_tag 'employees[]', "", :class=>"employee", :id => 'employees_'+index.to_s %>
+  <%= link_to_function "Hapus","" ,:class=> 'removeLine'%>
+</span>
+<span class="clear"></span>

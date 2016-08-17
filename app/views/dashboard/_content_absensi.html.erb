@@ -1,0 +1,119 @@
+<%= javascript_include_tag "jquery/jquery.js" %>
+<% unless @absence_chart[:total].blank? || @absence_chart[:bulan].blank? %>
+  <script type="text/javascript" src="http://www.google.com/jsapi"></script>
+  <%= javascript_include_tag "jquery.gvChart-1.0.1.min.js" %>
+
+  <script type="text/javascript">
+    gvChartInit();
+    $(document).ready(function(){
+      jQuery('#c_presences_pie').gvChart({
+        chartType: 'PieChart',
+        gvSettings: {
+          width: 450,
+          height: 200
+        }
+      });
+
+      jQuery('#c_absensi_bulanan').gvChart({
+        chartType: 'ColumnChart',
+        gvSettings: {
+          width: 700,
+          height: 200
+        }
+      });
+    });
+  </script>
+  <div id="div_absensi">
+    <div class="dashboard-chart">
+      <fieldset class="chart-block" style="min-height:283px;width:25%">
+        <div class="control-box">
+          <p class="bold auto">Grafik Absensi</p>
+        </div>
+        <div class="chart">
+          <table id="c_presences_pie" border="1">
+            <caption></caption>
+            <thead>
+            <th></th>
+            <% @absence_chart[:total].each do |x| %>
+              <th><%= x[:name] %></th>
+            <% end %>
+            </thead>
+            <tbody>
+              <tr>
+                <% @absence_chart[:total].each do |x| %>
+                  <td><%= x[:count] %></td>
+                <% end %>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </fieldset>
+      <fieldset class="chart-block" style="min-height:283px;width:60%">
+        <div class="control-box">
+          <p class="bold auto">Grafik Absensi</p>
+        </div>
+        <div class="chart">
+          <table id="c_absensi_bulanan" border="1">
+            <caption></caption>
+            <thead>
+            <th></th>
+            <% @absence_chart[:bulan].each do |x| %>
+              <th><%= x[:name] %></th>
+            <% end %>
+            </thead>
+            <tbody>
+              <tr>
+                <th>Ijin</th>
+                <% @absence_chart[:bulan].each do |x| %>
+                  <td><%= x[:ijin_count] %></td>
+                <% end %>
+              </tr>
+              <tr>
+                <th>Cuti</th>
+                <% @absence_chart[:bulan].each do |x| %>
+                  <td><%= x[:cuti_count] %></td>
+                <% end %>
+              </tr>
+              <tr>
+                <th>Sakit</th>
+                <% @absence_chart[:bulan].each do |x| %>
+                  <td><%= x[:sakit_count] %></td>
+                <% end %>
+              </tr>
+              <tr>
+                <th>Mangkir</th>
+                <% @absence_chart[:bulan].each do |x| %>
+                  <td><%= x[:mangkir_count] %></td>
+                <% end %>
+              </tr>
+              <tr>
+                <th>Lain-lain</th>
+                <% @absence_chart[:bulan].each do |x| %>
+                  <td><%= x[:lain_count] %></td>
+                <% end %>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </fieldset>
+    </div>
+  </div>
+<% else %>
+  <div id="absensi_desc_role">
+    <div class="dashboard-chart" id="c3">
+      <fieldset class="chart-block4">
+        <div class="control-box"></div>
+        <div no-chart="">
+          <div id="desc_role" class="no-data-chart">Belum ada data absensi saat ini
+          </div>
+        </div>
+      </fieldset>
+    </div>
+  </div>
+<% end %>
+<script type="text/javascript">
+  $(document).ready(function(){
+    parent.document.getElementById('button_absensi_submit').style.display = "block";
+    parent.document.getElementById('load_absensi').style.display = "none";
+  });
+</script>

@@ -1,0 +1,43 @@
+{
+"sEcho": <%=h @sEcho %>,
+"iTotalRecords": <%= @iTotalRecords %>,
+"iTotalDisplayRecords": <%= @iTotalDisplayRecords %>,
+"aaData" : [
+<%- @presences_from_report.each do |row| %>
+  [  "<%= l row.date, :format => '%A' %>",
+  "<%= l row.date %>",
+  <%- if !row.absence_id.blank? %>
+    "","",
+    "<%=h row.absence_code %>",
+    "<%= "-" %>",
+    <% a = @absence_type.find{|at| at.type_id == row.absence_type_id} %>
+    "<%=h a.absence_type_name unless a.blank? %>"
+  <%- elsif !row.presence_id.blank? %>
+    <% p = Presence.find(row.presence_id) %>
+    <% details = p.presence_details.all(:conditions => "start_working is not null and end_working is not null", :order => :start_working) %>
+    "<%= details.blank? ? " " : details.first.start_working.getlocal.strftime("%H:%M") %>",
+    "<%= details.blank? ? " " : details.last.end_working.getlocal.strftime("%H:%M") %>",
+    "<%= Presence.hours_to_hour_text(row.work_duration) if row.work_duration %>",
+    "<%= Presence.minutes_to_hour_text(row.overtime_duration * 60) if row.overtime_duration  %>",
+    "<%= "" %>"
+  <% else %>
+    "","",
+    "<%=h row.absence_code %>",
+    "<%= "-" %>",
+    <% if row.absence_code == "L" %>
+    "<%= "Libur" %>"
+    <% else %>
+    "<%= "Tidak Masuk Kerja" %>"
+    <% end %>
+  <%- end %>
+  <%= "]," %>
+<% end %>
+["","","",
+"TOTAL BULANAN :",
+"<%= Presence.hoursnum_to_hour(@presences_from_report.sum{|p| p.work_duration.to_f})%>",
+"<%= Presence.minutes_to_hour(@presences_from_report.sum{|p| p.overtime_duration.to_f})%>",
+""
+]
+]
+}
+

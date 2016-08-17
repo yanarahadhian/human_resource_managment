@@ -1,0 +1,61 @@
+<div id="main-content" style="border-left:0px">
+<div class="contentTable">
+<% if !values.blank? %> 
+  <div id="app_two_con" class="input-data app_two_con">
+    <table id="tb7">
+      <thead>
+	      <tr>
+          <th width="5%" class="center-text">No.</th>
+          <th>NIK</th>
+          <th>
+            <a href="javascript:void(0)" onClick="<%= sortablecol("firstname",sortby,direction,"mutasi") %>" id="firstnameColumn">
+              Nama
+              <span class="icons sorter_ico">&nbsp;</span>
+            </a>
+          </th>
+          <th>Bagian</th>
+          <th class="center-text">Tanggal masuk/keluar</th>
+          <th class="left-text">Jenis kelamin</th>
+          <th class="left-text">Jabatan</th>
+          <th class="left-text">Masa kerja</th>
+          <th class="left-text">Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% values.each_with_index do |p,i| %>
+          <tr class="<%= i%2 == 0 ? "" : "alt"%>">
+            <td><%= (25*(pagenum.to_i - 1))+i+1 %></td>
+            <td class="left-text"><%= p.employee_identification_number %></td>
+            <td class="left-text"><%= p.full_name %></td>
+            <% emp = p.current_employment(Date.today, true) %>
+            <td class="left-text"><%= emp.blank? ? "-" : emp.division.blank? ? "-" : emp.division.name %></td>
+            <td class="left-text"><%= p.employment_date %> / <%= emp.blank? ? "" : emp.employment_end %></td>
+            <td class="left-text"><%= p.gender %></td>
+            <td class="left-text"><%= emp.blank? ? "-" : emp.position.blank? ? "-" : emp.position.position_name %></td>
+            <td class="left-text"><%= second_to_days(p.total_length_of_service(p)) %></td>
+            <td class="left-text"><%= p.current_status.blank? ? "&nbsp;" : p.current_status.contract_type.blank? ? "&nbsp;" : p.current_status.contract_type.contract_type_name %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+<% else %>
+  <div class="control-box"></div>
+    <div no-chart="">
+      <div id="desc_role" class="no-data-chart">Belum ada data
+    </div>
+  </div>
+<% end %>
+</div></div>
+<%= hidden_field_tag "page_num_mutasi",pagenum %>
+<%= hidden_field_tag "sort_mutasi",sortby %>
+<%= hidden_field_tag "direction_mutasi",direction %>
+<script type="text/javascript">
+  $(document).ready(function(){
+    var h = $('#tb7').height();
+    var p = h/2-5;
+    var h2 = h +2
+    $('.bar-show-chart').css({paddingTop: p, paddingBottom: p});
+    $('.chart-block-table').css({height: h2});
+  });
+</script>

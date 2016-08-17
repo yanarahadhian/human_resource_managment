@@ -1,0 +1,32 @@
+<% input_name = "input-field" %>
+<% err_name = error_message_on @devices, :device_name %>
+<% input_name = "input-error" unless err_name.blank? %>
+
+<% input_ip = "input-field" %>
+<% err_ip = error_message_on @devices, :ip_address %>
+<% input_ip = "input-error" unless err_ip.blank? %>
+<div class="input">
+  <span class=" <%= input_name %>">
+    <span class='left'><%= f.label 'Nama Alat <span class="redstar">*</span>' %>:</span>
+    <%= f.text_field :device_name %>
+    <span class="clear"></span>
+    <%= err_name %>
+  </span>
+  <span class="clear"></span>
+
+  <span class=" <%= input_ip %>" style = "width: 600px;">
+    <span class='left'><%= f.label 'IP Address Alat <span class="redstar">*</span>' %>:</span>
+    <%= f.text_field :ip_address %>
+    <span class="clear"></span>
+    <%= err_ip %>
+  </span>
+  <span class="clear"></span>
+
+  <span class=" <%= input_name %>" style = "width: 600px;">
+    <span class='left'><%= f.label 'Port ' %>:</span>
+    <%= f.text_field :port %>
+    <span class="clear"></span>
+    <%= err_name %>
+  </span>
+</div>
+<span class="clear"></span>

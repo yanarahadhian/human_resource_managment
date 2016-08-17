@@ -1,0 +1,24 @@
+<% input_name = "input-field" %>
+<% err_name = error_message_on @department, :department_name %>
+<% input_name = "input-error" unless err_name.blank? %>
+
+<% input_kode = "input-field" %>
+<% err_kode = error_message_on @department, :department_code %>
+<% input_kode = "input-error" unless err_kode.blank? %>
+
+<div class="input">
+  <div class="<%= input_kode %>">
+    <span class="left"><%= f.label :department_code, "Kode Departemen <span class='redstar'>*</span>" %>: &nbsp;</span>
+    <span><%= f.text_field :department_code %></span>
+    <%= err_kode %>
+  </div>
+  <span class="clear"></span>
+
+  <div class="<%= input_name %>">
+    <span class="left"><%= f.label :department_name, "Nama Departemen <span class='redstar'>*</span>" %>: &nbsp;</span>
+    <span><%= f.text_field :department_name %></span>
+    <%= err_name %>
+  </div>
+</div>
+<span class="clear"></span>
+

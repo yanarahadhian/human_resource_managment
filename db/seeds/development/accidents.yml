@@ -1,0 +1,242 @@
+01:
+  id: 1
+  accident_location: "Bandung"
+  accident_date: 2011_01_01
+  causes: "Kecelakaan motor"
+  accident_description: ""
+  action_taken: "Bawa ke rumah sakit"
+  accident_category: "Sedang"
+  person_id: 1
+  accident_person_in_charge: ""
+  company_id: 1
+02:
+  id: 2
+  accident_location: "Bandung"
+  accident_date: 2011_01_04
+  causes: "Kecelakaan motor"
+  accident_description: ""
+  action_taken: "Bawa ke rumah sakit"
+  accident_category: "Sedang"
+  person_id: 1
+  accident_person_in_charge: ""
+  company_id: 1
+03:
+  id: 3
+  accident_location: "Bandung"
+  accident_date: 2011_01_04
+  causes: "Jatuh dari loteng rumah"
+  accident_description: ""
+  action_taken: "Masuk puskesmas"
+  accident_category: "Sedang"
+  person_id: 1
+  accident_person_in_charge: ""
+  company_id: 1
+04:
+  id: 4
+  accident_location: "Jakarta"
+  accident_date: 2011_01_04
+  causes: "Jatuh dari loteng rumah"
+  accident_description: ""
+  action_taken: "Masuk puskesmas"
+  accident_category: "Sedang"
+  person_id: 3
+  accident_person_in_charge: ""
+  company_id: 1
+05:
+  id: 5
+  accident_location: "Bandung"
+  accident_date: 2011_02_04
+  causes: "Jatuh dari loteng rumah"
+  accident_description: ""
+  action_taken: "Masuk puskesmas"
+  accident_category: "Sedang"
+  person_id: 4
+  accident_person_in_charge: ""
+  company_id: 1
+06:
+  id: 6
+  accident_location: "Jakarta"
+  accident_date: 2011_02_03
+  causes: "Kebanjiran"
+  accident_description: ""
+  action_taken: "Masuk puskesmas"
+  accident_category: "Ringan"
+  person_id: 2
+  accident_person_in_charge: ""
+  company_id: 1
+07:
+  id: 7
+  accident_location: "Jakarta"
+  accident_date: 2011_02_03
+  causes: "Kebanjiran"
+  accident_description: ""
+  action_taken: "Masuk puskesmas"
+  accident_category: "Ringan"
+  person_id: 1
+  accident_person_in_charge: ""
+  company_id: 1
+10:
+  id: 10
+  accident_location: "Jakarta"
+  accident_date: 2011_02_03
+  causes: "Kebanjiran"
+  accident_description: ""
+  action_taken: "Masuk puskesmas"
+  accident_category: "Ringan"
+  person_id: 3
+  accident_person_in_charge: ""
+  company_id: 1
+11:
+  id: 11
+  accident_location: "Bandung"
+  accident_date: 2011_02_05
+  causes: "Kebanjiran"
+  accident_description: ""
+  action_taken: "Masuk puskesmas"
+  accident_category: "Ringan"
+  person_id: 6
+  accident_person_in_charge: ""
+  company_id: 1
+12:
+  id: 12
+  accident_location: "Bandung"
+  accident_date: 2011_03_05
+  causes: "Kebanjiran"
+  accident_description: ""
+  action_taken: "Masuk puskesmas"
+  accident_category: "Ringan"
+  person_id: 4
+  accident_person_in_charge: ""
+  company_id: 1
+13:
+  id: 13
+  accident_location: "Bandung"
+  accident_date: 2011_03_05
+  causes: "Kebanjiran"
+  accident_description: ""
+  action_taken: "Masuk puskesmas"
+  accident_category: "Ringan"
+  person_id: 3
+  accident_person_in_charge: ""
+  company_id: 1
+14:
+  id: 14
+  accident_location: "Bandung"
+  accident_date: 2011_03_05
+  causes: "Kebanjiran"
+  accident_description: ""
+  action_taken: "Masuk puskesmas"
+  accident_category: "Ringan"
+  person_id: 3
+  accident_person_in_charge: ""
+  company_id: 1
+15:
+  id: 15
+  accident_location: "Bandung"
+  accident_date: 2011_03_05
+  causes: "Kebanjiran"
+  accident_description: ""
+  action_taken: "Masuk puskesmas"
+  accident_category: "Ringan"
+  person_id: 3
+  accident_person_in_charge: ""
+  company_id: 1
+16:
+  id: 16
+  accident_location: "Bandung"
+  accident_date: 2011_03_05
+  causes: "Kebanjiran"
+  accident_description: ""
+  action_taken: "Masuk puskesmas"
+  accident_category: "Ringan"
+  person_id: 3
+  accident_person_in_charge: ""
+  company_id: 1
+17:
+  id: 17
+  accident_location: "Bandung"
+  accident_date: 2011_03_05
+  causes: "Kebanjiran"
+  accident_description: ""
+  action_taken: "Masuk puskesmas"
+  accident_category: "Ringan"
+  person_id: 3
+  accident_person_in_charge: ""
+  company_id: 1
+18:
+  id: 18
+  accident_location: "Bandung"
+  accident_date: 2011_03_05
+  causes: "Iritasi kulit"
+  accident_description: ""
+  action_taken: "Masuk puskesmas"
+  accident_category: "Ringan"
+  person_id: 3
+  accident_person_in_charge: ""
+  company_id: 1
+19:
+  id: 19
+  accident_location: "Bandung"
+  accident_date: 2011_03_05
+  causes: "Belajar gokart"
+  accident_description: ""
+  action_taken: "Masuk puskesmas"
+  accident_category: "Ringan"
+  person_id: 3
+  accident_person_in_charge: ""
+  company_id: 1
+20:
+  id: 20
+  accident_location: "Bandung"
+  accident_date: 2011_03_05
+  causes: "Jatuh dari becak"
+  accident_description: ""
+  action_taken: "Masuk puskesmas"
+  accident_category: "Ringan"
+  person_id: 3
+  accident_person_in_charge: ""
+  company_id: 1
+21:
+  id: 21
+  accident_location: "Jakarta"
+  accident_date: 2011_03_05
+  causes: "Kebanjiran"
+  accident_description: ""
+  action_taken: "Masuk puskesmas"
+  accident_category: "Ringan"
+  person_id: 3
+  accident_person_in_charge: ""
+  company_id: 1
+23:
+  id: 23
+  accident_location: "Bandung"
+  accident_date: 2011_03_05
+  causes: "Kebanjiran"
+  accident_description: ""
+  action_taken: "Kejepit pintu"
+  accident_category: "Ringan"
+  person_id: 3
+  accident_person_in_charge: ""
+  company_id: 1
+23:
+  id: 23
+  accident_location: "Bandung"
+  accident_date: 2011_03_05
+  causes: "Kebanjiran"
+  accident_description: ""
+  action_taken: "Kejepit pintu"
+  accident_category: "Ringan"
+  person_id: 3
+  accident_person_in_charge: ""
+  company_id: 1
+22:
+  id: 22
+  accident_location: "Bandung"
+  accident_date: 2011_03_05
+  causes: "Kebanjiran"
+  accident_description: ""
+  action_taken: "Kejepit pintu"
+  accident_category: "Ringan"
+  person_id: 3
+  accident_person_in_charge: ""
+  company_id: 1

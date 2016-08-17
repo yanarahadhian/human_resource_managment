@@ -1,0 +1,43 @@
+<legend>
+  <a href="#" id="help_dash" class="icons help-top-icon" title="Click to show/hide information">&nbsp;</a>
+  Absen karyawan
+</legend>
+<%= render :partial => "layouts/howto/howto_content"%>
+<div class="input-data box-form">
+  <div class="title-page"></div>
+  <% form_for :absence,  :url => { :action => "create", :method => 'post' } do |f|%>
+  <div class="input-data box-form">
+    <span class="input">
+      <%= label_tag "Nama Karyawan :" %>
+      <%= text_field_tag :name %>
+    </span>
+    <span class="clear"></span>
+    <span class="input">
+      <%= label_tag "Tanggal Tidak masuk :" %>
+      <%= f.text_field :absence_date, :id=>'datepicker'%>
+    </span>
+    <span class="clear"></span>
+    <span class="input">
+      <%= label_tag "Alasan tidak masuk :" %>
+      <%= f.select(:absence_reason, options_for_select(['Ijin','Cuti','Sakit','Mankir','Cuti Khusus','Cuti Melahirkan', 'Sakit Kecelakaan'])) %>
+    </span>
+    <span class="clear"></span>
+    <span class="input">
+      <%= label_tag "Lama tidak masuk :" %>
+      <%= text_field_tag :absence_length ,nil %>
+      Hari
+    </span>
+    <span class="clear"></span>
+    <span class="input">
+      <%= label_tag "Keterangan" %>
+      <%=  text_area_tag :leave_description , nil, :size => "25x10" %>
+    </span>
+    <span class="clear"></span>
+  </div>
+  <br />
+  <div class="center-text box-form">
+    <%= submit_tag("Batal", { :name => 'reset', :id => 'info_section_cancel_basic', :type => "reset" , :class=>'grey_button' }) %>
+    <%= submit_tag "Simpan", {:class=>'blue_button', :id=>'info_section_save_basic'} %>
+    <% end %>
+  </div>
+</div>

@@ -1,0 +1,77 @@
+<%= render :partial => "layouts/howto_menu" %>
+<fieldset class="fm-table">
+  <legend><a href="#" id="help_dash" class="icons help-top-icon" title="Click to show/hide information">&nbsp;</a>
+   Informasi Detail Bagian <%= @group.work_group_name.just_display %></legend>
+  <%= render :partial => "layouts/howto/howto_content"%>
+  <div class="button-block-top box-form">
+    <div class="right">
+      <%#= link_to "<span class='icons delete-icon'>&nbsp;</span>Hapus Bagian",
+        {:controller => "work_groups", :action => "destroy", :id => @division},
+        :method => :delete, :confirm => "Bagian ini akan dihapus, anda yakin?",  :class => "grey_button_a"%>
+      <%= link_to  "<span class='icons delete-icon'>&nbsp;</span>Hapus Bagian",
+        {:controller => "work_groups", :action => "destroy", :id => @group}, :method => :delete,
+        :confirm => "Bagian ini akan dihapus, anda yakin?",
+        :class => "grey_button_a" %>
+
+      <a id="edit_info" class="grey_button_a">
+        <span class="icons edit-icon">&nbsp;</span>
+        Edit Bagian
+      </a>
+    </div>
+  </div>
+  <div class="clear"></div>
+
+  <div class=" box-form">
+  <div class="edit_field">
+  <div class="input-help-wide">
+    <label>Field dengan tanda <span class="redstar">*</span> harus diisi</label>
+  </div>
+  </div>
+    <% form_for [:organization_structure, @group], :html => { :multipart => true }  do |f| %>
+      <span class="input show_field"  style="display:none;">
+        <label>Nama bagian</label>:
+        <%= @group.work_group_name.just_display %>
+      </span>
+      <span class="input edit_field" style="max-width:600px;">
+        <span class="left"><%= f.label :name, "Nama Group <span class='redstar'>*</span>" %>: &nbsp;</span>
+        <%= f.text_field :work_group_name %>
+        <div style="margin-left:162px"><%= error_message_on @group, :work_group_name %></div>
+      </span>
+      <span class="clear"></span>
+      <span class="input show_field"  style="display:none;">
+        <label>Nama bagian</label>:
+        <%= @group.division.name.just_display if @group.division %>
+      </span>
+      <span class="input edit_field" style="max-width:600px;">
+        <span class="left"><label>Pilih Bagian<span class="redstar">*</span></label>: &nbsp;</span>
+        <%= collection_select(:work_group, :division_id, @divisions, :id, :name, options ={:index => @group.division_id}) %>
+      </span>
+      <span class="clear"></span>
+      <div class="center-text box-form" id="submit_button">
+        <hr/>
+        <input id="info_section_cancel_basic" class="grey_button" type="reset" value="Batal" name="info_section_cancel_basic"/>
+        <%= f.submit :Simpan,  :name => "info_section_save_basic", :id => "info_section_save_basic", :class => "blue_button" %>
+      </div>
+    <%- end %>
+  </div>
+</fieldset>
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('#edit_info').click(function(e){
+      e.preventDefault()
+      $('.show_field').hide();
+      $('.edit_field').show();
+      $('#submit_button').show();
+    });
+
+    $('#info_section_cancel_basic').click(function(e){
+      e.preventDefault()
+      $('.show_field').show();
+      $('.edit_field').hide();
+      $('#submit_button').hide();
+    });
+
+    $('#errorExplanation ul').hide();
+  });
+
+</script>

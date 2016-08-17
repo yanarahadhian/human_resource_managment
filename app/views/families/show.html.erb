@@ -1,0 +1,89 @@
+<% content_for :main_nav do %>
+  <li class="first"><%= link_to "#{image_tag('/images/icons/text_list_bullets.png', :alt => 'List')} List", "/employees"  %></li>
+	<li><%= link_to "#{image_tag('/images/icons/add.png', :alt => 'New')} New", "/employees/new" %></li>
+<% end -%>
+
+<div class="block">
+  <div class="secondary-navigation">
+    <ul class="wat-cf">
+      <li class="first"><%= link_to "Profile", "/employees/1" %></li>
+			<li><%= link_to "Addresses", '/addresses/1' %></li>
+      <li class="active"><%= link_to "Families", "/families/1" %></li>
+      <li><%= link_to "Educations", '/educations/1' %></li>
+			<li><%= link_to "Experiences", '/experiences/1' %></li>
+			<li><%= link_to "Employments", '/employments/1' %></li>
+			<li><%= link_to "Trainings", '/trainings/1' %></li>
+			<li><%= link_to "Violations", '/violations/1' %></li>
+    </ul>
+  </div>          
+  <div class="content">
+		<h2 class="title">Families of <%= link_to "James Bright", "/employees/1"%></h2>
+    <div class="inner">
+        <p>
+          <b>Name :</b>
+          Joe Bright
+        </p>
+
+        <p>
+          <b> Relation :</b>
+          Parents
+        </p>
+
+        <p>
+          <b>Gender :</b>
+          Male
+        </p>
+
+        <p>
+          <b> Birhtdate :</b>
+          New York, 05-08-2009
+        </p>
+
+        <p>
+          <b>Current Job :</b>
+          Farmer
+        </p>
+				<p>
+          <b>Highest Education :</b>
+          High School
+        </p>	<%= link_to "#{image_tag("web-app-theme/application_edit.png", :alt => "#{t("web-app-theme.edit", :default=> "Edit")}")} #{t("web-app-theme.edit", :default=> "Edit")}", '/families/1/edit', :class => "button" %> 
+		      <%= link_to "#{image_tag("web-app-theme/cross.png", :alt => "#{t("web-app-theme.delete", :default=> "Delete")}")} #{t("web-app-theme.delete", :default => "Delete")}", "/families/1", :method => "delete", :class => "button", :confirm => "#{t("web-app-theme.confirm", :default => "Are you sure?")}" %><br/>
+        <hr/><br/>
+				<p>
+          <b>Name :</b>
+          Michele Bright
+        </p>
+
+        <p>
+          <b> Relation :</b>
+          Parents
+        </p>
+
+        <p>
+          <b>Gender :</b>
+          Female
+        </p>
+
+        <p>
+          <b> Birhtdate :</b>
+          New York, 05-08-2009
+        </p>
+
+        <p>
+          <b>Current Job :</b>
+          Farmer
+        </p>
+				<p>
+          <b>Highest Education :</b>
+          High School
+        </p>
+				<%= link_to "#{image_tag("web-app-theme/application_edit.png", :alt => "#{t("web-app-theme.edit", :default=> "Edit")}")} #{t("web-app-theme.edit", :default=> "Edit")}", '/families/1/edit', :class => "button" %> 
+	      <%= link_to "#{image_tag("web-app-theme/cross.png", :alt => "#{t("web-app-theme.delete", :default=> "Delete")}")} #{t("web-app-theme.delete", :default => "Delete")}", "/families/1", :class => "button", :confirm => "#{t("web-app-theme.confirm", :default => "Are you sure?")}" %>
+      <div class="group navform wat-cf">       	<br/>
+      <hr/><br/>
+
+		<%= link_to "#{image_tag("icons/add.png", :alt => "New")} New", '/families/new', :class => "button", :style => 'float:right' %> 
+		</div>
+    </div>
+  </div>
+</div>

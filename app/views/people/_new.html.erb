@@ -1,0 +1,133 @@
+<%= render :partial=> "layouts/shared/breadcrumbs" %>
+<fieldset class="fm-table">
+ <legend> <a href="#" id="help_dash" class="icons help-top-icon" title="Click to show/hide information">&nbsp;</a> Tambah Karyawan</legend>
+  <%= render :partial => "layouts/howto/howto_content"%>
+  <div class="input-data">
+    <div class="box-form">
+      <div class="input-help">
+        <label>Field dengan tanda <span class="redstar">*</span> harus diisi</label>
+      </div>
+      <div id="box_retur_0">        
+        <% form_for @person, :html => { :multipart => true, :id => "form_edit" }  do |f| %>
+          <%= render :partial => 'person_form', :locals => {:f => f} %>
+          <div class="center-text">
+            <%= render :partial => "layouts/button_loader"  %>
+            <div id="button">
+              <input id="info_section_cancel_basic" class="grey_button" type="reset" value="Batal" name="info_section_cancel_basic" onclick="onCancel('#person_index')"/>
+              <input type="submit" value="Simpan" name="info_section_save_basic" id="info_section_save_basic" class="blue_button" onclick="ajaxLoad1('button','ajax-load1')"/>
+            </div>
+          </div>
+        <% end-%>
+      </div>
+    </div>
+  </div>
+</fieldset>
+
+<script type="text/javascript">
+  $(document).ready(function(){
+    if($('#is_upset').val() == '0'){
+      $("#unnormal_info").hide();
+      $("#is_upset_eyes_1").attr('checked' , false);
+      $("#is_upset_eyes_2").attr('checked' , true);
+    }
+    else if($('#is_upset').val() != '0'){
+      $("#unnormal_info").show();
+      $("#is_upset_eyes_1").attr('checked' , true)
+      $("#is_upset_eyes_2").attr('checked' , false)
+    }
+  
+    $('#person_no_hp').numeric();
+    <% unless @person.errors.blank? %>
+      $.address.value('<%= ApplicationController::BASE_URL %>/a/#{current_permalink}#person_new');
+    <% end %>
+
+    var dt = new Date;
+    endyear = dt.getFullYear() +10;
+
+    $( ".ui-date, .ui-date2" ).datepicker({
+      yearRange: '1939:' + endyear,
+      buttonImageOnly: true
+    })
+ });
+
+ function onDepartment(data){
+   $("#div_unit").empty();
+   $("#div_group").empty();
+   $.ajax({
+     url: "/change_people_divisi/" + data.value,
+     data: "a=a",
+     type: "GET"
+   });
+  }
+
+  function ajaxLoad1(div_btn, div_load){
+    $("#" + div_load + "").show();
+    $("#" + div_btn + "").hide();
+  }
+
+  $("#is_upset_eyes_1").click(function(){
+    $("#unnormal_info").show();
+    $('#unnormal_info').find(':text').attr('readonly', true);     
+    $('#unnormal_info').find(':checkbox').attr('checked', false);
+  })
+
+  $("#is_upset_eyes_2").click(function(){  
+    $("#unnormal_info").hide();
+    $('#person_left_minus').val("0");
+    $('#person_right_minus').val("0");
+    $('#person_left_plus').val("0");
+    $('#person_right_plus').val("0");
+    $('#person_left_silinder').val("0");
+    $('#person_right_silinder').val("0");
+  })
+
+  function change_left_minus(){
+    if($('#is_left_minus').attr('checked') == true)
+      $('#person_left_minus').attr('readonly', false)
+    else{
+      $('#person_left_minus').attr('readonly', true);
+      $('#person_left_minus').val("0")
+    }
+  }
+  function change_right_minus(){
+    if($('#is_right_minus').attr('checked') == true)
+      $('#person_right_minus').attr('readonly', false)
+    else{
+      $('#person_right_minus').attr('readonly', true)
+      $('#person_right_minus').val("0") 
+     }
+  }
+  function change_left_plus(){
+    if($('#is_left_plus').attr('checked') == true)
+      $('#person_left_plus').attr('readonly', false)
+    else{
+      $('#person_left_plus').attr('readonly', true);
+      $('#person_left_plus').val("0")
+    }
+  }
+  function change_right_plus(){
+    if($('#is_right_plus').attr('checked') == true)
+      $('#person_right_plus').attr('readonly', false)
+    else{
+      $('#person_right_plus').attr('readonly', true);
+      $('#person_right_plus').val("0")
+    }
+  }
+  function change_left_silinder(){
+    if($('#is_left_silinder').attr('checked') == true)
+      $('#person_left_silinder').attr('readonly', false)
+    else{
+      $('#person_left_silinder').attr('readonly', true);
+      $('#person_left_silinder').val("0")
+    }
+  }
+  function change_right_silinder(){
+    if($('#is_right_silinder').attr('checked') == true)
+      $('#person_right_silinder').attr('readonly', false)
+    else{
+      $('#person_right_silinder').attr('readonly', true);
+      $('#person_right_silinder').val("0")
+    }
+  }
+  
+</script>

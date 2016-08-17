@@ -1,0 +1,85 @@
+<% unless @data_chart.blank? || @data_chart[:is_nil] %>
+    <%= stylesheet_link_tag  "#{ApplicationController::APPSCHEF_URL}/stylesheets/private2.css",
+        "#{ApplicationController::APPSCHEF_URL}/stylesheets/fm_form.css",
+        "#{ApplicationController::APPSCHEF_URL}/stylesheets/960gs/fluid_grid.css",
+        "#{ApplicationController::APPSCHEF_URL}/stylesheets/colorbox.css",
+        "#{ApplicationController::APPSCHEF_URL}/stylesheets/footpanel.css",
+        "#{ApplicationController::APPSCHEF_URL}/stylesheets/redmond/jquery-ui-1.8.7.custom.css",
+        "jquery.autocomplete.css"%>
+<script type="text/javascript" src="http://www.google.com/jsapi"></script>
+ <%= javascript_include_tag "#{ApplicationController::APPSCHEF_URL}/javascripts/jquery-1.4.2.min.js","jquery.gvChart-1.0.1.min.js" %>
+
+<script type="text/javascript">
+  function display_list_keluar_masuk(item){
+   if (item==1){
+     $("#div_mutasi").hide();
+       $("#div_list_keluar_masuk").show();
+     }else{
+       $("#div_mutasi").show();
+       $("#div_list_keluar_masuk").hide();
+     }
+   }
+  gvChartInit();
+  $(document).ready(function(){
+      jQuery('#c_keluar_masuk').gvChart({
+        chartType: 'ColumnChart',
+        gvSettings: {
+            width: 740,
+            height: 300,
+            vAxis :{maxValue : 100, minValue:0 }
+            }
+      });
+  });
+</script>
+<html>
+  <div id="div_mutasi">
+    <div class="dashboard-chart">
+         <fieldset class="chart-block" style="min-height:183px;width:30%">
+         <div class="control-box">
+           <p class="bold auto">Grafik keluar masuk</p>
+         </div>
+         <div class="chart">
+            <table id="c_keluar_masuk" border="1">
+              <caption></caption>
+             <thead>
+               <th></th>
+               <% @data_chart[:bulan].each do |x| %>
+                 <th><%= x %></th>
+               <% end %>
+             </thead>
+             <tbody>
+               <tr>
+                 <th>keluar</th>
+               <% @data_chart[:keluar].each do |x| %>
+                 <td><%= x %></td>
+               <% end %>
+               </tr>
+               <tr>
+                 <th>masuk</th>
+               <% @data_chart[:masuk].each do |x| %>
+                 <td><%= x %></td>
+               <% end %>
+               </tr>
+             </tbody>
+            </table>
+          </div>
+        </fieldset>
+      </div>
+      <br class="clear"/>
+    </div>
+<% else %>
+  <div id="mutasi_desc_role">
+    <% unless params[:filter].blank? %>
+      <div class="dashboard-chart" id="c3">
+          <fieldset class="chart-block4">
+             <div class="control-box"></div>
+               <div no-chart="">
+                 <div id="desc_role" class="no-data-chart">Belum ada data keluar masuk saat ini
+               </div>
+             </div>
+          </fieldset>
+        </div>
+    <% end %>
+  </div>
+<% end %>
+</html>

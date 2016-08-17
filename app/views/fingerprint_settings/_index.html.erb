@@ -1,0 +1,202 @@
+<%= render :partial=> "layouts/shared/breadcrumbs" %>
+<%= javascript_include_tag  'pagination' %>
+<fieldset class="fm-table">
+  <legend><a href="#" id="help_dash" class="icons help-top-icon" title="Click to show/hide information">&nbsp;</a>
+    Setting Alat Sidik Jari </legend>
+  <%= render :partial => "layouts/howto/howto_content"%>
+  <%= render :partial => "layouts/delete_message"%>
+  <div class="panelFilter">
+    <table cellspacing="0" cellpadding="0">
+      <tbody>
+        <tr>
+          <% unless @devices.blank? %>
+            <td style="width:106px;">
+              <div id="action_menu">
+                <ul>
+                  <li>
+                    <a href="" class="grey_button2">
+                      <span class="left">More Actions</span>
+                      <span class="icons drop_arrow_ico">&nbsp;</span>
+                    </a>
+                    <div class="clear"></div>
+                    <ul>
+                      <li>
+                        <a class="list" onclick="onDeleteFingerPrint()">Delete</a>
+                      </li>
+                    </ul>
+                  </li>
+                </ul>
+              </div>
+            </td>
+          <% end %>
+          <% if current_features.include?('holiday_new') %>
+            <td width="260px">
+              <div class="pagination">
+                <span class="add-button right">
+                  <%= link_to "<span class=\'icons add_ico\'>&nbsp;</span>
+  Tambah Alat Sidik Jari", "#fingerprint_settings/new",  :class=>'grey_button2' %>
+                </span>
+              </div>
+              <div class="clear"></div>
+            </td>
+          <% end %>
+        </tr>
+        <tr>
+          <td>
+            <div class="expand_filter"  style="display:none">
+              <% form_remote_tag :url => {:action=>:index}, :method => :get  do -%>
+                <div id="filter_opt_1" style="display:none">
+                  <div class="clear"></div>
+                  <div class="filter_opt">
+                    <label class="left">Nama</label>
+                    <%= text_field :filter, :nama, :class => "left" %>
+                    <a href="#holidays" class="icons cancel_ico" id="icon_cancel_opt1">&nbsp;</a>
+                    <div class="clear"></div>
+                  </div>
+                </div>
+                <div id="filter_opt_2"  style="display:none">
+                  <div class="clear"></div>
+                  <div class="filter_opt">
+                    <label class="left">Lama hari libur</label>
+                    <%= text_field :filter, :duration, :class => "left" %>
+                    <a href="#holidays" class="icons cancel_ico" id="icon_cancel_opt2">&nbsp;</a>
+                    <div class="clear"></div>
+                  </div>
+                </div>
+                <div id="filter_opt_3"  style="display:none">
+                  <div class="clear"></div>
+                  <div class="filter_opt">
+                    <label class="left">Jumlah Cuti Bersama</label>
+                    <%= text_field :filter, :together_holiday, :class => "left" %>
+                    <a href="#holidays" class="icons cancel_ico" id="icon_cancel_opt3">&nbsp;</a>
+                    <div class="clear"></div>
+                  </div>
+                </div>
+                <div id="filter_opt_4"  style="display:none">
+                  <div class="clear"></div>
+                  <div class="filter_opt">
+                    <label class="left">Periode</label>
+                    <%= text_field :filter, :periode, :class => "left ui-date datepicker" %>
+                    <a href="#holidays" class="icons cancel_ico" id="icon_cancel_opt4">&nbsp;</a>
+                    <div class="clear"></div>
+                  </div>
+                </div>
+                <%= render :partial => "layouts/button_loader" %>
+                <a id="filter_button" >
+                  <span class="left"><%= submit_tag 'Go', :class=>"grey_button2", :onclick=> "progress_filter()" %></span>
+                  <div class="clear"></div>
+                </a>
+              <% end %>
+              <div class="clear"></div>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="clear"></div>
+  <div id="the_list">
+    <%= render :partial => "fingerprint_settings/list_devices" %>
+  </div>
+
+</fieldset>
+
+<script type="text/javascript">
+  var gaiSelected =  [];
+  
+  $(document).ready(function() {
+    error_handle("<%= flash.now[:notice] %>");
+    $(".ui-date").datepicker();
+    $('#reset_filter').live('click', function (e) {
+      $.ajax({
+        url: '/holidays',
+        type: 'get',
+        dataType: 'script',
+        data: {'_method': 'get',"":gaiSelected },
+        success: function() {
+          window.location='#holidays';
+        }
+      });
+    });
+    $('#link_opt_1').live('click', function (e){
+      e.preventDefault();
+      $('.expand_filter').show();
+      $('#filter_opt_1').show();
+      $('#filter_button').show();
+    });
+
+    $('#icon_cancel_opt1').click(function(){
+      $('#filter_opt_1').hide();
+      $('#filter_name').val("");
+      hide_all_search();
+    });
+
+    $('#link_opt_2').live('click', function (e){
+      e.preventDefault();
+      $('.expand_filter').show();
+      $('#filter_opt_2').show();
+      $('#filter_button').show();
+    });
+
+    $('#icon_cancel_opt2').click(function(){
+      $('#filter_opt_2').hide();
+      $('#filter_contract_type_id').val("");
+      hide_all_search();
+    });
+
+    $('#link_opt_3').click(function (e){
+      e.preventDefault();
+      $('.expand_filter').show();
+      $('#filter_opt_3').show();
+      $('#filter_button').show();
+    });
+
+    $('#icon_cancel_opt3').click(function(){
+      $('#filter_opt_3').hide();
+      $('#filter_division_id').val("");
+      hide_all_search();
+    });
+
+    $('#link_opt_4').click(function (e){
+      e.preventDefault();
+      $('.expand_filter').show();
+      $('#filter_opt_4').show();
+      $('#filter_button').show();
+    });
+
+    $('#icon_cancel_opt4').click(function(){
+      $('#filter_opt_4').hide();
+      $('#filter_position_id').val("");
+      hide_all_search();
+    });
+
+    function hide_all_search(){
+      a = false;
+      if ($('#filter_opt_1').is(":visible")){
+        a = true;
+      }
+      if ($('#filter_opt_2').is(":visible")){
+        a = true;
+      }
+      if ($('#filter_opt_3').is(":visible")){
+        a = true;
+      }
+      if ($('#filter_opt_4').is(":visible")){
+        a = true;
+      }
+      if (a != true){
+        $('.expand_filter').hide();
+      }
+    }
+
+    function progress_filter(){
+      $('#filter-load').show();
+      $('#filter_button').hide();
+    }
+
+    function stop_filter(){
+      $('#filter-load').hide();
+      $('#filter_button').show();
+    }
+  });
+</script>

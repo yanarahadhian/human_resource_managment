@@ -1,0 +1,499 @@
+employ01:
+   person_id: 1
+   employment_type_id: 1
+   work_group_id: 1
+   work_division_id: 1
+   department_id: 1
+   position_id: 4
+   employment_start: 2011-01-01
+   employment_end: 2011-04-01
+   change_from_before: "masuk kerja"
+employ02:
+   id: 2
+   person_id: 1
+   employment_type_id: 2
+   work_group_id: 3
+   work_division_id: 4
+   department_id: 1
+   position_id: 2
+   employment_start: 2011-04-01
+   employment_end: 2011-05-01
+   change_from_before: "mutasi"
+employ03:
+   id: 3
+   person_id: 1
+   employment_type_id: 2
+   work_group_id: 3
+   position_id: 1
+   work_division_id: 4
+   department_id: 1
+   employment_start: 2011-06-01
+   employment_end: 2011-06-01
+   change_from_before: "terminasi"
+employ04:
+   id: 4
+   person_id: 2
+   employment_type_id: 2
+   work_group_id: 3
+   work_division_id: 4
+   department_id: 1
+   position_id: 2
+   employment_start: 2011-01-01
+   employment_end: 2011-02-01
+   change_from_before: "masuk kerja"
+employ05:
+   id: 5
+   person_id: 2
+   employment_type_id: 2
+   work_group_id: 2
+   position_id: 1
+   work_division_id: 1
+   department_id: 1
+   employment_start: 2011-02-01
+   employment_end: 2011-03-01
+   change_from_before: "mutasi"
+employ06:
+   id: 6
+   person_id: 2
+   employment_type_id: 2
+   work_group_id: 1
+   work_division_id: 1
+   department_id: 1
+   position_id: 3
+   employment_start: 2011-03-01
+   employment_end: 2011-04-01
+   change_from_before: "promosi"
+employ07:
+   id: 7
+   person_id: 2
+   employment_type_id: 2
+   work_group_id: 1
+   work_division_id: 1
+   department_id: 1
+   position_id: 3
+   employment_start: 2011-04-01
+   employment_end: 2011-05-01
+   change_from_before: "mutasi"
+employ08:
+   id: 8
+   person_id: 2
+   employment_type_id: 2
+   work_group_id: 1
+   work_division_id: 1
+   department_id: 1
+   position_id: 3
+   employment_start: 2011-05-01
+   employment_end: 2011-05-01
+   change_from_before: "terminasi"
+employ09:
+   id: 9
+   person_id: 3
+   employment_type_id: 1
+   work_group_id: 1
+   position_id: 1
+   work_division_id: 1
+   department_id: 1
+   employment_start: 2011-01-01
+   employment_end: 2011-02-05
+   change_from_before: "masuk kerja"
+employ10:
+   id: 10
+   person_id: 3
+   employment_type_id: 1
+   work_group_id: 1
+   work_division_id: 1
+   department_id: 1
+   position_id: 3
+   employment_start: 2011-02-01
+   employment_end: 2011-03-05
+   change_from_before: "promosi"
+employ11:
+   id: 11
+   person_id: 3
+   employment_type_id: 1
+   work_group_id: 1
+   position_id: 1
+   work_division_id: 1
+   department_id: 1
+   position_id: 3
+   employment_start: 2011-03-01
+   employment_end: 2011-04-05
+   change_from_before: "mutasi"
+employ12:
+   id: 12
+   person_id: 3
+   employment_type_id: 1
+   work_group_id: 1
+   work_division_id: 1
+   department_id: 1
+   position_id: 3
+   employment_start: 2011-04-05
+   employment_end: 2011-05-05
+   change_from_before: "terminasi"
+employ13:
+   id: 13
+   person_id: 4
+   employment_type_id: 1
+   work_group_id: 1
+   work_division_id: 1
+   department_id: 1
+   position_id: 3
+   employment_start: 2011-02-05
+   employment_end: 2011-02-05
+   change_from_before: "masuk kerja"
+employ14:
+   id: 14
+   person_id: 4
+   employment_type_id: 1
+   work_group_id: 1
+   position_id: 1
+   work_division_id: 1
+   department_id: 2
+   position_id: 3
+   employment_start: 2011-06-05
+   employment_end: 2011-06-05
+   change_from_before: "terminasi"
+employ15:
+   id: 15
+   person_id: 5
+   employment_type_id: 1
+   work_group_id: 1
+   work_division_id: 1
+   department_id: 1
+   position_id: 3
+   employment_start: 2011-02-01
+   employment_end: 2011-05-01
+   change_from_before: "masuk kerja"
+employ16:
+   id: 16
+   person_id: 6
+   employment_type_id: 1
+   work_group_id: 1
+   position_id: 2
+   work_division_id: 1
+   department_id: 1
+   employment_start: 2010-03-01   
+   change_from_before: "masuk kerja"
+employ17:
+   id: 17
+   person_id: 7
+   employment_type_id: 1
+   work_group_id: 1
+   position_id: 2
+   work_division_id: 1
+   department_id: 1
+   employment_start: 2011-01-01
+   employment_end: 2011-02-01
+   change_from_before: "masuk kerja"
+employ18:
+   id: 18
+   person_id: 7
+   employment_type_id: 1
+   work_group_id: 1
+   position_id: 2
+   work_division_id: 1
+   department_id: 1
+   employment_start: 2011-02-01
+   change_from_before: "mutasi"
+employ19:
+   id: 19
+   person_id: 8
+   employment_type_id: 1
+   work_group_id: 1
+   position_id: 2
+   work_division_id: 1
+   department_id: 1
+   employment_start: 2011-02-01
+   employment_end: 2011-03-01
+   change_from_before: "masuk kerja"
+employ20:
+   id: 20
+   person_id: 9
+   employment_type_id: 1
+   work_group_id: 1
+   position_id: 2
+   work_division_id: 1
+   department_id: 1
+   employment_start: 2010-05-05
+   employment_end: 2010-05-05
+   change_from_before: "terminasi"
+employ21:
+   id: 21
+   person_id: 10
+   employment_type_id: 1
+   work_group_id: 1
+   position_id: 2
+   work_division_id: 1
+   department_id: 1
+   employment_start: 2010-05-05
+   employment_end: 2010-05-05
+   change_from_before: "masuk kerja"
+employ22:
+   id: 22
+   person_id: 11
+   employment_type_id: 1
+   work_group_id: 1
+   position_id: 2
+   work_division_id: 1
+   department_id: 1
+   employment_start: 2010-01-05
+   employment_end: 2010-01-05
+   change_from_before: "masuk kerja"
+employ23:
+   id: 23
+   person_id: 11
+   employment_type_id: 1
+   work_group_id: 1
+   position_id: 2
+   work_division_id: 1
+   department_id: 1
+   employment_start: 2010-03-05
+   employment_end: 2010-05-05
+   change_from_before: "mutasi"
+employ24:
+   id: 24
+   person_id: 11
+   employment_type_id: 1
+   work_group_id: 1
+   position_id: 2
+   work_division_id: 1
+   department_id: 1
+   employment_start: 2010-05-05
+   employment_end: 2010-06-05
+   change_from_before: "promosi"
+employ25:
+   id: 25
+   person_id: 11
+   employment_type_id: 1
+   work_group_id: 1
+   position_id: 2
+   work_division_id: 1
+   department_id: 1
+   employment_start: 2010-06-05
+   employment_end: 2010-06-05
+   change_from_before: "terminasi"
+employ26:
+   id: 26
+   person_id: 12
+   employment_type_id: 1
+   work_group_id: 1
+   position_id: 2
+   work_division_id: 1
+   department_id: 1
+   employment_start: 2011-03-05
+   employment_end: 2011-04-05
+   change_from_before: "masuk kerja"
+employ27:
+   id: 27
+   person_id: 12
+   employment_type_id: 1
+   work_group_id: 1
+   position_id: 2
+   work_division_id: 1
+   department_id: 1
+   employment_start: 2011-04-05
+   change_from_before: "mutasi"
+employ28:
+   id: 28
+   person_id: 13
+   employment_type_id: 1
+   work_group_id: 1
+   position_id: 2
+   work_division_id: 1
+   department_id: 1
+   employment_start: 2011-01-07
+   change_from_before: "masuk kerja"
+employ29:
+   id: 29
+   person_id: 13
+   employment_type_id: 1
+   work_group_id: 1
+   position_id: 2
+   work_division_id: 1
+   department_id: 1
+   employment_start: 2011-04-07
+   employment_end: 2011-05-07
+   change_from_before: "mutasi"
+employ30:
+   id: 30
+   person_id: 13
+   employment_type_id: 1
+   work_group_id: 1
+   position_id: 2
+   work_division_id: 1
+   department_id: 1
+   employment_start: 2011-05-07
+   employment_end: 2011-06-07
+   change_from_before: "promosi"
+employ31:
+   id: 31
+   person_id: 14
+   employment_type_id: 1
+   work_group_id: 1
+   position_id: 2
+   work_division_id: 1
+   department_id: 1
+   employment_start: 2011-06-07
+   change_from_before: "masuk kerja"
+employ32:
+   id: 32
+   person_id: 15
+   employment_type_id: 1
+   work_group_id: 1
+   position_id: 2
+   work_division_id: 1
+   department_id: 1
+   employment_start: 2011-02-07
+   employment_end: 2011-02-07
+   change_from_before: "masuk kerja"
+employ33:
+   id: 33
+   person_id: 16
+   employment_type_id: 1
+   work_group_id: 1
+   position_id: 2
+   work_division_id: 1
+   department_id: 1
+   employment_start: 2011-05-10
+   employment_end: 2011-06-10
+   change_from_before: "terminasi"
+employ34:
+   id: 34
+   person_id: 17
+   employment_type_id: 1
+   work_group_id: 1
+   position_id: 2
+   work_division_id: 1
+   department_id: 1
+   employment_start: 2011-03-10
+   change_from_before: "masuk kerja"
+employ35:
+   id: 35
+   person_id: 17
+   employment_type_id: 1
+   work_group_id: 1
+   position_id: 2
+   work_division_id: 1
+   department_id: 1
+   employment_start: 2011-06-10
+   employment_end: 2011-06-10
+   change_from_before: "promosi"
+employ36:
+   id: 36
+   person_id: 17
+   employment_type_id: 1
+   work_group_id: 1
+   position_id: 2
+   work_division_id: 1
+   department_id: 1
+   employment_start: 2011-06-10
+   employment_end: 2011-06-10
+   change_from_before: "terminasi"
+employ37:
+   id: 37
+   person_id: 17
+   employment_type_id: 1
+   work_group_id: 1
+   position_id: 2
+   work_division_id: 1
+   department_id: 1
+   employment_start: 2011-01-10
+   employment_end: 2011-05-10
+   change_from_before: "masuk kerja"
+employ38:
+   id: 38
+   person_id: 17
+   employment_type_id: 1
+   work_group_id: 1
+   position_id: 2
+   work_division_id: 1
+   department_id: 1
+   employment_start: 2011-05-10
+   employment_end: 2011-06-10
+   change_from_before: "terminasi"
+employ39:
+   id: 39
+   person_id: 18
+   employment_type_id: 1
+   work_group_id: 1
+   position_id: 2
+   work_division_id: 1
+   department_id: 1
+   employment_start: 2011-03-10
+   employment_end: 2011-06-10
+   change_from_before: "masuk kerja"
+employ40:
+   id: 40
+   person_id: 18
+   employment_type_id: 1
+   work_group_id: 1
+   position_id: 2
+   work_division_id: 1
+   department_id: 1
+   employment_start: 2011-06-10
+   change_from_before: "terminasi"
+employ41:
+   id: 41
+   person_id: 19
+   employment_type_id: 1
+   work_group_id: 1
+   position_id: 2
+   work_division_id: 1
+   department_id: 1
+   employment_start: 2011-02-10
+   employment_end: 2011-04-10
+   change_from_before: "masuk kerja"
+employ42:
+   id: 42
+   person_id: 19
+   employment_type_id: 1
+   work_group_id: 1
+   position_id: 2
+   work_division_id: 1
+   department_id: 1
+   employment_start: 2011-04-10
+   change_from_before: "promosi"
+employ43:
+   id: 43
+   person_id: 20
+   employment_type_id: 1
+   work_group_id: 1
+   position_id: 2
+   work_division_id: 1
+   department_id: 1
+   employment_start: 2011-02-10
+   employment_end: 2011-04-10
+   change_from_before: "masuk kerja"
+employ44:
+   id: 44
+   person_id: 20
+   employment_type_id: 1
+   work_group_id: 1
+   position_id: 2
+   work_division_id: 1
+   department_id: 1
+   employment_start: 2011-04-10
+   change_from_before: "promosi"
+employ45:
+   id: 45
+   person_id: 21
+   employment_type_id: 1
+   work_group_id: 1
+   position_id: 2
+   work_division_id: 1
+   department_id: 1
+   employment_start: 2011-02-10
+   employment_end: 2011-03-10
+   change_from_before: "masuk kerja"
+employ46:
+   id: 46
+   person_id: 21
+   employment_type_id: 1
+   work_group_id: 1
+   position_id: 2
+   work_division_id: 1
+   department_id: 1
+   employment_start: 2011-03-10
+   employment_end: 2011-07-10
+   change_from_before: "terminasi"
+

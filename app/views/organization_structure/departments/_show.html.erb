@@ -1,0 +1,111 @@
+<%= render :partial=> "layouts/shared/breadcrumbs" %>
+<div class="clear"></div>
+<%- if @department %>
+  <fieldset class="fm-table">
+    <legend> <a href="#" id="help_dash" class="icons help-top-icon" title="Click to show/hide information">&nbsp;</a>
+      Informasi Detail Departemen <%=h @department.department_name %></legend>
+    <%= render :partial => "layouts/howto/howto_content"%>
+
+    <div class=" box-form">
+      <span class="edit_field"  style="display:none;">
+        <div class="input-help-wide">
+          <label>Field dengan tanda <span class="redstar">*</span> harus diisi</label>
+        </div>
+      </span>
+      <% input_dept = "input-field" %>
+      <% err_dept= error_message_on @department, :department_name %>
+      <% input_dept = "input-error" unless err_dept.blank? %>
+
+      <% input_kode = "input-field" %>
+      <% err_kode = error_message_on @department, :department_code %>
+      <% input_kode = "input-error" unless err_kode.blank? %>
+
+      <% form_remote_for [:organization_structure, @department], :html => { :multipart => true }  do |f| %>
+        <div class="input big">
+          <div class="top-right" style="top: 7px; right: 4px">
+            <% if current_features.include?('department_edit') %>
+              <a id="edit_info" class="grey_button_a no-margin">
+                <span class="icons edit-icon">&nbsp;</span>
+                Edit
+              </a>
+            <% end %>
+          </div>
+          <span class="input-field show_field">
+            <label>Kode Departemen</label>:
+            <%=h @department.department_code.just_display %>
+          </span>
+          <span class="<%= input_kode %> edit_field" style="max-width:600px; display:none;">
+            <span class="left"><%= f.label :department_code, "Kode Departemen" %>: &nbsp;</span>
+            <%= f.text_field :department_code %>
+            <%= err_kode %>
+          </span>
+          <span class="clear"></span>
+          <span class="input-field show_field">
+            <label>Nama Departemen</label>:
+            <%=h @department.department_name.just_display %>
+          </span>
+          <span class="<%= input_dept %> edit_field" style="max-width:600px; display:none;">
+            <span class="left"><%= f.label :department_name, "Nama Departemen <span class='redstar'>*</span>" %>: &nbsp;</span>
+            <%= f.text_field :department_name %>
+            <%= err_dept %>
+          </span>
+          <span class="clear"></span>
+          <%- unless @department.divisions.blank? %>
+            <span class="input-field">
+              <label>Jumlah Bagian</label>:
+              <%= @department.division_count %>
+            </span>
+            <span class="clear"></span>
+            <span class="input-field">
+              <label>Daftar Bagian</label>:
+              <%- @department.divisions.each do |div| %>
+                <span class="content"><%=h div.name.just_display %></span>
+                <%= ", " unless div == @department.divisions.last %>
+              <%- end %>
+            </span>
+          <%- end %>
+        </div>
+        <div class=" clear"></div>
+        <hr/>
+        <div class="center-text box-form">
+          <%= render :partial => "layouts/button_loader"  %>
+        </div>
+        <div class="center-text box-form" id="submit_button" style="display:none">
+          <input id="info_section_cancel_basic" class="grey_button" type="reset" value="Batal" name="info_section_cancel_basic"/>
+          <input type="submit" value="Simpan" name="info_section_save_basic" id="info_section_save_basic" class="blue_button" onclick="load_on_submit()"/>
+        </div>
+      <%- end %>
+    </div>
+  </fieldset>
+<%- else %>
+  <div class="center-text">
+    Maaf tidak ada departemen dengan id <%= params[:id] %> di perusahaan ini
+  </div>
+<%- end %>
+<script>
+  $(document).ready(function() {
+    $('#edit_info').click(function(e){
+      e.preventDefault()
+      edit_info();
+    });
+
+    $('#info_section_cancel_basic').click(function(e){
+      e.preventDefault()
+      $('.show_field').show();
+      $('.edit_field').hide();
+      $('#submit_button').hide();
+    });
+
+  });
+  function edit_info(){
+    $('.show_field').hide();
+    $('.edit_field').show();
+    $('#submit_button').show();
+  }
+
+  function load_on_submit(){
+    $("#ajax-load1").show();
+    $("#submit_button").hide();
+  }
+</script>
+

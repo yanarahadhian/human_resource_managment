@@ -1,0 +1,24 @@
+<% input_nama = "input-field" %>
+<% err_nama = error_message_on @group, :work_group_name %>
+<% input_nama = "input-error" unless err_nama.blank? %>
+
+<% input_div = "input-field" %>
+<% err_div = error_message_on @group, :division_id %>
+<% input_div = "input-error" unless err_div.blank? %>
+
+<div class="input">
+  <span class="<%= input_nama %>">
+    <label>Nama Group <span class="redstar">*</span></label><span class="left">:&nbsp;</span>
+    <%= f.text_field :work_group_name %>
+    <%= err_nama %>
+  </span>
+  <span class="clear"></span>
+
+  <span class="<%= input_div %>">
+    <label>Assign group ke bagian <span class="redstar">*</span> </label><span class="left">:&nbsp;</span>
+    <%= collection_select(:division, :id, @divisions, :id, :name, options ={:prompt => "Pilih Bagian"}) %>
+    <%= err_div %>
+  </span>
+  <span class="clear"></span>
+</div>
+

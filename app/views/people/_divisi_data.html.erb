@@ -1,0 +1,10 @@
+<span class="input-field hide">
+    <label>Bagian</label> :
+    <select onchange="onDivision(this)" name="person[division_name]" id="person_division_name">
+      <option value="">Pilih Bagian</option>
+      <% @divisions.each do |x| %>
+      <option value="<%=x.id%>"><%=x.name %></option>
+      <% end %>
+    </select>
+  </span>
+<div class="clear"></div>

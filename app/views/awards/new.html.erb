@@ -1,0 +1,20 @@
+ <div class="left right-information" style="width:1070px;">
+      <div class="inner-title">
+        Tambah Penghargaan
+      </div>
+      <div class="box-form">
+        <% form_for @award, :url => person_awards_path do |f| %>
+          <div id="box_retur_0">
+            <%= render :partial => 'award_form', :locals => {:f => f} %>
+            <hr />
+            <div class="center-text">
+              <%= render :partial => "layouts/button_loader"  %>
+              <div id="button">
+                <input id="info_section_cancel_basic" class="grey_button" type="reset" value="Batal" name="info_section_cancel_basic" onclick="onCancel('<%=history_path(params[:person_id])%>?tab=4')"/>
+                <input type="submit" value="Simpan" name="info_section_save_basic" id="info_section_save_basic" class="blue_button" onclick="ajaxLoad1('<%= person_awards_path %>','button','ajax-load1')"/>                
+              </div>
+            </div>
+          </div>
+         <% end-%>
+			</div>
+  </div>

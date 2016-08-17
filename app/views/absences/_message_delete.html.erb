@@ -1,0 +1,23 @@
+<div id="dis" style="display:none">
+  <div id="popup_<%= id %>">
+    <div id="message_delete" class="popup">
+      <br />
+      <div class="title-page-small">
+        Konfirmasi Penghapusan Data
+      </div>
+      <div class="popup-confirmation">
+        <span class="alert_big_ico">&nbsp;</span>
+        Apakah Anda yakin akan menghapus Data Ini?
+        <div class="clear"></div>
+        <p>Note : Jika Anda memilih Ya, aksi ini tidak dapat di batalkan.</p>
+      </div>
+      <div class="box-form">
+        <input type="hidden" id="tamp" name="tamp"/>
+        <div class="right">
+          <input type="submit" value="Ya" class="blue_button" onclick="removePresence(<%= id %>,<%= person_id %>)" />
+          <input type="button" value="Tidak" class="grey_button" onclick="$.colorbox.close();"/>&nbsp;&nbsp;&nbsp;
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

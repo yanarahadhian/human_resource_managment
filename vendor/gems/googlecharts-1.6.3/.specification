@@ -1,0 +1,103 @@
+--- !ruby/object:Gem::Specification 
+name: googlecharts
+version: !ruby/object:Gem::Version 
+  hash: 9
+  prerelease: 
+  segments: 
+  - 1
+  - 6
+  - 3
+  version: 1.6.3
+platform: ruby
+authors: 
+- Matt Aimonetti
+autorequire: 
+bindir: bin
+cert_chain: []
+
+date: 2011-05-05 00:00:00 +07:00
+default_executable: 
+dependencies: []
+
+description: Generate charts using Google API & Ruby
+email: mattaimonetti@gmail.com
+executables: []
+
+extensions: []
+
+extra_rdoc_files: 
+- README
+- README.markdown
+- README.txt
+files: 
+- History.txt
+- License.txt
+- Manifest.txt
+- README
+- README.markdown
+- README.txt
+- Rakefile
+- VERSION
+- config/hoe.rb
+- config/requirements.rb
+- googlecharts.gemspec
+- lib/gchart.rb
+- lib/gchart/aliases.rb
+- lib/gchart/theme.rb
+- lib/gchart/version.rb
+- lib/googlecharts.rb
+- lib/themes.yml
+- script/destroy
+- script/generate
+- script/txt2html
+- setup.rb
+- spec/fixtures/another_test_theme.yml
+- spec/fixtures/test_theme.yml
+- spec/gchart_spec.rb
+- spec/spec_helper.rb
+- spec/theme_spec.rb
+- tasks/deployment.rake
+- tasks/environment.rake
+- tasks/rspec.rake
+- tasks/website.rake
+- website/index.html
+- website/index.txt
+- website/javascripts/rounded_corners_lite.inc.js
+- website/stylesheets/screen.css
+- website/template.rhtml
+has_rdoc: true
+homepage: http://googlecharts.rubyforge.org/
+licenses: []
+
+post_install_message: 
+rdoc_options: []
+
+require_paths: 
+- lib
+required_ruby_version: !ruby/object:Gem::Requirement 
+  none: false
+  requirements: 
+  - - ">="
+    - !ruby/object:Gem::Version 
+      hash: 3
+      segments: 
+      - 0
+      version: "0"
+required_rubygems_version: !ruby/object:Gem::Requirement 
+  none: false
+  requirements: 
+  - - ">="
+    - !ruby/object:Gem::Version 
+      hash: 3
+      segments: 
+      - 0
+      version: "0"
+requirements: []
+
+rubyforge_project: 
+rubygems_version: 1.5.2
+signing_key: 
+specification_version: 3
+summary: Generate charts using Google API & Ruby
+test_files: []
+

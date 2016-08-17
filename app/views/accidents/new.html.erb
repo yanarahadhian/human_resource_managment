@@ -1,0 +1,25 @@
+ <div class="left right-information" style="width:1070px;">
+  <%= render :partial=>"layouts/top_menu_detail_karyawan" %>
+  <div id="content-dynamic">
+    <fieldset class="fm-table">
+      <div class="inner-title">Tambah Kecelakaan</div>
+      <div class="box-form">
+         <% form_for @accident, :url => person_accidents_path do |f| %>
+           <div id="box_retur_0">
+             <%= render :partial => 'accident_form', :locals => {:f => f} %>
+             <p><span class="redstar">*</span> Harus diisi</p>
+             <span class="clear"></span>
+             <hr />
+             <div class="center-text">
+               <%= render :partial => "layouts/button_loader"  %>
+               <div id="button">                 
+                 <input id="info_section_cancel_basic" class="grey_button" type="reset" value="Batal" name="info_section_cancel_basic" onclick="onCancel('<%= person_employments_path(@person.id) %>?tab=4')"/>
+                 <input type="submit" value="Simpan" name="info_section_save_basic" id="info_section_save_basic" class="blue_button" onclick="ajaxLoad1('<%= person_accidents_path %>','button','ajax-load1')" />
+               </div>
+             </div>
+           </div>
+         <%end%>
+      </div>
+    </fieldset>
+  </div>
+</div>

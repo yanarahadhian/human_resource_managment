@@ -1,0 +1,109 @@
+<%= render :partial=> "layouts/shared/breadcrumbs" %>
+<%= render :partial => "layouts/howto_menu" %>
+
+<fieldset class="fm-table">
+  <legend><a href="#" id="help_dash" class="icons help-top-icon" title="Click to show/hide information">&nbsp;</a>
+   Setting HR</legend>
+  <%= render :partial => "layouts/howto/howto_content"%>
+  <div class="clear"></div>
+  <div class="input-help-wide">
+    <label>Field dengan tanda <span class="redstar">*</span> harus diisi</label>
+  </div>
+  <div class="clear"></div>
+
+    <% input_late = "input-field" %>
+    <% err_late = error_message_on @hr, :lateness_tolerance_in_minutes %>
+    <% input_late = "input-error" unless err_late.blank? %>
+
+    <% input_period = "input-field" %>
+    <% err_period = error_message_on @hr, :period_in_minutes %>
+    <% input_period = "input-error" unless err_period.blank? %>
+
+    <% input_quota = "input-field" %>
+    <% err_quota = error_message_on @hr, :leaves_first_year_quota %>
+    <% input_quota = "input-error" unless err_quota.blank? %>
+
+    <% input_year = "input-field" %>
+    <% err_year = error_message_on @hr, :leaves_quota_per_year %>
+    <% input_year = "input-error" unless err_year.blank? %>
+
+    <% form_remote_for @hr,  :url => setting_path(@hr.id) do |f| %>
+      <div class="input" style="width:500px;">
+        <span class="<%= input_late %>">
+
+          <%= f.label :lateness_tolerance_in_minutes, 'Toleransi keterlambatan<span class="redstar">*</span>' ,:class=>'width180px'%>:
+          <%= f.text_field :lateness_tolerance_in_minutes ,:class=>'small-text bt-tooltip-text' ,:title=>'Toleransi Keterlambatan'%>Menit
+
+          <a class="icons help_ico" id="tooltip_keterlambatan" bt-xtitle="" title="">&nbsp;</a>
+          <%= render :partial => "layouts/jquery_tooltip", :locals => {:link=>"tooltip_keterlambatan", :list=>"list_keterlambatan"} %>
+
+          <div><%= err_late %></div>
+
+        </span>
+
+        <div class="clear"></div>
+        <span class=<%= input_period %>>
+          <%= f.label :period_in_minutes, 'Waktu kelipatan perhitungan<span class="redstar">*</span>' ,:class=>'width180px'%>:
+          <%= f.text_field :period_in_minutes ,:class=>'small-text bt-tooltip-text' ,:title=>'Waktu Kelipatan Perhitungan'%> Menit
+
+          <a class="icons help_ico" id="tooltip_kelipatan_hitung" bt-xtitle="" title="">&nbsp;</a>
+          <%= render :partial => "layouts/jquery_tooltip", :locals => {:link=>"tooltip_kelipatan_hitung", :list=>"list_kelipatan_hitung"} %>
+
+          <div><%= err_period %></div>
+
+        </span>
+        <div class="clear"></div>
+
+
+        <span class=<%= input_quota %>>
+          <%= f.label :leaves_first_year_quota, 'Jatah cuti tahun pertama<span class="redstar">*</span>' ,:class=>'width180px'%>:
+          <%= f.text_field :leaves_first_year_quota ,:class=>'small-text bt-tooltip-text' ,:title=>'Jatah Cuti Tahun Pertama'%> Hari
+
+          <a class="icons help_ico" id="tooltip_cuti_thn_pertama" bt-xtitle="" title="">&nbsp;</a>
+          <%= render :partial => "layouts/jquery_tooltip", :locals => {:link=>"tooltip_cuti_thn_pertama", :list=>"list_cuti_thn_pertama"} %>
+
+          <div><%= err_quota %></div>
+
+        </span>
+        <div class="clear"></div>
+        <span class=<%= input_year %>>
+          <%= f.label :leaves_quota_per_year,  'Jatah cuti setiap tahun<span class="redstar">*</span>' , :class=>'width180px' %>:
+          <%= f.text_field  :leaves_quota_per_year  ,:class=>'small-text bt-tooltip-text' ,:title=>'Jatah Cuti Setiap Tahun' %> Hari
+
+          <a class="icons help_ico" id="tooltip_cuti_tiap_thn" bt-xtitle="" title="">&nbsp;</a>
+          <%= render :partial => "layouts/jquery_tooltip", :locals => {:link=>"tooltip_cuti_tiap_thn", :list=>"list_cuti_tiap_thn"} %>
+
+          <div><%= err_year %></div>
+
+        </span>
+
+        <span class="input-field">
+          <label class="width180px">Lembur</label>:
+            <%= f.radio_button :is_company_overtime, false, :checked => !is_company_overtime(@hr) %> Sesuai dengan peraturan Kementrian Tenaga Kerja<br/>
+        </span>
+
+        <span class="input-field">
+          <label class="width180px">&nbsp;</label>&nbsp;
+            <%= f.radio_button :is_company_overtime, true, :checked => is_company_overtime(@hr) %> Sesuai dengan upah pro rata per jam
+        </span>
+      </div>
+      <div class="clear"></div>
+      <hr />
+      <div class="center-text box-form hiding_button">
+        <%= render :partial => "layouts/button_loader" %>
+        <div id="button">
+          <input id="info_section_cancel_basic" class="grey_button" type="reset" value="Batal" name="info_section_cancel_basic" onclick="onCancel('#settings')"/>
+          <input type="submit" value="Simpan" name="info_section_save_basic" id="info_section_save_basic" class="blue_button" onclick="ajaxLoad1('button','ajax-load1')"/>
+        </div>
+      </div>
+    <% end %>  
+</fieldset>
+
+<%= render :partial => "tooltip_all_field_setting" %>
+
+<script type="text/javascript">
+  function ajaxLoad1(div_btn, div_load){
+     $("#" + div_load + "").show();
+     $("#" + div_btn + "").hide();
+   }
+</script>

@@ -1,0 +1,46 @@
+<script>
+  function onClose(){
+    $('#field_start').hide();
+    $('#label_start').show();
+    $('#field_perubahan').hide();
+    $('#label_perubahan').show();
+    $('#field_end').hide();
+    $('#label_end').show();
+    $('#field_department').hide();
+    $('#label_department').show();
+    $('#field_divisi').hide();
+    $('#label_divisi').show();
+    $('#field_group').hide();
+    $('#label_group').show();
+    $('#field_jabatan').hide();
+    $('#label_jabatan').show();
+    $('#field_reason').hide();
+    $('#label_reason').show();
+    $('.title-page-tambah').html("Detail Jabatan");
+    $('#div_button').hide();
+    $.fn.colorbox.close();
+  }
+
+    $(document).ready(function(){
+     $('#cboxClose').click(function(){
+        onClose()
+     });
+  });
+</script>
+<div style="display:none">
+    <div class="frm-popup" id="popup_employment_<%= employment.id %>">
+      <div class="title-page-tambah">Detail Jabatan</div>
+        <div class="box-form">          
+        <% form_for employment, :url => person_employment_path(person_id, employment.id), :html=> {:method => "put"}, :method=> "post" do |f| %>
+           
+               <%= render :partial => 'employment_edit_form', :locals => {:f => f, :employment => employment} %>
+             <div class="right-text" id="div_button" style="display:none;">
+               <input id="info_section_cancel_basic" class="grey_button" type="reset" value="Batal" name="info_section_cancel_basic" onclick="onClose()"/>
+               <input type="submit" value="Simpan" name="info_section_save_basic" id="info_section_save_basic" class="blue_button" onclick="ajaxLoad('<%= person_employment_path(person_id, employment.id) %>')"/>
+             </div>
+          
+        <% end-%>
+      </div>
+    </div>
+ </div>
+     

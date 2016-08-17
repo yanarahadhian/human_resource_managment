@@ -1,0 +1,12 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+satu:
+  id: 1
+  company_id: 32
+  person_id: 1
+  contract_start: "2012-01-01"
+  is_daily_employee: 0
+  is_permanent_employee: 0
+#
+# two:
+#   column: value

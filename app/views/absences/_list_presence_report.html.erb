@@ -1,0 +1,204 @@
+
+  <table id="presence_report_table">
+    <thead>
+      <tr>
+        <th class="center-text" width="25">No.</th>
+        <th width="95">Departemen</th>
+        <th width="90">Bagian</th>
+        <th width="70">NIK</th>
+        <th width="105">Nama</th>
+      <%- (@date_start..@date_end).each do |date| %>
+        <th width="35"><%= date.strftime("%d")%></th>
+        <% if date.wday == 0 || date == @date_end %>
+          <th width="35"><%=  "Lembur #{date.strftime("%d")}" %></th>
+        <% end %>
+      <%- end %>
+      <th width="55">L1(Jam)</th>
+      <th width="55">L2(Jam)</th>
+      <th width="55">L3(Jam)</th>
+      <th width="55">L4(Jam)</th>
+      <th width="65">Total Lembur</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% unless @reports.blank? %>
+      <% @reports.each_with_index do |report, i|%>
+          <tr>
+          <td>
+            <%= "#{@start_index+i+1}."%>
+          </td>
+          <td>
+            <%= report[:department].to_s %>
+          </td>
+          <td>
+            <%= report[:division].to_s %>
+          </td>
+          <td>
+            <%= report[:employee_id]%>
+          </td>
+          <td>
+            <%= report[:name].titleize %>
+          </td>
+          <% (@date_start..@date_end).each_with_index do |date, index| %>
+            <% if report[:work_time][index].class == Float %>
+              <td>
+                <div>
+                  <%= number_with_precision(report[:work_time][index], :precision => 2) %>
+            <% elsif report[:work_time][index] == "-" %>
+              <td style="background:darkgoldenrod;">
+                <div>
+                  <%= report[:work_time][index].upcase %>
+            <% elsif report[:work_time][index].blank? %>
+              <td style="background:darkgoldenrod;">
+                <div>
+                  <%= "-" %>
+            <% else %>
+              <td style="background:crimson;">
+                <div>
+                  <%= report[:work_time][index].upcase %>
+            <% end %>
+            <span class="superscript"><%= "#{report[:shift_code][index].to_s.upcase}" %></span>
+            </div>
+            </td>
+
+            <% if date.wday == 0 || date == @date_end %>
+              <td style="background:#ba0707;">
+                <%= number_with_precision(report[:weekly_overtime][index], :precision => 2) %>
+              </td>
+            <% end %>
+
+          <% end %>
+          <td>
+            <%= number_with_precision(report[:overtime1], :precision => 2) %>
+          </td>
+          <td>
+            <%= number_with_precision(report[:overtime2], :precision => 2) %>
+          </td>
+          <td>
+            <%= number_with_precision(report[:overtime3], :precision => 2) %>
+          </td>
+          <td>
+            <%= number_with_precision(report[:overtime4], :precision => 2) %>
+          </td>
+          <td>
+            <%= number_with_precision(report[:overtime_total], :precision => 2) %>
+          </td>
+        </tr>
+      <% end %>
+      <% else %>
+        <%- unless params["iDisplayStart"].blank? %>
+          <tr class="no-data">
+            <td colspan="100%" class="center-text">
+              <div class="description">Data Tidak Ditemukan</div>
+              <div class="info">Silakan ubah parameter filter Anda</div>
+            </td>
+          </tr>
+        <%- end %>
+      <% end %>
+    </tbody>
+  </table>
+
+  <div class="clear"></div>
+  <div class="panelFilter">
+    <table cellpadding="0" cellspacing="0">
+      <tbody>
+        <tr>
+          <td></td>
+          <td>&nbsp;</td>
+          <td class="right-text">
+            <div class="pagination right">
+              <span class="paginationResult">
+                <% if !@iTotalRecords.nil? && (@iTotalRecords > 0) %>
+                  <%= "#{@start_index + 1} - #{@start_index + @iTotalDisplayRecords} dari " %>
+                  <span id="totalAbsenceRecords"> <%= "#{@iTotalRecords}" %>
+                  </span>
+                <% end %>
+              </span>
+              <% if !@iTotalRecords.nil? && (@iTotalRecords > 25) %>
+                <a ><span class="icons last_ico" id="last_page">&nbsp;</span></a>
+                <a ><span class="icons next_ico" id="next_page">&nbsp;</span></a>
+                <a ><span class="icons prev_ico" id="prev_page">&nbsp;</span></a>
+                <a ><span class="icons first_ico" id="first_page">&nbsp;</span></a>
+              <% end %>
+              <div class="clear"></div>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <script type="text/javascript" >
+    var displayStart = <%= @start_index.to_i %>;
+    var dataLength = 25;
+
+    $(document).ready(function() {
+      //
+      $('#next_page').click(function(e){
+        e.preventDefault();
+        if (displayStart + dataLength < $('#totalAbsenceRecords').text()){
+          $("#ajax-load").show();
+          displayStart = displayStart + dataLength;
+          resetTablePage($('#date_pick_absen').val(), $('#date_pick_absen2').val(),
+          $('#rekap_absen_name').val(), $('#rekap_absen_department').val(),
+          $('#rekap_absen_division').val(), $('#rekap_absen_nik').val(), dataLength, displayStart);
+          $("#ajax-load").hide();
+        }
+        return false;
+      });
+
+      $('#last_page').click(function(e){
+        e.preventDefault();
+        if (displayStart + dataLength < $('#totalAbsenceRecords').text()){
+          $("#ajax-load").show();
+          displayStart = (Math.floor((parseInt($('#totalAbsenceRecords').text()-1)/dataLength))*dataLength);
+          resetTablePage($('#date_pick_absen').val(), $('#date_pick_absen2').val(),
+          $('#rekap_absen_name').val(), $('#rekap_absen_department').val(),
+          $('#rekap_absen_division').val(), $('#rekap_absen_nik').val(), dataLength, displayStart);
+          $("#ajax-load").hide();
+        }
+        return false;
+      } );
+
+      $('#prev_page').click(function(e){
+        e.preventDefault();
+        if (displayStart > 0){
+          $("#ajax-load").show();
+          displayStart = displayStart - dataLength;
+          resetTablePage($('#date_pick_absen').val(), $('#date_pick_absen2').val(),
+          $('#rekap_absen_name').val(), $('#rekap_absen_department').val(),
+          $('#rekap_absen_division').val(), $('#rekap_absen_nik').val(), dataLength, displayStart);
+          $("#ajax-load").hide();
+        }
+        return false;
+      } );
+
+      $('#first_page').click(function(e){
+        e.preventDefault();
+        if (displayStart > 0){
+          $("#ajax-load").show();
+          displayStart = 0;
+          resetTablePage($('#date_pick_absen').val(), $('#date_pick_absen2').val(),
+          $('#rekap_absen_name').val(), $('#rekap_absen_department').val(),
+          $('#rekap_absen_division').val(), $('#rekap_absen_nik').val(), dataLength, displayStart);
+          $("#ajax-load").hide();
+        }
+        return false;
+      } );
+
+    });
+
+    function resetTablePage(date_start, date_end, name, department, division, nik, contract, iDisplayLength, iDisplayStart){
+      $.get('/absences/presence_report_table',
+      { "date_start": date_start,
+        "date_end": date_end,
+        "name": name,
+        "department": department,
+        "division": division,
+        "nik": nik,
+        "contract": contract,
+        "iDisplayLength": iDisplayLength,
+        "iDisplayStart": iDisplayStart
+      });
+    }
+  </script>

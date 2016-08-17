@@ -1,0 +1,66 @@
+<% if @data_chart && (!@data_chart[:is_gen_nil] || !@data_chart[:is_pos_nil] || !@data_chart[:is_dept_nil]) %>
+  <script type="text/javascript" src="http://www.google.com/jsapi"></script>
+  <%= javascript_include_tag "jquery/jquery.js","jquery.gvChart-1.0.1.min.js" %>
+
+  <script type="text/javascript">
+    gvChartInit();
+    $(document).ready(function(){
+    <% if !@data_chart[:is_dept_nil] %>
+          jQuery('#c_department').gvChart({
+            chartType: 'PieChart',
+            gvSettings: {
+              width: 500,
+              height: 300
+            }
+          });
+    <% end %>
+    });
+  </script>
+  <div id="div_formasi">
+    <div class="dashboard-chart" >
+      <% if !@data_chart[:is_dept_nil] || !@data_chart[:is_div_nil] %>
+        <fieldset class="chart-block" style="display:inline;min-height:183px;width:30%">
+          <div class="control-box">
+            <p class="bold auto">Grafik Bagian</p>
+          </div>
+          <div class="chart">
+            <table id="c_department" border="1">
+              <caption></caption>
+              <thead>
+              <th></th>
+
+              <% data_name = @data_chart[:department] || @data_chart[:division] %>
+              <% data_name.each do |x| %>
+                <th><%= x %></th>
+              <% end %>
+              </thead>
+              <tbody>
+                <tr>
+                  <% data_val = @data_chart[:dept_value] || @data_chart[:div_value] %> 
+                  <% data_val.each do |x| %>
+                    <td><%= x %></td>
+                  <% end %>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </fieldset>
+      <% end %>
+    </div>
+  </div>
+<% else %>
+  <%= stylesheet_link_tag  "#{ApplicationController::APPSCHEF_URL}/stylesheets/private2.css" %>
+  <div id="formasi_desc_role">
+    <% unless params[:filter].blank? %>
+      <div class="dashboard-chart" id="c3">
+        <fieldset class="chart-block4">
+          <div class="control-box"></div>
+          <div no-chart="">
+            <div id="desc_role" class="no-data-chart">Belum ada data formasi saat ini
+            </div>
+          </div>
+        </fieldset>
+      </div>
+    <% end %>
+  </div>
+<% end %>

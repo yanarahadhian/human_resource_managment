@@ -1,0 +1,12 @@
+#products_container{
+	
+}
+.editor_panel td{
+	border-bottom: none !important;
+	border-right: none !important;
+	background: #FBFBFB;
+}
+.editor_panel2 td{
+	border-bottom: none !important;
+	background: #FBFBFB;
+}

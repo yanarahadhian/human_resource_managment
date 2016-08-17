@@ -1,0 +1,282 @@
+<%= render :partial=> "layouts/shared/breadcrumbs" %>
+
+<fieldset class="fm-table">
+  <legend>
+    <a href="#" id="help_dash" class="icons help-top-icon" title="Click to show/hide information">&nbsp;</a>
+    Absen Karyawan
+  </legend>
+  <%= render :partial => "layouts/howto/howto_content"%>
+  <%-  if @profile %>
+    <%= render :partial => 'layouts/profile_frame'%>
+    <div class="right-information">
+      <%= render :partial=>"layouts/top_menu_detail_karyawan"%>
+      <div id="content-dynamic">
+        <div class="fm-table-parent2">
+          <fieldset class="fm-table-notab">
+            <legend>
+              Data Sidik Jari Karyawan
+            </legend>
+            <div class="box-form">
+              <span class="input big">
+                <% if current_features.include?('employee_edit') %>
+                  <% unless @is_user_login %>
+                    <a class="grey_button_a add_barang top-right" id="edit_fingerprint" >
+                      <span class="icons edit-icon">&nbsp;</span> Edit
+                    </a>
+                  <% end %>
+                <% end %>
+                <label>ID alat sidik jari</label>:
+                <%= @person.fingerprint_user.blank? ? "-" : @person.fingerprint_user %>
+              </span>
+              <span class="clear"></span>
+            </div>
+          </fieldset>
+          <fieldset class="fm-table-notab">
+            <legend> Jatah Cuti Karyawan</legend>
+            <div class="box-form">
+              <div id="jct_inline_css">
+                <div class="input big">
+                  <% if current_features.include?('employee_edit') %>
+                    <% unless @is_user_login %>
+                      <a class="grey_button_a add_barang top-right" id="edit_cuti_karyawan" >
+                        <span class="icons edit-icon">&nbsp;</span> Edit
+                      </a>
+                    <% end %>
+                  <% end %>
+                  <span class="input-field">
+                    <label style="width: 190px"> Sisa jatah cuti saat ini</label>:
+                    <%- if @current_remaining_quota > 0 %>
+                      <%= "#{@current_remaining_quota} Hari" %>
+                    <%- else %>
+                      Tidak Ada
+                    <%- end %>
+                  </span>
+                  <div class="clear"></div>
+                  <% if !@this_year_quota.blank? && @this_year_quota.out_of_quota %>
+                    <span class="input-field">
+                      <label style="width: 190px"> Tanggal cuti terakhir</label>:
+                      <%= @this_year_quota.out_of_quota.strftime("%d/%m/%Y") %>
+                    </span>
+                    <div class="clear"></div>
+                  <% end %>
+                  <span class="input-field">
+                    <label style="width: 190px"> Cuti yang diambil periode ini</label>:
+                    <%= "#{@leaves_count} Hari" %>
+                  </span>
+                  <div class="clear"></div>
+                  <span class="input-field">
+                    <label style="width: 190px"> Cuti bersama periode ini</label>:
+                    <%= "#{@join_leaves} Hari" %>
+                  </span>
+                  <div class="clear"></div>
+                  <span class="input-field" style="width: 95%; height: 20px;">
+                    <label style="width: 190px">Jatah cuti tahun lalu</label>:
+                    <%- if @last_year_quota && @last_year_quota.redeemed_days.blank? %>
+                      <%= "#{@last_remaining_quota} Hari" %>
+                      <%= hidden_field_tag :redeemed_days, @last_remaining_quota %>
+                      <%= hidden_field_tag :current_quota, @this_year_quota.id %>
+                    <%- else %>
+                      Tidak Ada
+                    <%- end %>
+                    <%- if @last_year_quota && @last_remaining_quota > 0 && @last_year_quota.redeemed_days.blank? %>
+                      &nbsp;&nbsp;&nbsp;
+                      <select class="auto" id="action">
+                        <option value="0">Pilih Perlakuan</option>
+                        <option value="1">Uangkan cuti</option>
+                        <option value="2">Tambahkan ke jatah tahun ini</option>
+                      </select>
+                      <span id="link_button" class="auto right" style="display:none">
+                        <span id="link_edit">
+                          <span id="redeem_leaves" class="left"><a >Save</a></span>
+                          <span class="left" id="cancel_the_action">&nbsp;|&nbsp;<a >Cancel</a></span>
+                        </span>
+                      </span>
+                    <%- end %>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </fieldset>
+          <div class="clear"></div>
+          <fieldset class="fm-table-notab">
+            <legend> Absensi Bulanan Karyawan </legend>
+
+            <fieldset class="header-chart" style="width: 640px">
+              <label style="width: 150px; display: inline-block">Periode :</label>
+              <%= select_month(@date_start,{}, {:style=>"width:100px;"})%>
+              <%= select_year(@date_start, {:start_year => 1965, :end_year => Date.today.year}, {:style=>"width:80px;"})%>
+
+              <a class="grey_button2 no-margin none" id="filter_button">Tampilkan</span></a>
+            </fieldset>
+
+            <div class="clear"></div>
+            <div id="absence-notab">
+              <div class="input big">
+                <span class="input-field">
+                  <label>Masuk kerja </label>:
+                  <%= "#{@total_presence[:days]} hari" %>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  <%= link_to "Lihat detail", "#monthlyabsence/#{@person.id}?date_start_month=#{@date_start.month}&date_start_year=#{ @date_start.year}&date_end_month=#{@date_end.month}&date_end_year=#{ @date_end.year}",
+                    :onclick => "ajaxLoad('#{my_monthly_absence_path(:id => @person.id, :date_month => @date_start.month, :date_year =>  @date_start.year)}')" %>
+                </span>
+                <span class="clear"></span>
+
+                <span class="input-field">
+                  <label>Ijin </label>:
+                  <%= "#{@sum_total_excuse} hari" %>
+                  <%- if @sum_total_excuse.to_i > 0 %>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <%= link_to "Lihat detail", "#monthlyabsence/#{@person.id}?date_start_month=#{@date_start.month}&date_start_year=#{ @date_start.year}&date_end_month=#{@date_end.month}&date_end_year=#{ @date_end.year}",
+                      :onclick => "ajaxLoad('#{my_monthly_absence_path(:id => @person.id, :date_month => @date_start.month, :date_year =>  @date_start.year)}')" %>
+                  <%- end %>
+                </span>
+                <span class="clear"></span>
+
+                <span class="input-field">
+                  <label>Cuti </label>:
+                  <%= "#{@sum_total_leave} hari (sisa jatah: #{@current_remaining_quota} hari)" %>
+                  <%- if @sum_total_leave.to_i > 0%>
+                    <%= link_to "Lihat detail", "#monthlyabsence/#{@person.id}?date_start_month=#{@date_start.month}&date_start_year=#{ @date_start.year}&date_end_month=#{@date_end.month}&date_end_year=#{ @date_end.year}",
+                      :onclick => "ajaxLoad('#{my_monthly_absence_path(:id => @person.id, :date_month => @date_start.month, :date_year =>  @date_start.year)}')" %>
+                  <%- end %>
+                </span>
+                <span class="clear"></span>
+
+                <span class="input-field">
+                  <label>Sakit </label>:
+                  <%= "#{@sum_total_sick_leave} Hari" %>
+                  <%- if @sum_total_sick_leave.to_i > 0 %>
+                    <%= link_to "Lihat detail", "#monthlyabsence/#{@person.id}?date_start_month=#{@date_start.month}&date_start_year=#{ @date_start.year}&date_end_month=#{@date_end.month}&date_end_year=#{ @date_end.year}",
+                      :onclick => "ajaxLoad('#{my_monthly_absence_path(:id => @person.id, :date_month => @date_start.month, :date_year =>  @date_start.year)}')" %>
+                  <%- end %>
+                </span>
+                <span class="clear"></span>
+
+                <span class="input-field">
+                  <label>Cuti khusus </label>:
+                  <%= "#{@sum_total_special_leave} hari" %>
+                  <%- if @sum_total_special_leave.to_i > 0 %>
+                    <%= link_to "Lihat detail", "#monthlyabsence/#{@person.id}?date_start_month=#{@date_start.month}&date_start_year=#{ @date_start.year}&date_end_month=#{@date_end.month}&date_end_year=#{ @date_end.year}",
+                      :onclick => "ajaxLoad('#{my_monthly_absence_path(:id => @person.id, :date_month => @date_start.month, :date_year =>  @date_start.year)}')" %>
+                  <%- end %>
+                </span>
+                <span class="clear"></span>
+
+                <span class="input-field">
+                  <label>Cuti melahirkan </label>:
+                  <%= "#{@sum_total_birth_leave} hari"%>
+                  <%- if @sum_total_birth_leave.to_i > 0 %>
+                    <%= link_to "Lihat detail", "#monthlyabsence/#{@person.id}?date_start_month=#{@date_start.month}&date_start_year=#{ @date_start.year}&date_end_month=#{@date_end.month}&date_end_year=#{ @date_end.year}",
+                      :onclick => "ajaxLoad('#{my_monthly_absence_path(:id => @person.id, :date_month => @date_start.month, :date_year =>  @date_start.year)}')" %>
+                  <%- end %>
+                </span>
+                <span class="clear"></span>
+
+                <span class="input-field">
+                  <label>Mangkir </label>:
+                  <%="#{@sum_total_awol} hari"%>
+                  <%- if @sum_total_awol.to_i > 0 %>
+                    <%= link_to "Lihat detail", "#monthlyabsence/#{@person.id}?date_start_month=#{@date_start.month}&date_start_year=#{ @date_start.year}&date_end_month=#{@date_end.month}&date_end_year=#{ @date_end.year}",
+                      :onclick => "ajaxLoad('#{my_monthly_absence_path(:id => @person.id, :date_month => @date_start.month, :date_year =>  @date_start.year)}')" %>
+                  <%- end %>
+                </span>
+                <span class="clear"></span>
+
+                <span class="input-field">
+                  <label>Cuti kecelakaan </label>:
+                  <%= "#{@sum_total_accident_leave} hari" %>
+                  <%- if @sum_total_accident_leave.to_i > 0 %>
+                    <%= link_to "Lihat detail", "#monthlyabsence/#{@person.id}?date_start_month=#{@date_start.month}&date_start_year=#{ @date_start.year}&date_end_month=#{@date_end.month}&date_end_year=#{ @date_end.year}",
+                      :onclick => "ajaxLoad('#{my_monthly_absence_path(:id => @person.id, :date_month => @date_start.month, :date_year =>  @date_start.year)}')" %>
+                  <%- end %>
+                </span>
+                <span class="clear"></span>
+              </div>
+            </div>
+          </fieldset>
+        </div>
+      </div>
+    </div>
+
+  <%- end %>
+
+  <%- unless @current_person.blank? %>
+
+  <%- else %>
+    <fieldset class="fm-table-notab">
+      <legend>
+        <span class="icons arrow_ico" id="arrow1">&nbsp;</span>Karyawan tidak terdaftar
+      </legend>
+    </fieldset>
+  <%- end %>
+</fieldset>
+<%= render :partial => "absences/popup_pages/popup_edit_fingerprint_id" %>
+<%= render :partial => "absences/popup_pages/popup_edit_cuti_karyawan.html" %>
+
+<script type="text/javascript" >
+  function ShowNotifyMessage(text){
+    $(".notify_error").slideDown("fast").html('<span class="message">'+ text +'</span><a class="icons close-error-icon right" onclick="CloseNotify()";return false;">&nbsp;</a>');
+  }
+
+  $(document).ready(function(){
+    $("#edit_fingerprint").colorbox({width:"600",height:"auto", inline:true, href:"#popup_fingerprint",
+      onComplete: function(){
+        $(this).colorbox.resize();
+      },
+      onClosed: function(){
+      }
+    });
+
+    $("#edit_cuti_karyawan").colorbox({width:"600",height:"auto", inline:true, href:"#popup_cuti_karyawan",
+      onComplete: function(){
+        $(this).colorbox.resize();
+      },
+      onClosed: function(){
+      }
+    });
+
+
+    $('#filter_button').click(function (e) {
+      e.preventDefault();
+      //$(this).hide();
+      //$('#date_filter').hide();
+      $('#filter_show').show();
+      $('.result_filter').html('Bulan ' + $('#date_month option:selected').text()+' '+$('#date_year').val());
+      $.get( "/absences/mine", {id: "<%=@current_person.id if @current_person%>", date_year:$('#date_year').val(), date_month:$('#date_month').val()},function(data) {
+        $("#ajax-load").show();
+        $("#app_two_con").html($(data));
+        $("#ajax-load").hide();
+      });
+      return false;
+    });
+
+    $('#redeem_leaves').click(function (){
+      if($('#action').val()==1){
+        notify = 'Jatah cuti tahun lalu berhasil diuangkan'
+      }else{
+        notify = 'Jatah cuti tahun lalu berhasil ditambahkan ke jatah cuti tahun ini'
+      }
+      $.post("/absences/redeem_leaves",
+      {redeemed_days: $('#redeemed_days').val(), current_quota: $('#current_quota').val(), quota_action: $('#action').val() },
+      function(data){
+        $('#filter_button').click();
+        ShowNotifyMessage('Jatah cuti tahun lalu berhasil diuangkan');
+        refresh_page('absences/mine?profiles=1&id=<%= @person.id %>');
+      }
+    );
+    });
+
+    $('#action').change(function() {
+      if($('#action').val() != "0"){
+        $('#link_button').show();
+      }else{
+        $('#link_button').hide();
+      }
+    });
+
+    $('#cancel_the_action').click(function(){
+      $("#action").val("0").attr('selected',true);
+      $('#link_button').hide();
+    });
+
+  });
+</script>
+

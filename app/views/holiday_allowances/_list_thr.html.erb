@@ -1,0 +1,160 @@
+<%= javascript_include_tag  'pagination' %>  
+<table>
+  <thead>
+     <tr>
+       <th><%= check_box_tag("checkall", :id =>"checkall")%></th>
+       <th class="left-text">Tanggal Dibuat</th>
+       <th>NIK</th>
+       <th class="left-text">Nama</th>
+       <th class="left-text">NPWP</th>
+       <th class="left-text">Status</th>
+       <th class="left-text">Bruto Bulan Lalu</th>
+       <th class="left-text">Bonus / THR</th>
+       <th class="left-text">Bruto Gaji + THR</th>
+       <th class="left-text">Netto / Bulan</th>
+       <th class="left-text">Netto / Tahun</th>
+       <th class="left-text">PTKP</th>
+       <th class="left-text">PKP</th>
+       <th class="left-text">PPH atas THR / Bonus</th>
+       <th class="left-text">Take home</th>
+       <th class="left-text">Perlakuan</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% unless @honors.blank?  %>
+      <% @honors.each do |thr| %>
+      <tr>
+        <% unless thr.person.blank? %>
+          <% person = thr.person %>
+          <td><%= check_box_tag'myrow[ids][]', thr.id, false %></td>
+          <td class="right-text"><%= thr.honor_date %></td>
+          <td><%= link_to person.employee_identification_number, "#people/#{thr.person_id}?tab=0" %></td>
+          <td><%= link_to person.full_name, "#people/#{thr.person_id}?tab=0" %></td>
+          <td class="left-text"><%= person.no_npwp %></td>
+          <td class="left-text">
+            <% unless person.current_status.blank? %>
+              <%= person.current_status.contract_type.contract_type_name unless thr.person.current_status.contract_type.blank? %>
+            <% end %>
+          </td>
+
+           <td class="right-text">
+            <%= number_to_currency(thr.gross_income, :delimiter => ".", :precision => 0, :format => "%n") unless thr.blank? %>
+          </td>
+          
+          <td class="right-text">
+            <%= link_to_if current_features.include?('thr_detail'), ( number_to_currency(thr.salary, :delimiter => ".", :precision => 0, :format => "%n")), "#show_holiday_allowances/#{thr.id}" unless thr.blank? %>
+          </td>
+          
+           <td class="right-text">
+            <%= number_to_currency((thr.gross_income*12) + thr.salary, :delimiter => ".", :precision => 0, :format => "%n") unless thr.blank? %>
+          </td>
+
+          <td class="right-text">
+            <%= number_to_currency(thr.month_net_income, :delimiter => ".", :precision => 0, :format => "%n") unless thr.blank? %>
+          </td>
+          <td class="right-text">
+            <%= number_to_currency(thr.year_net_income, :delimiter => ".", :precision => 0, :format => "%n") unless thr.blank? %>
+          </td>
+          
+          <td class="right-text">
+            <%= number_to_currency(thr.ptkp, :delimiter => ".", :precision => 0, :format => "%n") unless thr.blank? %>
+          </td>
+          <td class="right-text">
+            <%= number_to_currency(thr.pkp, :delimiter => ".", :precision => 0, :format => "%n") unless thr.blank? %>
+          </td>
+          <td class="right-text">
+            <%= number_to_currency(thr.pph_indebted_per_year, :delimiter => ".", :precision => 0, :format => "%n") unless thr.blank? %>
+          </td>
+          <td class="right-text">
+            <%= number_to_currency(thr.final_take_home_pay, :delimiter => ".", :precision => 0, :format => "%n") unless thr.blank? %>
+          </td>
+          <td><%= link_to "Download", download_holiday_allowance_path(thr) %></td>
+        <% else %>
+        <% end %>
+      <% end %>
+
+      <% else %>
+              <tr class="no-data">
+                  <td class="center-text" colspan="16">
+                      <div class="description">Belum Ada Data THR. </div>
+                      <% if params[:action] != 'mine'%>
+                          <div class="info">Silahkan klik <%= link_to 'Hitung THR', "#new_holiday_allowance" %> untuk menambah data</div>
+                      <% end %>
+                  </td>
+              </tr>
+        <% end %>
+
+    </tr>
+  </tbody>
+</table>
+
+<div class="panelFilter">
+    <div class="pagination">
+      <% if @honors.count > 0 %>
+        <span class="paginationResult">
+          <% a = format_paginate1(@honors, @per_page,  @honors.total_entries) %>
+           <%= a[:a] %> - <%= a[:b] %> dari <%= @honors.total_entries %>
+        </span>
+        <%= a[:paginate] %>
+      <% else %>
+        &nbsp;
+      <% end %>
+    </div>
+</div>
+<%=hidden_field_tag "current_page", @honors.current_page %>
+
+<script type="text/javascript">
+
+   <% if @honors.blank? %>
+      $('#id_more_action').hide();$('#id_export').hide();
+    <% else %>
+      $('#id_more_action').show();$('#id_export').show();
+    <% end %>
+
+    <% if @honors_all > 0 %>
+      $('#id_filter').show();$('#filter_block').show();
+    <% else %>
+      $('#id_filter').hide();$('#filter_block').hide();
+    <% end %>
+      
+    // Select all or deselect all checkboxes
+    $(function () {
+        $('#checkall').click(function () {
+            $(this).parents('table:eq(0)').find(':checkbox').attr('checked', this.checked);
+        });
+    });
+
+    function onDelete(){
+      var arr_params = new Array();
+      $('#honors tbody input:checked').each(function() {
+        arr_params = arr_params.concat($(this).val());
+      });
+      if (arr_params.length > 0){
+        $('#div_sign').html('thr');
+        $('#div_btn_hapus').html('<input type="button" value="Ya" class="blue_button" onclick="delete_thr()"/>');
+        jQuery().colorbox({width:"auto",height:"auto", inline:true,href:"#message_delete",
+          onClosed:function(){
+          }
+        });
+      }else{
+        return false;
+      }
+    }
+
+    function delete_thr(){
+      var arr_params = new Array();
+      $('#honors tbody input:checked').each(function() {
+        arr_params = arr_params.concat($(this).val());
+      });
+      var controller = "/holiday_allowances/destroy";
+      $.ajax({
+        type: "delete",
+        url: escape(controller),
+        data:{'_method': 'post',"ids":arr_params,"is_thr": "1", 'current_page': $('#current_page').val()},
+        dataType:"script",
+        success: function(){
+          $.fn.colorbox.close();
+        }
+      });
+    }
+</script>

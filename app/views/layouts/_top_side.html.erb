@@ -1,0 +1,229 @@
+<% if current_features.include?('employee_index') %>
+  <li>
+    <%= link_to "Karyawan", "#person_index", :class => "top_link people_top_link"%>
+    <div class="clear"></div>
+    <ul class="submenu-top">
+      <li class="parent">
+         <a href="#person_index" class="tooltip-t" title="pret test" id="list_karyawan">Daftar Karyawan</a>
+         <ul>
+           <li><a href="#person_new"><span class="add-top-menu">&nbsp;</span> Tambah Karyawan </a></li>
+         </ul>
+      </li>
+       <% if current_features.include?('in_out_employee')%>
+         <li><%= link_to "Keluar Masuk", "#keluar_masuk", :id=>"keluar" %></li>
+       <% end %>
+       <% if current_features.include?('mutation_index')%>
+         <li><%= link_to "Mutasi", "#list_mutasi", :id=>"mutasi"%></li>
+       <% end %>
+       <% if current_features.include?('demotion_index')%>
+         <li><%= link_to "Demosi", "#list_demosi", :id=>"demosi"%></li>
+       <% end %>
+       <% if current_features.include?('promotion_index')%>
+         <li><%= link_to "Promosi", "#promotions", :id=>"promosi" %></li>
+       <% end %>
+       <% if current_features.include?('sp_index') %>
+          <li><%= link_to "Surat Peringatan", "#memorandums", :id=>"sp"  %></li>
+        <% end %>
+
+        <% if current_features.include?('accident_index') %>
+          <li> <%= link_to "Kecelakaan Kerja","#job_accidents", :id =>"accident" %></li>
+        <% end %>
+    </ul>
+  </li>
+<% end %>
+
+<% if current_features.include?('present_index') %>
+  <li>
+    <%= link_to "Waktu Kerja dan Lembur",'#absences', :class => "top_link absences_top_link"%>
+    <div class="clear"></div>
+    <ul class="submenu-top">
+      <li class="parent">
+         <a href="#absences" class="menu_absence" id="absensi">Absensi Kerja</a>
+         <% if current_features.include?('present_employee') %>
+         <ul>
+            <li>
+              <%= link_to "Absenkan Karyawan",popup_absent_to_people_absences_path, :class=>'side_link employee_present', :id=>'add_presence' %>
+            </li>
+            <li>
+              <%= link_to "Import Data", popup_import_data_absent_absences_path, :class=>'side_link employee_present', :id=>'add_presence' %>
+             
+            </li>
+         </ul>
+         <% end %>
+      </li>
+      <% if current_features.include?('late_index') %>
+        <li><a href="#download_from_device" id="download_from_device">Download Data Kehadiran</a></li>
+      <% end %>
+      <% if current_features.include?('late_index') %>
+        <li><a href="#late" id="terlambat">Terlambat</a></li>
+      <% end %>
+      <% if current_features.include?('working_hours_more_index') %>
+        <li><a href="#more_hour" id="kerja_lebih">Kerja Lebih</a></li>
+      <% end %>
+      <% if current_features.include?('working_hours_less_index') %>
+        <li><a href="#less_hour" id="kerja_kurang">Kerja Kurang</a></li>
+      <% end %>
+      <% if current_features.include?('more_rest_index') %>
+        <li><a href="#more_rest" id="istirahat_lebih">Istirahat Lebih</a></li>
+      <% end %>
+      <% if current_features.include?('less_rest_index') %>
+        <li><a href="#less_rest" id="istirahat_kurang">Istirahat Kurang</a></li>
+      <% end %>
+      <% if current_features.include?('absence_index') %>
+        <li><a href="#absent" id="tidak_masuk">Tidak Masuk</a></li>
+      <% end %>
+      <% if current_features.include?('employee_no_end_work_time_index') %>
+        <li><a href="#absences/no_logout" id="tidak_logout">Absen Tidak Lengkap</a></li>
+      <% end %>
+        
+      <% if current_features.include?('overtime_index') || current_features.include?('overtime_plan_list') %>
+        <li class="parent">
+          <a>Lembur</a>
+          <ul>
+            <% if current_features.include?('overtime_index') %>
+              <li><%= link_to "Daftar Lembur", "#overtimes/index_done", :id=>'lembur'%></li>
+            <% end %>
+            <% if current_features.include?('overtime_plan_list') %>
+              <li><%= link_to "Rencana Lembur","#overtimes", :id=>'rencana_lembur'%></li>
+            <% end %>
+          </ul>
+        </li>
+      <% end %>
+
+      <% if current_features.include?('employee_leave_management_add') %>
+        <li>
+          <%= link_to "Cuti","#leaves", :id => "pemintaan_cuti"%>
+        </li>
+      <% end %>
+    </ul>
+  </li>
+<% end %>
+
+<% if current_features.include?('salary_index') %>
+  <li>
+    <%= link_to "Gaji dan Tunjangan","#salaries", :class => "top_link salaries_top_link" %>
+    <div class="clear"></div>
+    <ul class="submenu-top">
+      <li class="parent">
+         <%= link_to "Data Gaji", "#salaries", :id=>"data-gaji" %>
+         <% if current_features.include?('salary_new') %>
+         <ul>
+            <li>
+              <%= link_to "<span class=\"add-top-menu\">&nbsp;</span> Hitung Gaji", '#new_salary'%>
+            </li>
+         </ul>
+         <% end %>
+      </li>
+      <li class="parent">
+         <%= link_to "Data Master", "#salary_master_datas", :id=>"data-master" %>         
+         <ul>
+            <li>
+              <%= link_to "<span class=\"add-top-menu\">&nbsp;</span> Tambah Gaji Master", '#salary_master_new'%>
+            </li>
+         </ul>
+      </li>
+      <% if current_features.include?('thr_index') %>
+        <li class="parent">
+          <%= link_to "Bonus (eg.THR)","#holiday_allowances", :class => "top_link holiday_top_link" %>
+          <% if current_features.include?('thr_new') %>
+            <ul>
+              <li>
+                <%= link_to "<span class='icons add_ico'>&nbsp;</span>Hitung THR", '#new_holiday_allowance' %>
+              </li>
+            </ul>
+          <% end %>
+        </li>
+      <% end %>
+    </ul>
+  </li>
+<% end %>
+   
+<% if current_features.include?('sp_index') %>
+  <li>
+    <%= link_to "Laporan Lainnya", "#view_absensi", :class => "top_link memorandums_top_link"%>
+    <div class="clear"></div>
+    <ul class="submenu-top">
+      
+      <% if current_features.include?('absent_report') %>
+        <li>
+          <%= link_to "Absensi", "#view_absensi", :id => "rpt_view_absensi" %>
+        </li>
+      <% end %>
+
+      <% if current_features.include?('absent_report') %>
+        <li>
+          <%= link_to "Laporan Ketidakhadiran", "#view_laporan_ketidakhadiran", :id => "rpt_laporan_ketidakhadiran" %>
+        </li>
+      <% end %>
+
+      <% if current_features.include?('present_report') %>
+        <li>
+          <%= link_to "Rekap Kehadiran", "#view_rekap_absensi", :id => "rpt_view_rekap_absensi" %>
+        </li>
+      <% end %>
+
+      <% if current_features.include?('overtime_recap') %>
+        <li>
+          <%= link_to "Rekap Lembur", "#view_rekap_overtime", :id => "rpt_view_rekap_overtime" %>
+        </li>
+      <% end %>
+
+      <% if current_features.include?('formation_gender_report') %>
+        <li>
+          <%= link_to "Formasi Jenis Kelamin", "#view_formasi", :id => "rpt_view_formasi" %>
+        </li>
+      <% end %>
+        
+      <% if current_features.include?('formation_position_report')  %>
+        <li>
+          <%= link_to "Formasi Jabatan", "#view_formasi_jabatan", :id => "rpt_view_formasi_jabatan" %>
+        </li>
+      <% end %>
+        
+      <% if current_features.include?('formation_report') %>
+        <li>
+          <%= link_to "Formasi Departemen", "#view_formasi_departemen", :id => "rpt_view_formasi_departemen" %>
+        </li>
+      <% end %>
+
+      <% if current_features.include?('formation_division_report') %>
+        <li>
+          <%= link_to "Formasi Bagian", "#view_formasi_bagian", :id => "rpt_view_formasi_bagian" %>
+        </li>
+      <% end %>
+        
+      <% if current_features.include?('in_out_employee_report') %>
+        <li>
+          <%= link_to "Keluar Masuk", "#view_mutasi", :id => "rpt_view_mutasi" %>
+        </li>
+      <% end %>
+        
+      <% if current_features.include?('employee_status_report') %>
+        <li>
+          <%= link_to "Status Kontrak", "#view_status", :id => "rpt_view_status" %>
+        </li>
+      <% end %>
+
+      <% if current_features.include?('sp_report') %>
+        <li>
+          <%= link_to "Surat Peringatan", "#view_sp", :id => "rpt_view_sp" %>
+        </li>
+      <% end %>
+
+      <% if current_features.include?('accident_report') %>
+        <li>
+          <%= link_to "Kecelakaan Kerja", "#view_accident", :id => "rpt_view_accident" %>
+        </li>
+      <% end %>
+    </ul>
+  </li>
+<% end %>
+
+<script type="text/javascript">
+  $(document).ready(function(){
+    $(".employee_present").colorbox({width:"600px",height:"400px", iframe:true,
+      onClosed:function(){
+      }
+    });
+  });
+</script>

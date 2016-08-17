@@ -1,0 +1,39 @@
+tax_statuses1:
+  id: 1
+  tax_status_code: T/O
+  ptkp: 1320000
+
+tax_statuses2:
+  id: 2
+  tax_status_code: T/1
+  ptkp: 1430000
+
+tax_statuses3:
+  id: 3
+  tax_status_code: T/2
+  ptkp: 1540000
+
+tax_statuses4:
+  id: 4
+  tax_status_code: T/3
+  ptkp: 1650000
+
+tax_statuses5:
+  id: 5
+  tax_status_code: K/O
+  ptkp: 1430000
+
+tax_statuses6:
+  id: 6
+  tax_status_code: K/1
+  ptkp: 1540000
+
+tax_statuses7:
+  id: 7
+  tax_status_code: K/2
+  ptkp: 1650000
+
+tax_statuses8:
+  id: 8
+  tax_status_code: K/3
+  ptkp: 1760000

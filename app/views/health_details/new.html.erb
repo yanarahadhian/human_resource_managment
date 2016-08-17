@@ -1,0 +1,28 @@
+<legend>
+  <a href="#" id="help_dash" class="icons help-top-icon" title="Click to show/hide information">&nbsp;</a>
+ Edit kesehatan
+</legend>
+<%= render :partial => "layouts/howto/howto_content"%>
+<%=render :partial => "layouts/top_menu_detail_karyawan"%>
+<div style="background: none repeat scroll 0pt 0pt rgb(148, 185, 231); height: 3px; width: 100%;" id="line"></div>
+<br/>
+<div class="left" style="width: 82%;">
+  <div id="content-dynamic">
+    <div class="box-form">
+      <% form_for @health_detail, :url => person_health_health_details_path do |f| %>
+        <div id="box_retur_0">
+          <%= render :partial => "form_health_details", :locals => {:f => f} %>
+          <div id="group">
+          </div>
+          <br class="clear"/>
+          <hr/>
+          <div class="center-text">
+            <input type="submit" value="Simpan" name="info_section_save_basic" id="info_section_save_basic" class="blue_button"/>
+            <input type="reset" id="info_section_cancel_basic" class="grey_button" value="Cancel" name="info_section_cancel_basic" onclick="javascript:window.location='/people/1'"/>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+

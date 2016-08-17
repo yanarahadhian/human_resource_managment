@@ -1,0 +1,8 @@
+<% if params[:division_id] == 'custom'-%>
+	<%= text_field_tag "division_name", nil, {:class => 'inputtext', :style=>"width:75px;float:left;"} %> &nbsp;<%= link_to('cancel', '#', :onclick => "showNewDivision('cancel');") %>
+	<div id='error_new_division' class="formError" style="display:none">can't be blank</div>
+<% elsif params[:division_id] == 'cancel' -%>
+	<%= select :employment, :work_division_id, select_options(@divisions, true, false), { :include_blank => 'Pilih' }, {:class => 'select', :onchange => "showNewDivision(this.value)"} %>
+	<div id='error_division' class="formError" style="display:none">can't be blank</div>
+	<%= error_message_on :employment, :work_division_id %>
+<% end -%>

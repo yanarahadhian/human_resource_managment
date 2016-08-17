@@ -1,0 +1,54 @@
+<%= render :partial=> "layouts/shared/breadcrumbs" %>
+<%= render :partial => "layouts/howto_menu" %>
+<fieldset class="fm-table">
+  <legend>
+    <a href="#" id="help_dash" class="icons help-top-icon" title="Click to show/hide information">&nbsp;</a>
+    Tambah Kecelakaan Kerja
+  </legend>
+  <%= render :partial => "layouts/howto/howto_content"%>
+ 
+    <div class="input-help">
+      <label>Field dengan tanda <span class="redstar">*</span> harus diisi</label>
+    </div><div class="clear"></div>
+    <div id="content-dynamic">
+      <div class="box-form">
+        <div id="box_retur_0">
+          <% form_remote_for @accident, :url=> job_accidents_path do |f| %>
+            <%= render :partial => "form_accidents", :locals => {:f => f} %>
+            <div class="clear"></div>
+            <div class="center-text block-btn-form">
+              <%= render :partial => "layouts/button_loader" %>
+              <div id="button">
+                <%if @person.id.blank?%>
+                  <input id="info_section_cancel_basic" class="grey_button" type="button" value="Batal" name="info_section_cancel_basic" onclick="onCancel('#job_accidents')"/>
+                <%else%>
+                  <% url = "#people/#{@person.id}/employments?tab=4" %>
+                  <input id="info_section_cancel_basic" class="grey_button" type="reset" value="Batal" name="info_section_cancel_basic" onclick='onCancel("<%= url.to_s %>")'/>
+                <%end%>
+                <input type="submit" value="Simpan" name="info_section_save_basic" id="info_section_save_basic" class="blue_button" onclick="ajaxLoad1('button','ajax-load1')" />
+              </div>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  
+</fieldset>
+
+<script type="text/javascript">
+
+  function onCancel(url){
+    window.location.href = url;
+  }
+
+  function ajaxLoad1(div_btn, div_load){
+    $("#" + div_load + "").show();
+    $("#" + div_btn + "").hide();
+  }
+
+  $( ".ui-date, .ui-date2" ).datepicker({
+    buttonImageOnly: true,
+    maxDate: new Date()
+  })
+  
+</script>

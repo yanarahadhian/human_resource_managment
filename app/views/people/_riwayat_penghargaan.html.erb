@@ -1,0 +1,232 @@
+<% row =0 %>
+<% form_remote_for @award, :url => person_awards_path(@person.id) do |f|-%>
+  <table id="tb_award">
+    <thead>
+      <tr>
+        <th width="167" class="left-text">Tgl Penghargaan</th>
+        <th width="177" class="left-text">Spesialisasi Penghargaan</th>
+        <th width="187" class="left-text">Penyelenggara</th>
+        <th width="70">Edit</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% if @person.awards.blank? %>
+        <tr class="no-data" id="tr_blank">
+          <td colspan="4" class="center-text"><div class="description">Belum Ada Penghargaan.</div><div class="info">Silahkan klik <a onclick="addRecord()"> Tambah Penghargaan</a> untuk menambah data</div></td>
+        </tr>
+      <% else %>
+        <% @person.awards.each do |award| %>
+          <tr id="tr_<%= row %>">
+            <td>
+              <div id="div_input_award_date_<%= row %>" style="display:none">
+                <input type="text" class="ui-date" id="award_date_<%= row %>" name="award[date][<%= award.id %>]" value="<%= award.award_date.blank? ? "" : award.award_date.strftime("%d/%m/%Y") %>"/>
+              </div>
+              <div id="div_label_award_date_<%= row %>">
+                <%= award.award_date.blank? ? "" : award.award_date.strftime("%d/%m/%Y") %>
+              </div>
+            </td>
+            <td class="left-text">
+              <div id="div_input_award_name_<%= row %>" style="display:none">
+                <input type="text" id="award_name_<%= row %>" name="award[name][<%= award.id %>]" value="<%= award.award_name %>"/>
+              </div>
+              <div id="div_label_award_name_<%= row%>">
+                <%=h award.award_name.blank? ? "-" : award.award_name %>
+              </div>
+            </td>
+            <td class="left-text">
+              <div id="div_input_award_giver_<%= row %>" style="display:none">
+                <input type="text" id="award_giver_<%= row %>" name="award[giver][<%= award.id %>]" value="<%= award.awards_giver %>"/>
+              </div>
+              <div id="div_label_award_giver_<%= row %>">
+                <%=h award.awards_giver.blank? ? "-": award.awards_giver %>
+              </div>
+            </td>
+            <td>
+              <span class="left">
+                <div id="link_button_<%= row %>">
+                  <%= f.hidden_field :id, :value => award.id, :name => "work_contract[id][#{award.id}]" %>
+                  <div id="is_link_edit_<%= row %>" style="display:none;">
+                    <div class="left"><a onclick="onUpdate('<%= row %>','<%= award.id %>')">Save</a></div>
+                    <div class="left">&nbsp;|&nbsp;<a onclick="onCancelWhenEdit('<%= row %>','<%= award.id %>')">Cancel</a></div>
+                  </div>
+                  <div id="is_link_not_edit_<%= row %>">
+                    <div class="left"><a onclick="onEditAward('<%= row %>')">Edit</a></div>
+                    <div class="left">&nbsp;|&nbsp;<a onclick="removeFormField(<%= row %>,<%= award.id %>)">Delete</a></div>
+                  </div>
+                </div>
+              </span>
+            </td>
+          </tr>
+          <% row+=1 %>
+        <% end %>
+
+      <%end%>
+    </tbody>
+  </table>
+
+<% end %>
+
+<span class="left">
+  <a class="grey_button_notext add_barang" onclick="addRecord()"> <span style="margin-right: 0pt;" class="icons add_ico">&nbsp;</span> </a>
+</span>
+<script>
+  $(document).ready(function(){
+    $(".ui-date, .ui-date2").datepicker({
+      showOn: "button",
+      buttonImage: "<%=ApplicationController::APPSCHEF_URL%>/images/calendar.gif",
+      buttonImageOnly: true
+    })
+  });
+
+  var row = <%= row %> ;
+
+  function addRecord(){
+    <% if @person.awards.blank? %>
+      $('#tr_blank').remove();
+    <% end %>
+       
+    var data = "<tr id='tr_" + row + "'>";
+    data += '<td><div id="div_input_award_date_' + row + '">';    
+    data += '<input type="text" class="ui-date" id="award_date_' + row + '" name="award[date][' + row + ']"';
+    data += '</div><div id="div_label_award_date_' + row + '"></div></td>';
+    data += '<td class="left-text"><div id="div_input_award_name_' + row + '">';    
+    data += '<input type="text" id="award_name_' + row +'" name="award[name][' + row + ']">';
+    data += '</div><div id="div_label_award_name_' + row + '"></div></td>';
+    data += '<td class="left-text"><div id="div_input_award_giver_' + row +'">';
+    data += '<input type="text" id="award_giver_' + row + '" name="award[giver][' + row + ']">';        
+    data += '</div><div id="div_label_award_giver_' + row + '"></div></td>';
+    data += '<td><div id="link_button_' + row + '">';
+    data += "<div class='left'><a onclick=\"saveWithoutID('" + row + "')\" class='left'>Save</a></div>";
+    data += "<div class='left'>&nbsp;|&nbsp;<a onclick=\"removeFormFieldWithoutID('" + row+ "')\">Cancel</a></div>";
+    data += '</div></td>';
+    $('#tb_award').append(data);
+
+    $('#tb_work_contract').append(data);
+    $(".ui-date, .ui-date2").datepicker({
+      showOn: "button",
+      buttonImage: "<%=ApplicationController::APPSCHEF_URL%>/images/calendar.gif",
+      buttonImageOnly: true
+    });
+    row++;
+  }
+
+  function onBackWorkContract(row){
+    $('#div_input_award_date_' + row + '').hide();
+    $('#div_label_award_date_' + row + '').show();
+    $('#div_input_award_name_' + row + '').hide();
+    $('#div_label_award_name_' + row + '').show();
+    $('#div_input_award_giver_' + row + '').hide();
+    $('#div_label_award_giver_' + row + '').show();
+    $('#is_link_edit_' + row + '').hide();
+    $('#is_link_not_edit_' + row + '').show();
+  }
+
+  function onChangeButton(row, id){
+    data = '';
+    data = '<input type="hidden" value="' + id + '" name="award[id][' +id + ']"';
+    data += '<div id="is_link_edit_' + row + '" style="display:none;">';
+    data += '<div class="left"><a onclick="onUpdate(' + row + ',' + id + ')">Save</a></div>';
+    data += '<div class="left">&nbsp;|&nbsp;<a onclick="onCancelWhenEdit(' +row + ',' +id +')">Cancel</a></div>';
+    data += '</div>';
+    data += '<div id="is_link_not_edit_' + row + '">';
+    data += '<div class="left"><a onclick="onEditAward(' + row + ')">Edit</a></div>';
+    data += '<div class="left">&nbsp;|&nbsp;<a onclick="removeFormField(' + row + ',' + id +')">Delete</a></div>';
+    data += '</div>';
+    return data;
+  }
+
+  function removeFormField(row, id){
+     $('#div_sign').html('penghargaan');
+     $('#div_btn_hapus').html('<input type="button" value="Ya" class="blue_button" onclick="delete_penghargaan(' + row +',' + id + ')"/>');
+     jQuery().colorbox({width:"auto",height:"auto", inline:true,href:"#message_delete",
+       onClosed:function(){
+       }
+    });    
+  }
+
+  function delete_penghargaan(row, id){
+    url = "/destroy_award";
+      $.ajax({
+        url: url,
+        data: "person_id=<%= @person.id %>&id=" + id + "&row=" + row,
+        type: "GET",
+        success: function(){
+          $.fn.colorbox.close();
+        }
+     });
+  }
+
+  function saveWithoutID(row){
+    var tgl = $('#award_date_' + row + '').val();
+    var nama = $('#award_name_' + row + '').val();
+    var giver = $('#award_giver_' + row + '').val();
+    if (tgl!="" || nama!="" || giver!=""){
+      data = 'row=' + row + '&award[award_name]=' + nama + '&award[award_date]=' + tgl + '&award[awards_giver]=' + giver + '&award[person_id]=<%= @person.id %>';
+      $.ajax({
+        type: 'POST',
+        beforeSend:function(request){$('#spinner').show(); $("#ajax-load").show();CloseNotify();$('#link_button_'+row).hide();},
+        complete:function(request){
+          $('#spinner').hide();
+          $("#ajax-load").hide();},
+        success:function(request){
+          $('.notify_error').show();$('#link_button_'+row).show();
+        },
+        url: '/create_award',
+        data: data
+      });
+    }else{
+      alert('Data riwayat penghargaan tidak boleh kosong');
+    }
+  }
+  
+  function onEditAward(row){
+    $('#div_input_award_date_' + row + '').show();
+    $('#div_label_award_date_' + row + '').hide();
+    $('#div_input_award_name_' + row + '').show();
+    $('#div_label_award_name_' + row + '').hide();
+    $('#div_input_award_giver_' + row + '').show();
+    $('#div_label_award_giver_' + row + '').hide();
+    $('#is_link_edit_' + row + '').show();
+    $('#is_link_not_edit_' + row + '').hide();
+    //temp =$(".ui-date").val().split("-");
+    //tempString = temp[2]+"/"+temp[1]+"/"+temp[0];
+    //$(".ui-date").val(tempString);
+  }
+
+  function onUpdate(row, id){
+    var tgl = $('#award_date_' + row + '').val();
+    var nama = $('#award_name_' + row + '').val();
+    var giver = $('#award_giver_' + row + '').val();
+    data = 'row=' + row + '&id=' + id + '&award[award_name]=' + nama + '&award[award_date]=' + tgl + '&award[awards_giver]=' + giver + '&award[person_id]=<%= @person.id %>';
+    $.ajax({
+      type: 'POST',
+      beforeSend:function(request){$('#spinner').show(); $("#ajax-load").show();CloseNotify();$('#link_button_'+row).hide();},
+      complete:function(request){
+        $('#spinner').hide();
+        $("#ajax-load").hide();},
+      success:function(request){
+        $('.notify_error').show();$('#link_button_'+row).show();
+      },
+      url: '/update_award',
+      data: data
+    });
+  }
+
+  function removeFormFieldWithoutID(row){
+    url = "/destroy_award";
+    $.ajax({
+      url: url,
+      data: "person_id=<%= @person.id %>",
+      type: "GET"
+    });
+  }
+
+  function onCancelWhenEdit(row, id){
+    $.ajax({
+      url: "/cancel_award",
+      data: "row=" + row + "&id=" + id + "&person_id=<%= @person.id %>",
+      type: "GET"
+    });
+  }
+
+</script>

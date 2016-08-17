@@ -1,0 +1,22 @@
+## YAML Template.
+group01:
+  id: 1
+  company_id: 1
+  division_id: 1
+  work_group_name: "Gudang A"
+group02:
+  id: 2
+  company_id: 1
+  division_id: 2
+  work_group_name: "Gudang B"
+group03:
+  id: 3
+  company_id: 1
+  division_id: 3
+  work_group_name: "Lab 1"
+group04:
+  id: 4
+  company_id: 1
+  division_id: 4
+  work_group_name: "Lab 2"
+

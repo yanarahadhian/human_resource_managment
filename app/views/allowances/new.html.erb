@@ -1,0 +1,179 @@
+<legend>
+  <a href="#" id="help_dash" class="icons help-top-icon" title="Click to show/hide information">&nbsp;</a>
+  Setting Tambah Tunjangan Diluar Gaji
+</legend>
+<%= render :partial => "layouts/howto/howto_content"%>
+<div class="box-form">
+  <form name="new_detail_produk" method="post">
+    <span class="input">
+      <label>Nama Tunjangan</label>
+      :
+      <input type="text"/>
+    </span>
+    <div class="clear"></div>
+    <span class="input">
+      <label>Jangka Waktu Pemberian</label> :
+      <select>
+        <option>Pilih Jangka Waktu</option>
+        <option></option>
+        <option>Setiap Hari</option>
+        <option>Setiap 2 Hari</option>
+        <option>Setiap Minggu</option>
+        <option>Setiap 2 Minggu</option>
+        <option>Setiap Tahun</option>
+      </select>
+    </span>
+    <div class="clear"></div>
+    <span class="input">
+
+      <label>Besar Tunjangan</label> :
+      <select id="tunjangan">
+        <option>Pilih Besar Tunjangan</option>
+        <option></option>
+        <option>Berbeda setiap orang</option>
+        <option value="change_class0">Sama setiap orang</option>
+        <option value="change_class1">Tergantung pada jabatan</option>
+        <option value="change_class2">Tergantung status karyawan</option>
+        <option value="change_class3">Tergantung pada jabatan dan status karyawan</option>
+      </select>
+    </span>
+    <div class="clear"></div>
+    <span class="input tunj" id="tunj_1">
+      <label>Nilai Tunjangan</label> :
+      <input type="text" class="small-text-table right-text" value="Rp.0,-"/>
+    </span>
+    <!-- Line -->
+    <div class="clear"></div>
+    <div class="input data-tabel tunj" id="tunj_2">
+      <div class="frm-input">
+        <input type="hidden" id="counter" value="4"/>
+        <table id="tb_grade">
+          <thead>
+            <tr>
+              <th width="189" class="center-text">
+                <a href="">
+                  <span class="left-text">Nama Jabatan</span></a>
+              </th>
+              <th width="237" class="center-text">
+                <a href="">
+                  <span class="center-text">Tunjangan</span></a>
+              </th>
+              <th width="21" class="center-text">&nbsp;</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr>
+              <td class="center-text"><input type="text"/></td>
+              <td class="center-text">
+                <input type="text" class="currency-text" value="Rp.0,-"/>
+              </td>
+              <td class="center-text">&nbsp;</td>
+            </tr>
+          </tbody>
+        </table>
+        <span class="add-button left"><a class="grey_button_notext add_barang" id="add_grade" onclick="addRecord()"> <span style="margin-right: 0pt;" class="icons add_ico">&nbsp;</span> </a></span>
+      </div>
+    </div>
+    <div class="clear"></div>
+    <!-- Line -->
+    <div class="clear"></div>
+    <span class="input tunj" id="tunj_3">
+      <label><input type="checkbox" id="kontrak_harian"/> Kontrak Harian</label> :
+      Nilai Tunjangan <input type="text" class="currency-text" value="Rp.0,-"/>
+      <div class="input-separator"></div>
+      <label><input type="checkbox" id="kontrak_harian"/> Kontrak Bulanan</label> :
+      Nilai Tunjangan <input type="text" class="currency-text" value="Rp.0,-"/>
+      <div class="input-separator"></div>
+      <label><input type="checkbox" id="kontrak_harian"/> Tetap Harian</label> :
+      Nilai Tunjangan <input type="text" class="currency-text" value="Rp.0,-"/>
+      <div class="input-separator"></div>
+      <label><input type="checkbox" id="kontrak_harian"/> Tetap Bulanan</label> :
+      Nilai Tunjangan <input type="text" class="currency-text" value="Rp.0,-"/>
+      <div class="input-separator"></div>
+    </span>
+    <!-- Line -->
+    <div class="clear"></div>
+    <div class="input data-tabel tunj" id="tunj_4">
+      <label><input type="checkbox" id="kontrak_harian"/> Kontrak Harian</label>
+      <label><input type="checkbox" id="kontrak_harian"/> Kontrak Bulanan</label>
+      <div class="input-separator"></div>
+      <label><input type="checkbox" id="kontrak_harian"/> Tetap Harian</label>
+      <label><input type="checkbox" id="kontrak_harian"/> Tetap Bulanan</label>
+
+      <div class="input-separator"></div>
+      <div class="frm-input">
+        <input type="hidden" id="counter2" value="1"/>
+        <br/>
+        <table id="tb_tunj">
+          <thead>
+            <tr>
+              <th width="170" class="center-text">
+                <a href="">
+                  <span class="left-text">Nama Jabatan</span></a>
+              </th>
+              <th width="109" class="center-text">Jenis Status</th>
+              <th width="137" class="center-text">
+                <a href="">
+                  <span class="center-text">Tunjangan</span></a>
+              </th>
+              <th width="27" class="center-text">&nbsp;</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr>
+              <td class="center-text"><input type="text" class="small-text-table"/></td>
+              <td class="center-text">
+                <select class="auto">
+                  <option>Pilih Status</option>
+                  <option></option>
+                  <option>Harian Kontrak</option>
+                  <option>Bulanan Kontrak</option>
+                  <option>Harian Tetap</option>
+                  <option>Bulanan Tetap</option>
+                </select>
+              </td>
+              <td class="center-text">
+                <input type="text" class="currency-text" value="Rp.0,-"/>
+              </td>
+              <td class="center-text">&nbsp;</td>
+            </tr>
+          </tbody>
+        </table>
+        <span class="add-button left"><a class="grey_button_notext add_barang" id="add_grade" onclick="addRecord2()"> <span style="margin-right: 0pt;" class="icons add_ico">&nbsp;</span> </a></span>
+      </div>
+    </div>
+    <!-- Line -->
+    <div class="clear"></div>
+    <span class="input">
+      <label>Syarat Pemeberian</label><span class="left">:</span>
+      <label class="radio"><input type="checkbox"/> Hanya jika hadir</label>
+      <div class="clear"></div>
+      <label>&nbsp;</label>
+      <label class="auto" style="margin-left:9px"><input type="checkbox"/> Hanya jika masa kerja lebih dari 1 tahun</label>
+    </span>
+
+    <div class="clear"></div>
+    <hr/>
+    <!-- disini block button loading -->
+    <script type="text/javascript">
+      $(document).ready(function(){
+        $('#loading').hide();
+        $('#button input[type="button"]').click(function(){
+          $('#button input').hide();
+          $('#loading').show();
+        })
+      })
+    </script>
+    <div class="block-btn-form" id="button">
+      <div id="loading" class="loading-btn" style="display: none; ">
+        <img src="file:///D|/Project/CSS_Appschef/public/images/ajax-loader.gif"/>
+        <span class="message">Harap Tunggu ...</span>
+      </div>
+      <input type="reset" value="Batal" class="grey_button"/>
+      <input type="button" value="Simpan" class="blue_button"/>
+    </div>
+    <!-- End -->
+  </form>
+</div>

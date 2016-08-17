@@ -1,0 +1,101 @@
+<%= javascript_include_tag  'pagination' %>
+<%= render :partial => "people/people_script" %>
+<table id="person_table" class="tablesorter">
+  <thead>
+     <tr>
+       <th style="width:20px;"><input type="checkbox"/></th>
+       <th class="left-text">NIK</th>
+       <th class="left-text">Nama</th>
+       <th>Bagian</th>
+       <th>Group</th>
+       <th>Jabatan</th>
+       <th>Jenis kelamin</th>
+       <th class="left-text">Tanggal Masuk</th>
+       <th class="left-text">Tanggal Keluar</th>
+       <th class="left-text">Masa Kerja</th>
+       <th class="left-text">Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% unless @people.blank? %>
+      <% @people.each do |p| %>
+        <% emp = p.current_employment(Date.today, true) %>
+
+        <% if !emp.blank? && emp.change_from_before == "terminasi" %>
+          <% bgcolor = " style='background : #ea5f5f'" %>
+          <%= render :partial => "layouts/jquery_tooltip", :locals => {:link=>"no_keluar_masuk_#{p.id}", :list=>"list_keluar"} %>
+        <% else %>
+          <% bgcolor = "" %>
+          <%= render :partial => "layouts/jquery_tooltip", :locals => {:link=>"no_keluar_masuk_#{p.id}", :list=>"list_masuk"} %>
+        <% end %>
+    
+        <tr<%= bgcolor %>>
+          <td><%= check_box_tag'myrow[ids][]', p.id, false %></td>
+          <td class="left-text">
+            <%= link_to p.employee_identification_number, "#people/#{p.id }?tab=0" %>
+          </td>
+          <td class="left-text"><%= link_to p.full_name, "#people/#{p.id }?tab=0" %></td>
+          <td class="left-text"><%= emp.blank? ? "-" : emp.division.blank? ? "-" : emp.division.name %></td>
+          <td class="left-text"><%= emp.blank? ? "-" : emp.work_group.blank? ? "-" : emp.work_group.work_group_name %></td>
+          <td class="left-text"><%= emp.blank? ? "-" : emp.position.blank? ? "-" : emp.position.position_name %></td>
+          <td class="left-text"><%= p.gender %></td>
+          <td class="left-text"><%= p.employment_date %></td>
+          <td class="left-text"><%= emp.blank? ? "-" : emp.change_from_before == "terminasi" ? emp.employment_end : "-" %></td>
+          <td class="left-text"><%= second_to_days(p.total_length_of_service(p)) %></td>
+          <td class="left-text"><%= p.current_status.blank? ? "-" : p.current_status.contract_type.blank? ? "-" : p.current_status.contract_type.contract_type_name %> 
+            <a id="no_keluar_masuk_<%= p.id %>" class="icons orange-info-ico info"> </a></td>
+        </tr>
+      <% end %>
+    <% else %>
+      <tr class="no-data">
+        <td colspan="11" class="center-text"><div class="description">
+          <% if params[:filter] %>
+            Data Tidak Ditemukan
+          <% else %>
+            Belum Ada Data Keluar Masuk karyawan
+          <% end %>
+          </div>
+          <div class="info">
+            <% if params[:filter] %>
+              Silahkan <a id="import2" onclick="onBtnReset('/reset_list_keluar_masuk')"> Reset Filter</a> untuk mengubah parameter anda
+            <% end %>&nbsp;
+         </div>          
+       </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<div class="panelFilter">
+  <div class="pagination">
+    <% if @people.count > 0 %>
+      <span class="paginationResult">
+        <% a = format_paginate1(@people, @per_page, @people.total_entries, "keluar_masuk") %>
+        <%= a[:a] %> - <%= a[:b] %> dari <%= @people.total_entries %>
+      </span>
+      <%= a[:paginate] %>
+    <% else %>
+      &nbsp;
+    <% end %>
+    <div class="clear"></div>
+  </div>
+</div>
+
+<div class="tooltip" style="display:none">
+  <p></p>
+</div>
+
+<div id="list_keluar" class="list" style="display: none;">
+  <ul>
+    <li style="cursor: default; list-style-image: none;">
+      keluar
+    </li>
+  </ul>
+</div>
+
+<div id="list_masuk" class="list" style="display: none;">
+  <ul>
+    <li style="cursor: default; list-style-image: none;">
+      masuk
+    </li>
+  </ul>
+</div>

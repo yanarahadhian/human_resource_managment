@@ -1,0 +1,101 @@
+<div id="div_presence_detail">
+  <table  id="presence_detail">
+    <thead>
+      <tr>
+        <th>Jam Masuk</th>
+        <th class="center-text">Jam Keluar</th>
+        <th class="center-text">Lama Kerja</th>
+        <% if @my_presence && @my_presence_details %>
+          <th width="5%"></th>
+        <% end %>
+      </tr>
+    </thead>
+    <tbody>
+      <%- if @my_presence%>
+        <%- if @my_presence_details %>
+          <%- @my_presence_details.each do |presence_detail| %>
+            <tr>
+              <td class="left-text">
+                <%= presence_detail.start_working.nil? ? "-" : presence_detail.start_working.getlocal.strftime("%d/%m/%Y %H:%M") %>
+              </td>
+              <%- if presence_detail.end_working %>
+                <td class="left-text"><%= presence_detail.end_working.getlocal.strftime("%d/%m/%Y %H:%M") %></td>
+                <td class="left-text"><%= Presence.minutes_to_hour_text(presence_detail.work_session_length_in_minutes.to_i)%></td>
+                <% if !presence_detail.nil? && (presence_detail.presence.is_acted_upon.blank? || presence_detail.presence.is_acted_upon == 0) %>
+                  <td class="center-text">
+                    <%= link_to "", "javascript:removePresence(#{presence_detail.id},#{@current_person.id});", :confirm => "Apakah anda yakin akan menghapus ini", :class => "icons delete-icon" %>
+                  </td>
+                <% end %>
+              <%- else %>
+                <td class="left-text">
+                  <% form_tag(end_absence_path, :method => "get") do %>
+                    <%= hidden_field_tag "id", @current_person.id %>
+                    <input type="submit" value="Keluar" class="grey_button2">
+                  <% end %>
+                </td>
+                <td class="left-text"></td>
+                <% if presence_detail.presence.is_acted_upon.blank? || presence_detail.presence.is_acted_upon == 0 %>
+                  <td class="center-text">
+                    <%= link_to "", "javascript:removePresence(#{presence_detail.id},#{@current_person.id});", :confirm => "Apakah anda yakin akan menghapus ini", :class => "icons delete-icon" %>
+                  </td>
+                <% end %>
+              <%- end %>
+            </tr>
+          <%- end %>
+          <%- if !@my_presence_details.last.nil? && @my_presence_details.last.end_working && @my_presence.in_schedule?%>
+            <tr>
+              <td class="left-text">
+                <% form_tag(start_absence_path, :method => "get") do %>
+                  <%= hidden_field_tag "id", @current_person.id %>
+                  <input type="submit" value="masuk" class="grey_button2">
+                <% end %>
+              </td>
+              <td class="left-text"></td>
+              <td class="left-text"></td>
+            </tr>
+          <%- end %>
+          <%- if !@my_presence_details.first.nil? && @my_presence_details.first.end_working %>
+            <tr>
+              <td class="right-text" colspan="2">Total</td>
+              <td class="left-text"><%= Presence.hours_to_hour_text(@my_presence.presence_length_in_hours.to_f) %></td>
+            </tr>
+          <%- end %>
+        <%- elsif @my_presence.in_schedule? %>
+          <tr>
+            <td class="left-text">
+              <% form_tag(start_absence_path, :method => "get") do %>
+                <%= hidden_field_tag "id", @current_person.id %>
+                <input type="submit" value="masuk" class="grey_button2">
+              <% end %>
+            </td>
+            <td class="left-text"></td>
+            <td class="left-text"></td>
+          </tr>
+        <%- end %>
+      <%- else %>
+        <%- if @date.to_time > @yesterday_schedule %>
+          <tr>
+            <td class="left-text">
+              <% form_tag(start_absence_path, :method => "get") do %>
+                <%= hidden_field_tag "id", @current_person.id %>
+                <input type="submit" value="masuk" class="grey_button2">
+              <% end %>
+            </td>
+            <td class="left-text"></td>
+            <td class="left-text"></td>
+          </tr>
+        <%- else %>
+          <tr>
+            <td class="center-text" colspan="3">Karyawan tidak masuk kerja!</td>
+          </tr>
+        <%- end %>
+      <%- end %>
+    </tbody>
+  </table>
+</div>
+<script type="text/javascript">
+  function removePresence(presence_id,person_id){
+    $.get('/absences/remove_presence?presence_id='+presence_id+'&id='+person_id+'&date='+$('#date_pick').val(), function(data){});
+  }
+</script>
+

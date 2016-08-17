@@ -1,0 +1,56 @@
+<div id="main-content" style="border-left:0px">
+<div class="contentTable">
+<% if !values.blank? %> 
+  <div id="app_two_con" class="input-data app_two_con">
+    <table id="tb3">
+	    <thead>
+		    <tr>
+          <th width="5%" class="center-text">No.</th>
+          <th>NIK</th>
+          <th width="23%" class="center-text">
+            <a href="javascript:void(0)" onClick="<%= sortablecol("firstname",sortby,direction,"formasi") %>" id="firstnameColumn">
+              Nama
+              <span class="icons sorter_ico">&nbsp;</span>
+            </a>
+          </th>
+          <th>Departemen</th>
+          <th>Bagian</th>
+          <th>Jenis Kelamin</th>
+          <th>Jabatan</th>
+        </tr>
+	    </thead>
+	    <tbody>
+        <% values.each_with_index do |c,i| %>
+          <tr class="<%= i%2 == 0 ? "" : "alt"%>">
+            <td><%= (25*(pagenum.to_i - 1))+i+1 %></td>
+            <td class="left-text"><%= c.employee_identification_number %></td>
+            <td class="left-text"><%= c.full_name %></td>
+            <td class="left-text"><%= c.current_employment.blank? ? "&nbsp;" : c.current_employment.department.blank? ? "&nbsp;" : c.current_employment.department.department_name %></td>
+            <td class="left-text"><%= c.current_employment.blank? ? "&nbsp;" : c.current_employment.division.blank? ? "&nbsp;" : c.current_employment.division.name %></td>
+            <td class="left-text"><%= c.gender %></td>
+            <td class="left-text"><%= c.current_employment.blank? ? "&nbsp;" : c.current_employment.position.blank? ? "&nbsp;" : c.current_employment.position.position_name %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+<% else %>
+  <div class="control-box"></div>
+    <div no-chart="">
+      <div id="desc_role" class="no-data-chart">Belum ada data
+    </div>
+  </div>
+<% end %>
+</div></div>
+<%= hidden_field_tag "page_num_formasi",pagenum %>
+<%= hidden_field_tag "sort_formasi",sortby %>
+<%= hidden_field_tag "direction_formasi",direction %>
+<script type="text/javascript">
+  $(document).ready(function(){
+    var h = $('#tb3').height();
+    var p = h/2-5;
+    var h2 = h +2
+    $('.bar-show-chart').css({paddingTop: p, paddingBottom: p});
+    $('.chart-block-table').css({height: h2});
+  });
+</script>

@@ -1,0 +1,32 @@
+<%= render :partial=> "layouts/shared/breadcrumbs" %>
+<fieldset class="fm-table">
+  <legend>
+    <a href="#" id="help_dash" class="icons help-top-icon" title="Click to show/hide information">&nbsp;</a>
+    Ubah Alat Sidik Jari
+  </legend>
+  <%= render :partial => "layouts/howto/howto_content"%>
+  <br/>
+  <div class="input-help-wide">
+    <label>Field dengan tanda <span class="redstar">*</span> harus diisi</label>
+  </div>
+  <div class="clear"></div>
+  <% form_remote_for @device,  :url => fingerprint_setting_path(@device) do |f| %>
+    <div class="input-data box-form">
+      <%= render :partial => "fingerprint_form", :locals => { :f =>f } %>
+       <div class="center-text box-form">
+        <%= render :partial => "layouts/button_loader" %>
+        <div id="button">
+          <input id="info_section_cancel_basic" class="grey_button" type="reset" value="Batal" name="info_section_cancel_basic" onclick="onCancel('#fingerprint_settings/<%= @device.id %>')"/>
+          <input type="submit" value="Simpan" name="info_section_save_basic" id="info_section_save_basic" class="blue_button" onclick="ajaxLoad1('button','ajax-load1')"/>
+        </div>
+      </div>
+    </div>
+  <%  end %>
+</fieldset>
+
+<script type="text/javascript">
+  function ajaxLoad1(div_btn, div_load){
+     $("#" + div_load + "").show();
+     $("#" + div_btn + "").hide();
+   }
+</script>

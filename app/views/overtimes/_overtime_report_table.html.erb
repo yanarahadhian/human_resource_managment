@@ -1,0 +1,18 @@
+{
+"sEcho": <%=h @sEcho %>,
+"iTotalRecords": <%= @iTotalRecords %>,
+"iTotalDisplayRecords": <%= @iTotalDisplayRecords %>,
+"aaData" : [
+<%- @overtime_reports.each_with_index do |overtime, index| %>
+  [ "<%= "#{@start_index+index+1}."%>",
+    "<%= overtime[:department].department_name if overtime[:department] %>",
+    "<%= overtime[:person].employee_identification_number %>",
+    "<%= overtime[:person].full_name.titleize %>",
+    "<%= Presence.minutes_to_hour_text(overtime[:compulsory_overtime]) %>",
+    "<%= Presence.minutes_to_hour_text(overtime[:nc_overtime]) %>"
+  <%= "]," unless overtime == @overtime_reports.last %>
+<% end %>
+<%= "]" unless @overtime_reports.blank? %>
+]
+}
+

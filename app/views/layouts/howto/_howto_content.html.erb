@@ -1,0 +1,84 @@
+<%= render :partial => "layouts/shared/qtip_menu" %>
+<script type="text/javascript">
+
+  $(document).ready(function(){
+     <% if controller_name == "settings" || controller_name == "holidays" || controller_name == "shifts" || controller_name == "departments" || controller_name == "divisions" || controller_name == "work_groups" || controller_name == "positions" || controller_name == "schedules" || controller_name == "payrolls" || controller_name == "fingerprint_settings" %>
+      $('body').addClass("setting_body");
+       $('#help_dash').qtip({
+        content: 'Klik untuk menampilkan Panel Bantuan',
+        style: {width: 190},
+             position: {
+              adjust: { x: 10, y: 15},
+              my: 'top left',
+              at: 'top left'
+             },
+             show: { ready: true },
+             hide: { fixed: true }
+        });
+      <% else %>
+        $('#help_dash').qtip({
+          content: 'Klik untuk menampilkan Panel Bantuan',
+          style: {width: 190},
+            position: {
+                adjust: { x: 10, y: 15},
+                my: 'top left',
+                at: 'top left'
+            },
+            show: { ready: true },
+            hide: { fixed: true }
+        });
+      <% end %>
+      setTimeout("hideQueryTip()",2000);
+
+      $('#help_dash').click(function(){
+        $('.all_box_dashboard').toggle();
+        return false;
+      });
+      $('#hide_notify').click(function(){
+        $('.all_box_dashboard').hide();
+        return false;
+      });
+
+  });
+
+    function hideQueryTip() {
+      $("#help_dash").qtip("hide");
+    }
+
+   $(function() {
+    $('#slider-help').mobilyslider({
+      content: '.notify_how',
+      children: 'div',
+      transition: 'fade',
+      animationSpeed: 500,
+      autoplay: false,
+      autoplaySpeed: 3000,
+      pauseOnHover: false,
+      bullets: false,
+      arrows: false,
+      arrowsHide: true,
+      prev: 'prev',
+      next: 'next',
+      animationStart: function() {},
+      animationComplete: function() {}
+    }).css("position", "relative");
+  });
+</script>
+<div class="all_box_dashboard">
+  <div class="notify_dashboard">
+    <span class="icons callout">&nbsp;</span>
+    <a id="hide_notify" href="#">
+      <span class="icons hide-icon">&nbsp;</span>
+    </a>
+    <div class="notify_desc">
+      <h2>Description</h2>
+       <%= render :partial => "layouts/howto/description" %>
+    </div>
+    <div id="slider-help" class="fifty-fifty right" >
+      <div class="notify_how">
+        <h2>How To?</h2>
+        <%= render :partial => "layouts/howto/notify" %>
+      </div>
+    </div>
+  </div>
+</div>

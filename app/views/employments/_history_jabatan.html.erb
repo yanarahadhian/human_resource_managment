@@ -1,0 +1,108 @@
+<% emp = @person.current_employment %>
+<div class="panelFilter">
+              <table cellspacing="0" cellpadding="0">
+                <tbody><tr>
+                  <td width="100%">
+                    <div class="pagination">
+                      <span class="add-button right">
+                         <a id="popup_add" class="grey_button2" href="/people/<%= @person.id %>/employments/popup_add_employment">
+                            <span class="icons add_ico">&nbsp;</span>
+                             Tambah Jabatan
+                         </a>
+                      </span>
+                      <% if !@person.current_employment.blank? && @person.current_employment.change_from_before != "terminasi" %>
+                        <span class="add-button right">
+                         <a class="grey_button2" id="link_popup_terminasi" href="/people/<%= @person.id %>/employments/popup_terminasi">
+                            <span class="icons add_ico">&nbsp;</span>Terminasi
+                         </a>
+                      </span>
+                     <% end %>
+                       
+                    </div>
+                    <div class="clear"></div>
+                  </td>
+
+                </tr>               
+              </tbody></table>
+
+            </div>
+<div class="clear"></div>
+<% unless @person.employments.blank? %>
+<table width="1381">
+	  <thead>
+		  <tr>
+			  <th width="140">Periode</th>
+        <th width="129" class="center-text">Jabatan</th>
+			  <th width="100" class="center-text">Bagian</th>
+			  <th width="157" class="left-text">Perubahan</th>
+		  </tr>
+		</thead>
+		<tbody>
+
+      <% @person.employments.all.each do |p| %>
+        <% if p.change_from_before=="terminasi" %>
+         <tr bgcolor="red">
+            <td class="left-text" colspan="5"><b><%= @person.full_name %></b> resign tanggal <%= p.employment_end.strftime("%d/%m/%Y") %></td>
+         </tr>
+       <% else %>
+        <tr>
+           <td class="left-text"><a id="popup_edit_<%= p.id %>" href="/popup_detail_employment/<%= @person.id %>/<%= p.id%>">
+              <%= p.employment_start.strftime("%d/%m/%Y") unless p.employment_start.blank? %> s/d
+              <%= p.employment_end.blank? ? "n/a" : p.employment_end.strftime("%d/%m/%Y") %></a>
+           </td>
+           <td class="left-text"><%= p.position.blank? ? "-" : p.position.position_name %></td>
+           <td class="left-text"><%= p.division.blank? ? "-" : p.division.name  %></td>
+           <td><%= p.change_from_before.capitalize! %></td>
+         </tr>
+       <% end %>
+     <% end %>
+
+  </tbody>
+ </table>
+ <% else %>
+  <div style="text-align:center;padding-top:30px;"><h1>Belum ada Jabatan</h1></div>
+ <% end %>
+
+<script>
+ $(document).ready(function(){
+   $("#employment_employment_type_check").val("");
+ });
+ function onEmployment1(data, person_id, id){
+    if (data.value == 'Tindakan'){
+    }else{
+      url = "/people/" + person_id + "/employments/" + id + "/edit?type=" + data.value;
+      $.ajax({
+        url: url,
+        data: "",
+        type: "GET"
+      });
+    }
+  }
+
+ $(document).ready(function(){
+    $("#popup_add").colorbox({width:"550px",height:"550px", iframe:true,
+      onClosed:function(){
+        $('#info_jabatan').load('<%= ApplicationController::BASE_URL %>/people/<%= @person.id %>/employments/history_jabatan');
+      }
+    });
+
+    $("#link_popup_terminasi").colorbox({width:"600px",height:"280px", iframe:true,
+      onClosed:function(){
+        $('#info_jabatan').load('<%= ApplicationController::BASE_URL %>/people/<%= @person.id %>/employments/history_jabatan');
+      }
+    });
+
+    <% @person.employments.all.each do |p| %>
+      $("#popup_edit_<%= p.id %>").colorbox({width:"550px",height:"555px", iframe:true,
+        onClosed:function(){
+          $('#info_jabatan').load('<%= ApplicationController::BASE_URL %>/people/<%= @person.id %>/employments/history_jabatan');
+        }
+      });
+    <% end %>
+  });
+
+  function onTerminasi(){
+    $("#terminasi").colorbox({width:"700px",height:"auto", inline:true, href:"#popup_terminasi_employment"});
+  }
+
+</script>

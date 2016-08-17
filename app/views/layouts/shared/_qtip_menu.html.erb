@@ -1,0 +1,459 @@
+<script type="text/javascript">
+$(document).ready(function(){
+
+  $('#list_karyawan').qtip({
+    content: 'Daftar karyawan yang ada di perusahaan',
+    position: {
+      adjust: { x: -30, y: -30 },
+      my: 'bottom center',
+      at: 'bottom right'
+    }
+  });
+
+  $('#keluar').qtip({
+    content: 'Daftar karyawan yang keluar dan masuk perusahaan',
+    position: {
+      adjust: { x: -40, y: -10 },
+      my: 'center left',
+      at: 'bottom right'
+    }
+  });
+
+  $('#mutasi').qtip({
+    content: 'Daftar karyawan yang mengalami mutasi selama bekerja',
+    style: {width: 250},
+    position: {
+      adjust: { x: -40, y: -10 },
+      my: 'center left',
+      at: 'bottom right'
+    }
+  });
+
+  $('#demosi').qtip({
+    content: 'Daftar karyawan yang mengalami demosi selama bekerja',
+    style: {width: 250},
+    position: {
+      adjust: { x: -40, y: -10 },
+      my: 'center left',
+      at: 'bottom right'
+    }
+  });
+  
+  $('#promosi').qtip({
+    content: 'Daftar karyawan yang mengalami promosi selama bekerja',
+    style: {width: 250},
+    position: {
+      adjust: { x: -40, y: -10 },
+      my: 'center left',
+      at: 'bottom right'
+    }
+  });
+
+
+  $('#absensi').qtip({
+    content: 'Daftar absensi karyawan yang masuk pada periode yang dipilih',
+    style: {width: 250},
+    position: {
+      adjust: { x: -30, y: -30 },
+      my: 'bottom center',
+      at: 'bottom right'
+    }
+  });
+  
+  $('#terlambat').qtip({
+    content: 'Daftar absensi karyawan yang terlambat pada periode yang sudah ditentukan',
+    style: {width: 250},
+    position: {
+      adjust: { x: -40, y: -10 },
+      my: 'center left',
+      at: 'bottom right'
+    }
+  });
+
+  $('#kerja_lebih').qtip({
+    content: 'Daftar karyawan yang memiliki jam kerja lebih dari yang telah ditentukan perusahaan',
+    style: {width: 250},
+    position: {
+      adjust: { x: -40, y: -10 },
+      my: 'center left',
+      at: 'bottom right'
+    }
+  });
+
+  $('#kerja_kurang').qtip({
+    content: 'Daftar karyawan yang memiliki jam kerja kurang dari yang telah ditentukan perusahaan',
+    style: {width: 250},
+    position: {
+      adjust: { x: -40, y: -10 },
+      my: 'center left',
+      at: 'bottom right'
+    }
+  });
+  
+  $('#istirahat_lebih').qtip({
+    content: 'Data karyawan yang memiliki jam istirahat lebih',
+    style: {width: 250},
+    position: {
+      adjust: { x: -40, y: -10 },
+      my: 'center left',
+      at: 'bottom right'
+    }
+  });
+
+  $('#istirahat_kurang').qtip({
+    content: 'Data karyawan yang memiliki jam istirahat kurang',
+    style: {width: 250},
+    position: {
+      adjust: { x: -40, y: -10 },
+      my: 'center left',
+      at: 'bottom right'
+    }
+  });
+
+  $('#tidak_masuk').qtip({
+    content: 'Data karyawan yang tidak masuk pada periode yang ditentukan',
+    style: {width: 250},
+    position: {
+      adjust: { x: -40, y: -10 },
+      my: 'center left',
+      at: 'bottom right'
+    }
+  });
+
+   $('#tidak_logout').qtip({
+    content: 'Data karyawan yang memiliki absensi tidak lengkap',
+    style: {width: 250},
+    position: {
+      adjust: { x: -40, y: -10 },
+      my: 'center left',
+      at: 'bottom right'
+    }
+  });
+
+  $('#lembur').qtip({
+    content: 'Data karyawan yang sudah melakukan lembur, baik itu lembur wajib maupun lembur tidak wajib',
+    style: {width: 250},
+    position: {
+      adjust: { x: -30, y: -30 },
+      my: 'bottom center',
+      at: 'bottom right'
+    }
+  });
+
+  $('#data-gaji').qtip({
+    content: 'Daftar gaji karyawan perusahaan yang diberikan untuk periode tertentu',
+    style: {width: 250},
+    position: {
+      adjust: { x: -30, y: -30 },
+      my: 'bottom center',
+      at: 'bottom right'
+    }
+  });
+
+  $('#data-master').qtip({
+    content: 'Daftar master gaji karyawan',
+    position: {
+      adjust: { x: -40, y: -10 },
+      my: 'bottom center',
+      at: 'top right'
+    }
+  });
+
+  $('.holiday_top_link').qtip({
+    content: 'Data THR yang pernah diberikan untuk karyawan',
+    style: {width: 250},
+    position: {
+      adjust: { x: -30, y: -30 },
+      my: 'bottom center',
+      at: 'bottom right'
+    }
+  });
+  
+  $('#sp').qtip({
+    content: 'Data Surat Peringatan yang pernah diterima karyawan',
+    style: {width: 250},
+    position: {
+      adjust: { x: -40, y: -10 },
+      my: 'center left',
+      at: 'bottom right'
+    }
+  });
+
+  $('#accident').qtip({
+    content: 'Data kecelakaan kerja yang pernah dialami karyawan dan tercatat pada aplikasi',
+    style: {width: 250},
+    position: {
+      adjust: { x: -40, y: -10 },
+      my: 'center left',
+      at: 'bottom right'
+    }
+  });
+  
+  $('#add_presence').qtip({
+    content: 'Klik disini untuk mengabsenkan karyawan',
+    style: {width: 250},
+    position: {
+      adjust: { x: -40, y: -15 },
+      my: 'left center',
+      at: 'bottom right'
+    }
+  });
+
+  $('#rencana_lembur').qtip({
+    content: 'Klik disini untuk merencanakan jadwal lembur karyawan',
+    style: {width: 250},
+    position: {
+      adjust: { x: -40, y: -15 },
+      my: 'left center',
+      at: 'bottom right'
+    }
+  });
+
+  $('.tindakan').qtip({
+    content: 'Klik menu ini untuk membuat absensi, menghitung gaji, atau menyetujui rencana lembur dan cuti karyawan anda',
+    style: {width: 250},
+    position: {
+      adjust: { x: -90, y: -15 },
+      my: 'center left',
+      at: 'bottom right'
+    }
+  });
+
+  $('#hitung_gaji').qtip({
+    content: 'Klik disini untuk menghitung gaji karyawan dengan periode tertentu',
+    style: {width: 250},
+    position: {
+      adjust: { x: -80, y: -15 },
+      my: 'left center',
+      at: 'bottom right'
+    }
+  });
+
+  $('#permintaan_cuti').qtip({
+    content: 'Klik disini untuk permintaan cuti',
+    style: {width: 250},
+    position: {
+      adjust: { x: -50, y: -15 },
+      my: 'left center',
+      at: 'bottom right'
+    }
+  });
+
+  $('.data_saya').qtip({
+    content: 'Klik menu ini untuk melihat data gaji, absensi, cuti, dan SP',
+    style: {width: 250},
+    position: {
+      adjust: { x: -90, y: -15 },
+      my: 'center left',
+      at: 'bottom right'
+    }
+  });
+
+  $('.left_gaji').qtip({
+    content: 'Klik disini untuk melihat data gaji karyawan',
+    style: {width: 250},
+    position: {
+      adjust: { x: -90, y: -15 },
+      my: 'left center',
+      at: 'bottom right'
+    }
+  });
+  
+  $('.left_absensi').qtip({
+    content: 'Klik disini untuk melihat data absensi karyawan',
+    style: {width: 250},
+    position: {
+      adjust: { x: -90, y: -15 },
+      my: 'left center',
+      at: 'bottom right'
+    }
+  });
+
+  $('.left_cuti').qtip({
+    content: 'Klik disini untuk melihat data cuti karyawan',
+    style: {width: 250},
+    position: {
+      adjust: { x: -90, y: -15 },
+      my: 'left center',
+      at: 'bottom right'
+    }
+  });
+
+  $('.left_sp').qtip({
+    content: 'Klik disini untuk melihat data SP karyawan',
+    style: {width: 250},
+    position: {
+      adjust: { x: -90, y: -15 },
+      my: 'left center',
+      at: 'bottom right'
+    }
+  });
+
+  $('#rencana_lembur').qtip({
+    content: 'Daftar rencana lembur karyawan perusahaan',
+    style: {width: 250},
+    position: {
+      adjust: { x: -30, y: -30 },
+      my: 'bottom center',
+      at: 'bottom right'
+    }
+  });
+
+  $('#pemintaan_cuti').qtip({
+    content: 'Daftar permintaan cuti karyawan perusahaan',
+    style: {width: 250},
+    position: {
+      adjust: { x: -40, y: -10 },
+      my: 'center left',
+      at: 'bottom right'
+    }
+  });
+
+  $('#rpt_view_absensi').qtip({
+    content: 'Laporan grafik presentasi kehadiran dan ketidakhadiran karyawan',
+    style: {width: 250},
+    position: {
+      adjust: { x: -40, y: -10 },
+      my: 'center left',
+      at: 'bottom right'
+    }
+  });
+
+  $('#rpt_view_rekap_absensi').qtip({
+    content: 'Laporan rekap absensi karyawan',
+    style: {width: 250},
+    position: {
+      adjust: { x: -40, y: -10 },
+      my: 'center left',
+      at: 'bottom right'
+    }
+  });
+
+  $('#rpt_view_rekap_overtime').qtip({
+    content: 'Laporan rekap lembur karyawan',
+    style: {width: 250},
+    position: {
+      adjust: { x: -40, y: -10 },
+      my: 'center left',
+      at: 'bottom right'
+    }
+  });
+  
+  $('#rpt_view_formasi').qtip({
+    content: 'Laporan grafik jenis kelamin karyawan',
+    style: {width: 250},
+    position: {
+      adjust: { x: -40, y: -10 },
+      my: 'center left',
+      at: 'bottom right'
+    }
+  });
+
+  $('#rpt_view_formasi_jabatan').qtip({
+    content: 'Laporan grafik jumlah karyawan yang ada pada masing-masing jabatan',
+    style: {width: 250},
+    position: {
+      adjust: { x: -40, y: -10 },
+      my: 'center left',
+      at: 'bottom right'
+    }
+  });
+  
+  $('#rpt_view_formasi_departemen').qtip({
+    content: 'Laporan grafik jumlah karyawan yang ada pada masing-masing departemen',
+    style: {width: 250},
+    position: {
+      adjust: { x: -40, y: -10 },
+      my: 'center left',
+      at: 'bottom right'
+    }
+  });
+
+  $('#rpt_view_formasi_bagian').qtip({
+    content: 'Laporan grafik jumlah karyawan yang ada pada masing-masing bagian',
+    style: {width: 250},
+    position: {
+      adjust: { x: -40, y: -10 },
+      my: 'center left',
+      at: 'bottom right'
+    }
+  });
+  
+  $('#rpt_view_mutasi').qtip({
+    content: 'Laporan grafik karyawan yang keluar masuk perusahaan setiap periodenya',
+    style: {width: 250},
+    position: {
+      adjust: { x: -40, y: -10 },
+      my: 'center left',
+      at: 'bottom right'
+    }
+  });
+
+  $('#rpt_view_status').qtip({
+    content: 'Laporan grafik status karyawan',
+    style: {width: 250},
+    position: {
+      adjust: { x: -40, y: -10 },
+      my: 'center left',
+      at: 'bottom right'
+    }
+  });
+
+  $('#rpt_view_sp').qtip({
+    content: 'Laporan grafik surat peringatan yang diterima karyawan setiap periodenya',
+    style: {width: 250},
+    position: {
+      adjust: { x: -40, y: -10 },
+      my: 'center left',
+      at: 'bottom right'
+    }
+  });
+
+  $('#rpt_view_accident').qtip({
+    content: 'Laporan grafik kecelakaan kerja yang terjadi setiap periodenya',
+    style: {width: 250},
+    position: {
+      adjust: { x: -40, y: -10 },
+      my: 'center left',
+      at: 'bottom right'
+    }
+  });
+
+  $('#department').qtip({
+    content: 'Daftar department yang terdaftar pada perusahaan',
+    position: {
+    adjust: { x: -30, y: -30 },
+      my: 'bottom center',
+      at: 'bottom right'
+    }
+  });
+
+  $('#divisi').qtip({
+    content: 'Daftar bagian yang ada pada perusahaan',
+    position: {
+    adjust: { x: -30, y: -30 },
+      my: 'bottom center',
+      at: 'bottom right'
+    }
+  });
+
+  $('#group').qtip({
+    content: 'Daftar group yang ada pada perusahaan',
+    position: {
+    adjust: { x: -30, y: -30 },
+      my: 'bottom center',
+      at: 'bottom right'
+    }
+  });
+
+  $('#position').qtip({
+    content: 'Daftar jabatan yang ada pada perusahaan',
+    position: {
+    adjust: { x: -30, y: -30 },
+      my: 'bottom center',
+      at: 'bottom right'
+    }
+  });
+  
+});
+</script>

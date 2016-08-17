@@ -1,0 +1,27 @@
+{
+"sEcho": <%=h @sEcho %>,
+"iTotalRecords": <%= @iTotalRecords %>,
+"iTotalDisplayRecords": <%= @iTotalDisplayRecords %>,
+"iDataExist": <%= @absent_exist %>,
+"aaData" : [
+<%- @absents.each do |absent| %>
+  [
+  "<%= "<input name='person_id' type='checkbox' value=#{absent[:person].id} />" %>",
+  "<%=h absent[:person].full_name.titleize %>",
+  "<%=h absent[:department].department_name.just_display if absent[:department] %>",
+  "<%=h absent[:division].name.just_display if absent[:division] %>",
+  "<%= "#{l absent[:date]}  <input name='absent_date' type='hidden' value=#{absent[:date].strftime("%Y-%m-%d")} />" %>",
+  "<%=h absent[:type] %>",
+  "<%= absent[:leave_quota] %>",
+  "<%= absent[:total_permision] %>",
+  <%- if !absent[:type].blank? or absent[:is_acted_upon] %>
+    "<%=h absent[:reason] %>"
+  <%- else %>
+    "Belum ditindaklanjuti"
+  <%- end %>
+  <%= "]," unless absent == @absents.last %>
+<% end %>
+<%= "]" unless @absents.blank? %>
+]
+}
+

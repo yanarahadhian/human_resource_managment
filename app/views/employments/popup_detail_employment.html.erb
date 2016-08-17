@@ -1,0 +1,37 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta name="description" content="AppsChef" />
+  <meta name="keywords" content="AppsChef" />
+  <link rel="icon" href="<%= ApplicationController::APPSCHEF_URL %>/images/favicon.ico" type="image/x-icon"/>
+  <%= javascript_include_tag "#{ApplicationController::APPSCHEF_URL}/javascripts/jquery.js",'jrails',
+                             'jquery-ui-1.8.7.custom/js/jquery-ui-1.8.7.custom.min.js',
+                             'jquery-ui-1.8.7.custom/development-bundle/ui/jquery.ui.core.js',
+                             'jquery-ui-1.8.7.custom/development-bundle/ui/jquery.ui.widget.js',
+                             'jquery-ui-1.8.7.custom/development-bundle/ui/jquery.ui.datepicker.js',
+                             'jquery.rating.js',
+                             'jquery.colorbox.js',
+                             'jquery-idleTimeout.js'
+                             %>
+
+  <%= stylesheet_link_tag "#{ApplicationController::APPSCHEF_URL}/stylesheets/private2.css",
+                          "#{ApplicationController::APPSCHEF_URL}/stylesheets/fm_form.css",
+                          "#{ApplicationController::APPSCHEF_URL}/stylesheets/960gs/fluid_grid.css",
+                          'jquery.rating.css',
+                          'colorbox.css',
+                          'jquery-ui-1.8.7.custom/css/custom-theme/jquery-ui-1.8.7.custom.css'%>
+  <style>.ui-date{background:none !important;}</style>
+  <title>Human Resource Karyawan: <%= render :partial => "layouts/title" %></title>
+</head>
+<body class="body-popup">
+    <div class="frm-popup" id="popup_employment_<%= @employment.id %>">
+      <div class="title-page-tambah">Detail Jabatan</div>      
+      <div class="input-help" style="display:none">
+        <label>Field dengan tanda <span class="redstar">*</span> harus diisi</label>
+      </div><div class="clear"></div>
+      <div class="box-form" id="div_edit_employment_form">
+        <%= render :partial => "edit_form" %>
+      </div>
+    </div>
+   </body>
+  </html>

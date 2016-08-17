@@ -1,0 +1,43 @@
+<% content_for :main_nav do %>
+  <li class="first"><%= link_to "#{image_tag('/images/icons/text_list_bullets.png', :alt => 'List')} List", people_path  %></li>
+	<li><%= link_to "#{image_tag('/images/icons/add.png', :alt => 'New')} New", new_person_path %></li>
+<% end -%>
+
+<div class="block">
+	<%= person_link_col(params[:person_id]) %>
+	<div class="content">          
+    <h2 class="title">List Alamat</h2>
+    <div class="inner">
+			<% unless @educations.blank? -%>
+				<table class="table">
+	        <tr>
+	         	<th>Institusi</th>
+            <th style="width: 80px">Periode</th>
+            <th style="width: 70px">Prestasi</th>
+            <th>Keterangan</th>
+            <th class='last'></th>
+          </tr>
+	        <% @educations.each do |edu| %>
+	          <tr>
+	            <td><%= edu.educational_institution.institution_name.display %> <%= "( #{edu.educational_institution.institution_type} )" if !edu.educational_institution.blank? and !edu.educational_institution.institution_type.blank? %></td>
+	            <td><%= edu.entry_year.to_s + ' - ' + zero_to_now(edu.graduation_year) %></td>
+	            <td>Nilai Akhir: <%= edu.gpa %> </td>
+	            <td>Keterangan Lain : <%= label_tag('expander', edu.education_description.display, :class => 'expander') %> <br />
+	              <div style="float: left">Sertifikat :&nbsp; </div> <%= link_to 'Download',edu.certificate.url %> </td>
+	            <td class="last"><%= link_to("", edit_person_education_path(params[:person_id], edu), :class=>"edit_link ")%> <%= link_to('', person_education_path(params[:person_id], edu), :method => :delete, :confirm => "Apakah anda yakin akan menghapus ini", :class => "delete_button UIObjectListing_RemoveLink")%></td>
+	          </tr>
+	        <% end %>
+				</table>
+			<% else -%>
+				<br/>
+				<h2>Belum ada pendidikan</h2>
+				<br/>
+			<% end -%>
+			<%= link_to "#{image_tag('/images/icons/user_add.png', :alt => 'Tambah karyawan')} Create new", new_person_education_path(params[:person_id]), :class => "button" %>
+      <div class="actions-bar wat-cf">
+        <div class="actions">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

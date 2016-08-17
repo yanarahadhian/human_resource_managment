@@ -1,0 +1,26 @@
+   <table width="1381">
+			        <thead>
+			          <tr>
+			            <th width="164"> <a href=""> <span class="center-text">Nama</span> Penyakit</a> </th>
+			            <th width="200" class="center-text"> <a href="" class="left-text"> Periode  </a> </th>
+			            <th width="270" class="left-text">Larangan</th>
+			            <th width="70" class="left-text">Perlakuan</th>
+		            </tr>
+		            </thead>
+			          <tbody>
+                  <% @health_details.each do | p | %>
+                    <tr>
+			              <td class="left-text"><%= p.disease_name  %> </td>
+			              <td class="left-text"><%= p.start %> - <%=p.finish%></td>
+			              <td><%= p.reduction %></td>
+			              <td>
+			                <span class="icons edit-icon">&nbsp;</span>
+			                <a href="<%= edit_person_health_health_detail_url(@person.id, @health.id, p)  %> " class="grey_button4">
+			                  <span class="left">Edit</span>
+                       </a>
+                    </td>
+		                </tr>
+                  <% end %>
+			            
+			            </tbody>
+	              </table>

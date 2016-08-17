@@ -1,0 +1,17 @@
+<table style="width: 650px; margin: 1pt auto;">
+  <thead>
+    <tr>
+      <th width="63">Tanggal</th>
+      <th width="154"> <a href=""> <span class="center-text">Keterangan</span></a> </th>
+    </tr>
+  </thead>
+  <tbody>
+    <%- @total_birth_leave.each do |excuse| %>
+      <tr>
+        <td><%= l excuse[:from_date] %></td>
+        <td><%= "Selesai tanggal #{excuse[:to_date]}" %></td>
+      </tr>
+    <%- end %>
+  </tbody>
+</table>
+

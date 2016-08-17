@@ -1,0 +1,88 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta name="description" content="AppsChef" />
+  <meta name="keywords" content="AppsChef" />
+  <link rel="icon" href="<%= ApplicationController::APPSCHEF_URL %>/images/favicon.ico" type="image/x-icon"/>
+  <%= javascript_include_tag "#{ApplicationController::APPSCHEF_URL}/javascripts/jquery.js",'jrails',
+                             'jquery-ui-1.8.7.custom/js/jquery-ui-1.8.7.custom.min.js',
+                             'jquery-ui-1.8.7.custom/development-bundle/ui/jquery.ui.core.js',
+                             'jquery-ui-1.8.7.custom/development-bundle/ui/jquery.ui.widget.js',
+                             'jquery-ui-1.8.7.custom/development-bundle/ui/jquery.ui.datepicker.js',
+                             'jquery.rating.js',
+                             'jquery.colorbox.js',
+                             'jquery-idleTimeout.js'
+                             %>
+
+<%= stylesheet_link_tag "#{ApplicationController::APPSCHEF_URL}/stylesheets/private2.css",
+                          "#{ApplicationController::APPSCHEF_URL}/stylesheets/fm_form.css",
+                          "#{ApplicationController::APPSCHEF_URL}/stylesheets/960gs/fluid_grid.css",
+                          'jquery.rating.css',
+                          'colorbox.css',
+                          'jquery-ui-1.8.7.custom/css/custom-theme/jquery-ui-1.8.7.custom.css' %>
+  <style>.ui-date{background:#FFFFFF !important;}</style>
+  <title>Human Resource Karyawan: <%= render :partial => "layouts/title" %></title>
+  </head>
+  <body class="body-popup">
+    <style type="text/css">
+    .frm-popup .input-help label {
+              float: none;
+          }
+  </style>
+      <div class="frm-popup" id="popup_terminasi_employment">
+        <div class="title-page-tambah">Apakah Anda yakin akan terminasi <%= @person.full_name %>?</div>
+          <div class="box-form">
+            <% form_for @new, :url => {:controller => "employments" ,:action => "create"} do |f| %>
+              <div id="box_retur_0">
+                <div class="over" id="block-option" style="height:130px; overflow-x:hidden">
+                  <%= f.hidden_field :change_from_before, :value => "terminasi" %>
+                  <%= f.hidden_field :employment_start, :value => Time.now %>
+                  <%= f.hidden_field :employment_end, :value => Time.now %>
+                  <%unless @id.blank?%>
+                    <%= f.hidden_field :person_id, :value => @id %>
+                  <%else%>
+                    <%= f.hidden_field :person_id, :value => @person.id %>
+                  <%end%>
+                  <span class="input">
+                    <label>Tanggal</label><span class="left">:&nbsp;</span>
+                      <%= f.text_field :created_at, :id => "ui-date", :class => "ui-date", :size => "40px", :value => Time.now.strftime("%d/%m/%Y") %>
+                  </span>
+                  <span class="input">
+                    <label>Alasan</label><span class="left">:&nbsp;</span>
+                      <%= f.text_area :reason_for_change, :rows => 3, :cols => 60 %>
+                  </span>
+                </div>
+                <span class="clear"></span>
+                <div class="center-text block-btn-form">
+                <input type="button" value="Tidak" class="grey_button" onclick="parent.$.fn.colorbox.close();"/>
+                <input type="submit" value="Ya" name="info_section_save_basic" id="info_section_save_basic" class="blue_button"/>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      </div>
+</body>
+
+<script>
+  function closePopUp(){
+    $.colorbox.close()
+  }
+  $(document).ready(function(){
+     $.datepicker.setDefaults({
+        showOn: "button",
+        buttonImage: "<%=ApplicationController::APPSCHEF_URL%>/images/calendar.gif",
+        changeMonth: true,
+        changeYear: true,
+        dateFormat: 'dd/mm/yy',
+        altFormat: 'dd MM yy',
+        firstDay: 1
+      });
+
+      $(".ui-date, .ui-date2").datepicker({
+        buttonImageOnly: true
+      });
+    });
+</script>
+
+</html>
+

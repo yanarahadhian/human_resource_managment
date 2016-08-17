@@ -1,0 +1,144 @@
+<table id ="device_table">
+  <thead>
+    <tr>
+      <th width="8"><input type="checkbox"/></th>
+      <th width="126" class="left-text">
+        <span class="center-text">Nama Device</span>
+      </th>
+      <th width="150" class="left-text">
+        <span class="center-text">IP Address</span>
+      </th>
+      <th width="150" class="left-text">
+        <span class="center-text">Port</span>
+      </th>
+      <th width="120">&nbsp;</th>
+    </tr>
+  </thead>
+  <tbody>
+    <%unless @devices.blank?%>
+      <% @devices.each do |device| %>
+        <tr>
+          <td class="center"><%=  check_box_tag "delete_ids[]", device.id, false%></td>
+          <td><%= "<a href='#fingerprint_settings/#{device.id}'> #{h(device.device_name)} </a>" %></td>
+          <td><%= "<a href='#fingerprint_settings/#{device.id}'> #{h(device.ip_address)} </a>" %></td>
+          <td><%=h device.port.blank? ? "-" : device.port %></td>
+          <td><a onclick="onHapusInternalData('<%= device.id %>')">Hapus Data Internal Alat</a>
+            <%#= link_to_remote "Hapus Data Internal Alat",
+              :url => {:action => "delete_device_data", :controller => "fingerprint_settings", :id => device.id},
+              :method => :post,
+              :update => 'div_fingerprint',
+              :before => "$('#ajax-load').show()",
+              :complete => "$('#ajax-load').hide()",
+              :confirm => "Apakah anda yakin?"  %>
+          </td>
+        </tr>
+      <%  end %>
+    <%else%>
+      <tr class="no-data">
+        <td class="center-text" colspan="7">
+          <div class="description">Belum Ada Data Alat Sidik Jari. </div>
+          <div class="info">Silahkan  <%= link_to 'Tambah Alat Sidik Jari', "#fingerprint_settings/new" %> untuk menambah data</div>
+        </td>
+      </tr>
+    <%end%>
+  </tbody>
+</table>
+
+<div class="panelFilter">
+  <% if @devices.count > 0 %>
+    <span class="paginationResult">
+      <% a = format_paginate1(@devices, 10, @devices.total_entries) %>
+      <%= a[:a] %> - <%= a[:b] %> dari <%= @devices.total_entries %>
+    </span>
+    <%= a[:paginate] %>
+  <% else %>
+    &nbsp;
+  <% end %>
+  <div class="clear"></div>
+</div>
+
+<script type="text/javascript">
+  var gaiSelected =  [];
+  $(document).ready(function(){
+    $('#device_table thead tr th input').live('click', function () {
+      if ($(this).is(":checked")) {
+        $('#device_table tbody tr td input').each(function (){
+          $(this).attr( 'checked', true );
+          $(this).parent().parent().addClass('row_selected');
+          var iId = this ;
+          if ( jQuery.inArray(iId.value, gaiSelected) == -1 ){
+            gaiSelected[gaiSelected.length++] = iId.value;
+          }
+        });
+      }
+      else{
+        $('#device_table tbody tr').each(function (){
+          $(this).removeClass('row_selected');
+          var iId = $('#device_table tbody tr td input');
+          gaiSelected = [];
+          iId.attr( 'checked', false );
+        });
+      }
+    });
+  });
+
+  function onHapusInternalData(id){
+    $('#div_sign').html('fingerprint');
+      $('#div_btn_hapus').html('<input type="button" value="Ya" class="blue_button" onclick="delete_data_fingerprint(' + id + ')"/>');
+      jQuery().colorbox({width:"auto",height:"auto", inline:true,href:"#message_delete",
+        onClosed:function(){
+        }
+      });
+  }
+
+  function onDeleteFingerPrint(){
+    var arr_params = new Array();
+    $('#device_table tbody input:checked').each(function() {
+      arr_params = arr_params.concat($(this).val());
+    });
+    if (arr_params.length > 0){
+      $('#div_sign').html('fingerprint');
+      $('#div_btn_hapus').html('<input type="button" value="Ya" class="blue_button" onclick="delete_fingerprint()"/>');
+      jQuery().colorbox({width:"auto",height:"auto", inline:true,href:"#message_delete",
+        onClosed:function(){
+        }
+      });
+    }else{
+      return false;
+    }
+  }
+
+  function delete_data_fingerprint(id){
+    var controller = "/fingerprint_settings/delete_device_data";
+    $("#ajax-load").show();   
+    $.ajax({
+      type: "post",
+      url: escape(controller),
+      data:{'_method': 'post','id':id},
+      dataType: 'script',
+      success: function(){
+        $("#ajax-load").hide();
+        $.fn.colorbox.close();
+      }
+    })
+  }
+
+  function delete_fingerprint(){
+    var arr_params = new Array();
+    $('#device_table tbody input:checked').each(function() {
+      arr_params = arr_params.concat($(this).val());
+    });
+    var controller = "/fingerprint_settings/delete_multiple";
+    $("#ajax-load").show();
+    $.ajax({
+      type: "post",
+      url: escape(controller),
+      data:{'_method': 'post',"ids":arr_params},
+      dataType: 'script',
+      success: function(){
+        $("#ajax-load").hide();
+        $.fn.colorbox.close();
+      }
+    })
+  }
+</script>

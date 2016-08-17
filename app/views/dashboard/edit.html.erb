@@ -1,0 +1,73 @@
+<%= render :partial => "layouts/howto_menu" %>
+<legend>
+  <a href="#" id="help_dash" class="icons help-top-icon" title="Click to show/hide information">&nbsp;</a>
+  Dashboard
+</legend>
+<%= render :partial => "layouts/howto/howto_content"%>
+<div style="width: 82%;" class="left">
+  <br/>
+  <div id="content-dynamic">
+    <div class="box-form">
+      <form method="post" action="">
+        <div id="box_retur_0">
+          <span class="input">
+            <label>Nama Pegawai<span class="redstar">*</span></label>
+            <input type="text"/>
+          </span>
+          <span class="clear"></span>
+          <span class="input">
+            <label>Bagian</label>
+            <input type="text"/>
+          </span>
+          <span class="clear"></span>
+          <span class="input">
+            <label>Shift Kerja</label>
+            <input type="text"/>
+          </span>
+          <span class="clear"></span>
+          <span class="input">
+            <label>Group</label>
+            <input type="text"/>
+          </span>
+          <span class="clear"></span>
+          <span class="input">
+            <label>Jam Mulai</label>
+            <input type="text" class="width-30"/><input type="text" class="width-30"/>
+          </span>
+          <span class="clear"></span>
+          <span class="input">
+            <label>Jam Selesai</label>
+            <input type="text" class="width-30"/><input type="text" class="width-30"/>
+          </span>
+          <span class="clear"></span>
+          <span class="input">
+            <label>Mulai istirahat</label>
+            <input type="text" class="width-30"/><input type="text" class="width-30"/>
+          </span>
+          <span class="clear"></span>
+          <span class="input">
+            <label>Lama Istirahat</label>
+            <input type="text" class="width-30"/><input type="text" class="width-30"/>
+          </span>
+          <span class="clear"></span>
+          <span class="input">
+            <label>Keterangan</label>
+            <textarea cols="25" rows="3"></textarea>
+          </span>
+          <span class="clear"></span>
+          <span class="input">
+            <label>Lembur</label>
+            <input type="text"/>
+          </span>
+          <span class="clear"></span>
+          <br class="clear"/>
+          <hr/>
+          <div class="center-text">
+            <input type="submit" class="blue_button" id="info_section_save_basic" name="info_section_save_basic" value="Simpan"/>
+            <input type="reset" onclick="javascript:window.location=''" name="info_section_cancel_basic" value="Batal" class="grey_button" id="info_section_cancel_basic"/>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

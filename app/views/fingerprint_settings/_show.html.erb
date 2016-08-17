@@ -1,0 +1,85 @@
+<%= javascript_include_tag  'pagination' %>
+<%= render :partial=> "layouts/shared/breadcrumbs" %>
+<fieldset class="fm-table">
+  <legend>
+    <a href="#" id="help_dash" class="icons help-top-icon" title="Click to show/hide information">&nbsp;</a>
+    Alat Sidik Jari
+  </legend>
+  <%= render :partial => "layouts/howto/howto_content"%>
+
+  <div class="input big">
+    <a href='#fingerprint_settings/<%= @device.id %>/edit' class="grey_button_a top-right">
+      <span class="icons edit-icon">&nbsp;</span>
+      Edit
+    </a>
+    <span class="input-field">
+      <label>Nama alat sidik jari</label>:
+      <%=h  @device.device_name %>
+      <span class="clear"></span>
+    </span>
+    <span class="clear"></span>
+    <span class="input-field">
+      <label>IP address alat</label>:
+      <%=h  @device.ip_address %>
+      <span class="clear"></span>
+    </span>
+    <span class="clear"></span>
+    <span class="input-field">
+      <label>Port webservice alat</label>:
+      <%=h  @device.port.blank? ? "-" : @device.port %>
+      <span class="clear"></span>
+    </span>
+    <span class="clear"></span>
+  </div>
+  <table id ="device_table">
+    <thead>
+      <tr>
+        <th width="8"></th>
+        <th width="126" class="left-text">
+          <span class="center-text">Waktu Akses</span>
+        </th>
+        <th width="8">
+          <span class="center-text">Status</span>
+        </th>
+        <th width="150" class="left-text">
+          <span class="center-text">Keterangan</span>
+        </th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <%unless @device_logs.blank?%>
+        <% @device_logs.each do |log| %>
+          <tr>
+            <td class="center"></td>
+            <!-- <td><%#= link_to device.device_name, "#editFingerprintSetting/#{device.id.to_s}" %></td> -->
+            <td><%= h(log.access_time.getlocal.strftime("%F %H:%M") ) %></td>
+            <td><%= log.status ? "Berhasil diakses" : "Gagal diakses" %></td>
+            <td><%= h(log.description) %></td>
+          </tr>
+        <%  end %>
+      <%else%>
+        <tr class="no-data">
+          <td class="center-text" colspan="7">
+            <div class="description">Belum Ada Data Alat Sidik Jari. </div>
+            <div class="info">Silahkan  <%= link_to 'Tambah Alat Sidik Jari', "#fingerprint_settings/new" %> untuk menambah data</div>
+          </td>
+        </tr>
+      <%end%>
+
+    </tbody>
+  </table>
+  <div class="panelFilter">
+    <%unless @device_logs.blank?%>
+      <div class="pagination">
+        <span class="paginationResult">
+          <% a = format_paginate1(@device_logs, @per_page, @device_logs.total_entries, "show") %>
+          <%= a[:a] %> - <%= a[:b] %> dari <%= @device_logs.total_entries %>
+        </span>
+        <%= a[:paginate] %>
+        <div class="clear"></div>
+      </div>
+    <%end%>
+  </div>
+</fieldset>
+

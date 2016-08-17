@@ -1,0 +1,43 @@
+<%= render :partial => "layouts/howto_menu" %>
+<br />
+<div class="companyTab">
+  <ul class="left">
+    <% if controller_name=="people" || controller_name=="families" %>
+      <% if action_name=="show" || action_name=="new"  || action_name=="edit" || action_name=="edit_health" %>
+        <li><a href="#people/<%= @person.id %>?tab=0" class="active">Data Pribadi</a></li>
+      <% else %>
+        <li><%= link_to "Data Pribadi", "#people/#{@person.id}?tab=0" %></li>
+      <% end %>
+    <% else %>
+      <li><%= link_to "Data Pribadi", "#people/#{@person.id}?tab=0" %></li>
+    <%end%>
+
+    <% if (controller_name == "employments" && action_name == "index") || controller_name == "violations" ||
+        (controller_name == "employments" && action_name == "edit") || controller_name == "trainings"  || controller_name=="accidents"%>
+      <li><a href="#"  class="active">Data Pekerjaan</a></li>
+    <%else%>
+      <li><%= link_to "Data Pekerjaan", "#people/#{@person.id}/employments?tab=0" %></li>
+    <% end %>
+
+    <% if action_name=="history" || controller_name == "educations" || controller_name == "experiences" ||
+       controller_name == "awards"%>
+    <li><a href="#"  class="active">Riwayat Karyawan</a></li>
+       <% else %>
+         <li><%= link_to "Riwayat Karyawan", "#history/#{@person.id}?tab=0" %></li>
+       <% end %>
+
+    <% if (controller_name == "absences" && action_name == "mine") %>
+      <li><a href="#" class="active">Data Absensi</a></li>
+    <%else%>
+      <li><%= link_to "Data Absensi", "#absences/mine?id=#{@person.id}&profiles=1" %></li>
+    <% end %>
+
+    <% if (controller_name == "salaries") %>
+      <li><a href="#"  class="active">Data Gaji</a></li>
+    <% else %>
+      <li><%= link_to "Data Gaji", "#salaries/informasi_gaji?person_id=#{@person.id}" %></li>
+    <% end %>
+  </ul>
+</div>
+<div class="clear"></div>
+

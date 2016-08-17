@@ -1,0 +1,54 @@
+<%= render :partial=> "layouts/shared/breadcrumbs" %>
+<fieldset class="fm-table">
+  <legend><a href="#" id="help_dash" class="icons help-top-icon" title="Click to show/hide information">&nbsp;</a>
+   Data Karyawan</legend>
+  <%= render :partial => "layouts/howto/howto_content"%>
+  <%= render :partial => 'layouts/profile_frame'%>
+  <div class="right-information">
+    <%= render :partial=>"layouts/top_menu_detail_karyawan" unless @is_user_login  %>
+    <div id="content-dynamic">
+      <fieldset class="fm-table-parent2">
+        <div class="box-form">
+          <div id="box_retur_0">
+            <div class="input big">
+                <a class="grey_button_a add_barang top-right" id="add_barang" href="#salaries/edit_informasi_gaji?person_id=<%= @person.id %>">
+                  <span class="icons edit-icon">&nbsp;</span> Edit
+                </a>
+              <span class="input-field">
+                <label>Nama bank</label>:
+                <%= @person.bank_name.blank? ? "-" : @person.bank_name %>
+              </span>
+              <span class="clear"></span>
+
+              <span class="input-field">
+                <label>No. rekening</label>:
+                <%= @person.account_number.blank? ? "-" : @person.account_number %>
+              </span>
+              <span class="clear"></span>
+
+              <span class="input-field">
+                <label>Nama pemilik rekening</label>:
+                <%= @person.account_name.blank? ? "-" : @person.account_name %>
+              </span>
+              <span class="clear"></span>
+
+              <span class="input-field">
+                <label>No. jamsostek</label>:
+                <%= @person.jamsostek_number.blank? ? "-" : @person.jamsostek_number %>
+              </span>
+              <span class="clear"></span>
+            </div>
+          </div>
+        </div>
+      </fieldset>
+    </div>
+  </div>
+</fieldset>
+
+<script type="text/javascript">
+
+  $(document).ready(function() {
+    removeNotifyMessage();
+  });
+  
+</script>

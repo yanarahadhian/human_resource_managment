@@ -1,0 +1,101 @@
+<% if controller_name== "awards"  %>
+   <% if action_name == "edit" %>
+      Edit data penghargaan
+   <% elsif action_name == "new" %>
+      Tambah data penghargaan
+   <% end %>
+<% elsif controller_name == "absences" %>
+  <% if action_name == "my_absence" %>
+    Absensi harian saya
+  <% elsif action_name == "my_monthly_absence" %>
+    Absensi bulanan saya
+  <% elsif action_name == "my_yearly_absence" %>
+    Absensi tahunan saya
+  <% else %>
+    Absen
+  <% end %>
+<% elsif controller_name == "overtimes" %>
+   Waktu kerja dan lembur
+<% elsif controller_name == "salaries" %>
+  <% if action_name == "slip" %>
+     Slip gaji saya
+   <% else %>
+     Data gaji
+   <% end %>
+<% elsif controller_name == "memorandums" %>
+   SP
+<% elsif controller_name == "job_accidents" %>
+   Kecelakaan kerja
+<% elsif controller_name == "departments" %>
+   Struktur Organisasi : Departemen
+<% elsif controller_name == "divisions" %>
+   Struktur Organisasi : Bagian
+<% elsif controller_name == "Work_units" %>
+   Struktur Organisasi : Unit Kerja
+<% elsif controller_name == "work_groups" %>
+   Struktur Organisasi : Group
+<% elsif controller_name == "positions" %>
+   Struktur Organisasi : Jabatan
+<% elsif controller_name == "schedules" %>
+   Scheduling
+<% elsif controller_name == "holidays" || controller_name == "job_times" ||
+    controller_name == "settings" || controller_name == "shifts"%>
+   HRM Setting
+<% elsif controller_name == "people" %>
+    <% if action_name == "edit" %>
+      Edit data karyawan
+    <% elsif action_name == "edit_health" %>
+      Edit kesehatan karyawan
+    <% elsif action_name == "history" %>
+      Riwayat karyawan    
+    <% else %>
+      Data karyawan
+    <% end %>
+<% elsif controller_name == "families" %>  
+  <% if action_name == "edit" %>
+      Edit data keluarga
+   <% elsif action_name == "new" %>
+      Tambah data keluarga
+   <% end %>
+<% elsif controller_name== "accidents" %>
+   <% if action_name == "new" %>
+      Tambah data kecelakaan
+   <% elsif action_name == "edit" %>
+      Edit data kecelakaan
+   <% end %>
+<% elsif controller_name== "employments" %>
+     Data employment karyawan
+<% elsif controller_name== "trainings" %>
+   <% if action_name == "new" %>
+     Tambah pelatihan karyawan
+   <% elsif action_name == "edit" %>
+     Edit pelatihan karyawan
+   <% end %>
+<% elsif controller_name== "violations" %>
+   <% if action_name == "new" %>
+     Tambah pelanggaran
+   <% elsif action_name == "edit" %>
+     Edit Pelanggaran
+   <% end %>
+<% elsif controller_name== "educations" %>
+   <% if action_name == "new" %>
+     Tambah riwayat pendidikan
+   <% elsif action_name == "edit" %>
+     Edit riwayat pendidikan
+   <% end %>
+<% elsif controller_name== "experiences" %>
+   <% if action_name == "new" %>
+     <% if params[:experience_type] == "work" %>
+       Tambah riwayat pekerjaan
+     <% else %>
+       Tambah riwayat organisasi
+     <% end %>
+   <% elsif action_name == "edit" %>
+     <% if params[:experience_type] == "work" %>
+       Edit riwayat pekerjaan
+     <% else %>
+       Edit riwayat organisasi
+     <% end %>
+   <% end %>
+<% end %>
+

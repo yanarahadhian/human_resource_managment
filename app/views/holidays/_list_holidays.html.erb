@@ -1,0 +1,142 @@
+<%= javascript_include_tag  'pagination' %>
+<table id ="holiday_table" class="tablesorter">
+  <thead>
+    <tr>
+      <th width="47"><input type="checkbox"/></th>
+      <th width="169" class="left-text">Nama Hari Libur</th>
+      <th width="226" class="left-text">Periode</th>
+      <th width="150" class="left-text">Lama Hari Libur</th>
+      <th width="150" class="left-text">Jumlah Cuti Bersama</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <%unless @holidays.blank?%>
+      <% @holidays.each do |holiday| %>
+        <tr id="<%= holiday.id %>">
+          <td class="center">
+            <% if current_features.include?('holiday_delete') %>
+              <%= check_box_tag'myrow[ids][]', holiday.id, false %>
+            <% end %>
+          </td>
+          <td>
+            <% if current_features.include?('holiday_edit') %>
+              <%= link_to "#{h holiday.holiday_name}", "#editHoliday/#{holiday.id.to_s}", :class => "cls_holiday_name" %>
+            <% else %>
+              <%=h holiday.holiday_name %>
+            <% end %>
+          </td>
+          <td><%=h holiday.holiday_start_date.strftime("%d/%m/%Y") %>
+            <%=h "s.d. #{holiday.holiday_end_date.strftime("%d/%m/%Y")}" if holiday.holiday_end_date > holiday.holiday_start_date %>
+          </td>
+          <td><%=h holiday.holiday_duration.blank? ? '-' : holiday.holiday_duration %></td>
+          <td><%=h holiday.leave_duration.blank? ? '-' : holiday.leave_duration %></td>
+        </tr>
+      <%  end %>
+    <%else%>
+
+      <tr class="no-data">
+        <td colspan="5" class="center-text">
+          <div class="description">
+            <%unless @filtering == 0%>
+              Data Tidak Ditemukan
+            <% else %>
+              Belum Ada Data Hari Libur.
+            <% end %>
+          </div>
+          <div class="info">
+            <%unless @filtering == 0%>
+              Silahkan <a href="#holidays" id="reset_filter">Reset Filter</a> atau mengubah parameter Anda
+            <% else %>
+              <%= "Silahkan #{link_to 'Tambah Hari Libur', '#holiday/new'} untuk menambah data" if current_features.include?('holiday_new') %>
+            <% end %>
+          </div>
+        </td>
+      </tr>
+    <%end%>
+  </tbody>
+</table>
+
+<div class="panelFilter">
+  <div class="pagination">
+    <%if @holidays.count > 0 %>
+      <span class="paginationResult">
+        <% a = format_paginate1(@holidays, @per_page, @holidays.total_entries) %>
+        <%= a[:a] %> - <%= a[:b] %> dari <%= @holidays.total_entries %>
+      </span>
+      <%= a[:paginate] %>
+    <% else %>
+      &nbsp;
+    <%end%>
+    <div class="clear"></div>
+  </div>  
+</div>
+
+<script type="text/javascript">
+  var gaiSelected =  [];
+
+  $(document).ready(function() {
+    <%#= render :partial => "layouts/shared/tooltip_hr_setting" %>
+    
+    $('#holiday_table thead tr th input').live('click', function () {
+      if ($(this).is(":checked")) {
+        $('#holiday_table tbody tr td input').each(function (){
+          $(this).attr( 'checked', true );
+          $(this).parent().parent().addClass('row_selected');
+          var iId = this ;
+          if ( jQuery.inArray(iId.value, gaiSelected) == -1 ){
+            gaiSelected[gaiSelected.length++] = iId.value;
+          }
+        });
+      }
+      else{
+        $('#holiday_table tbody tr').each(function (){
+          $(this).removeClass('row_selected');
+          var iId = $('#holiday_table tbody tr td input');
+          gaiSelected = [];
+          iId.attr( 'checked', false );
+        });
+      }
+    } );
+
+
+  });
+
+
+  function onDeleteHolidays(){
+      var arr_params = new Array();
+      $('#holiday_table tbody input:checked').each(function() {
+        arr_params = arr_params.concat($(this).val());
+      });
+      if (arr_params.length > 0){
+        $('#div_sign').html('hari libur');
+        $('#div_btn_hapus').html('<input type="button" value="Ya" class="blue_button" onclick="delete_holidays()"/>');
+        jQuery().colorbox({width:"auto",height:"auto", inline:true,href:"#message_delete",
+          onClosed:function(){
+          }
+        });
+      }else{
+        return false;
+      }
+  }
+ 
+  function delete_holidays(){
+      var arr_params = new Array();
+      $('#holiday_table tbody input:checked').each(function() {
+        arr_params = arr_params.concat($(this).val());
+      });
+      var controller = "/holidays/delete_multiple";
+      $("#ajax-load").show();
+      $.ajax({
+        type: "post",
+        url: escape(controller),
+        data:{'_method': 'post',"ids":arr_params},
+        dataType: 'script',
+        success: function(){
+          $("#ajax-load").hide();
+          $.fn.colorbox.close();
+        }
+      })
+  }
+
+</script>

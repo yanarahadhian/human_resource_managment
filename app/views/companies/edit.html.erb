@@ -1,0 +1,64 @@
+<div id="pagelet_stream_header" style="padding-top: 10px;">
+	<div class="clearfix UIIntentionalStream_Top">
+		<div class="UIIntentionalStream_Top_Icon UIImageBlock clearfix">
+			<div class="UIImageBlock_Content UIImageBlock_ICON_Content">
+				<li class="UIIntentionalStream_Top_Header">
+					<span class="UIIntentionalStream_LiveHeader">Edit Perusahaan</span>
+				</li>
+			</div>
+		</div>
+	</div>
+</div>
+<div id="info_tab" class="info_tab" style="padding: 15px 70px 20px;">       
+  <div id="info_section_basic" class="info_section edit_mode ">
+		<div class="section_header" id="info_section_header_basic">
+			<h3 class="clearfix">
+				<span>Info Perusahaan</span>
+				<div class="divider"> </div>
+			</h3>
+		</div>
+    <div class="profile_info_container clearfix">
+			<div id="info_section_editor_basic" class="profile_info section_editor" style="height: auto;">
+				<div class="editor_panel clearfix">
+					<% form_for @company do |f| %>
+						<div style="float:right;width: 15%;">* Harus di isi</div>
+						<%= render :partial => 'company_form', :locals => {:f => f} %>
+                                                                                          <% if @role.name != 'superadmin' %>
+                                            <tr>
+                                              <td colspan='3' >
+                                                    <span class="divfont">Supervisor Approval</span><br/>
+                                                    <div class="divider"></div>
+                                              </td>
+                                            </tr>
+                                            <tr class="tallrow">
+                                            <td class="label">
+                                            <%= label_tag "Supervisor approval <span id='star'>*</span>", nil, :class => :row_description %>
+                                            </td>
+                                            <td>
+                                              <%= check_box_tag 'spv_chd',nil, false, :onclick => 'showPasswordField()' %> Setuju <br/>
+                                                <div id='password_field' style="margin-top: 8px;display:none;">
+                                                    Username :<%= text_field_tag :username, nil, {:class => 'inputtext', :style => 'width:100px'} %><br/>
+                                                    Password :<%= password_field_tag :password, nil, {:class => 'inputtext', :style => 'width: 100px; margin-top: 10px;'} %>
+                                                </div>
+                                            </td>
+                                            </tr>
+                                            <tr>
+                                              <td colspan='3' >&nbsp;</td>
+                                            </tr>
+                                          <% end %>
+						<table class="editor">
+								<tr>
+									<td colspan="2">
+										<div class="buttons">
+											<input type="submit" value="Save Changes" name="info_section_save_basic" id="info_section_save_basic" class="inputsubmit"/>
+											<input id="info_section_cancel_basic" class="inputbutton inputaux" type="reset" value="Batal" name="info_section_cancel_basic" onclick="javascript:window.location='<%=companies_path%>'"/>
+										</div>
+									</td>
+								</tr>
+						</table>
+      		<% end-%>
+				</div>
+			</div>
+    </div>
+  </div>
+</div>

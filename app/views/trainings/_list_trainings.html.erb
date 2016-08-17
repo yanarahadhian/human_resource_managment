@@ -1,0 +1,144 @@
+<div class="panelFilter">
+  <table cellspacing="0" cellpadding="0">
+    <tbody><tr>
+      <td style="width:103px">
+        <div id="action_menu">
+          <ul>
+            <li>
+              <a class="grey_button2">
+                <span class="left">More Actions</span>
+              </a>
+              <div class="clear"></div>
+              <ul>
+                <li style="cursor: default; list-style-image: none;"><a onclick="onDelete(2)" class="list">Delete</a></li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </td>
+      <td>
+        <div class="pagination">
+          <span class="add-button right">
+            <a id="popup_add_training" href="/popup_add_training/<%= @person.id %>" class="grey_button2" class="grey_button2">
+              <span class="icons add_ico">&nbsp;</span>
+              Tambah Pelatihan
+            </a>
+          </span>
+        </div>
+        <div class="clear"></div>
+      </td>
+    </tr>
+   </tbody>
+  </table>
+</div>
+<div class="clear"></div>
+<table id="training_table">
+	  <thead>
+		  <tr>
+        <th><input type="checkbox"/></th>
+			  <th>No. Sertifikat</th>
+			  <th>Jenis Pelatihan</th>
+                          <th class="center-text">Pelatih</th>
+			  <th class="center-text">Tema</th>
+			  <th class="left-text">Waktu</th>
+			  <th class="left-text">Keterangan</th>
+		  </tr>
+		</thead>
+		<tbody>
+    <% unless @trainings.blank? -%>
+      <% @trainings.each do |training| %>
+      <tr>
+        <td class="center"><%= check_box_tag'myrow[ids][]', training.id, false %></td>
+         <td class="left-text">
+            <%= training.certificate_number.blank? ? "-" : training.certificate_number %>
+         </td>
+         <td class="left-text">
+            <%= training.training_type.blank? ? "-" : training.training_type %>
+         </td>
+         <td class="left-text">
+            <a class="grey_button4" id="popup_edit_training_<%= training.id %>" href="/popup_detail_training/<%= @person.id %>/<%= training.id%>"><%= training.person_trained_in %></a>
+         </td>
+         <td class="left-text">
+            <%= training.theme.blank? ? '-' : training.theme %>
+         </td>
+         <td>
+             <%= training.training_start.blank? ? '-' : "#{training.training_start.strftime("%Y-%d-%m")} s/d "%>
+             <%= training.training_end.blank? ? '-' : training.training_end.strftime("%Y-%d-%m") %></td>
+         <td>
+            <%= training.training_description.blank? ? "-" : training.training_description %>
+         </td>
+       </tr>
+     <% end %>
+   <% else -%>
+     <tr class="no-data">
+       <td colspan="8" class="center-text"><div class="description">Belum Ada Data Pelatihan. </div><div class="info">Silahkan klik<a id="popup_add_training2" href="/popup_add_training/<%= @person.id %>"> Tambah Pelatihan</a> untuk menambah data</div></td>
+     </tr>
+   <% end %>
+  </tbody>
+ </table>
+<script type="text/javascript">
+
+   var gaiSelectedTraining = []
+ $(document).ready(function(){
+
+   $("#popup_add_training").colorbox({width:"600px",height:"548px", iframe:true,
+     onClosed:function(){
+       $('#info_pelatihan').load('<%= ApplicationController::BASE_URL %>/people/<%= @person.id %>/trainings');
+     }
+   });
+   $("#popup_add_training2").colorbox({width:"600px",height:"548px", iframe:true,
+     onClosed:function(){
+       $('#info_pelatihan').load('<%= ApplicationController::BASE_URL %>/people/<%= @person.id %>/trainings');
+     }
+   });
+    <% @trainings.each do |training| %>
+      $("#popup_edit_training_<%= training.id %>").colorbox({width:"600px",height:"548px", iframe:true,
+        onClosed:function(){
+          $('#info_pelatihan').load('<%= ApplicationController::BASE_URL %>/people/<%= @person.id %>/trainings');
+        }
+      });
+    <% end %>
+    
+   
+      $('#training_table thead tr th input').live('click', function () {
+        if ($(this).is(":checked")) {
+          $('#training_table tbody tr td input').each(function (){
+            $(this).attr( 'checked', true );
+            $(this).parent().parent().addClass('row_selected');
+            var iId = this ;
+            if ( jQuery.inArray(iId.value, gaiSelectedTraining) == -1 ){
+              gaiSelectedTraining[gaiSelectedTraining.length++] = iId.value;
+            }
+          });
+        }
+        else{
+          $('#training_table tbody tr').each(function (){
+            $(this).removeClass('row_selected');
+            var iId = $('#training_table tbody tr td input');
+            gaiSelectedTraining = [];
+            iId.attr( 'checked', false );
+          });
+        }
+      } );
+ });
+
+ function delete_pelatihan(){
+   var arr_params = new Array();
+   $('#training_table tbody input:checked').each(function() {
+     arr_params = arr_params.concat($(this).val());
+   });
+   var controller = "/trainings/delete_multiple";
+   $("#ajax-load").show();
+   $.ajax({
+     type: "post",
+     url: escape(controller),
+     data:{'_method': 'post',"ids":arr_params,"person_id":<%= @person.id %>},
+     dataType: 'script',
+     success: function(){
+       $("#ajax-load").hide();
+       $.fn.colorbox.close();
+     }
+   });
+ };
+
+ </script>

@@ -1,0 +1,11 @@
+<%= render :partial=> "layouts/shared/breadcrumbs" %>
+<%= javascript_include_tag  'pagination' %>
+<fieldset class="fm-table">
+ <legend> <a href="#" id="help_dash" class="icons help-top-icon" title="Click to show/hide information">&nbsp;</a>
+   Promosi Karyawan</legend>
+  <%= render :partial => "layouts/howto/howto_content"%>
+  <%= render :partial => "layouts/delete_message" %>
+  <div id="div_promotions">
+    <%= render :partial => "promotions/promotions" %>
+  </div>
+</fieldset>

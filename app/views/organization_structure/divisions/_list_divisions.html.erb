@@ -1,0 +1,220 @@
+<%= javascript_include_tag  'pagination' %>
+<table id="divisions_table">
+  <thead>
+    <tr>
+      <th width="10"><input type="checkbox"> </th>
+      <th width="60" class="center-text">Kode Bagian</th>
+      <th width="100" class="center-text">Nama Bagian</th>
+      <th width="100" class="left-text">Departemen</th>
+      <th width="60" class="center-text">Jumlah Group</th>
+      <th width="60" class="left-text">Jumlah Karyawan</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% unless @division.blank? %>
+      <% @division.each do |x| %>
+        <tr >
+          <td class="center-text"><%= check_box_tag'myrow[ids][]', x.id, false %></td>
+          <td><%=h x.division_code %></td>
+          <td><a href="#organization_structure/divisions/<%=x.id%>" class="division_name"><%=h x.name %></a></td>
+          <td><a href="#organization_structure/divisions/<%=x.id%>"><%=h x.department.blank? ? "" : x.department.department_name %></a></td>
+          <td class="right-text"><a href="#organization_structure/work_groups?division_id=<%=x.id%>"><%= x.work_groups.count  %></a></td>
+          <td class="right-text">
+             <a href="#peopleDivision/<%= x.id %>"><%= x.personel.count %></a>
+          </td>
+        </tr >
+      <% end %>
+    <% else   %>
+      <tr class="no-data">
+        <td colspan="10" class="center-text">
+          <div class="description">
+            <% if params[:filter] %>
+              Data Tidak Ditemukan
+            <% else %>
+              Belum Ada Data Bagian
+            <% end %>
+          </div>
+          <div class="info">
+            <% if params[:filter] %>
+              Silahkan <a id="import2" onclick="onBtnReset('/organization_structure/divisions')"> Reset Filter</a> untuk mengubah parameter anda
+            <% else %>
+              Silahkan klik<a id="import2" href="#organization_structure/divisions/new"> Tambah bagian</a> untuk menambah data
+            <% end %>
+          </div>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<div class="panelFilter">
+  <% unless @division.blank? %>
+    <div class="pagination">
+      <span class="paginationResult">
+        <% a = format_paginate1(@division, @per_page, @division.total_entries) %>
+        <%= a[:a] %> - <%= a[:b] %> dari <%= @division.total_entries %>
+      </span>
+      <%= a[:paginate] %>
+      <div class="clear"></div>
+    </div>
+  <% end %>
+</div>
+
+<script>
+
+  function onJumlahKaryawan(){
+    var val = $("#filter_select").val();
+    $("#filter_jumlah_karyawan").val("");
+    $("#filter_awal").val("");
+    $("#filter_akhir").val("");
+    if (val != "3"){
+      $("#div_min_max").show();
+      $("#div_antara").hide();
+    }else{
+      $("#div_min_max").hide();
+      $("#div_antara").show();
+    }
+  }
+
+  function progress_filter(){
+    $('#ajax-load1').show();
+    $('#filter_button').hide();
+  }
+
+  function stop_filter(){
+    $('#ajax-load1').hide();
+    $('#filter_button').show();
+  }
+
+  var gaiSelected =  [];
+
+  $(document).ready(function() {
+
+    $('#divisions_table thead tr th input').live('click', function () {
+      if ($(this).is(":checked")) {
+        $('#divisions_table tbody tr td input').each(function (){
+          $(this).attr( 'checked', true );
+          $(this).parent().parent().addClass('row_selected');
+          var iId = this ;
+          if ( jQuery.inArray(iId.value, gaiSelected) == -1 )
+          {
+            gaiSelected[gaiSelected.length++] = iId.value;
+          }
+        });
+      }
+      else
+      {
+        $("#divisions_table tbody tr").each(function (){
+          $(this.nTr).toggleClass('row_selected');
+          var iId = $('#divisions_table tbody tr td input');
+          gaiSelected = []
+          iId.attr( 'checked', false );
+        });
+      }
+    } );
+
+    $('#link_opt_1').live('click', function (e){
+      e.preventDefault();
+      $('.expand_filter').show();
+      $('#filter_opt_1').show();
+      $('#filter_button').show();
+    });
+
+    $('#icon_cancel_opt1').click(function(){
+      $('#filter_opt_1').hide();
+      $('#filter_name').val("");
+      hide_all_search();
+    });
+
+    $('#link_opt_2').live('click', function (e){
+      e.preventDefault();
+      $('.expand_filter').show();
+      $('#filter_opt_2').show();
+      $('#filter_button').show();
+    });
+
+    $('#icon_cancel_opt2').click(function(){
+      $('#filter_opt_2').hide();
+      $('#filter_select').val("");
+      $('#filter_awal').val("");
+      $('#filter_akhir').val("");
+      hide_all_search();
+    });
+
+<%= render :partial => "layouts/shared/tooltip_hr_setting" %>
+  });
+
+  function onBtnReset(url_name){
+    $("#ajax-load1").show();
+    $("#filter_button").hide();
+    onReset();
+    $.ajax({
+      url: url_name,
+      type: 'get',
+      dataType: 'script',
+      data: { '_method': 'get',"":gaiSelected },
+      success: function() {
+        $("#ajax-load1").hide();
+        $("#filter_button").show();
+      }
+    });
+  }
+
+  function onReset(){
+    $('#filter_nama').val("");
+    $('#filter_jumlah_karyawan').val("");
+    $('#filter_awal').val("");
+    $('#filter_akhir').val("");
+  }
+
+  function onDelete(){
+    var arr_params = new Array();
+    $('#divisions_table tbody input:checked').each(function() {
+      arr_params = arr_params.concat($(this).val());
+    });
+    if (arr_params.length > 0){
+      $('#div_sign').html('division');
+      $('#div_btn_hapus').html('<input type="button" value="Ya" class="blue_button" onclick="delete_division()"/>');
+      jQuery().colorbox({width:"auto",height:"auto", inline:true,href:"#message_delete",
+        onClosed:function(){
+        }
+      });
+    }else{
+      return false;
+    }
+  }
+
+  function delete_division(){
+    var arr_params = new Array();
+    $('#divisions_table tbody input:checked').each(function() {
+      arr_params = arr_params.concat($(this).val());
+    });
+    var controller = "/organization_structure/divisions/delete_multiple";
+    $("#ajax-load").show();
+    $.ajax({
+      type: "post",
+      url: escape(controller),
+      data:{'_method': 'post',"division_ids":arr_params},
+      dataType: 'script',
+      success: function(){
+        $("#ajax-load").hide();
+        $.fn.colorbox.close();
+      }
+    });
+  }
+
+  function hide_all_search(){
+    a = false;
+    if ($('#filter_opt_1').is(":visible")){
+      a = true;
+    }
+    if ($('#filter_opt_2').is(":visible")){
+      a = true;
+    }
+    if (a != true){
+      $('.expand_filter').hide();
+      onBtnReset('/organization_structure/divisions');
+    }
+    return a
+  }
+</script>

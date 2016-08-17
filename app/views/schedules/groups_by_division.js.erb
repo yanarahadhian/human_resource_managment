@@ -1,0 +1,2 @@
+$('select[name=\'filter[nama_group]\']').html('<%= options_for_select([["Pilih Group",0]]+@work_groups.map {|d| [d.work_group_name, d.id]}).gsub(/\n/, '') %>');
+

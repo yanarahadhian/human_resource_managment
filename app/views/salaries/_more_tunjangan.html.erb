@@ -1,0 +1,12 @@
+<tr>
+  <td>
+    <%= select("premiums", "id", Premium.all.collect {|p| [ p.premium_name, p.id ] }, 
+      { :include_blank => false, :prompt => 'Pilih Tunjangan/Premi' }, :width => 30)%>
+  </td>
+  <td class='right-text'>
+    Rp. <input type='text' class='small-text-table'/> ,-
+  </td>
+  <td>
+    <%= remove_child_link "remove", f %>
+  </td>
+</tr>

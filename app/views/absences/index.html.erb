@@ -1,0 +1,452 @@
+<%= render :partial=> "layouts/shared/breadcrumbs" %>
+<%= render :partial => "layouts/howto_menu" %>
+
+
+
+
+<div class="clear"></div>
+<script type="text/javascript">
+  function ShowNotifyMessage(text){
+    $(".notify_error").slideDown("fast").html('<span class="message">'+ text +'</span><a class="icons close-error-icon right" onclick="CloseNotify()";return false;">&nbsp;</a>');
+  }
+  $(document).ready(function(){
+    <% if params[:save] == "create_present" %>
+      var message = "Karyawan berhasil dihadirkan"
+      <% if params[:msg] == "1" %>
+        message = "Data kehadiran tidak dapat disimpan karena karyawan telah memiliki data kehadiran pada hari ini!"
+      <% elsif params[:msg] == "2" %>
+        message = "Karyawan telah dinyatakan <%= params[:absen] %> pada hari ini!"
+      <% end %>
+      $('.notify_error').show();$('.message').html(message);
+    <% end %>
+    $("#filter_division").attr('disabled', 'disabled');
+    $('#filter_trigger').addClass("filter-active");
+    $('#filter_block').show();
+    $('#filter_trigger').click(function(){
+      $(this).toggleClass("filter-active");
+      $('#filter_block').toggle();
+    });
+    $('.expand_filter .reset-filter-ico').click(function(){
+      $('#filter_block').hide();
+      $('#filter_trigger').removeClass("filter-active")
+    });
+    //Filter_Step
+    $('#filter_nd').hide();
+    $('#next_step').click(function(){
+      $('#filter_st').hide();
+      $('#filter_nd').show();
+    });
+    $('#save_create, #cancel_create').click(function(){
+      $('#filter_st').show();
+      $('#filter_nd').hide();
+    });
+  });
+
+  function onDepartment(data){
+    $("#div_unit").empty();
+    $("#div_group").empty();
+    $.ajax({
+      url: "/change_divisi/" + data.value,
+      data: "a=a",
+      type: "GET"
+    });
+    if(data.value==""){$("#filter_division").attr('disabled', 'disabled');}else{$("#filter_division").removeAttr("disabled");}
+  }
+</script>
+
+<fieldset class="fm-table">
+  <legend>
+    <a href="#" id="help_dash" class="icons help-top-icon" title="Click to show/hide information">&nbsp;</a> 
+    Absen Karyawan
+  </legend>
+  <%= render :partial => "layouts/howto/howto_content" %>
+  <%= render :partial => "layouts/delete_message" %>
+  <div class="panelFilter">
+    <table cellspacing="0" cellpadding="0">
+      <tbody><tr>
+          <td width="100px" id="id_more_action">
+            <div class="action_menu">
+              <ul>
+                <li>
+                  <a class="grey_button2">
+                    <span class="left">More Actions</span>
+                    <span class="icons drop_arrow_ico">&nbsp;</span>
+                  </a>
+                  <div class="clear"></div>
+                  <ul>
+                    <li><a class="list" id="fix_presences">Sesuaikan Absensi</a></li>
+                    <li><a class="list" id="delete_presences">Hapus Absensi</a></li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+          </td>
+          <td>
+            <div class="action_menu" id="id_search">
+              <ul>
+                <li>
+                  <a class="grey_button2" id="filter_trigger" style="color: rgb(89, 119, 156); ">
+                    <span class="icons filter-ico">&nbsp;</span> Filter
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </td>
+          <td class="right">
+            <div class="action_menu" id="action_menu">
+              <ul>
+                <li>
+                  <a class="grey_button2">
+                    <span class="left">Export Data to</span>
+                    <span class="icons drop_arrow_ico">&nbsp;</span>
+                  </a>
+                  <div class="clear"></div>
+                  <ul>
+                    <li><a href="/absences/export_absensi_kerja" class="list"><span class="icons xls_ico">&nbsp;</span><span class="left">XLS File</span></a></li>
+                    <li>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+            <% if current_features.include?('present_employee') %>
+              <span class="add-button left">
+                <a href="/absences/popup_absent_to_people" id="employee_present_button" class="grey_button2">
+                  <span class="icons add_ico">&nbsp;</span>
+                  Absenkan Karyawan
+                </a>
+                <a href=/absences/popup_import_data_absent id="import_data_absence_button" class="grey_button2">
+                  <span class="icons add_ico">&nbsp;</span>
+                  Import Data Absen
+                </a>  
+              </span>
+             
+            <% end %>
+          </td>
+        </tr>
+        <tr id="filter_block" style="display: table-row; ">
+          <td colspan="3">
+            <div class="expand_filter">
+              <div id="filter_st" style="display: block; ">
+                <div class="left-filter">
+                  <div class="filter_opt">
+                    <label class="left">Periode</label>
+                    <select class="left auto" name="filter_select" id="filter_select"><option value="1"> Harian </option><option value="2"> Bulanan </option></select>
+                    <div class="clear"></div>
+                    <div style="margin-top: 10px">
+                      <label class="left" id="">Tanggal/Bulan</label>
+                      <span id='date_filter' class="left">
+                        <%= text_field_tag "temp_date",{},{:class => "left", :style => "width:115px !important"}%>
+                        <%= hidden_field_tag :date,{},{:id => "date_pick"} %>
+                        <%= hidden_field_tag "temp_date"%>
+                      </span>
+                      <span id="month_filter" class="left" style="display:none;">
+                        <%= select_month(@date_start,{}, {:class=>"auto"})%>
+                        <%= select_year(@date_start, {:start_year => 1965, :end_year => Date.today.year}, {:class=>"auto"})%>
+                      </span>
+                      <% if params[:table]=='month' %>
+                        <span><a id='remove_month_filter' class="left icons cancel_ico" style="display:none;">&nbsp;</a> </span>
+                      <% else %>
+                        <span><a id='remove_date_filter' class="left icons cancel_ico" style="display:none;">&nbsp;</a> </span>
+                      <% end %>
+                    </div>
+                  </div>
+                </div>
+                <div class="right-filter">
+                  <div class="filter_opt" id="filter_opt_1">
+                    <label class="left">Nama</label>
+                    <input type="text" class="left" id="filter_name"/>
+                    <span class="left" id="text_name"></span>
+                    <div class="clear"></div>
+                  </div>
+
+                  <div class="filter_opt" id="filter_opt_2">
+                    <label class="left">Departemen</label>
+                    <span class="left">
+                      <%= collection_select(:filter, :department, @departments, :id, :department_name,
+                        options ={:prompt => "Pilih Departemen"}, :onchange => "onDepartment(this)") %>
+                    </span>
+                    <span class="left" id="text_department"></span>
+                    <div class="clear"></div>
+                  </div>
+
+                  <div class="filter_opt" id="filter_opt_3">
+                    <label class="left">Bagian</label>
+                    <span class="left">
+                      <%= collection_select(:filter, :division, @divisions, :id, :name, options ={:prompt => "Pilih Bagian"}) %>
+                    </span>
+                    <span class="left" id="text_division"></span>
+                    <div class="clear"></div>
+                  </div>
+                </div>
+                <div class="clear"></div>                
+                <div class="center filter-btn">
+                  <%= render :partial => "layouts/button_loader" %>
+                  <a class="grey_button2" id="filter_button" style="float :none !important;">
+                    <span class="center">Tampilkan</span>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </td>
+        </tr>
+      </tbody></table>
+
+  </div>
+  <div class="clear"></div>
+  <div id="absence_table">
+    <% if params[:table]=='month' %>
+      <%= render :partial => "list_absensi_mounth" %>
+    <% else %>
+      <%= render :partial => "list_absensi" %>
+    <% end %>
+  </div>
+  <div class="panelFilter">
+    <div class="pagination">
+      <span class="paginationResult"></span>
+      <a ><span class="icons last_ico" id="last_page">&nbsp;</span></a>
+      <a ><span class="icons next_ico" id="next_page">&nbsp;</span></a>
+      <a ><span class="icons prev_ico" id="prev_page">&nbsp;</span></a>
+      <a ><span class="icons first_ico" id="first_page">&nbsp;</span></a>
+    </div>
+    <div class="clear"></div>
+  </div>
+</fieldset>
+<%= render :partial => "absences/popup_pages/popup_fix_presences" %>
+
+<script type="text/javascript" >
+  $(document).ready(function() {
+
+    $("#employee_present_button").colorbox({width:"600px",height:"390px", iframe:true,
+      onClosed:function(){
+      }
+    });
+    
+    $("#import_data_absence_button").colorbox({width:"600px",height:"390px", iframe:true,
+      onClosed:function(){
+      }
+    });
+
+    $("#popup_date_pick").datepicker({
+      altField: '#popup_temp_date',
+      altFormat: 'dd/mm/yy',
+      dateFormat: 'yy-mm-dd',
+      buttonImageOnly: true,
+      maxDate: '+0'
+    });
+    $("#popup_date_pick2").datepicker({
+      altField: '#popup_temp_date2',
+      altFormat: 'dd/mm/yy',
+      dateFormat: 'yy-mm-dd',
+      buttonImageOnly: true,
+      maxDate: '+0'
+    });
+    $('#popup_date_pick').datepicker("setDate",<%="#{Date.today.strftime("%d/%m/%Y")}"%>);
+    $('#popup_date_pick2').datepicker("setDate",<%="#{Date.today.strftime("%d/%m/%Y")}"%>);
+
+    $("#fix_presences").colorbox({width:"auto",height:"auto", inline:true, href:"#popup_fix_presences",
+      onComplete: function(){
+      },
+      onClosed: function(){
+        $('#popup_date_pick').datepicker("setDate",<%="#{Date.today.strftime("%d/%m/%Y")}"%>);
+        $('#popup_date_pick2').datepicker("setDate",<%="#{Date.today.strftime("%d/%m/%Y")}"%>);
+      }
+    });
+
+
+    $('#delete_presences').click(function(e) {
+      var arr_params = new Array();
+      $('#daily_absences_table tbody input:checked').each(function() {
+        arr_params = arr_params.concat($(this).val());
+      });
+      if (arr_params.length > 0){
+        $('#div_sign').html('absensi');
+        $('#div_btn_hapus').html('<input type="button" value="Ya" class="blue_button" onclick="delete_absensi()"/>');
+        jQuery().colorbox({width:"auto",height:"auto", inline:true,href:"#message_delete",
+          onClosed:function(){
+          }
+        });
+      }else{
+        return false;
+      }      
+    });
+
+    $('#daily_absences_table thead tr th input').live('click', function () {
+      if ($(this).is(":checked")) {
+        $('#daily_absences_table tbody tr td input').each(function (){
+          if ( !$(this).is(":disabled") ){
+            $(this).attr( 'checked', true );
+          }
+        });
+      }
+      else{
+        $('#daily_absences_table tbody tr td input').each(function (){
+          $(this).attr( 'checked', false );
+        });
+      }
+    } );
+
+    $('#filter_select').change(function(e){
+      e.preventDefault();
+      var selectValue = this.options[this.selectedIndex].value;
+      if (selectValue == '1'){
+        $.get( "/absences", {},function(data) {
+          $('.fm-table').empty();
+          $('.fm-table').replaceWith($('.fm-table', data));
+          document.location='#absences';
+        });
+      }
+      if (selectValue == '2'){
+        $.get( "/absences", {"table":"month"},function(data) {
+          $('.fm-table').empty();
+          $('.fm-table').replaceWith($('.fm-table', data));
+          document.location='#absences?table=month';
+        });
+      }
+    } );
+
+    $('#link_opt_1').click(function (e){
+      e.preventDefault();
+      $('#filter_opt_1').show();
+      $('#filter_button').show();
+    });
+
+    $('#link_opt_2').click(function (e){
+      e.preventDefault();
+      $('#filter_opt_2').show();
+      $('#filter_button').show();
+    });
+
+    $('#link_opt_3').click(function (e){
+      e.preventDefault();
+      $('#filter_opt_3').show();
+      $('#filter_button').show();
+    });
+
+    $('.remove_filter').click( function (e) {
+      e.preventDefault();
+      $(this).parent().hide();
+      $.get("/absences/divisions_by_department", null, null, "script");
+      $('#filter_department').val('');
+      $('#filter_division').val('');
+      if ($('#filter_opt_3').is(':hidden') && $('#filter_opt_2 ').is(':hidden') && $('#filter_opt_1').is(':hidden')){
+        if ($('#month_filter').is(':hidden')){
+          $('#filter_button').show();
+        }
+      }
+      oTable.fnDraw();
+    });
+
+    $('#next_page').click(function(e){
+      e.preventDefault();
+      if (displayStart + dataLength < $('#total').text()){
+        $("#ajax-load").show();
+        displayStart = displayStart + dataLength;
+        oTable.fnDraw();
+        $("#ajax-load").hide();
+      }
+      return false;
+    } );
+
+    $('#last_page').click(function(e){
+      e.preventDefault();
+      if (displayStart + dataLength < $('#total').text()){
+        $("#ajax-load").show();
+        displayStart = (Math.floor((parseInt($('#total').text()-1)/dataLength))*dataLength);
+        oTable.fnDraw();
+        $("#ajax-load").hide();
+      }
+      return false;
+    } );
+
+    $('#prev_page').click(function(e){
+      e.preventDefault();
+      if (displayStart > 0){
+        $("#ajax-load").show();
+        displayStart = displayStart - dataLength;
+        oTable.fnDraw();
+        $("#ajax-load").hide();
+      }
+      return false;
+    } );
+
+    $('#first_page').click(function(e){
+      e.preventDefault();
+      if (displayStart > 0){
+        $("#ajax-load").show();
+        displayStart = 0;
+        oTable.fnDraw();
+        $("#ajax-load").hide();
+      }
+      return false;
+    } );
+
+    $('#filter_department').change(function() {
+      $.get("/absences/divisions_by_department", {id: $(this).val()}, null, "script");
+    });
+
+    $('#import_absences').click(function(e) {
+      e.preventDefault();
+      if ( confirm("Apakah yakin akan mengimport data dari alat sidik jari?") ){
+        $.ajax({
+          url: '/absences/fingerprint_data_import',
+          type: 'get',
+          dataType: 'html',
+          data: {},
+          beforeSend:function(){$('#spinner').show(); $("#ajax-load").show();},
+          complete:function(){$('#spinner').hide(); $("#ajax-load").hide();},
+          success: function(data) {
+            // the item has been deleted
+            // might want to remove it from the interface
+            // or redirect or reload by setting window.location
+            oTable.fnDraw();
+            $('#app_two_con').html(data);
+            $('.notify_error').html($('.notify_error', data).html());
+            $('.notify_error').show();
+            $('#spinner').hide(); $("#ajax-load").hide();
+          }
+        });
+      }
+      else{
+        oTable.fnDraw();
+      }
+      return false;
+    } );
+
+  });
+
+
+  function parameterPresences(){
+    $('#daily_absences_table tbody tr td input').each(function(e){
+      if ($(this).is(":checked")) {
+        gaiSelected[gaiSelected.length++] = $(this).val();
+      }
+    });
+  }
+
+  function delete_absensi(){
+    var arr_params = new Array();
+    $('#daily_absences_table tbody input:checked').each(function() {
+      arr_params = arr_params.concat($(this).val());
+    });
+    if (arr_params.length > 0 ){
+      var controller = "/absences/delete_presences";
+      $.ajax({
+        type: "post",
+        url: escape(controller),
+        data:{'_method': 'post',"presence_ids":arr_params},
+        dataType:"script",
+        success: function(data) {
+          oTable.fnDraw();
+          showFlashMessage(data);
+          $.fn.colorbox.close();
+        }
+      })
+    }else{
+      return false;
+    }
+  }
+  
+
+</script>
+

@@ -1,0 +1,35 @@
+<!-- popup -->
+<div style="display:none;">
+  <div class="frm-popup" id="popup_more_rest">
+    <div id="popup2">
+      <%- if @presence %>
+        <div class="title-page-tambah"><%= @presence.person.full_name.titleize %></div>
+        <fieldset>
+          <span class="input">
+            <label>Waktu Istirahat</label>
+            <label><%= Presence.minutes_to_hour_text(@presence.break_length_in_minutes.to_i) %></label>
+          </span>
+          <span class="clear"></span>
+          <span class="input">
+            <label>Beri Keterangan</label>
+            <textarea id="rest_description" cols="35" rows="3"></textarea>
+          </span>
+          <span class="clear"></span>
+          <span class="input">
+            <label>Anggap sama semua</label>
+            <%= check_box_tag "same"%>
+          </span>
+          <span class="clear"></span>
+          <hr>
+          <div class="center-text  box-form">
+            <input type="reset" id="info_section_cancel_basic" class="grey_button" value="Batal" name="info_section_cancel_basic" onclick="javascript:$.colorbox.close();window.location='#more_rest'">
+            <input type="submit" value="Simpan" name="info_section_save_basic" id="info_section_save_basic" class="blue_button">
+          </div>
+        </fieldset>
+      <%- end %>
+    </div>
+  </div>
+</div>
+<div class="clear"></div>
+<!-- end popup -->
+

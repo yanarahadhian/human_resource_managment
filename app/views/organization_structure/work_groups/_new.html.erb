@@ -1,0 +1,33 @@
+<%= render :partial=> "layouts/shared/breadcrumbs" %>
+<fieldset class="fm-table">
+  <legend><a href="#" id="help_dash" class="icons help-top-icon" title="Click to show/hide information">&nbsp;</a> Tambah Group Baru</legend>
+  <%= render :partial => "layouts/howto/howto_content"%>
+
+  <div class="input-data box-form">
+    <div class="input-help-wide">
+      <label>Field dengan tanda <span class="redstar">*</span> harus diisi</label>
+    </div>
+    <% form_remote_for [:organization_structure, @group], :html => { :multipart => true }  do |f| %>
+      <div class="input-data box-form">
+        <%= render :partial => "group_form", :locals => {:f => f} %>
+      </div>
+      <div class="clear"></div>
+      <div class="center-text">
+        <%= render :partial => "layouts/button_loader" %>
+      </div>
+      <div id="button" class="block-btn-form">
+        
+          <input id="info_section_cancel_basic" class="grey_button" type="reset" value="Batal" name="info_section_cancel_basic" onclick="onCancel('#organization_structure/work_groups')"/>
+          <input type="submit" value="Simpan" name="info_section_save_basic" id="info_section_save_basic" class="blue_button" onclick="load_on_submit()"/>
+       
+      </div>
+    <% end %>
+  </div>
+</fieldset>
+
+<script>
+  function load_on_submit(){
+    $("#ajax-load1").show();
+    $("#button").hide();
+  }
+</script>

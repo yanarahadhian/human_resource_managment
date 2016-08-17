@@ -1,0 +1,12 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+satu:
+  id: 1
+  company_id: 32
+  company_cover_jamsostek: 123000
+  jamsostek_by_company: 1
+  full_working_days: 30
+  
+#
+# two:
+#   column: value

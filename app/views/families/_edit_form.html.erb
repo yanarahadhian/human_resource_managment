@@ -1,0 +1,78 @@
+<% form_for @family, :url => person_family_path( @person.id, @family.id ) do |f| %>
+   <div id="box_retur_0">
+     
+       <%= render :partial => 'families/family_edit_form', :locals => {:f=>f, :family => @family} %>
+   
+     <div class="center-text">
+       <%= render :partial => "layouts/button_loader" %>
+       <div id="button" class="block-btn-form center">
+         <input type="reset" id="info_section_cancel_basic" class="grey_button" value="Batal" name="info_section_cancel_basic" onclick="doCancelEdit()" />
+         <input type="submit" value="Simpan" name="info_section_save_basic" id="info_section_save_basic" class="blue_button" onclick="ajaxLoad1('<%= person_family_path(@person.id, @family.id) %>','button','ajax-load1')"/>
+       </div>
+     </div>
+   </div>
+ <%end%>
+
+<script>
+
+ function doCancelEdit(){
+   path = "<%= ApplicationController::BASE_URL %>/people/<%= @person.id %>/families/cancel_popup_detail";
+   $.ajax({
+     type: "get",
+     url: path,
+     data :"id=<%= @family.id%>",
+     dataType: 'script',
+     success: function(){
+       $('.title-page-tambah').html("Detail Keluarga");
+    }
+   })
+ }
+  
+$(document).ready(function(){
+<% if @sign=="gagal" %>
+     onChangeFamilyField();
+  <% end %>
+
+  var dt = new Date;
+      endyear = dt.getFullYear() +10;
+      $.datepicker.setDefaults({
+        showOn: "button",
+        buttonImage: "<%=ApplicationController::APPSCHEF_URL%>/images/calendar.gif",
+        changeMonth: true,
+        changeYear: true,
+        dateFormat: 'dd/mm/yy',
+        altFormat: 'dd MM yy',
+        yearRange: '1939:' + endyear,
+        firstDay: 1
+     });
+
+      $( ".ui-date, .ui-date2" ).datepicker({
+        buttonImageOnly: true
+      })
+     });
+
+
+  function ajaxLoad(url){
+     $("#ajax-load").show();
+       $.get(url, function(data) {
+         $("#ajax-load").hide();
+       });
+    }
+
+   function ajaxLoad1(url, div_btn, div_load){
+     $("#" + div_load + "").show();
+     $("#" + div_btn + "").hide();
+       $.get(url, function(data) {
+         $("#ajax-load").hide();
+       });
+    }
+
+     function set_citi(){
+      var value = $('#family_address_attributes_state').val();
+      $.ajax({
+        url: "/change_city/" + value,
+        data: "",
+        type: "GET"
+      });
+   }
+</script>

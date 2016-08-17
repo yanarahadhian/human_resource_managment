@@ -1,0 +1,141 @@
+presence01:
+  id: 1
+  company_id: 1
+  person_id: 6
+  presence_date: "2011-03-01"
+presence02:
+  id: 2
+  company_id: 1
+  person_id: 6
+  presence_date: "2011-03-02"
+presence03:
+  id: 3
+  company_id: 1
+  person_id: 6
+  presence_date: "2011-03-03"
+presence04:
+  id: 4
+  company_id: 1
+  person_id: 6
+  presence_date: "2011-03-04"
+presence05:
+  id: 5
+  company_id: 1
+  person_id: 6
+  presence_date: "2011-03-05"
+presence06:
+  id: 6
+  company_id: 1
+  person_id: 6
+  presence_date: "2011-03-07"
+presence07:
+  id: 7
+  company_id: 1
+  person_id: 6
+  presence_date: "2011-03-08"
+presence08:
+  id: 8
+  company_id: 1
+  person_id: 6
+  presence_date: "2011-03-09"
+presence09:
+  id: 9
+  company_id: 1
+  person_id: 6
+  presence_date: "2011-03-10"
+presence10:
+  id: 10
+  company_id: 1
+  person_id: 6
+  presence_date: "2011-03-11"
+presence11:
+  id: 11
+  company_id: 1
+  person_id: 6
+  presence_date: "2011-03-12"
+presence12:
+  id: 12
+  company_id: 1
+  person_id: 6
+  presence_date: "2011-03-14"
+presence13:
+  id: 13
+  company_id: 1
+  person_id: 6
+  presence_date: "2011-03-15"
+presence14:
+  id: 14
+  company_id: 1
+  person_id: 6
+  presence_date: "2011-03-16"
+presence15:
+  id: 15
+  company_id: 1
+  person_id: 6
+  presence_date: "2011-03-17"
+presence16:
+  id: 16
+  company_id: 1
+  person_id: 6
+  presence_date: "2011-03-18"
+presence17:
+  id: 17
+  company_id: 1
+  person_id: 6
+  presence_date: "2011-03-19"
+presence18:
+  id: 18
+  company_id: 1
+  person_id: 6
+  presence_date: "2011-03-21"
+presence19:
+  id: 19
+  company_id: 1
+  person_id: 6
+  presence_date: "2011-03-22"
+presence20:
+  id: 20
+  company_id: 1
+  person_id: 6
+  presence_date: "2011-03-23"
+presence21:
+  id: 21
+  company_id: 1
+  person_id: 6
+  presence_date: "2011-03-24"
+presence22:
+  id: 22
+  company_id: 1
+  person_id: 6
+  presence_date: "2011-03-25"
+presence23:
+  id: 23
+  company_id: 1
+  person_id: 6
+  presence_date: "2011-03-26"
+presence24:
+  id: 24
+  company_id: 1
+  person_id: 6
+  presence_date: "2011-03-28"
+presence25:
+  id: 25
+  company_id: 1
+  person_id: 6
+  presence_date: "2011-03-29"
+presence26:
+  id: 26
+  company_id: 1
+  person_id: 6
+  presence_date: "2011-03-30"
+presence27:
+  id: 27
+  company_id: 1
+  person_id: 6
+  presence_date: "2011-03-31"
+presence28:
+  id: 28
+  company_id: 1
+  person_id: 6
+  presence_date: "2011-04-01"
+

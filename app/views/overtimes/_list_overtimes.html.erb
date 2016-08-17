@@ -1,0 +1,197 @@
+<%= javascript_include_tag  'pagination' %>
+<table width="1450" id="overtime_data_table">
+  <thead>
+    <tr>
+      <th class="center-text" width="20"><input type="checkbox"/></th>
+      <th width="163">Nama Karyawan</th>
+      <th width="106">Periode Lembur</th>
+      <th width="116">Waktu Mulai Lembur</th>
+      <th width="76">Status</th>
+      <th width="76">Bagian</th>
+      <th width="76">Group</th>
+      <th width="106">Alasan</th>
+    </tr>
+  </thead>
+  <tbody>
+     <% unless @overtimes.blank? %>
+       <% @overtimes.each do |x| %>
+         <% link = "#{current_root_url}#overtimes/#{x.id}/edit"  %>
+         <tr>
+           <td class="center-text">
+             <% unless x.status.downcase == "rejected" || x.status.downcase == "approved" %>
+               <%= check_box_tag'myrow[ids][]', x.id, false %>
+             <% end if !x.status.blank? %>
+           </td>
+           <td><%= x.person.full_name %></td>
+           <td>
+             <% awal = x.start_periode.blank? ? "" : x.start_periode.strftime("%d/%m/%Y") %>
+             <% akhir = x.end_periode.blank? ? "" : x.end_periode.strftime("%d/%m/%Y") %>
+             <a href="<%= link %>"><%= "#{awal} - #{akhir}" %></a>
+           </td>
+           <td class="right-text"><%= x.start_overtime.strftime("%H:%M:%S") %></td>
+           <% emp = x.person.current_employment %>
+           <td><a href="<%= link %>"><%= x.status %></a></td>
+           <td><a href="<%= link %>"><%= emp.blank? ? "" : emp.division.blank? ? "" : emp.division.name %></a></td>
+           <td><a href="<%= link %>"><%= emp.blank? ? "" : emp.work_group.blank? ? "" : emp.work_group.work_group_name %></a></td>
+           <td><a href="<%= link %>"><%= x.reason %></a></td>
+        </tr>
+       <% end %>
+     <% else %>
+       <tr class="no-data">
+        <td colspan="8" class="center-text">
+          <div class="description">
+           <% if params[:filter] %>
+              Data Tidak Ditemukan
+            <% else %>
+              Belum Ada Data Lembur karyawan
+            <% end %>
+          </div>
+          <div class="info">
+            <% if params[:filter] %>
+              Silahkan <a id="reset_filter2"> Reset Filter</a> untuk mengubah parameter anda
+            <% else %>
+              Silahkan <%= link_to 'Tambah Lembur Karyawan', "#overtimes/new" %> untuk menambah data
+            <% end %>
+          </div>
+          </td>
+      </tr>
+     <% end %>
+  </tbody>
+</table>
+  <div class="panelFilter">
+     <div class="pagination">
+       <% unless @overtimes.blank? %>
+         <span class="paginationResult">
+           <% a = format_paginate1(@overtimes, @per_page, @overtimes.total_entries) %>
+           <%= a[:a] %> - <%= a[:b] %> dari <%= @overtimes.total_entries %>
+         </span>
+         <%= a[:paginate] %>
+       <% end %>
+     <div class="clear"></div>
+    </div>
+  </div>
+
+<script type="text/javascript">
+  var gaiSelected =  [];
+  $(document).ready(function() {
+
+    <% if @overtimes.blank? %>
+      $('#id_more_action').hide();
+    <% else %>
+      $('#id_more_action').show();
+    <% end %>
+
+    <% if @overtimes_all > 0 %>
+      $('#id_filter').show();$('#filter_block').show();
+    <% else %>
+      $('#id_filter').hide();$('#filter_block').hide();
+    <% end %>
+    $('#overtime_data_table thead tr th input').click(function () {
+       if ($(this).is(":checked")) {
+         $('#overtime_data_table tbody tr td input').each(function (){
+           $(this).attr( 'checked', true );
+           $(this).parent().parent().addClass('row_selected');
+           var iId = this ;
+            if ( jQuery.inArray(iId.value, gaiSelected) == -1 ){
+              gaiSelected[gaiSelected.length++] = iId.value;
+            }
+          });
+        }
+        else{
+          $('#overtime_data_table tbody tr').each(function (){
+            $(this).removeClass('row_selected');
+            var iId = $('#overtime_data_table tbody tr td input');
+            gaiSelected = [];
+            iId.attr( 'checked', false );
+          });
+        }
+      });
+    });
+
+  function onDelete(act_name){
+    var arr_params = new Array();
+    $('#overtime_data_table tbody input:checked').each(function() {
+      arr_params = arr_params.concat($(this).val());
+    });
+    if (arr_params.length > 0){
+      $('#div_sign').html('lembur karyawan');
+      $('#div_btn_hapus').html("<input type='button' value='Ya' class='blue_button' onclick='delete_lembur_karyawan(\"" + act_name + "\")'/>");
+      jQuery().colorbox({width:"auto",height:"auto", inline:true,href:"#message_delete",
+        onClosed:function(){
+        }
+      });
+    }else{
+      return false;
+    }
+  }
+
+  function delete_lembur_karyawan(act_name){
+    var arr_params = new Array();
+    $('#overtime_data_table tbody input:checked').each(function() {
+      arr_params = arr_params.concat($(this).val());
+    });
+    var controller = "/overtimes/delete_multiple";
+    $("#ajax-load").show();
+    var action = act_name
+    $.ajax({
+      type: "post",
+      url: escape(controller),
+      data:{'_method': 'post',"ids":arr_params, "act_name" : action},
+      dataType: 'script',
+      success: function(){
+        $("#ajax-load").hide();
+        $.fn.colorbox.close();
+        $('#filter_button input[type="submit"]').click();
+      }
+    });
+  }
+
+  function onApprove(act_name){
+   var arr_params = new Array();
+   $('#overtime_data_table tbody input:checked').each(function() {
+     arr_params = arr_params.concat($(this).val());
+   });
+   if (arr_params.length > 0 && act_name == 'approved'){
+     $('#div_sign').html('lembur karyawan');
+     $('#div_nama_comfirm').html('Approve');
+     $('#div_aksi').html('meng-aprove');
+     $('#div_btn_hapus').html("<input type='button' value='Ya' class='blue_button' onclick='approve_lembur_karyawan(\"" + act_name + "\")'/>");
+     jQuery().colorbox({width:"auto",height:"auto", inline:true,href:"#message_delete",
+       onClosed:function(){}
+     });
+   }
+   else if (arr_params.length > 0 && act_name == 'Rejected'){
+     $('#div_sign').html('lembur karyawan');
+     $('#div_nama_comfirm').html('Reject');
+     $('#div_aksi').html('me-reject');
+     $('#div_btn_hapus').html("<input type='button' value='Ya' class='blue_button' onclick='approve_lembur_karyawan(\"" + act_name + "\")'/>");
+     jQuery().colorbox({width:"auto",height:"auto", inline:true,href:"#message_delete",
+       onClosed:function(){}
+     });
+   }else{
+     return false;
+   }
+ }
+
+ function approve_lembur_karyawan(act_name){
+   var arr_params = new Array();
+   $('#overtime_data_table tbody input:checked').each(function() {
+     arr_params = arr_params.concat($(this).val());
+   });
+   var controller = "/overtimes/update_status";
+   $("#ajax-load").show();
+   var action = act_name;
+   $.ajax({
+     type: "post",
+     url: escape(controller),
+     data:{'_method': 'post',"ids":arr_params, "act_name" : action},
+     dataType: 'script',
+     success: function(){
+       $("#ajax-load").hide();
+       $.fn.colorbox.close();
+       $('#filter_button input[type="submit"]').click();
+     }
+   });
+  }
+
+</script>

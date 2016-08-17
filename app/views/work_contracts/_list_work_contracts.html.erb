@@ -1,0 +1,348 @@
+<% row =0 %>
+<% form_remote_for @contract, :url => create_work_contract_path do |f|-%>
+  <table id="tb_work_contract" width="1381">
+    <thead>
+      <tr>
+        <th width="200">Jenis Kontrak</th>
+        <th width="117px" class="center-text">Mulai Kontrak</th>
+        <th width="117px" class="center-text">Selesai Kontrak</th>
+        <th width="116px" class="center-text">Kontrak / Tetap</th>
+        <th width="116px" class="center-text">Harian / Bulanan</th>
+        <th width="100px" class="center-text">Perlakuan</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% unless @person.work_contracts.blank? %>
+        <% @person.work_contracts.each do |x| %>
+          <tr id="tr_<%= row %>">
+            <td class="left-text">
+              <div id="div_input_<%= row %>" style="display:none;"><input type="text" style="width:200px;" id="contract_name_<%= row %>" name="work_contract[contract_name][<%= row %>]"/><a onclick="onKembali(<%= row %>)">Kembali</a></div>
+              <div id="div_input_type_<%= row %>" style="display:none;">
+                <select id="type_<%= row %>" onchange="getContractLainnya(<%= row %>)">;
+                  <option value=""> pilih</option>
+                  <% ContractType.by_company(current_company_id).each do |p| %>
+                    <% select = "" %>
+                    <% select = "selected" if x.contract_type_id == p.id %>
+                    <option value="<%= p.id %>"<%= select %> ><%= p.contract_type_name %></option>
+                  <% end %>
+                  <option value="lainnya">Buat baru</option>
+                </select>
+              </div>
+              <div id="div_label_type_<%= row %>">
+                <%= x.contract_type.contract_type_name unless x.contract_type.blank?%>
+              </div>
+            </td>
+            <td class="left-text">
+              <div id="div_input_start_<%= row %>" style="display:none">
+                <input type="text" class="ui-date" id="contract_start_<%= row %>" style="width:88px !important" name="work_contract[contract_start][<%= x.id %>]" value="<%= x.contract_start.strftime("%d/%m/%Y") unless x.contract_start.blank?  %>"/>
+              </div>
+              <div id="div_label_start_<%= row %>">
+                <%= x.contract_start.strftime("%d/%m/%Y") unless x.contract_start.blank? %>
+              </div>
+            </td>
+            <td class="center-text">
+              <div id="div_input_end_<%= row %>" style="display:none">
+                <input type="text" class="ui-date" id="contract_end_<%= row %>" style="width:88px !important" name="work_contract[contract_end][<%= x.id %>]" value="<%= x.contract_end.strftime("%d/%m/%Y") unless x.contract_end.blank? %>"/>
+              </div>
+              <div id="div_label_end_<%= row %>">
+                <%= x.contract_end.blank? ? "-" : x.contract_end.strftime("%d/%m/%Y") %>
+              </div>
+            </td>
+             <td class="center-text">
+              <div id="div_input_is_permanent_<%= row %>" style="display:none">
+                <select id="is_pemanent_<%= row %>" style="width:100px;">
+                 <% sel_tetap = x.is_permanent_employee? ? "selected='selected'" : "" %>
+                  <option value="0">Kontrak</option>
+                  <option value="1" <%= sel_tetap %>>Tetap</option>
+                </select>
+              </div>
+              <div id="div_label_is_permanent_<%= row %>">
+                <%= x.is_permanent_employee? ? "Tetap" : "Kontrak" %>
+              </div>
+            </td>
+            <td class="center-text">
+              <div id="div_input_is_daily_<%= row %>" style="display:none">
+                 <select id="is_daily_<%= row %>" style="width:100px;">
+                  <% sel_harian = x.is_daily_employee? ? "selected='selected'" : "" %>
+                  <option value="0">Bulanan</option>
+                  <option value="1" <%= sel_harian %>>Harian</option>
+                </select>
+              </div>
+              <div id="div_label_is_daily_<%= row %>">
+                 <%= x.is_daily_employee? ? "Harian" : "Bulanan" %>
+              </div>
+            </td>            
+            <td class="center-text">
+              <div id="link_button_<%= row %>">
+                <%= f.hidden_field :id, :value => x.id, :name => "work_contract[id][#{x.id}]" %>
+                <div id="is_link_edit_<%= row %>" style="display:none;">
+                  <div class="left"><a onclick="onUpdate('<%= row %>','<%= x.id %>')" id="link_save_work_contract_<%= row %>" href="#people/<%= @person.id %>/employments?tab=0">Save</a></div>
+                  <div class="left">&nbsp;|&nbsp;<a onclick="onCancelWhenEdit('<%= row %>','<%= x.id %>')">Cancel</a></div>
+                </div>
+                <div id="is_link_not_edit_<%= row %>">
+                  <div class="left"><a onclick="onEditWorkContract('<%= row %>')">Edit</a></div>
+                  <div class="left">&nbsp;|&nbsp;<a onclick="removeFormField(<%= row %>,<%= x.id %>)">Delete</a></div>
+                </div>
+              </div>
+            </td>
+          </tr>
+          <% row+=1 %>
+        <% end %>
+      <% else %>
+        <tr class="no-data" id="tr_blank">
+          <td colspan="6" class="center-text"><div class="description">Belum Ada Kontrak kerja. </div><div class="info">Silahkan klik<a onclick="addRecord()"> Tambah kontrak </a> untuk menambah data</div></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <span class="left">
+    <a class="grey_button_notext add_barang" onclick="addRecord()" href="#people/<%= @person.id %>/employments?tab=0" id="link_add_work_contract"> <span style="margin-right: 0pt;" class="icons add_ico">&nbsp;</span> </a>
+  </span>
+
+<% end %>
+
+<script>
+
+  $(document).ready(function(){    
+    $(".ui-date, .ui-date2").datepicker({
+      showOn: "button",
+      buttonImage: "<%=ApplicationController::APPSCHEF_URL%>/images/calendar.gif",
+      buttonImageOnly: true
+    })
+  });
+
+  function onChangeButton(row, id){
+    data = '';
+    data = '<input type="hidden" value="' + id + '" name="work_contract[id][' +id + ']"';
+    data += '<div id="is_link_edit_' + row + '" style="display:none;">';
+    data += '<div class="left"><a onclick="onUpdate(' + row + ',' + id + ')" href="#people/<%= @person.id %>/employments?tab=0">Save</a></div>';
+    data += '<div class="left">&nbsp;|&nbsp;<a onclick="onCancelWhenEdit(' +row + ',' +id +') href="#people/<%= @person.id %>/employments?tab=0">Cancel</a></div>';
+    data += '</div>';
+    data += '<div id="is_link_not_edit_' + row + '">';
+    data += '<div class="left"><a onclick="onEditWorkContract(' + row + ')">Edit</a></div>';
+    data += '<div class="left">&nbsp;|&nbsp;<a onclick="removeFormField(' + row + ',' + id +')">Delete</a></div>';
+    data += '</div>';
+    return data;
+  }
+
+  function onEditWorkContract(row){
+    $('#div_input_type_' + row + '').show();
+    $('#div_input_start_' + row + '').show();
+    $('#div_input_end_' + row + '').show();
+    $('#div_label_type_' + row + '').hide();
+    $('#div_label_start_' + row + '').hide();
+    $('#div_label_end_' + row + '').hide();
+    $('#div_input_is_permanent_' + row + '').show();
+    $('#div_label_is_permanent_' + row + '').hide();
+    $('#div_input_is_daily_' + row + '').show();
+    $('#div_label_is_daily_' + row + '').hide();
+    $('#is_link_edit_' + row + '').show();
+    $('#is_link_not_edit_' + row + '').hide();
+  }
+
+  function onCancelWhenEdit(row, id){
+    $.ajax({
+      url: "/cancel_work_contract",
+      data: "row=" + row + "&id=" + id + "&person_id=<%= @person.id %>" ,
+      type: "GET"
+    });
+  }
+
+  function getContractLainnya(current){
+    var val = $("#type_" + current).val();
+    if (val == "lainnya"){
+      $("#div_input_" + current).show();
+      $("#div_input_type_" + current).hide();
+    }
+  }
+
+  function onKembali(current){
+    $("#div_input_" + current).hide();
+    $("#div_input_type_" + current).show();
+    $("#contract_name_" + current).val('');
+    $("#type_" + current).val('');
+  }
+  
+
+  var current = <%= row %> ;
+
+  function addRecord(){
+<% if @person.work_contracts.blank? %>
+      $('#tr_blank').remove();
+<% end %>
+       
+    $("#div_btn_work_contract").show();    
+    var data = "<tr id='tr_" + current + "'>";
+
+    data += '<td class="left-text"><div id="div_input_' + current + '" style="display:none;"><input type="text" id="contract_name_' + current + '" style="width:200px;" name="work_contract[contract_name][' + current + ']"><a onclick="onKembali(' + current + ')">Kembali</a></div>';
+    data += '<div id="div_input_type_' + current + '"><select id="type_' + current + '" name="work_contract[contract_type_id]['+ current + ']" onchange="getContractLainnya(' + current + ')">';
+    var select = '<option value="">Pilih jenis kontrak</option>';
+    <% ContractType.by_company(current_company_id).each do |p| %>
+        select += '<option value="<%= p.id %>"><%= p.contract_type_name %></option>';
+    <% end %>
+    select += '<option value="lainnya">Buat baru</option>';
+    data += select;
+    data += '</select></div><div id="div_label_type_' + current + '"></td>';
+
+    data += '<td class="left-text"><div id="div_input_start_' + current + '"><input type="text" id="contract_start_' + current + '" class="ui-date" name="work_contract[contract_start][' + current + ']" style="width:88px !important"></div>';
+    data += '<div id="div_label_start_' + current + '"></div></td>';
+
+    data += '<td class="center-text"><div id="div_input_end_' + current + '"><input type="text" id="contract_end_' + current + '" class="ui-date" name="work_contract[contract_end][' + current + ']" style="width:88px !important"></div>';
+    data += '<div id="div_label_end_' + current + '"></div></td>';
+
+    data += get_is_permanent_employee(current);
+    data += get_is_daily_employee(current);
+
+    data += '<td class="center-text">';
+    data += "<div id='ajax-load1' style='display: none' class='ajax-load'>";
+    data += "<img src='/images/ajax-loader.gif'> <span>Silahkan tunggu...</span>";
+    data += "</div>";
+    data += '<div id="link_button_' + current + '">';
+    data += "<div class='left'><a onclick=\"saveWithoutID('" + current + "')\" class='left' id='add_work_contract_" + current + "' href='#people/<%= @person.id %>/employments?tab=0'>Save</a></div>";
+    data += "<div class='left'>&nbsp;|&nbsp;<a onclick=\"removeFormFieldWithoutID('" + current + "')\">Cancel</a></div>";
+    data += '</div></td>';
+    data += "</tr>";
+    $('#tb_work_contract').append(data);
+    $(".ui-date, .ui-date2").datepicker({
+      showOn: "button",
+      buttonImage: "<%= ApplicationController::APPSCHEF_URL %>/images/calendar.gif",
+      buttonImageOnly: true
+    });
+    current++;
+  }
+
+  function get_is_permanent_employee(current){    
+    var select = '<select id="is_pemanent_' + current + '" name="work_contract[is_permanent_employee]['+ current + ']"  style="width:80px;">';
+    select +='<option value="0">Kontrak</option>';
+    select +='<option value="1">Tetap</option>';
+    select +='</select></div>';
+
+    var data = '<td class="center-text"><div id="div_input_is_permanent_' + current + '">'
+    data += select;
+    data += '<div id="div_label_is_permanent_' + current + '"></div></td>';
+    return data
+  }
+
+  function get_is_daily_employee(current){
+    var select = '<select id="is_daily_' + current + '" name="work_contract[is_daily_employee]['+ current + ']" style="width:80px;">';    
+    select +='<option value="0">Bulanan</option>';
+    select +='<option value="1">Harian</option>';
+    select +='</select></div>';
+    var data = '<td class="center-text"><div id="div_input_is_daily_' + current + '">';
+    data += select;
+    data += '<div id="div_label_is_daily_' + current + '"></div></td>';
+    return data;
+  }
+  
+  function removeFormField(row, id){
+    $('#div_sign').html('Kontrak Kerja');
+    $('#div_btn_hapus').html('<input type="button" value="Ya" class="blue_button" onclick="delete_work_contract(' + row +',' + id + ')"/>');
+    jQuery().colorbox({width:"auto",height:"auto", inline:true,href:"#message_delete"
+    });      
+  }
+
+  function delete_work_contract(row, id){
+    url = "/destroy_work_contract";
+    $.ajax({
+      url: url,
+      beforeSend:function(request){$('#spinner').show(); $("#ajax-load").show();CloseNotify();},
+          complete:function(request){
+            $('#spinner').hide();
+            $("#ajax-load").hide();},
+          success:function(request){
+            $.fn.colorbox.close();
+            $('.notify_error').show();
+          },
+      data: "person_id=<%= @person.id %>&id=" + id + "&row=" + row,
+      type: "GET"
+    });
+  }
+
+  function removeFormFieldWithoutID(row){
+    url = "/destroy_work_contract";
+    $.ajax({
+      url: url,
+      data: "person_id=<%= @person.id %>",
+      type: "GET",
+      success: function(){
+        $.fn.colorbox.close();
+      }
+    });
+  }
+
+  function onUpdate(row, id){
+    var type = $('#type_' + row + '').val();
+    var start = $('#contract_start_' + row + '').val();
+    var end = $('#contract_end_' + row + '').val();
+    var cname = $('#contract_name_' + row + '').val();
+    var is_daily = $('#is_daily_' + row + '').val();
+    var is_permanent = $('#is_pemanent_' + row + '').val();
+    var param = 'row=' + row + '&id=' + id + '&contract[contract_type_id]=' + type 
+    param += '&contract[contract_start]=' + start + '&contract[contract_end]=' + end
+    param += '&contract[person_id]=<%= @person.id %>&contract[contract_name]=' + cname
+    param += '&contract[is_daily_employee]=' + is_daily + '&contract[is_permanent_employee]=' + is_permanent
+    $.ajax({
+      type: 'POST',
+      beforeSend:function(request){$('#spinner').show(); $("#ajax-load").show();CloseNotify();$('#link_button_'+row).hide();},
+      complete:function(request){
+        $('#spinner').hide();
+        $("#ajax-load").hide();},
+      success:function(request){
+        $('.notify_error').show();$('#link_button_'+row).show();
+      },
+      url: '/update_work_contract',
+      data:param
+    });
+  }
+
+  function saveWithoutID(row){
+    var type = $('#type_' + row + '').val();
+    var start = $('#contract_start_' + row + '').val();
+    var end = $('#contract_end_' + row + '').val();
+    var cname = $('#contract_name_' + row + '').val();
+    var is_daily = $('#is_daily_' + row + '').val();
+    var is_permanent = $('#is_pemanent_' + row + '').val();
+    var message = getMessage(type,start,end);
+    var param = 'row=' + row + '&id=&contract[contract_type_id]=' + type + '&contract[contract_start]=' + start
+        param += '&contract[contract_end]=' + end + '&contract[person_id]=<%= @person.id %>&contract[contract_name]=' + cname
+        param += '&contract[is_daily_employee]=' + is_daily + '&contract[is_permanent_employee]=' + is_permanent
+    if ( message == ""){
+      $.ajax({
+        type: 'POST',
+         beforeSend:function(request){$('#spinner').show(); $("#ajax-load").show();$(".ajax-load").show();CloseNotify();$('#link_button_'+row+'').hide();},
+          complete:function(request){
+            $('#spinner').hide();
+            $("#ajax-load").hide();},
+          success:function(request){
+            $('.notify_error').show();$('#link_button_'+row).show();
+          },
+        url: '/create_work_contract',
+        data: param
+      });
+    } else{
+      alert(message)
+    }
+  }
+
+  function getMessage(type,start,end){
+    var message = "";
+    if (type == ""){
+      message = "Jenis kontrak tidak boleh kosong. ";
+    }
+    if (start==""){
+      message += "Mulai kontrak tidak boleh kosong. ";
+    }
+    if (start != "" && end != ""){
+      var a = start.split("/")
+      var b = end.split("/")
+      var istart = new Date(a[2],a[1],a[0]);
+      var iend = new Date(b[2],b[1],b[0]);
+      if (istart > iend ){
+        message += "Tanggal mulai harus lebih kecil dari tanggal selesai. ";
+      }
+    }
+    return message;
+  }
+
+
+</script>

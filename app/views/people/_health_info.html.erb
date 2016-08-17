@@ -1,0 +1,45 @@
+<div class="input big">
+  <% unless @is_user_login %>
+      <a class="grey_button_a add_barang top-right" id="edit_kesehatan" href="#edit_health/<%= @person.id %>" onclick="ajaxLoad('#edit_health/<%=@person.id%>')">
+        <span class="icons edit-icon">&nbsp;</span> Edit
+      </a>
+  <% end %>
+  <span class="input-field">
+    <label>Buta warna</label>:
+    <%= @person.color_blind=="ya" ? "ya" : @person.color_blind=="tidak" ? "tidak" : "-" %>
+  </span>
+  <span class="clear"></span>
+
+  <label>Fungsi Penglihatan</label>:
+  <%@upset = @person.left_minus +  @person.right_minus + @person.left_plus + @person.right_plus + @person.left_silinder + @person.right_silinder  %>
+   <%= @upset > 0 ? "ya" : "tidak" %>
+  </span>
+  <span class="clear"></span>
+
+  <span class="input-field">
+    <label>Golongan darah</label>:
+    <%= @person.blood_type.blank? ? "-" : @person.blood_type.upcase  %>
+  </span>
+  <span class="clear"></span>
+
+  <span class="input-field">
+    <label>Tinggi</label>:
+    <%= @person.height_in_cm.blank? ? "-" : "#{@person.height_in_cm} cm" %>
+  </span>
+  <span class="clear"></span>
+
+  <span class="input-field">
+    <label>Berat </label>:
+    <%= @person.weight_in_kg.blank? ? "-" : "#{@person.weight_in_kg} kg" %>
+  </span>
+  <span class="clear"></span>
+
+  <span class="input-field">
+    <label>Riwayat penyakit</label>:
+    <%= @person.known_illnesses.blank? ? "-" : @person.known_illnesses %>
+  </span>
+  <span class="clear"></span>
+
+</div>
+
+<%#= render :partial => "healths/list_disease" %>

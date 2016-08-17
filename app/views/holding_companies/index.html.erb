@@ -1,0 +1,52 @@
+  <div class="UIWell">
+    <div class="UIToolbarWell_Content UIContentBox_Gray">
+      <div class="UIToolbarWell_MainContent clearfix">
+        <span class="UIToolbarWell_Left">
+          <span class="UIToolbarWell_Button">
+            <a class="UIButton UIActionButton UIButton_Gray Icon_Btn UIActionButton_SuppressMargin" href="/holding_companies/new" bindpoint="root">
+              <span class="UIButton_Text" bindpoint="text">
+                <span class="UIButton_Icon UIButton_IconNoSpriteMap UIButton_IconSmallMonochromatic" style="background-position: 0pt -361px;"/></span>
+                  New
+              </span>
+            </a>
+          </span>
+        </span>
+      </div>
+    </div>
+  </div>
+
+<div id="pagelet_stream_header" style="padding-top: 10px;">
+  <div class="clearfix UIIntentionalStream_Top">
+    <div class="UIIntentionalStream_Top_Icon UIImageBlock clearfix">
+      <div class="UIImageBlock_Content UIImageBlock_ICON_Content">
+        <li class="UIIntentionalStream_Top_Header">
+          <span class="UIIntentionalStream_LiveHeader">Daftar Holding Company</span>
+        </li>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <div class="profile_bottom_container">
+    <% unless @holding_companies.blank? -%>
+     <table class="formtable">
+        <tr>             
+          <th>ID</th>
+          <th>Nama Perusahaan</th>
+          <th class="last">Aksi</th>
+        </tr>
+      <% @holding_companies.each do |comp| %>
+        <tr>
+          <td><%= comp.id %></td>
+          <td><%= comp.title.just_display %></td>
+          <td><%= link_to("", edit_holding_company_path(comp), :class=>"edit_link ")%>
+          <%#= link_to('', holding_company_path(comp), :method => :delete, :confirm => "Apakah anda yakin akan menghapus ini", :class => "delete_button UIObjectListing_RemoveLink")%>
+          </td>
+        </tr>
+      <%- end %>
+    </table>
+    <% else %>
+      <div style="text-align:center;padding-top:30px;"><h1>Belum ada Holding Company</h1></div>
+    <%- end %>
+  </div>
+  

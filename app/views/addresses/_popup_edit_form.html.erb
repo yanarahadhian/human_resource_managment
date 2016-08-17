@@ -1,0 +1,262 @@
+<% input_jalan = "input-field" %>
+<% err_jalan = error_message_on @address, :street1 %>
+<% input_jalan = "input-error" unless err_jalan.blank? %>
+
+<% input_kota = "input-field" %>
+<% err_kota = error_message_on @address, :city %>
+<% input_kota = "input-error" unless err_kota.blank? %>
+
+<% input_propinsi = "input-field" %>
+<% err_propinsi = error_message_on @address, :state %>
+<% input_propinsi = "input-error" unless err_propinsi.blank? %>
+
+<% input_telp = "input-field" %>
+<% err_telp = error_message_on @address, :no_telp %>
+<% input_telp = "input-error" unless err_telp.blank? %>
+
+<% input_rt = "input-field" %>
+<% err_rt = error_message_on @address, :rt %>
+<% input_rt = "input-error" unless err_rt.blank? %>
+
+<% input_rw = "input-field" %>
+<% err_rw = error_message_on @address, :rw %>
+<% input_rw = "input-error" unless err_rw.blank? %>
+
+<% input_no_telp = "input-field" %>
+<% err_no_telp = error_message_on @address, :no_telp %>
+<% input_no_telp = "input-error" unless err_no_telp.blank? %>
+
+<div class="input">
+<%= link_to "<span class='icons edit-icon'>&nbsp;</span>Edit", "#", :class=>"grey_button_a top-right", :onclick=>"onChangeField()"%>
+<% if controller_name == "addresses" %>
+  <span class="<%= input_propinsi %>">
+    <label>Provinsi<span class="redstar">*</span></label><span class="left">:&nbsp;</span>
+    <%= hidden_field_tag "autocomplete_address_state_array", @state, :id => 'autocomplete_address_state_array' %>
+    <div id="field_state" style="display:none;">
+      <select name="address[state]" id="address_state" onchange="set_citi()">
+        <option value="">Pilih</option>
+        <% @state.each do |p| %>
+          <% if p== @address.state %>
+            <option value="<%= p %>" selected><%= p %></option>
+          <% else %>
+            <option value="<%= p %>"><%= p %></option>
+          <% end %>
+        <% end %>
+      </select>
+      <%= err_propinsi %>
+    </div>
+    <div id="lbl_state">
+      <%= @address.state %>
+    </div>
+  </span>
+  <span class="clear"></span>
+  <div id="div_city">
+  <span class="<%= input_kota %>">
+    <%= hidden_field_tag "autocomplete_address_city_array", @city, :id => 'autocomplete_address_city_array' %>
+    <label>Kota / Kabupaten<span class="redstar">*</span></label><span class="left">:&nbsp;</span>
+    <div id="field_city" style="display:none;">
+      <select name="address[city]" id="address_city">
+        <option value="">Pilih</option>
+         <% @city.each do |p| %>
+           <% if p== @address.city %>
+             <option value="<%= p %>" selected><%= p %></option>
+           <% else %>
+             <option value="<%= p %>"><%= p %></option>
+           <% end %>
+         <% end %>
+      </select>
+      <%#= f.select :city, options_for_select(@city), { :prompt => "Pilih kota/propinsi"} , :selected=> @address.city%>
+      <%= err_kota %>
+    </div>
+    <div id="lbl_city">
+      <%= @address.city %>
+    </div>
+  </span>
+  </div>
+  <span class="clear"></span>
+<% else %>
+  <span class="input-field">
+    <label>Provinsi</label><span class="left">:&nbsp;</span>
+    <%= hidden_field_tag "autocomplete_address_state_array", @state, :id => 'autocomplete_address_state_array' %>
+    <div id="field_state" style="display:none">
+      <select name="address[state]" id="address_state" onchange="set_citi1()">
+        <option value="">Pilih kota/propinsi</option>
+        <% @state.each do |p| %>
+          <% if p== @address.state %>
+            <option value="<%= p %>" selected><%= p %></option>
+          <% else %>
+            <option value="<%= p %>"><%= p %></option>
+          <% end %>
+        <% end %>
+      </select>
+      <%= err_propinsi %>
+    </div>
+    <div id="lbl_state">
+      <%= @address.state %>
+    </div>
+  </span>
+  <span class="clear"></span>
+
+  <% style = "" %>  
+  <% if @address.city.blank? %>
+     <% style = "display:none" %>
+  <% end %>
+
+  <div id="div_city" style="<%= style %>">
+  <span class="input-field">
+    <%= hidden_field_tag "autocomplete_address_city_array", @city, :id => 'autocomplete_address_city_array' %>
+    <label>Kota / Kabupaten</label><span class="left">:&nbsp;</span>
+
+    <div id="field_city" style="display:none;">
+      <select name="address[city]" id="address_city">
+        <option value="">Pilih kota/propinsi</option>
+         <% @city.each do |p| %>
+           <% if p== @address.city %>
+             <option value="<%= p %>" selected><%= p %></option>
+           <% else %>
+             <option value="<%= p %>"><%= p %></option>
+           <% end %>
+         <% end %>
+      </select>
+      <%#= f.select :city, options_for_select(@city), { :prompt => "Pilih kota/propinsi"} , :selected=> @address.city%>
+      <%= err_kota %>
+    </div>
+    <div id="lbl_city">
+      <%= @address.city %>
+    </div>
+  </span>
+  </div>
+  <span class="clear"></span>
+ 
+<% end %>
+
+<span class="input-field">
+  <label>Kecamatan / Kelurahan</label><span class="left">:&nbsp;</span>
+  <div id="field_kelurahan" style="display:none;">
+    <%= f.text_field :kecamatan, :id => 'autocomplete_address_state', :autocomplete => 'off', :style=> "width:115px;" %> /
+    <%= f.text_field :kelurahan, :style=> "width:115px;", :style=> "width:115px;" %>
+  </div>
+  <div id="lbl_kelurahan">
+    <%= @address.kelurahan.blank? ? "-" : @address.kelurahan %> /
+    <%= @address.kecamatan.blank? ? "-" : @address.kecamatan %>
+  </div>
+</span>
+<span class="clear"></span>
+
+<span class="<%= input_jalan %>">
+  <label>Jalan <span class="redstar">*</span></label><span class="left">:&nbsp;</span>
+  <div id="field_street1" style="display:none;">
+    <%= f.text_field :street1, :style => "width: 210px;" %>
+    <%= err_jalan %>
+  </div>
+  <div id="lbl_street1">
+    <%= @address.street1 %>
+  </div>
+</span>
+<span class="clear"></span>
+
+<span class="<%= input_rt %> <%= input_rw %>">
+  <label>RT / RW</label><span class="left">:&nbsp;</span>
+  <div id="field_rt" style="display:none;">
+    <span class="left"><%= f.text_field :rt, :style => "width: 30px;" %> /</span>
+    <%= f.text_field :rw, :style => "width: 30px;" %>
+    <%= err_rt %>
+    <%= err_rw %>
+  </div>
+  <div id="lbl_rt">
+    <%= @address.rt.blank? ? "-" : @address.rt %> / <%= @address.rw.blank? ? "-" : @address.rw %>
+  </div>
+</span>
+<span class="clear"></span>
+
+<span class="<%= input_no_telp %>">
+  <label>No Telp </label><span class="left">:&nbsp;</span>
+  <div id="field_no_telp" style="display:none;">
+    <%= f.text_field :no_telp, :size=> "27px;", :maxlength => 15%>
+    <%= err_no_telp %>
+  </div>
+  <div id="lbl_no_telp">
+    <%= @address.no_telp.blank? ? "-" : @address.no_telp %>
+  </div>
+</span>
+<span class="clear"></span>
+
+<span class="input-field">
+  <label>Kode Pos</label><span class="left">:&nbsp;</span>
+  <div id="field_kode_pos" style="display:none;">
+    <%= f.text_field :kode_pos, :id => 'autocomplete_address_city', :autocomplete => 'off', :size=> "27px;"  %>
+  </div>
+  <div id="lbl_kode_pos">
+    <%= @address.kode_pos.blank? ? "-" : @address.kode_pos %>
+  </div>
+</span>
+</div>
+<span class="clear"></span>
+
+<script type="text/javascript">
+
+  $(document).ready(function(){
+    if($('#address_state').val()==""){$('#address_city').attr('disabled', 'disabled');}
+    $('#address_no_telp').numeric();
+    $('#family_address_attributes_no_telp').numeric();
+  });
+
+  function set_citi(){
+    var value = $('#address_state').val();
+    if (value==""){
+      value = "nil";
+    }
+    $.ajax({
+      url: "/change_city/" + value,
+      data: "sign=<%= controller_name %>",
+      type: "GET",
+      success: function() {
+        <% if controller_name== "families" %>
+          $("#div_city").show();
+        <% end %>
+      }
+    });
+  }
+
+  function set_citi1(){
+    var value = $('#address_state').val();
+    <% if controller_name== "families" %>
+      if (value==""){
+        $("#div_city").hide();
+        $("#address_city").val("");
+      }
+    <% end %>
+    $.ajax({
+      url: "/change_city/" + value,
+      data: "",
+      type: "GET",
+      success: function() {
+        <% if controller_name== "families" %>
+          $("#div_city").show();
+        <% end %>
+      }
+    });
+  }
+
+   function onChangeField(){
+    $('#field_street1').show();
+    $('#lbl_street1').hide();
+    $('#field_rt').show();
+    $('#lbl_rt').hide();    
+    $('#field_kelurahan').show();
+    $('#lbl_kelurahan').hide();
+    $('#field_city').show();
+    $('#lbl_city').hide();
+    $('#field_state').show();
+    $('#lbl_state').hide();
+    $('#field_no_telp').show();
+    $('#lbl_no_telp').hide();
+    $('#field_kode_pos').show();
+    $('#lbl_kode_pos').hide();
+    $('#div_link_edit').hide();
+    $('#button').show();
+    $('.input-help').show();
+    $('#title_detail').html("Edit Alamat");
+    $('.grey_button_a.top-right').hide();
+  }
+</script>

@@ -1,0 +1,110 @@
+<table>
+    <thead>
+        <tr>
+            <th >NIK</th>
+            <th class="left-text">
+                <a href="">Nama<span class="icons sorter_ico">&nbsp;</span></a>
+            </th>
+            <th class="left-text">Status</th>
+            <th class="left-text">NPWP</th>
+            <th class="left-text">Bruto / Bln</th>
+            <th class="left-text">PTKP</th>
+            <th class="left-text">PKP</th>
+            <th class="left-text">PPH 21</th>
+            <th class="left-text">Take home</th>
+            <th class="left-text">Perlakuan</th>
+        </tr>
+    </thead>
+    <tbody>
+        <% @salaries.each do |salary| %>
+            <tr>
+                <td>
+                    <%= salary.person.employee_identification_number %>
+                </td>
+                <td>
+                    <%= link_to salary.person.full_name, person_path(salary.person.id) %>
+                </td>
+                <td class="left-text">
+                    <%= salary.person.current_status.contract_type.contract_type_name %>
+                </td>
+                <td class="right-text">
+                    <%= salary.person.no_npwp %>
+                </td>
+                <td class="right-text">
+                    <%= link_to (format_no_currency(salary.gross_income)), salary_path(salary.id) unless salary.blank? %>
+                </td>
+                <td class="right-text">
+                    <%= format_no_currency(salary.ptkp) %>
+                </td>
+                <td class="right-text">
+                    <%= format_no_currency(salary.pkp) %>
+                </td>
+                <td class="right-text">
+                    <%= format_no_currency(salary.pph_indebted_per_month) %>
+                </td>
+                <td class="right-text">
+                    <%= format_no_currency(salary.final_take_home_pay) %>
+                </td>
+                <td>
+                    <%= link_to "Download", download_salary_path(salary) %>
+                </td>
+          </tr>
+      <% end %>
+    </tbody>
+</table>
+
+<div class="panelFilter">
+    <div class="pagination">
+        <%= link_to "", salaries_path(@salaries, :page => 1), :class => 'first-page' unless @salaries.current_page == 1 %>
+        <span class="paginationResult">
+            <%= @salaries.current_page %> - <%= @salaries.count %> dari <%= @salaries.total_pages %>
+        </span>
+        <%= will_paginate @salaries,{
+            :class          => 'pages',
+            :previous_label => '',
+            :next_label     => '',
+            :inner_window   => 5, 
+            :outer_window   => 1,
+            :separator      => ' ',
+            :param_name     => :page,
+            :params         => nil,
+            :page_links     => false,
+            :container      => true
+        } %> 
+        <%= link_to "", salaries_path(@salaries, :page => @salaries.total_pages), :class => 'last-page' unless @salaries.current_page == @salaries.total_pages  %>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+    // Select all or deselect all checkboxes
+    $(function () {
+        $('#checkall').click(function () {
+            $(this).parents('table:eq(0)').find(':checkbox').attr('checked', this.checked);
+        });
+    });
+
+    // Destroy salaries that selected on checboxes
+    function onDelete(){
+      var answer = confirm("Apakah Anda yakin?");
+        if ($('#honors tbody input:checked').length != 0 && answer ) {
+            var arr_params = new Array();
+            $('#honors tbody input:checked').each(function() {
+                arr_params = arr_params.concat($(this).val());
+            });
+            var controller = "/salaries/multiple_destroy";  
+            $.ajax({
+                type: "DELETE",
+                url: escape(controller),
+                data:"ids="+arr_params,
+                dataType:"JSON",
+                success: function(){
+                  $("#honors").html('<div style="margin-left:220px;margin-top:60px;"><img src="/images/loading2.gif"></div>').load( $(this).attr('url') );
+                }
+            })          
+        }
+        else{
+            return false;  
+        } 
+    };
+</script>

@@ -1,0 +1,230 @@
+<%= render :partial=> "layouts/shared/breadcrumbs" %>
+<fieldset class="fm-table">
+  <legend>
+    <a href="#" id="help_dash" class="icons help-top-icon" title="Click to show/hide information">&nbsp;</a>
+    Formasi Jabatan
+  </legend>
+  <%= render :partial => "layouts/howto/howto_content"%>
+  <div class="box-form">
+    <div class="panelFilter">
+      <table cellpadding="0" cellspacing="0">
+        <tbody>
+          <tr>
+            <td>
+              <a  class="grey_button2" id="filter_trigger_formasi_jabatan"> 
+                <span class="icons filter-ico">&nbsp;</span> Filter 
+              </a>
+            </td>
+          </tr>
+          <tr id="filter_block_formasi_jabatan">
+            <td>
+            	<div class="expand_filter"> 
+                <div id="filter_st">
+                  <% form_remote_for :filter_formasi_jabatan, :url => {:action => :find_statistik_get} , :method => :get, :html => {:id => "ajax_form_jabatan"} do |f| %>
+                    <div class="left-filter">
+                      <div class="filter_opt">
+                        <label>Formasi pada tanggal:</label>
+                        <%= f.text_field :employment_start, :class => "ui-date" %>
+                      </div>
+                    </div>
+                    
+                    <div class="right-filter">
+                      <div class="filter_opt">
+                        <label>Departemen:</label>
+                        <%= f.collection_select :department_id , Department.by_company(current_company_id).all, :id, :department_name, {:prompt => "Semua Departemen"}, :onChange => "onDepartmentFormasiJabatan(this)" %>
+                      </div>
+                      <div class="clear"></div>
+                      <div id="div_divisi_formasi_jabatan">
+                        <div class="filter_opt">
+                          <label>Bagian:</label>
+                          <%= f.collection_select :work_division_id , Division.by_company(current_company_id).all, :id, :name, {:prompt => "Semua Bagian"}, {:disabled => "disabled"} %>
+                        </div>
+                      </div>
+                      <div class="clear"></div>
+                    </div>
+                    <div class="clear"></div>
+                    <div class="center-text filter-btn" id="b1">
+                      <input type="hidden" name="txt_action" value="formasi_jabatan">
+                      <div id="load_formasi_jabatan" class="ajax-load" style="display: none">
+                        <img src="<%=  ApplicationController::APPSCHEF_URL %>/images/ajax-loader.gif">Processing...
+                      </div>
+                      <div id="button_formasi_jabatan_submit">
+                        <input type="button" class="grey_button2 none" value="Lihat statistik" name="commit" id="filter_formasi_jabatan_submit" onclick="cekValidateFormasiJabatan()">
+                      </div>
+                    </div>
+                  <% end %>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="clear"></div>  
+  <div style="display:none" id="table-fix_formasi_jabatan">
+  	<div id="parent_auto_formasi_jabatan">
+      <div class="table-over3 showed" id="content_formasi_jabatan_table" style="width:50%">     
+        <%= hidden_field_tag "page_num_formasi_jabatan",1 %>
+        <%= hidden_field_tag "sort_formasi_jabatan","firstname" %>
+        <%= hidden_field_tag "direction_formasi_jabatan","asc" %>         
+      </div>
+      <div class="chart-auto" id="chart_auto_formasi_jabatan" style="width: 50%;">
+        <div class="bar-show-chart" title="Tampilkan Grafik" id="show_chart" onClick="sliderChart8('medium');$(this).children('span').toggleClass('prev-ads-ico');">
+          <span class="icons next-ads-ico">&nbsp;</span>
+        </div>
+        <table class="no-border chart-block-table no-hover">
+          <tr>
+            <td valign="top" class="center-text" id="div_content_formasi_jabatan">
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+ 
+  <div class="clear"></div>
+
+ <div class="panelFilter">
+    <div class="pagination" id="pagination">
+      <%= render :partial => "formasi_paginate" %>
+    </div>
+  </div>
+</fieldset>
+
+<script type="text/javascript">
+  $(document).ready(function(){
+    $('#filter_block_formasi_jabatan').show();
+    $('#filter_trigger_formasi_jabatan').addClass("filter-active")
+    $('#filter_trigger_formasi_jabatan').click(function(){
+      $(this).toggleClass("filter-active");
+      $('#filter_block_formasi_jabatan').toggle();
+    });
+    $('.expand_filter .reset-filter-ico').click(function(){
+      $('#filter_block_formasi_jabatan').hide();
+      $('#filter_trigger_formasi_jabatan').removeClass("filter-active");
+    });
+    var background = 'rgba(255,255,255,0.9)';
+    var border = '#A9D5F2';
+    var font_color = '#56626a';
+    $('.bar-show-chartX').bt({
+      showTip: function(box) {
+	$(box).fadeIn('fast');
+      },
+      shrinkToFit: true,
+      hoverIntentOpts: {
+	interval: 0,
+	timeout: 9999
+      },
+      positions: ['right', 'right'],
+      fill: background,
+      strokeStyle: border,
+      overlap: 0,
+      centerPointY: 1,
+      centerPointX: 0,
+      cornerRadius: 4,
+      right: 20,
+      cssStyles: {
+	fontFamily: 'Arial,"Lucida Grande",Helvetica,Arial,Verdana,sans-serif',
+	fontSize: '12px',
+	color: font_color,
+	width: 'auto',
+	padding: 5,
+      },
+      shadow: true,
+      shadowColor: 'rgba(0,0,0,.2)',
+      shadowBlur: 5,
+      shadowOffsetX: 0,
+      hadowOffsetY: 0
+    });
+  });
+    //Chart
+  function sliderChart8(size){
+    var w;
+    switch(size){
+      case "small" : w = 40; break;
+      case "medium" : w = 70; break;
+      case "large" : w = 100;
+    }
+    var size_table = 100 - w;
+    if(!($('#content_formasi_jabatan_table').hasClass("showed"))){
+      $('#chart_auto_formasi_jabatan').css({width: w+"%"},"medium");
+      $('#content_formasi_jabatan_table').css({width: size_table+"%"},"medium");
+      $('#parent_auto_formasi_jabatan').removeAttr("style")
+      $('#content_formasi_jabatan_table').toggleClass("showed");
+    }else{
+      $('#content_formasi_jabatan_table').toggleClass("showed");
+      $('#chart_auto_formasi_jabatan').css({width: 1000+"px"},"medium");
+      $('#content_formasi_jabatan_table').css({width: 1050+"px"},"medium");
+      $('#parent_auto_formasi_jabatan').css("width","200%");
+    }
+  }
+</script>
+
+<script type="text/javascript">
+  $(document).ready(function(){
+    $('#div_formasi_jabatan').hide();
+    var dt = new Date;
+    year = dt.getFullYear();
+
+    $( ".ui-date, .ui-date2" ).datepicker({
+      buttonImageOnly: true
+    })
+  })
+
+  $("#filter_formasi_jabatan_employment_start").datepicker('setDate', new Date());
+  $("#filter_formasi_jabatan_employment_end").datepicker('setDate', new Date());
+
+  function showResultformasi_jabatan(page){
+    var action = '/dashboard/get_formasi_table?employment_start='+$('#filter_formasi_jabatan_employment_start').val()+'&department_id='+$('#filter_formasi_jabatan_department_id').val()+'&work_division_id='+$('#filter_formasi_jabatan_work_division_id').val()+'&filter=formasi_jabatan&page='+page;
+    var params = '&sort='+$('#sort_formasi_jabatan').val()+'&direction='+$('#direction_formasi_jabatan').val();
+    $.get(action+params,function(data){}); 
+  }
+
+  function sortResultformasi_jabatan(field_name,direction){
+    var page_num = $("#page_num_formasi_jabatan").val();
+    var action = '/dashboard/get_formasi_table?employment_start='+$('#filter_formasi_jabatan_employment_start').val()+'&department_id='+$('#filter_formasi_jabatan_department_id').val()+'&work_division_id='+$('#filter_formasi_jabatan_work_division_id').val()+'&filter=formasi_jabatan&page='+page_num+'&sort='+field_name+'&direction='+direction;
+    $.get(action,function(data){}); 
+  }
+
+  function cekValidateFormasiJabatan(){
+    sdate = $("#filter_formasi_jabatan_employment_start").val();
+    if (sdate == ""){
+      $('#div_formasi_jabatan').show();
+      $('#div_formasi_jabatan').html(htmlValidateFormasiJabatan('Formasi Perusahaan pada tanggal tidak boleh kosong'));
+      $('#formasi_desc_role').show();
+      $('#formasi_desc_role').html(htmlValidateFormasiJabatan('Formasi Perusahaan pada tanggal tidak boleh kosong'));
+      return false;
+    } else {
+      var form = document.getElementById('ajax_form_jabatan')
+      $('#button_formasi_jabatan_submit').hide();
+      $('#load_formasi_jabatan').show();
+      if(form.onsubmit()){
+        form.submit();
+      }
+      $.get('/dashboard/get_formasi_table?employment_start='+$('#filter_formasi_jabatan_employment_start').val()+'&department_id='+$('#filter_formasi_jabatan_department_id').val()+'&work_division_id='+$('#filter_formasi_jabatan_work_division_id').val()+'&filter=formasi_jabatan', function(data){});
+    }
+  }
+
+  function onDepartmentFormasiJabatan(data){
+    $.ajax({
+      url: "/change_divisi/" + data.value,
+      data: "type=report_formasi_jabatan",
+      type: "GET"
+    });
+  }
+
+  function htmlValidateFormasiJabatan(say){
+    var data = '';
+    data += '<div class="dashboard-chart" id="c3">';
+    data += '<fieldset class="chart-block4">';
+    data += '<div class="control-box"></div>';
+    data += '<div no-chart="">';
+    data += '<div id="desc_role" class="no-data-chart">' + say;
+    data += '</div>';
+    data += '</div>';
+    data += '</fieldset>';
+    data += '</div>';
+    return data;
+  }
+</script>

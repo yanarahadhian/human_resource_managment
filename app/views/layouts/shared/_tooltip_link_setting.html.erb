@@ -1,0 +1,33 @@
+<% is_edit_setting_hr =  HrSetting.is_edit_setting_hr?(current_company_id) %>
+<% is_holiday = HrSetting.is_holiday?(current_company_id) %>
+<% is_shift = HrSetting.is_shift?(current_company_id) %>
+<% is_org = HrSetting.is_organisasi?(current_company_id) %>
+<% is_payroll =  HrSetting.is_payroll?(current_company_id) %>
+<% is_people = HrSetting.is_people?(current_company_id) %>
+<% is_schedule = HrSetting.is_schedule?(current_company_id) %>
+
+<%  if !HrSetting.is_all_setting?(current_company_id) %>
+  $('.class_menu_tooltip_setting').qtip({
+    content: 'Sebelum mengelola perusahaan, silahkan setting aplikasi sehingga sesuai dengan peraturan perusahaan',
+    style :('db'),
+    position: {
+      adjust: { x: -15, y: 30 },
+      my: 'top right',
+      at: 'top right'
+    },
+    show: { ready: true}
+  });
+<% end %>
+
+<% if (is_edit_setting_hr && is_holiday && is_shift && is_org && is_payroll && is_people && !is_schedule) %>
+   $('.class_menu_tooltip_setting').qtip({
+     content: 'Klik menu setting kembali untuk mengatur penjadwalan',
+     style :('db1'),
+     position: {
+      adjust: { x: -15, y: 30 },
+      my: 'top right',
+      at: 'top right'
+    },
+    show: { ready: true }
+  });
+<% end %>

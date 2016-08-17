@@ -1,0 +1,42 @@
+<!-- popup -->
+<div style="display:none;">
+  <div class="frm-popup" id="popup_fix_presences">
+    <div id="popup2">
+      <div class="title-page-tambah">Sesuaikan Jam Kerja</div>
+      <fieldset>
+        <form id="super_form" method="get" action="/absences/fix_presences">
+          <span class="input">
+            <label>Tanggal Mulai</label> :
+            <%= text_field_tag "popup_temp_date",{},{:style => "width:140px !important;"}%>
+            <%= hidden_field_tag :date_start,{},{:id => "popup_date_pick"} %>
+          </span>
+          <div class="clear"></div>
+          <span class="input">
+            <label>Tanggal Selesai</label> :
+            <%= text_field_tag "popup_temp_date2",{},{:style => "width:140px !important;"}%>
+            <%= hidden_field_tag :date_end,{},{:id => "popup_date_pick2"} %>
+          </span>
+          <div class="clear"></div>
+          <hr>
+          <div class="center-text  box-form">
+            <input type="reset" id="info_section_cancel_basic" class="grey_button" value="Batal" name="info_section_cancel_basic" onclick="javascript:$.colorbox.close();">
+            <%= submit_to_remote 'save_button', 'Simpan', :url => fix_presences_absences_path,
+            :method => :get,
+            :update => "content_ajax",
+            :loading => "$('#spinner').show();$('#ajax-load').show();", 
+            :failure => "ShowNotifyMessage('Absensi karyawan tidak berhasil disesuaikan');",
+            :success => "ShowNotifyMessage('Absensi karyawan berhasil disesuaikan');$.colorbox.close();refresh_page('absences');$('#spinner').hide();$('#ajax-load').hide();",
+            :html => {:class => 'blue_button_a'} %>
+          </div>
+        </form>
+      </fieldset>
+    </div>
+  </div>
+</div>
+<!-- end popup -->
+<script type="text/javascript">
+  $(document).ready(function(){
+
+  });
+</script>
+

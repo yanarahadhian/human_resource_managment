@@ -1,0 +1,83 @@
+<% form_for @experience, :url => person_experience_path(@person.id,@experience.id) do |f| %>
+  <div id="box_retur_0">
+   
+      <%= f.hidden_field :data_type, :value => @data_type %>
+      <%= render :partial => 'experiences/popup_edit_form', :locals => {:f => f, :ex => @experience, :pdata_type => @data_type} %>
+  
+    <div class="clear"></div>
+      
+      <div id="button_edit_exp" class="center block-btn-form" style="display:none;">
+        <%= render :partial => "layouts/button_loader" %>
+        <input type="reset" id="info_section_cancel_basic" class="grey_button" value="Batal" name="info_section_cancel_basic" onclick="doCancelEdit()">
+        <input type="button" value="Simpan" name="info_section_save_basic" id="info_section_save_basic" class="blue_button" onclick="ajaxLoad1('<%= person_experience_path(@person.id,@experience.id) %>','button_edit_exp','ajax-load1')"/>
+      </div>
+    </div>
+  </div>
+<% end-%>
+
+<script>
+
+  function doCancelEdit(){
+    path = "<%= ApplicationController::BASE_URL %>/people/<%= params[:person_id] %>/experiences/cancel_popup_detail";
+    var strTitle = "Detail Pekerjaan"
+<% if @experience.experience_type == "experience_type" %>
+      strTitle = "Detail Organisasi"
+<% end %>
+    $.ajax({
+      type: "get",
+      url: path,
+      data :"id=<%= @experience.id %>",
+      dataType: 'script',
+      success: function(){
+        $('.title-page-tambah').html(strTitle);
+        $('.grey_button_a.top-right').show();
+      }
+    })
+  }
+  
+  function ajaxLoad1(url, div_btn, div_load){
+    $("#" + div_load + "").show();
+    $("#" + div_btn + "").hide();
+    var tampung = 0;
+    var stat = $('#cbStatus').val();
+    var tk = $('#experience_end_date').val();
+    if (stat=="non_aktif"){
+      if (tk==""){
+        tampung = 0;
+      }else{
+        tampung = 1;
+      }
+    }else{
+      tampung = 1;
+    }
+
+    if (tampung != 0){
+      $('.edit_experience').submit();
+      $.get(url, function(data) {
+        $("#ajax-load").hide();
+      });
+    }else{
+      $("#fe").show();
+      $('#experience_end_date').addClass('fe_error');
+      $('#if_error').addClass('input-error');
+      $("#ajax-load1").hide();
+      $("#button_edit_exp").show();
+    }
+  }
+
+  function checkvalue(cb){
+    if (cb.value=='non_aktif'){
+      $('#hideshow').show();
+      $("#fe").hide();
+      $('#experience_end_date').removeClass('fe_error');
+      $('#if_error').removeClass('input-error');
+    }else{
+      hidediv();
+    }
+  }
+  function hidediv(){
+    $('#cbStatus').val('aktif')
+    $('#experience_end_date').val('');
+    $('#hideshow').hide();
+  }
+</script>

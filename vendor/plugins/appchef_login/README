@@ -1,0 +1,94 @@
+h2. AppchefLogin
+============
+
+Platform login integration for Appchef application
+
+
+h3. Setup Rails 2.x
+===============
+
+* on config/environment.rb
+APPCHEF_URL = [url platform]
+CALLBACK_URL = [your app callback url]
+
+
+h3. Setup Rails 3.x
+===============
+
+* on config/application.rb
+APPCHEF_URL = [url platform]
+CALLBACK_URL = [your app callback url]
+
+
+h3. Example with Restful-Authentication
+===================================
+
+* create a migration, adding token_string to user model.
+<pre><code>
+  add_column :users, :token_string, :string
+  add_index :users, :token_string
+</code></pre>
+
+* libs/authenticated_system.rb
+<pre><code>
+  # modify def current_user line 12
+  @current_user ||= ... || login_from_platform) unless @current_user == false
+
+  # add new method login_from_platform
+  def login_from_platform
+    self.current_user = User.find_by_token_string(session[:platform_token]) unless session[:platform_token].nil?
+  end
+</code></pre>
+
+* add this lines of code to your app/models/user.rb
+<pre><code>
+  class User < ActiveRecord::Base
+    # initiate appchef_login
+    appchef_login
+
+    # create platform user
+    def self.create_from_platform(platform_user, token_string)
+      new_user = User.new(:name => platform_user['name'], :login => platform_user['login'], :password => "", :email => platform_user['email'])
+      new_user.token_string = token_string
+
+      new_user.save(false)
+
+      new_user
+    end
+
+    # get platform user information
+    def self.setup_platform_user(token_string)
+      platform_user = get_platform_user(token_string)
+
+      user = User.create_from_platform(platform_user['user'], token_string)
+
+      user
+    end
+</code></pre>
+
+* adding callback url in your controller
+<pre><code>
+  # callback url, retrieve token string from platform
+  # logged in user if exist or create new user
+  def callback
+    session[:platform_token] = params[:token_string]
+    if self.current_user.nil?
+      User.setup_platform_user(params[:token_string])
+    end
+    redirect_to '/'
+  end
+</code></pre>
+
+* in your view
+<pre><code>
+  # add login button
+  # create platform session and your app session
+  <%= appchef_login_button %>
+
+  # add logout button
+  # clear platform session and redirected to your app logout link
+  <%= appchef_logout_button('/logout') %>
+</code></pre>
+
+
+Copyright (c) 2011 David Angga Prasetya, released under the MIT license

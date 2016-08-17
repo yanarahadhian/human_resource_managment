@@ -1,0 +1,14 @@
+<%- if data && data.any? -%>
+  <span class="UIToolbarWell_Right">
+    <% if data.previous_page -%>
+    <span class="UIPager_ButtonWrapper " bindpoint="backWrapper">
+    <%= link_to("", params.merge(:page => data.previous_page), {:class=>"UIPager_Button UIPager_ButtonBack", :bindpoint=>"backRoot"}) %>
+    </span>
+    <% end -%>
+    <% if data.next_page -%>
+      <span class="UIPager_ButtonWrapper" bindpoint="forwardWrapper">
+      <%= link_to("", params.merge(:page => data.next_page), {:class=>"UIPager_Button UIPager_ButtonForward", :bindpoint=>"forwardRoot"}) %>
+    </span>
+    <% end -%>
+  </span>
+<% end -%>

@@ -1,0 +1,10 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+satu:
+   id: 1
+   basic_salary: 	4000000
+   cooperation_cut: 25000
+   company_id: 32
+   person_id: 1
+   valid_from: "2012-03-01"
+   valid_to: "2012-03-15"

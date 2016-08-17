@@ -1,0 +1,67 @@
+<% content_for :main_nav do %>
+  <li class="first"><%= link_to "#{image_tag('/images/icons/text_list_bullets.png', :alt => 'List')} List", "/employees"  %></li>
+	<li><%= link_to "#{image_tag('/images/icons/add.png', :alt => 'New')} New", "/employees/new" %></li>
+<% end -%>
+
+<div class="block">
+  <div class="secondary-navigation">
+    <ul class="wat-cf">
+      <li class="first"><%= link_to "Profile", "/employees/1" %></li>
+			<li><%= link_to "Addresses", '/addresses/1' %></li>
+      <li><%= link_to "Families", "/families/1" %></li>
+      <li class="active"><%= link_to "Educations", '/educations/1' %></li>
+			<li><%= link_to "Experiences", '/experiences/1' %></li>
+			<li><%= link_to "Employments", '/employments/1' %></li>
+			<li><%= link_to "Trainings", '/trainings/1' %></li>
+			<li><%= link_to "Violations", '/violations/1' %></li>
+    </ul>
+  </div>          
+  <div class="content">
+		<h2 class="title">Educations of <%= link_to "James Bright", "/employees/1"%></h2>
+    <div class="inner">
+        <p>
+          <b>Institution Name :</b>
+          Computer University
+        </p>
+
+        <p>
+          <b>Institution Type:</b>
+          College
+        </p>
+				<p>
+          <b>Address :</b>
+					1000 Reunion Way, Reunion. Florida
+        </p>
+        <p>
+          <b>Field Major :</b>
+          Computer Engineering
+        </p>
+
+        <p>
+          <b> Entry Year :</b>
+          2002
+        </p>
+
+        <p>
+          <b>Graduation Year :</b>
+          2005
+        </p>
+				<p>
+          <b>Nilai Akhir :</b>
+          3.88
+        </p>
+				<p>
+          <b>Description :</b>
+          Blah blah blah blah blah blah blah
+					Blah blah blah blah blah blah blah<br/>
+					Blah blah blah blah blah blah blah
+        </p>
+				<%= link_to "#{image_tag("web-app-theme/application_edit.png", :alt => "#{t("web-app-theme.edit", :default=> "Edit")}")} #{t("web-app-theme.edit", :default=> "Edit")}", '/educations/1/edit', :class => "button" %> 
+		      <%= link_to "#{image_tag("web-app-theme/cross.png", :alt => "#{t("web-app-theme.delete", :default=> "Delete")}")} #{t("web-app-theme.delete", :default => "Delete")}", "/educations/1", :method => "delete", :class => "button", :confirm => "#{t("web-app-theme.confirm", :default => "Are you sure?")}" %><br/>
+        <hr/><br/>
+<div class="group navform wat-cf">   
+		<%= link_to "#{image_tag("icons/add.png", :alt => "New")} New", '/educations/new', :class => "button", :style => 'float:right' %> 
+		</div>
+    </div>
+  </div>
+</div>

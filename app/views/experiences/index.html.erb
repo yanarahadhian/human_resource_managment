@@ -1,0 +1,125 @@
+<% content_for :main_nav do %>
+  <li class="first"><%= link_to "#{image_tag('/images/icons/text_list_bullets.png', :alt => 'List')} List", people_path  %></li>
+  <li><%= link_to "#{image_tag('/images/icons/add.png', :alt => 'New')} New", new_person_path %></li>
+<% end -%>
+
+<div class="block">
+  <%= person_link_col(params[:person_id]) %>
+  <div class="content">          
+    <h2 class="title">List Pengalaman Kerja</h2>
+    <div class="inner">
+      <% unless @person.exp_by_type('work').blank? -%>
+        <table class="table">
+          <tr>
+            <th>Perusahaan</th>
+            <th style="width: 220px">Periode</th>
+            <th>Jabatan</th>
+            <th>Keterangan</th>
+            <th class="last">&nbsp;</th>
+          </tr> 
+          <% @person.exp_by_type('work').each do |exp| %>            
+            <td><%= exp.previous_company.company_name.display unless exp.previous_company.blank? %></td>
+            <td><%= exp.start_date.to_s%>
+                <%= ' - ' + zero_to_now(exp.end_date) unless exp.end_date.blank? %>
+            </td>
+            <td><%= exp.position_held.display + ', ' + exp.division.display %></td>
+            <td>Keterangan Lain : <%= label_tag('expander', exp.job_description.display, :class => 'expander') %>
+              <br/>Alasan berhenti : <%= label_tag('expander', exp.reason_of_termination.display, :class => 'expander') %>.
+            </td>
+            <td><%=  link_to 'Edit', edit_person_experience_path(@person,exp) %> | <%=  link_to 'Hapus', person_experience_path(@person,exp), :confirm => 'Apakah kamu yakin ?', :method => :delete %></td>
+            </tr>
+          <% end %>
+        </table>
+      <% else -%>
+        <br/>
+        <h2>Belum ada pengalaman kerja</h2>
+        <br/>
+      <% end -%>
+      <%= link_to "#{image_tag('/images/icons/user_add.png', :alt => 'Tambah Pengalaman Kerja')} Create new", person_new_experience_path(@person,'work'), :class => "button" %>
+      <div class="actions-bar wat-cf">
+        <div class="actions">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr/>
+
+  <div class="content">          
+    <h2 class="title">List Riwayat organisasi</h2>
+    <div class="inner">
+      <% unless @person.exp_by_type('organizational').blank? -%>
+        <table class="table">
+          <tr>
+            <th>Organisasi</th>
+            <th style="width: 220px">Periode</th>
+            <th>Jabatan</th>
+            <th>Keterangan</th>
+            <th class="last">&nbsp;</th>
+          </tr> 
+          <% @person.exp_by_type('organizational').each do |exp| -%>
+            <tr>
+              <td><%= exp.company_name.display %></td>
+              <td><%= exp.start_date.to_s + ' - ' + zero_to_now(exp.end_date) %></td>
+              <td><%= exp.position_held.display + ', ' + exp.division.display %></td>
+              <td>Keterangan : <%= label_tag('expander', exp.job_description.display, :class => 'expander') %>
+              
+                <br/>Alasan berhenti : <%= label_tag('expander', exp.reason_of_termination.display, :class => 'expander') %>.
+              </td>
+              <td><%=  link_to 'Edit', edit_person_experience_path(@person,exp) %> | <%=  link_to 'Hapus', person_experience_path(@person,exp), :confirm => 'Apakah kamu yakin ?', :method => :delete %></td>
+            </tr>
+            </tr>
+          <% end -%>
+        </table>
+      <% else -%>
+        <br/>
+        <h2>Belum ada riwayat organisasi</h2>
+        <br/>
+      <% end -%>
+      <%= link_to "#{image_tag('/images/icons/user_add.png', :alt => 'Tambah Riwayat organisasi')} Create new", person_new_experience_path(@person,'organizational'), :class => "button" %>
+      <div class="actions-bar wat-cf">
+        <div class="actions">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr/>
+
+  <div class="content">          
+    <h2 class="title">List Riwayat Pelatihan</h2>
+    <div class="inner">
+      <% unless @person.exp_by_type('training').blank? -%>
+        <table class="table">
+          <tr>
+            <th>Perusahaan</th>
+            <th style="width: 220px">Periode</th>
+            <th>Training</th>
+            <th>Keterangan</th>
+            <th class="last">&nbsp;</th>
+          </tr> 
+          <% @person.exp_by_type('training').each do |exp| %>
+            <tr>
+              <td><%= exp.company_name.display %></td>
+              <td><%= exp.start_date.to_s + ' - ' + zero_to_now(exp.end_date) %></td>
+              <td><%= exp.position_held.display + ', ' + exp.division.display %></td>
+              <td>Keterangan : <%= label_tag('expander', exp.job_description.display, :class => 'expander') %>
+                <br/>Alasan berhenti : <%= label_tag('expander', exp.reason_of_termination.display, :class => 'expander') %>.
+              </td>
+              <td><%=  link_to 'Edit', edit_person_experience_path(@person,exp) %> | <%=  link_to 'Hapus', person_experience_path(@person,exp), :confirm => 'Apakah kamu yakin ?', :method => :delete %></td>
+            </tr>
+          <% end %>
+        </table>
+      <% else -%>
+        <br/>
+        <h2>Belum ada riwayat pelatihan</h2>
+        <br/>
+      <% end -%>
+      <%= link_to "#{image_tag('/images/icons/user_add.png', :alt => 'Tambah Riwayat Pelatihan')} Create new", person_new_experience_path(@person,'training'), :class => "button" %>
+      <div class="actions-bar wat-cf">
+        <div class="actions">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,128 @@
+<div class="panelFilter">
+  <table cellspacing="0" cellpadding="0">
+    <tbody>
+      <tr>
+        <td width="103px">
+          <div id="action_menu">
+          <ul>
+              <li>
+                <a class="grey_button2">
+                  <span class="left">More Actions</span>
+                  <span class="icons drop_arrow_ico">&nbsp;</span>
+                </a>
+                <div class="clear"></div>
+                <ul>
+                  <li style="cursor: default; list-style-image: none;">
+                    <a class="list" onclick="onDelete(3)">Delete</a>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </td>
+        <td>
+          <div class="pagination">
+            <span class="add-button right">
+              <a href="#memorandums/new?pers_id=<%= @person.id %>" class="grey_button2">
+                <span class="icons add_ico">&nbsp;</span>
+                Tambah Pelanggaran
+              </a>
+            </span>
+          </div>
+          <div class="clear"></div>
+       </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<div class="clear"></div>
+<table id="violation_table">
+  <thead>
+	  <tr>
+      <th width="30"><input type="checkbox"/></th>
+		  <th width="70">Kategori</th>
+			<th width="108" class="center-text">Keterangan</th>
+			<th width="93" class="center-text">Waktu</th>
+			<th width="130" class="left-text">Hukuman</th>
+			<th width="93" class="left-text">Berlaku Sampai</th>
+			<th width="100" class="left-text">Edit</th>
+		</tr>
+	</thead>
+  <tbody>
+    <% unless @violations.blank? -%>
+      <% @violations.each do |violation| %>
+        <% suntil = violation.active_until.blank? ? "" : violation.active_until.strftime("%Y-%m-%d") %>
+        <tr>
+          <td class="center-text">
+            <%= check_box_tag'myrow[ids][]', violation.id, false %>
+          </td>
+          <td class="left-text"><%= violation.violation_category.blank? ? "-" : violation.violation_category %></td>
+          <td class="left-text"><%= violation.violation_description.blank? ? "-" : violation.violation_description %></td>
+          <td class="left-text"><%= violation.occurence_date.blank? ? "" : violation.occurence_date.strftime("%d/%m/%Y") %></td>
+          <td>
+            <% unless violation.action_taken.blank? %>
+
+              <%= violation.action_taken.include?('SP') ? violation.action_taken + ' sampai ' + suntil : violation.action_taken %>
+            <% end %>
+          </td>
+          <td><%= suntil %></td>
+          <td>
+            <span class="icons edit-icon">&nbsp;</span>
+            <span class="left"><a class="grey_button4" href="#memorandums/<%= violation.id %>/edit?pers_id=<%= @person.id %>">Edit</a></span>
+          </td>
+        </tr>
+      <% end %>
+    <% else -%>
+      <tr class="no-data">
+        <td colspan="7" class="center-text"><div class="description">Belum Ada Data Pelanggaran. </div><div class="info">Silahkan klik<a href="#memorandums/new?pers_id=<%= @person.id %>"> Tambah Pelanggaran</a> untuk menambah data</div></td>
+      </tr>
+    <% end -%>
+  </tbody>
+</table>
+
+<script>
+  
+  var gaiSelectedViolation = []
+  $(document).ready(function(){
+    $('#violation_table thead tr th input').live('click', function () {
+      if ($(this).is(":checked")) {
+        $('#violation_table tbody tr td input').each(function (){
+          $(this).attr( 'checked', true );
+          $(this).parent().parent().addClass('row_selected');
+          var iId = this ;
+          if ( jQuery.inArray(iId.value, gaiSelectedViolation) == -1 ){
+            gaiSelectedViolation[gaiSelectedViolation.length++] = iId.value;
+          }
+        });
+      }
+      else{
+        $('#violation_table tbody tr').each(function (){
+          $(this).removeClass('row_selected');
+          var iId = $('#violation_table tbody tr td input');
+          gaiSelectedViolation = [];
+          iId.attr( 'checked', false );
+        });
+      }
+    }); 
+ });
+
+ function delete_pelanggaran(){
+   var arr_params = new Array();
+   $('#violation_table tbody input:checked').each(function() {
+     arr_params = arr_params.concat($(this).val());
+   });
+   var controller = "/violations/delete_multiple";
+   $("#ajax-load").show();
+   $.ajax({
+     type: "post",
+     url: escape(controller),
+     data:{'_method': 'post',"ids":arr_params,"person_id":<%= @person.id %>},
+       dataType: 'script',
+       success: function(){
+         $("#ajax-load").hide();
+         $.fn.colorbox.close();
+       }
+    })
+  };
+  
+ </script>

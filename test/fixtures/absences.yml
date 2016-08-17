@@ -1,0 +1,30 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+satu:
+  id: 1
+  company_id: 32
+  person_id: 1
+  absence_date: "2012-03-02"
+  absence_type_id: 1
+dua:
+  id: 2
+  company_id: 32
+  person_id: 1
+  absence_date: "2012-03-04"
+  absence_type_id: 2
+
+tiga:
+  id: 3
+  company_id: 32
+  person_id: 1
+  absence_date: "2012-03-08"
+  absence_type_id: 3
+empat:
+  id: 4
+  company_id: 32
+  person_id: 1
+  absence_date: "2012-03-09"
+  absence_type_id: 4
+#
+# two:
+#   column: value

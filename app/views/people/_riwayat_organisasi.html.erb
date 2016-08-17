@@ -1,0 +1,125 @@
+<div class="panelFilter">
+  <table cellspacing="0" cellpadding="0">
+    <tbody><tr>
+        <td width="103px">
+          <div id="action_menu">
+            <ul>
+              <li>
+                <a class="grey_button2">
+                  <span class="left">More Actions</span>
+                  <span class="icons drop_arrow_ico">&nbsp;</span>
+                </a>
+                <div class="clear"></div>
+                <ul>
+                  <li style="cursor: default; list-style-image: none;"><a onclick="onDelete(3)" class="list">Delete</a></li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </td>
+        <td>
+          <div class="pagination">
+            <span class="add-button right">
+              <a id="add_organisasi" href="/popup_add_experience/<%= @person.id %>/organizational" class="grey_button2">
+                <span class="icons add_ico">&nbsp;</span>
+                Tambah Organisasi
+              </a>
+            </span>
+          </div>
+          <div class="clear"></div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<div class="clear"></div>
+<table id="org_table">
+  <thead>
+    <tr>
+      <th width="30"><input type="checkbox"/></th>
+      <th width="85" class="center-text">Periode</th>
+      <th width="165" class="right-text">Nama Organisasi</th>
+      <th width="126" class="center-text">Jabatan</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% unless @person.exp_by_type('organizational').blank? -%>
+      <% @person.exp_by_type('organizational').each do |exp| %>
+        <tr>
+          <td class="center-text"><%= check_box_tag'myrow[ids][]', exp.id, false %></td>
+          <td class="center"><%= exp.start_date.to_s + ' - ' + zero_to_now(exp.end_date) %></td>
+          <td class="left-text"><a id="edit_organizational_<%= exp.id %>" href="/popup_edit_experience/<%= @person.id %>/<%= exp.id %>/organizational"><%= exp.company_name.display %></a></td>
+          <td class="left-text"><%= exp.position_held.blank? ? "-" :  "#{exp.position_held} ," %> <%= exp.division.blank? ? "-" : exp.division %></td>
+        </tr>
+      <%end%>
+    <% else %>
+      <tr class="no-data">
+        <td colspan="4" class="center-text"><div class="description">Belum Ada Data Organisasi. </div><div class="info">Silahkan klik<a id="add_organisasi2" href="/popup_add_experience/<%= @person.id %>/organizational"> Tambah Organisasi</a> untuk menambah data</div></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>   
+<script>
+  var gaiSelectedOrgs = []
+  $(document).ready(function(){
+<% @person.exp_by_type('organizational').each do |exp| %>
+      $("#edit_organizational_<%= exp.id %>").colorbox({width:"40%",height:"540px", iframe:true,
+        onClosed:function(){
+          $('#riwayat_organisasi').load('<%= ApplicationController::BASE_URL %>/riwayat_experience/<%= @person.id %>/organizational');
+        }
+      });
+<%end%>
+    $("#add_organisasi").colorbox({width:"40%",height:"520px", iframe:true,
+      onClosed:function(){
+        $('#riwayat_organisasi').load('<%= ApplicationController::BASE_URL %>/riwayat_experience/<%= @person.id %>/organizational');
+      }
+    });
+
+    $("#add_organisasi2").colorbox({width:"40%",height:"540px", iframe:true,
+      onClosed:function(){
+        $('#riwayat_organisasi').load('<%= ApplicationController::BASE_URL %>/riwayat_experience/<%= @person.id %>/organizational');
+      }
+    });
+
+    $('#org_table thead tr th input').live('click', function () {
+      if ($(this).is(":checked")) {
+        $('#org_table tbody tr td input').each(function (){
+          $(this).attr( 'checked', true );
+          $(this).parent().parent().addClass('row_selected');
+          var iId = this ;
+          if ( jQuery.inArray(iId.value, gaiSelectedOrgs) == -1 ){
+            gaiSelectedOrgs[gaiSelectedOrgs.length++] = iId.value;
+          }
+        });
+      }
+      else{
+        $('#org_table tbody tr').each(function (){
+          $(this).removeClass('row_selected');
+          var iId = $('#org_table tbody tr td input');
+          gaiSelectedOrgs = [];
+          iId.attr( 'checked', false );
+        });
+      }
+    } );
+      
+  });
+
+  function delete_organisasi(){
+    var arr_params = new Array();
+    $('#org_table tbody input:checked').each(function() {
+      arr_params = arr_params.concat($(this).val());
+    });
+    var controller = "/experiences/delete_multiple";
+    $("#ajax-load").show();
+    $.ajax({
+      type: "post",
+      url: escape(controller),
+      data:{'_method': 'post',"ids":arr_params,"person_id":<%= @person.id %>},
+      dataType: 'script',
+      success: function(){
+        $("#ajax-load").hide();
+        $.fn.colorbox.close();
+      }
+    })
+  };
+</script>

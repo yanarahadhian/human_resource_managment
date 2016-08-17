@@ -1,0 +1,230 @@
+<%= render :partial => "layouts/howto_menu" %>
+<div class="clear"></div>
+
+<fieldset class="fm-table">
+  <legend>
+    <a href="#" id="help_dash" class="icons help-top-icon" title="Click to show/hide information">&nbsp;</a>  
+    <%- if @current_person.user_id == current_user.id %>
+      Absensi Tahunan Saya
+    <%- else %>
+      <%= "Absensi Tahunan #{@current_person.full_name}" %>
+    <%- end %>
+  </legend>
+  <%= render :partial => "layouts/howto/howto_content"%>
+  <div class="button-block-top box-form">
+    <a href="<%=current_root_url%>#absences" id="add_product" class="grey_button_a left">
+      <span class="grey_button_back">&laquo;</span>
+      Kembali ke daftar absensi
+    </a>
+  </div>
+  <div class="clear"></div>
+  <%= render :partial => "layouts/top_menu_myabsence" %>
+  <div class="dashboard_hr">
+    <div class="box-form">
+      <span class="clear"></span>
+    </div>
+    <span class="clear"></span>
+
+    <div class="panelFilter">
+      <table cellspacing="0" cellpadding="0">
+        <tbody>
+          <tr>
+            <td width="103px">
+              &nbsp;
+            </td>
+            <td>
+              &nbsp;
+            </td>
+            <td width="107px" class="right">
+              <div id="action_menu">
+                  <ul>
+                    <li>
+                      <a class="grey_button2">
+                        <span class="left">Export Data to</span>
+                        <span class="icons drop_arrow_ico">&nbsp;</span>
+                      </a>
+                      <div class="clear"></div>
+                      <ul>                        
+                        <li><div id="export"><a class="list" href="/absences/export_my_yearly_absence?id=<%= @current_person.id %>&year=<%= @year.strftime("%d/%m/%Y") %>"><span class="icons xls_ico">&nbsp;</span><span class="left">XLS File</span></a></div></li>
+                        <li>
+                        </li>
+                      </ul>
+                    </li>
+                  </ul>
+                </div>
+            </td>
+          </tr>
+          <tr>
+            <td>&nbsp;</td>
+            <td>
+              <div class="expand_filter">
+                <div class="filter_opt" id="date_filter">
+                  <label class="left">Periode</label>
+                  <%= select_year(@year, {:start_year => 1965, :end_year => Date.today.year}, {:style=>"width:80px;"})%>
+                  <div class="clear"></div>
+                </div>
+                <div class="filter_opt" id="filter_show" style="display:none;">
+                  <label class="left">Periode</label>
+                  <span class="left result_filter"></span>
+                  <a class="icons cancel_ico remove_filter">&nbsp;</a>
+                  <div class="clear"></div>
+                </div>
+                <a class="grey_button2" id="filter_button">
+                  <span class="left">Go</span>
+                  <div class="clear"></div>
+                </a>
+              </div>
+            </td>
+            <td></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="clear"></div>
+    <div id="absence-notab">
+      <fieldset class="fm-table-notab">
+        <legend>
+          <a id="trigger_kerja"><span class="icons arrow_ico" id="arrow1">&nbsp;</span>Masuk Kerja : <%= "#{@total_presence} hari" %></a>
+        </legend>
+        <div style="display: none;" class="kategori-transaksi" id="info_kerja">
+          <div class="clear"></div><br/>
+          <%= render :partial => "absences/list_yearly/kerja"  %>
+        </div>
+      </fieldset>
+      <!-- End View Informasi Pribadi -->
+      <fieldset class="fm-table-notab">
+        <legend>
+          <a id="trigger_ijin"><span id="arrow6" class="icons arrow_ico">&nbsp;</span>Ijin : <%= "#{@sum_total_excuse} hari" %></a>
+        </legend>
+        <%- if @sum_total_excuse > 0 %>
+          <div id="info_ijin" style="display: none;">
+            <div class="clear"></div><br/>
+            <%= render :partial => "absences/list_yearly/ijin"  %>
+          </div>
+        <%- end %>
+      </fieldset>
+      <!-- End Ijin -->
+      <!-- View Cuti Begin -->
+      <fieldset class="fm-table-notab">
+        <legend>
+          <a id="trigger_cuti"><span id="arrow3" class="icons arrow_ico">&nbsp;</span>Cuti : <%= "#{@sum_total_leave} hari (sisa jatah : #{@current_person.leaves_quotas.remaining_quota} hari)" %></a>
+        </legend>
+        <%- if @sum_total_leave > 0%>
+          <div id="info_cuti" style="display: none;">
+            <div class="clear"></div><br/>
+            <%= render :partial => "absences/list_yearly/cuti"  %>
+          </div>
+        <%- end %>
+      </fieldset>
+      <!-- end cuti -->
+      <!-- Table sakit -->
+      <fieldset class="fm-table-notab">
+        <legend>
+          <a id="trigger_sakit"><span id="arrow2" class="icons arrow_ico">&nbsp;</span>Sakit : <%= "#{@sum_total_sick_leave} Hari" %></a>
+        </legend>
+        <%- if @sum_total_sick_leave > 0 %>
+          <div id="info_sakit" class="kategori-transaksi" style="display: none;">
+            <div class="clear"></div><br/>
+            <%= render :partial => "absences/list_yearly/sakit"  %>
+          </div>
+        <%- end %>
+      </fieldset>
+      <!-- end sakit-->
+      <!-- Table cuti khusus Begin -->
+      <fieldset class="fm-table-notab">
+        <legend>
+          <a id="trigger_cuti_khusus"><span id="arrow4" class="icons arrow_ico">&nbsp;</span>Cuti Khusus : <%= "#{@sum_total_special_leave} hari" %></a>
+        </legend>
+        <%- if @sum_total_special_leave > 0 %>
+          <div id="info_cuti_khusus" class="kategori-transaksi" style="display: none;">
+            <div class="clear"></div><br/>
+            <%= render :partial => "absences/list_yearly/cuti_khusus"  %>
+          </div>
+        <%- end %>
+      </fieldset>
+      <!-- End Table cuti khusus -->
+      <br class="clear"/>
+      <!-- Table cuti melahirkan -->
+      <fieldset class="fm-table-notab">
+        <legend>
+          <a id="trigger_cuti_melahirkan"><span id="arrow5" class="icons arrow_ico">&nbsp;</span>Cuti Melahirkan : <%= "#{@sum_total_birth_leave} hari"%></a>
+        </legend>
+        <%- if @sum_total_birth_leave > 0 %>
+          <div id="info_cuti_melahirkan" class="kategori-transaksi" style="display: none;">
+            <div class="clear"></div><br/>
+            <%= render :partial => "absences/list_yearly/cuti_melahirkan"  %>
+          </div>
+        <%- end %>
+      </fieldset>
+      <!-- end cuti melahirkan -->
+      <!-- Table cuti melahirkan -->
+      <fieldset class="fm-table-notab">
+        <legend>
+          <a id="trigger_mangkir"><span id="arrow7" class="icons arrow_ico">&nbsp;</span>Mangkir : <%="#{@sum_total_awol} hari"%></a>
+        </legend>
+        <%- if @sum_total_awol > 0 %>
+          <div id="info_mangkir" class="kategori-transaksi" style="display: none;">
+            <div class="clear"></div><br/>
+            <%= render :partial => "absences/list_yearly/mangkir"  %>
+          </div>
+        <%- end %>
+      </fieldset>
+      <!-- end mangkir -->
+      <!-- Table cuti kecelakaan -->
+      <fieldset class="fm-table-notab">
+        <legend>
+          <a id="trigger_cuti_kecelakaan"><span id="arrow8" class="icons arrow_ico">&nbsp;</span>Cuti Kecelakaan : <%= "#{@sum_total_accident_leave} hari" %></a>
+        </legend>
+        <%- if @sum_total_accident_leave > 0 %>
+          <div id="info_cuti_kecelakaan" class="kategori-transaksi" style="display: none;">
+            <div class="clear"></div><br/>
+            <%= render :partial => "absences/list_yearly/cuti_kecelakaan"  %>
+          </div>
+        <%- end %>
+      </fieldset>
+      <!-- end mangkir -->
+    </div>
+  </div>
+</fieldset>
+<script type="text/javascript" >
+  $(document).ready(function(){
+
+    $('.remove_filter').click( function (e) {
+      e.preventDefault();
+      $(this).parent().hide();
+      $('#date_filter').show();
+      $('#filter_button').show();
+      $('#date_year').val(<%= Date.today.year%>);
+      $.get( "/my_yearly_absence", {id: "<%=@current_person.id%>", year:$('#date_year').val()},function(data) {
+        $("#ajax-load").show();
+        $('#absence-notab').html($('#absence-notab', data).html() );
+        $("#ajax-load").hide();
+      });
+      return false;
+    });
+
+    $('#filter_button').click(function (e) {
+      e.preventDefault();
+      $(this).hide();
+      $('#date_filter').hide();
+      $('#filter_show').show();
+      $('.result_filter').html("1 Januari "+$('#date_year').val()+" - 31 Desember"+$('#date_year').val());
+      $('#export').html(get_link_export($('#date_year').val()));
+      $('.result_filter').html("1 Januari "+$('#date_year').val()+" - 31 Desember"+$('#date_year').val());
+      $.get( "/my_yearly_absence", {id: "<%=@current_person.id%>", year:$('#date_year').val()},function(data) {
+        $("#ajax-load").show();
+        $('#absence-notab').html($('#absence-notab', data).html() );
+        $("#ajax-load").hide();
+      });
+      return false;
+    } );
+
+  });
+
+  function get_link_export(year){
+    var data ='<a href="/absences/export_my_yearly_absence?id=<%=@current_person.id%>&amp;year=1/1/' + year + '" class="list">';
+        data +='<span class="icons xls_ico">&nbsp;</span><span class="left">XLS File</span></a>';
+    return data;
+  }
+</script>
+

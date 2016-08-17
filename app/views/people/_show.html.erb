@@ -1,0 +1,290 @@
+<%= render :partial=> "layouts/shared/breadcrumbs" %>
+<fieldset class="fm-table">
+  <legend><a href="#" id="help_dash" class="icons help-top-icon" title="Click to show/hide information">&nbsp;</a>
+   Data Karyawan</legend>
+  <%= render :partial => "layouts/howto/howto_content"%>
+  <%= render :partial => 'layouts/profile_frame'%>
+  <div class="right-information">
+    <%= render :partial=>"layouts/top_menu_detail_karyawan" unless @is_user_login  %>
+    <div id="content-dynamic">
+      <%= render :partial => "layouts/delete_message" %>
+      <fieldset class="fm-table2">
+        <div class="box-form">
+          <div id="box_retur_0">
+            <fieldset class="fm-table-notab">
+              <legend><span class="icons arrow_ico" id="arrow1">&nbsp;</span><a id="trigger_pribadi">Informasi Pribadi</a></legend>
+              <div class="view-information" id="info_pribadi">
+                
+                <div class="input big">
+                  <% if current_features.include?('employee_edit') %>
+                  <% unless @is_user_login %>
+                    <span class="add-button right">
+                      <a class="grey_button_a top-right edit_people" id="edit_people" href="#people/<%= @person.id %>/edit">
+                        <span class="icons edit-icon">&nbsp;</span> Edit 
+                      </a>
+                    </span>
+                  <% end %>
+                <% end %>  
+                  <span class="input-field">
+                    <label>No. KTP</label>:
+                    <%= @person.no_ktp.blank? ? "-" : @person.no_ktp %>
+                  </span>
+                  <span class="clear"></span>
+
+                  <span class="input-field">
+                    <label>No. NPWP</label>:
+                    <%= @person.no_npwp.blank? ? "-" : @person.no_npwp %>
+                  </span>
+                  <span class="clear"></span>
+
+                  <span class="input-field">
+                    <label>Tempat, Tgl Lahir</label>:
+                    <%= @person.city_of_birth.blank? ? "-" : @person.city_of_birth %>, <%= @person.birth_date.blank? ? "-" : @person.birth_date %>
+                  </span>
+                  <span class="clear"></span>
+
+                  <span class="input-field">
+                    <label>Status</label>:
+                    <%= @person.marital_status.blank? ? "-" : @person.marital_status %>
+                  </span>
+                  <span class="clear"></span>
+
+                  <span class="input-field">
+                    <label>Keluarga</label>:
+                    <%= !@person.families.blank? ? "#{@person.families.count} anggota keluarga" : '-' %>
+                  </span>
+                  <span class="clear"></span>
+
+                  <span class="input-field">
+                    <label>Agama</label>:
+                    <%= @person.religion.blank? ? "-" : "#{@person.religion}" %>
+                  </span>
+                  <span class="clear"></span>
+
+                  <span class="input-field">
+                    <label>No. HP </label>:
+                    <%= @person.no_hp.blank? ? "-" : @person.no_hp %>
+                  </span>
+
+                  <span class="input-field">
+                    <label>Status pajak </label>:
+                    <%= @person.tax_status.blank? ? "-" : @person.tax_status.tax_status_code %>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                     <a id="history_status_pajak" href="/popup_history_status_pajak/<%= @person.id %>" >
+                       History status pajak
+                     </a>
+                  </span>
+
+                  <span class="input-field">
+                    <label>Email</label>:
+                    <%= @person.personal_email.blank? ? "-" : @person.personal_email%>
+                  </span>
+
+                  <span class="input-field">
+                    <label>CV</label>:
+                    <% unless @person.resume_file_name.blank? -%>
+                        <%= File.exist?(@person.resume.path.to_s) ? link_to(@person.resume_file_name, @person.resume.url, :target => '_blank') : '-'  %>
+                    <% end -%>
+                  </span>
+                </div>
+              </div>
+            </fieldset>
+            <!-- End View Informasi Pribadi -->
+
+            <!-- Edit Alamat Begin -->
+            <fieldset class="fm-table-notab">
+              <legend>
+                <a id="trigger_alamat"><span class="icons arrow_ico" id="arrow2">&nbsp;</span>Informasi Alamat</a>
+              </legend>
+              <div class="kategori-transaksi" id="info_alamat">
+                <%= render :partial => "addresses/list_people_address" %>
+              </div>
+            </fieldset>
+            <!-- end alamat -->
+
+            <!-- Edit Keluarga Begin -->
+            <fieldset class="fm-table-notab">
+              <legend>
+                <a id="trigger_keluarga"><span class="icons arrow_ico" id="arrow3">&nbsp;</span>Data Keluarga</a>
+              </legend>
+              <div id="data_keluarga">
+                <%= render :partial=>"families/list_families" %>
+              </div>
+            </fieldset>
+            <span class="clear"></span>
+
+            <fieldset class="fm-table-notab">
+              <legend>
+                <a id="trigger_kesehatan"> <span class="icons arrow_ico" id="arrow4">&nbsp;</span>Informasi Kesehatan</a>
+              </legend>
+              <div id="info_kesehatan" class="view-information">
+                <%= render :partial=>"health_info" %>
+              </div>
+            </fieldset>
+            <!-- End View Info Kesehatan -->
+
+            <!-- View Kontak Darurat Begin -->
+            <fieldset class="fm-table-notab">
+              <legend>
+                <%= link_to "<span class='icons arrow_ico' id='arrow5'>&nbsp;</span>Kontak Darurat", "#people/#{@person.id}?tab=0", :id=> "trigger_darurat" %>
+                <!--<a id="trigger_darurat">
+                  <span class="icons arrow_ico" id="arrow5">&nbsp;</span>Kontak Darurat
+                </a>-->
+              </legend>
+              <div class="view-information" id="kontak_darurat">
+                <%= render :partial=>"emergencies/emergency_info" %>
+              </div>
+            </fieldset>
+          </div>
+        </div>
+      </fieldset>
+    </div>
+  </div>
+</fieldset>
+<script type="text/javascript">
+  $(document).ready(function(){
+   $('#person_no_telp_kontak_darurat').numeric();
+   <% unless params[:save].blank? %>
+      <% if params[:save] == "create_alamat" %>
+        $('.notify_error').show();$('.message').html('Data alamat berhasil ditambahkan');
+      <% elsif params[:save] == "update_alamat" %>
+        $('.notify_error').show();$('.message').html('Data alamat berhasil diubah');
+      <% elsif params[:save] == "create_family" %>
+        $('.notify_error').show();$('.message').html('Data keluarga berhasil ditambahkan');
+      <% elsif params[:save] == "update_family" %>
+        $('.notify_error').show();$('.message').html('Data keluarga berhasil dimodifikasi');
+      <% end %>
+    <% end %>
+
+    $('#info_kesehatan, #kontak_darurat, #info_perawatan, #data_keluarga,#info_pribadi,#info_alamat').hide()
+    <%  if params[:tab]=="2" %>
+      $('#data_keluarga').show();
+      $('#arrow3').removeClass('icons arrow_ico');
+      $('#arrow3').addClass('icons drop_arrow_ico');
+    <% elsif params[:tab]=="3" %>
+      $('#info_kesehatan').show();
+      $('#arrow4').removeClass('icons arrow_ico');
+      $('#arrow4').addClass('icons drop_arrow_ico');
+    <% elsif params[:tab]=="4" %>
+      $('#kontak_darurat').show();
+      $('#arrow5').removeClass('icons arrow_ico');
+      $('#arrow5').addClass('icons drop_arrow_ico');
+    <% elsif params[:tab]=="5" %>
+      $('#info_alamat').show();
+      $('#arrow2').removeClass('icons arrow_ico');
+      $('#arrow2').addClass('icons drop_arrow_ico');
+    <% else %>
+      $('#info_pribadi').show();
+      $('#arrow1').removeClass('icons arrow_ico');
+      $('#arrow1').addClass('icons drop_arrow_ico');
+    <% end %>
+
+    $('#trigger_pribadi').click(function(){
+      if($('#info_pribadi').is(':hidden')){
+        $('#info_pribadi').show();
+        $('#arrow1').removeClass('icons arrow_ico');
+        $('#arrow1').addClass('icons drop_arrow_ico');
+      }else{
+        $('#info_pribadi').hide();
+        $('#arrow1').removeClass('icons drop_arrow_ico');
+        $('#arrow1').addClass('icons arrow_ico');
+      }
+    });
+
+    $('#trigger_kesehatan').click(function(){
+      if($('#info_kesehatan').is(':hidden')){
+        $('#info_kesehatan').show();
+        $('#arrow4').removeClass('icons arrow_ico');
+        $('#arrow4').addClass('icons drop_arrow_ico');
+      }else{
+        $('#info_kesehatan').hide();
+        $('#arrow4').removeClass('icons drop_arrow_ico');
+        $('#arrow4').addClass('icons arrow_ico');
+      }
+    });
+
+    $('#trigger_darurat').click(function(){
+      if($('#kontak_darurat').is(':hidden')){
+        $('#kontak_darurat').show();
+        $('#arrow5').removeClass('icons arrow_ico');
+        $('#arrow5').addClass('icons drop_arrow_ico');
+      }else{
+        $('#kontak_darurat').hide();
+        $('#arrow5').removeClass('icons drop_arrow_ico');
+        $('#arrow5').addClass('icons arrow_ico');
+      }
+    });
+
+    $('#trigger_alamat').click(function(){
+      if($('#info_alamat').is(':hidden')){
+        $('#info_alamat').show();
+        $('#arrow2').removeClass('icons arrow_ico');
+        $('#arrow2').addClass('icons drop_arrow_ico');
+      }else{
+        $('#info_alamat').hide();
+        $('#arrow2').removeClass('icons drop_arrow_ico');
+        $('#arrow2').addClass('icons arrow_ico');
+      }
+    });
+
+    $('#trigger_keluarga').click(function(){
+      if($('#data_keluarga').is(':hidden')){
+        $('#data_keluarga').show();
+        $('#arrow3').removeClass('icons arrow_ico');
+        $('#arrow3').addClass('icons drop_arrow_ico');
+      }else{
+        $('#data_keluarga').hide();
+        $('#arrow3').removeClass('icons drop_arrow_ico');
+        $('#arrow3').addClass('icons arrow_ico');
+      }
+    });
+
+    $("#history_status_pajak").colorbox({width:"600px",height:"300px", iframe:true,
+      onClosed:function(){
+      }
+    });
+     
+  });
+
+  function onDelete(sign){
+     if (sign==2){
+       onDelete_keluarga();
+     }else if (sign==1){
+       onDelete_alamat();
+     }
+   }
+
+   function onDelete_keluarga(){
+      var arr_params = new Array();
+      $('#families_table tbody input:checked').each(function() {
+        arr_params = arr_params.concat($(this).val());
+      });
+      if (arr_params.length > 0){
+        $('#div_sign').html('keluarga');
+        $('#div_btn_hapus').html('<input type="button" value="Ya" class="blue_button" onclick="delete_keluarga()"/>');
+        jQuery().colorbox({width:"auto",height:"auto", inline:true,href:"#message_delete",
+          onClosed:function(){
+          }
+        });
+      }else{
+        return false;
+      }
+    }
+
+    function onDelete_alamat(){
+      var arr_params = new Array();
+      $('#address_table tbody input:checked').each(function() {
+        arr_params = arr_params.concat($(this).val());
+      });
+      if (arr_params.length > 0){
+        $('#div_sign').html('alamat');
+        $('#div_btn_hapus').html('<input type="button" value="Ya" class="blue_button" onclick="delete_alamat()"/>');
+        jQuery().colorbox({width:"auto",height:"auto", inline:true,href:"#message_delete",
+          onClosed:function(){
+          }
+        });
+      }else{
+        return false;
+      }
+    }
+</script>

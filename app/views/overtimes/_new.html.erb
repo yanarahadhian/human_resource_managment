@@ -1,0 +1,222 @@
+<% index = 0 %>
+<% index_2 = 0 %>
+<script  type="text/javascript">
+  var detail_from_partial = '<%= escape_javascript(render :partial => "add_employee") %>'
+  var detail_from_partial_2 = '<%= escape_javascript(render :partial => "add_division") %>'
+
+  var number_of_products =   1
+  var number_of_products_2 =   1
+
+  function changeGroupFirst(value){
+    $('#changeGroupID').load("/add_group?value="+value+"&index=0");
+  }
+
+  $(document).ready(function(){
+    var current_count = <%= current_count_people.count %>;
+    if (ar_name.length != current_count){
+      ar_name = <%= current_people.map { |x| "#{x.full_data_name}" }.to_json %>;
+      ar_id = <%= current_people.map { |x| x.id }.to_json %>
+    }
+    $(".employee").autocomplete(ar_name);
+
+    $('#info_section_cancel_basic').click( function(){
+      window.location = '<%=current_root_url%>#overtimes'
+    });
+
+    $('.addEmp').click(function(){
+<% index = index + 1 %>
+      $('.addon').append(detail_from_partial.replace(/DUMMY_PRODUCT_ID/g, number_of_products));
+      number_of_products = number_of_products + 1;
+    });
+
+    $('.addDiv').click(function(){
+<% index_2 = index_2 + 1 %>
+      $('.addon_2').append(detail_from_partial_2.replace(/DUMMY_PRODUCT_ID_2/g, number_of_products_2));
+      number_of_products_2 = number_of_products_2 + 1
+    });
+
+
+    $('.hideFirst_1').hide();
+    $('.hideFirst_2').hide();
+    $('.hideFirst_3').hide();
+
+    if ($('#option').val()== "Karyawan"){
+      $('.hideFirst_1').show();
+      $('.hideFirst_2').hide();
+      $('.hideFirst_3').show();
+    }else if ($('#option').val()== "Group"){
+      $('.hideFirst_2').show();
+      $('.hideFirst_1').hide();
+      $('.hideFirst_3').hide();
+    }else{
+      $('.hideFirst_1').hide();
+      $('.hideFirst_2').hide();
+      $('.hideFirst_3').hide();
+    }
+
+    $('#option').change(function(){
+      if ($(this).val()== "Karyawan"){
+        $('.hideFirst_1').show();
+        $('.hideFirst_2').hide();
+        $('.hideFirst_3').show();
+      }else if ($(this).val()== "Group"){
+        $('.hideFirst_2').show();
+        $('.hideFirst_1').hide();
+        $('.hideFirst_3').hide();
+      }else{
+        $('.hideFirst_1').hide();
+        $('.hideFirst_2').hide();
+        $('.hideFirst_3').hide();
+      }
+    });
+
+    $('.datepicker').datepicker({buttonImageOnly: true,minDate: new Date()});
+  });
+
+</script>
+<%= render :partial => "layouts/howto_menu" %>
+
+<fieldset class="fm-table">
+  <legend>
+    <a href="#" id="help_dash" class="icons help-top-icon" title="Click to show/hide information">&nbsp;</a>  
+    Tambah Lembur
+  </legend>
+  <%= render :partial => "layouts/howto/howto_content"%>  
+  <div class="box-form">
+    <% err_base = error_message_on @overtimedata, :base %>
+    <% err_assign = "" %>
+    <% err_group = "" %>
+    <% err_assign = err_base if err_base.include?"assign"  %>
+    <% err_group = err_base if err_base.downcase.include?"group"  %>
+    <% form_remote_for @overtimedata,  :url => {:action =>'overtime_data_create'} do |f| %>
+ 
+      <!--TODO: Change to overtime_status_update when keys activated -->
+      <%#- if current_features.include?('overtime_status_update') %>
+      <%- if current_features.include?('overtime_delete') %>
+      <div class="fifty-fifty">
+        <div class="input">
+          <span class="input-field">
+            <%= label_tag :option, "Assign Lembur Ke<span class='redstar'>*</span>"  %>:
+            <%= select_tag :option, options_for_select([["Assign Lembur Ke", "Pilih"],
+                ["Karyawan", "Karyawan"], ["Group", "Group"]],(params[:option] if params[:option])) %>
+            <div class="clear"></div>
+            <div style="margin-left:150px"><%= err_assign %></div>
+          </span>
+          <div class="clear"></div>
+  
+          <span class="input-field">
+            <%= label_tag :start_date, "Periode<span class='redstar'>*</span>"%>:
+            <%= text_field_tag :start_date , (params[:start_date] ? params[:start_date] : ""), :class=> 'auto ui-date datepicker dp1', :style => 'width :100px !important' %> s/d
+            <%= text_field_tag :end_date , (params[:end_date] ? params[:end_date] : ""), :class=> 'auto ui-date datepicker dp2', :style => 'width :100px !important' %>
+            <div class="clear"></div>
+            <div style="margin-left:150px"><%= error_message_on @overtimedata, :start_periode %></div>
+            <div style="margin-left:150px"><%= error_message_on @overtimedata, :end_periode %></div>        
+          </span>
+          
+          <div class="clear"></div>
+  
+          <span class="input-field hideFirst_1">
+            <%= label_tag :employee, "Nama Karyawan<span class='redstar'>*</span>" %>:
+            <%= text_field_tag 'employees[]', "", :class=>"employee", :id => "employees_0" %>
+            <div class="clear"></div>
+            <% if params[:option] && (params[:option] == "Karyawan") %> 
+              <div style="margin-left:150px"><%= error_message_on @overtimedata, :person_id %></div>
+            <% end %>
+          </span>
+          <div class="clear"></div>
+  
+          <div class="addon"></div>
+          <span class="add-button left">
+            <a class='grey_button_notext add_barang addEmp marginL20 hideFirst_3'>
+              <span class="icons add_ico" style="margin-right:0">&nbsp;</span>
+            </a>
+          </span>
+          <div class="clear"></div>
+  
+          <span class="input-field hideFirst_2 special">
+            <%= label_tag :division, "Divisi / Group<span class='redstar'>*</span>" %>:
+            <%= select_tag 'divisions[]', "<option value='0'>Pilih Bagian</option>#{options_from_collection_for_select(@divisions,'id','name')}",
+              :id => "divisions_0", :onchange => 'changeGroupFirst(this.value)'%>            
+            <span id="changeGroupID">
+            </span>
+            <div class="clear"></div>
+            <div style="margin-left:150px"><%= err_group %></div>
+          </span>
+          <div class="clear"></div>
+  
+          <div class="addon_2"></div>
+          <span class="add-button left hideFirst_2" style="width:600px;">
+            <a class='grey_button_notext add_barang addDiv marginL20 hideFirst_2'>
+              <span class="icons add_ico" style="margin-right:0">&nbsp;</span>
+            </a>
+          </span>
+          <div class="clear"></div>
+  
+          <span class="input-field">
+            <%= label_tag :reason, "Alasan" %>:
+            <%= text_area_tag :reason,"",:style => "width:300px;" %>
+          </span>
+          <div class="clear"></div>
+  
+          <span class="input-field special">
+            <%= label_tag :time, "Waktu Mulai Lembur<span class='redstar'>*</span>" %>:
+            <%= select_time(Time.now, {:time_separator => " : ", :minute_step => 5, :prefix => "start_working"}, {:class => "small-text"}) %>
+          </span>
+          <div class="clear"></div>
+  
+          <span class="input-field special">
+            <%= label_tag :status, "Status<span class='redstar'>*</span>" %>:
+            <%= select_tag :overtime_status , options_for_select([["Pending", "Pending"], ["Approved", "Approved"], ["Finished", "Finished"]]), :style => 'margin: -15px 0;'%>
+          </span>
+        </div>
+        <div class="clear"></div>
+
+          <div class="block-btn-form" id="button">
+            <%= render :partial => "layouts/button_loader" %>
+            <%= submit_tag("Batal", { :name => 'reset', :id => 'info_section_cancel_basic', :type => "reset" , :class=>'grey_button' }) %>
+            <%= f.submit "Simpan", {:class=>'blue_button', :id=>'info_section_save_basic'} %>
+          </div>
+        <%- else %>
+      <div class="input">
+          <%= hidden_field_tag :option , "Personal" %>
+          <%- if @person %>
+            <%= hidden_field_tag :person_id , @person.id %>
+            <span class="input-field">
+              <%= label_tag :start_date, "Periode"%>:
+              <%= text_field_tag :start_date , "", :class=> 'auto ui-date datepicker dp1' %> s/d
+              <%= text_field_tag :end_date , "", :class=> 'auto ui-date datepicker dp2' %>
+            </span>
+            <div class="clear"></div>
+  
+            <span class="input-field" >
+              <%= label_tag :reason, "Alasan" %>:
+              <%= text_area_tag :reason %>
+            </span>
+            <div class="clear"></div>
+  
+            <span class="input-field special">
+              <%= label_tag :time, "Waktu Mulai Lembur" %>:
+              <%= select_time(Time.now, {:time_separator => " : ", :minute_step => 5, :prefix => "start_working"}, {:class => "small-text"}) %>
+            </span>
+        </div>
+      </div>
+          <div class="block-btn-form" id="button">
+            <%= render :partial => "layouts/button_loader" %>
+            <%= submit_tag("Batal", { :name => 'reset', :id => 'info_section_cancel_basic', :type => "reset" , :class=>'grey_button' }) %>
+            <%= f.submit "Simpan", {:class=>'blue_button', :id=>'info_section_save_basic'} %>
+          </div>
+        <%- end %>
+      <%- end %>
+      <!-- End -->
+    <%end%>
+  </div>
+</fieldset>
+<script type="text/javascript">
+  $(document).ready(function(){
+    $('#loading').hide();
+    $("#button input[type='submit']").click(function(){
+      $('#button input').hide();
+      $('#ajax-load1').show();
+    })
+  })
+</script>

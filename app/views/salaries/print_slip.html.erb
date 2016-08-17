@@ -1,0 +1,160 @@
+<input type="button" class="grey_button right" value="Print" style="position:fixed" onclick="window.print() "/>
+<div class="container-letter-landscape" id="print">
+<% @honors.each_with_index do |honor, index| %>
+    <div class="container-print-s left">
+        <div class="inner">
+            <div class="input-data">
+                <div class="clear"></div>
+                <fieldset class="fm-table" >
+                    <div class="left" style="width:100%">
+                        <h2 class="title" style="float: left;"> 
+                        <% setting_logo = PayrollSetting.find_by_company_id(honor.person.company_id).use_logo_in_payroll_slip rescue nil %> 
+                        <% unless setting_logo.nil? %>                     
+                          <% url_img = "#{ApplicationController::APPSCHEF_URL}" + "#{session[:platform_user]['user']['user_company']['logo']}" %>
+                          <img src="<%= url_img unless session[:platform_user]['user']['user_company']['logo'].blank? %>" style="width: 30px" alt="company_logo" />
+                        <%end%>
+                        </h2>
+                        <h2 class="title" style="margin:0 25px">Slip Gaji</h2>
+                        <span class="date"><%= Time.now.to_date %> @ <%= Time.now.strftime("%I:%M")%></span>
+                    </div>
+                    <div class="box-form">
+                        <h4>
+                            <div class="clear"></div>
+                            <span class="input">
+                                <label>Nama</label> : 
+                                <span class="right"><%= honor.person.full_name %></span>
+                            </span>
+                            <div class="clear"></div>
+                            <span class="input">
+                                <label>NIK</label> : 
+                                <span class="right"><%= honor.person.employee_identification_number %></span>
+                            </span>
+                            <div class="clear"></div>
+                            <span class="input">
+                                <label>Jabatan</label> :
+                                <% emp = honor.person.current_employment %>
+                                <span class="right"> <%= emp.blank? ? "-" : emp.position.blank? ? "-" : emp.position.position_name %></span>
+                            </span>
+                            <div class="clear"></div>
+                            <span class="input">
+                                <label>Bagian/Regu</label> : 
+                                <span class="right"><%= emp.blank? ? "-" : emp.division.blank? ? "-" : emp.division.name %></span>
+                            </span>
+                            <div class="clear"></div>
+                            <span class="input">
+                                <label>Status Pajak</label> : 
+                                <span class="right"><%= honor.person.tax_status.tax_status_code unless honor.person.tax_status_id.blank? %></span>
+                            </span>
+                        </h4>
+                        <!-- <div class="right">
+                            <img alt="karyawan" src="" />
+                         </div>-->
+                    </div>  
+          <div class="clear"></div>
+                <table class="no-border">
+                
+                <tbody>
+                <tr class="total2">
+                  <th width="61%" class="left-text bold">No. Urut</th>
+                    <th width="39%" class="right-text bold"><%= index+1%></th>
+                </tr>
+                <tr>
+                  <td colspan="2" class="left-text">Gaji Bulan <span class="right">
+                  <%#=  Date::MONTHNAMES[honor.honor_month] %> <%= honor.honor_year %>
+                  </td>
+                  </tr>
+            
+                
+                  <tr class="alt">
+                  <td class="left-text">GP Baru<label>&nbsp;</label><%= honor.person.presences.cut_off_total_work_days(honor.start_period, honor.end_period)[:days] unless honor.start_period.blank? && honor.end_period.blank? %></td>
+                  <td class="right-text"><span class="bold"><%= format_no_currency(honor.salary) unless honor.salary.blank? %></span></td>
+                </tr>
+                  <% unless @overtimes.blank? %>
+                  <tr>
+                  <td class="left-text">Lembur<label>&nbsp;</label><%= format_no_currency_with_precision(honor.overtime_hourly_rate(honor.person, honor.honor_month, honor.honor_year)) %></td>
+                  <td class="right-text"><%= format_no_currency(honor.count_overtimes(honor.person, honor.honor_month, honor.honor_year)) %></td>
+                </tr>
+                <% end %>
+                <% unless honor.premium_in_honors.blank? %>
+                <% honor.premium_in_honors.each do |pih| %>
+                <% unless pih.premium.blank?%>
+                <tr class="alt">
+                  <td class="left-text"><%= pih.premium.premium_name %></td>
+                  <td class="right-text"><%= format_no_currency(pih.premium_value) %></td>
+                </tr>
+                <% end %>
+                <% end %>
+                <% end %>
+<!--                 <tr>
+                  <td class="left-text">Premi Hadir Bulan</td>
+                  <td class="right-text">100.000</td>
+                </tr>
+                
+                <tr class="alt">
+                  <td class="left-text">Premi Masa Kerja</td>
+                  <td class="right-text">150.000</td>
+                </tr>
+                
+                <tr>
+                  <td class="left-text">Premi Bersyarat</td>
+                  <td class="right-text">-</td>
+                </tr>
+                
+                <tr class="alt">
+                  <td class="left-text">P.Cuti/HC/CB</td>
+                  <td class="right-text">-</td>
+                </tr>
+                
+                <tr>
+                  <td class="left-text">Tunjangan Makan</td>
+                  <td class="right-text">-</td>
+                </tr> -->
+                
+                <tr class="total2">
+                  <td class="left-text">Total :</td>
+                  <td class="right-text"><%= format_no_currency(honor.gross_income) unless honor.gross_income.blank? %></td>
+                </tbody>
+              </table>
+   <div class="clear"></div>
+              <table class="no-border">
+                
+                <tbody><tr>
+                  <td width="61%" class="left-text">Pajak </td>
+                  <td width="39%" class="right-text"><%= format_no_currency(honor.pph_indebted_per_month) unless honor.pph_indebted_per_month.blank? %></td>
+                </tr>
+            
+                
+                  <tr class="alt">
+                  <td class="left-text"> Jamsostek</td>
+                  <td class="right-text"><%= format_no_currency(honor.jamsostek_cut) unless honor.jamsostek_cut.blank? %></td>
+                </tr>
+                
+                 <tr>
+                  <td class="left-text">Pinjaman</td>
+                  <td class="right-text"><%= format_no_currency(honor.debt) unless honor.debt.blank?%></td>
+                </tr>
+                
+                  <tr class="alt">
+                  <td class="left-text">Pot. Koperasi</td>
+                  <td class="right-text"><%= format_no_currency(honor.cooperation_cut) unless honor.cooperation_cut.blank? %></td>
+                </tr>
+                
+                 <tr>
+                  <td class="left-text">Pembulatan</td>
+                  <td class="right-text"><%= format_currency(honor.rounding_off) unless honor.rounding_off.blank? %></td>
+                </tr>
+                
+                 <tr class="total2">
+                  <td class="left-text">Total Upah Bersih</td>
+                  <td class="right-text"><%= format_no_currency(honor.total_final_take_home_pay) unless honor.total_final_take_home_pay.blank? %></td>
+                </tr>
+                </tbody>
+              </table>
+    </fieldset>
+        </div>
+        <div class="clear"></div>
+      </div>
+    </div>
+        
+        <% end %>
+       </div>

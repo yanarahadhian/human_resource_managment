@@ -1,0 +1,10 @@
+<span class="input hide">
+    <label>Unit</label>
+    <select onchange="onUnit(this)" name="employment[work_unit_id]" id="employment_work_unit_id">
+      <option value="">pilih unit</option>
+      <% @units.each do |x| %>
+      <option value="<%=x.id%>"><%=x.work_unit_name %></option>
+      <% end %>
+    </select>
+  </span>
+<span class="clear"></span>

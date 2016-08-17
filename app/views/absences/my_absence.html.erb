@@ -1,0 +1,113 @@
+<%= render :partial => "layouts/howto_menu" %>
+<div class="clear"></div>
+
+<fieldset class="fm-table">
+  <legend>
+    <a href="#" id="help_dash" class="icons help-top-icon" title="Click to show/hide information">&nbsp;</a>
+    <%- if @current_person.user_id == current_user.id %>
+      Absensi Saya
+    <%- else %>
+      <%= "Absensi #{@current_person.full_name}" %>
+    <%- end %>
+  </legend>
+  <%= render :partial => "layouts/howto/howto_content"%>
+  <div class="button-block-top box-form">
+    <% url_back = get_url_person_back(session[:url_act]) %>
+    <a href="<%= url_back %>" id="add_product" class="grey_button_a left">
+      <span class="grey_button_back">&laquo;</span>
+      Kembali ke daftar absensi
+    </a>
+  </div>
+  <div class="clear"></div>
+  <%= render :partial => "layouts/top_menu_myabsence" %>
+  <div class="panelFilter">
+    <table cellspacing="0" cellpadding="0">
+      <tbody><tr>
+          <td width="103px">
+          </td>
+          <td>
+            &nbsp;
+          </td>
+          <td class="right">
+            <div id="action_menu">
+            <ul>
+               <li>
+                 <a class="grey_button2">
+                   <span class="left">Export Data to</span>
+                   <span class="icons drop_arrow_ico">&nbsp;</span>
+                 </a>
+                 <div class="clear"></div>
+                 <ul>
+                   <li><a href="/absences/export_my_absence?id=<%= @current_person.id %>" class="list"><span class="icons xls_ico">&nbsp;</span><span class="left">XLS File</span></a></li>
+                   <li>
+                   </li>
+                 </ul>
+               </li>
+             </ul>
+           </div>
+          </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>
+            <div class="expand_filter">
+              <div class="filter_opt">
+                <label class="left">Tanggal</label>
+                
+                <input type="text" class="ui-date1" id="filter_date1" value="<%=  params[:date].blank? ? Time.now.strftime("%d/%m/%Y") : Person.format_date2(params[:date]) %>">
+                <input type="text" class="ui-date2" id="filter_date2" value="<%=  params[:date].blank? ? Time.now.strftime("%d/%m/%Y") : Person.format_date2(params[:date]) %>">
+                
+                <div class="clear"></div>
+              </div>
+              
+              <%= hidden_field_tag "temp_date"%>
+              <%= hidden_field_tag "temp_date1"%>
+              <a class="grey_button2"  id="filter_button" >
+                <span class="left">Go</span>
+              </a>
+              <div class="clear"></div>
+            </div>
+          </td>
+          <td></td>
+        </tr>
+      </tbody></table>
+
+  </div>
+  <div class="clear"></div>
+  <div id="div_presence_detail">
+    <%= render :partial => "list_myabsences2", :locals => {:my_presence_details => @my_presence_details} %>
+  </div>
+  <div class="panelFilter">
+    &nbsp;
+    <div class="clear"></div>
+  </div>
+</fieldset>
+<!-- JS Segment -->
+
+<script type="text/javascript" >
+  $(document).ready(function(){
+    removeNotifyMessage();
+    $( ".ui-date1, .ui-date2" ).datepicker({
+      buttonImageOnly: true      
+    })
+
+    $.datepicker.setDefaults({
+        showOn: "button",
+        buttonImage: "<%=ApplicationController::APPSCHEF_URL%>/images/calendar.gif",
+        changeMonth: true,
+        changeYear: true,
+        dateFormat: 'dd/mm/yy',
+        altFormat: 'dd MM yy',
+        firstDay: 1
+      });
+    
+   
+    $('#filter_button').click(function (e) {
+      e.preventDefault();
+      $.get( "/myabsence", {id: "<%=@current_person.id%>", date1:$("#filter_date1").val(), date2:$("#filter_date2").val()},function(data) {
+         $('#presence_detail').html($('#presence_detail', data));
+      });
+    });
+  });
+</script>
+

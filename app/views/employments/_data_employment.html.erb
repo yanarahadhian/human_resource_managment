@@ -1,0 +1,357 @@
+<script>
+
+  function hidediv() {
+if (document.getElementById) { // DOM3 = IE5, NS6
+
+  document.getElementById('hideshow').style.display = 'none';
+  document.getElementById('employment_employment_end').value = "now"  ;
+
+  }
+  else {
+    if (document.layers) { // Netscape 4
+      document.hideshow.display = 'none';
+    }
+    else { // IE 4
+      document.all.hideshow.style.display = 'none';
+    }
+  }
+}
+
+function showdiv() {
+  if (document.getElementById) { // DOM3 = IE5, NS6
+    document.getElementById('hideshow').style.display = 'block';
+  }
+  else {
+    if (document.layers) { // Netscape 4
+      document.hideshow.display = 'block';
+    }
+    else { // IE 4
+      document.all.hideshow.style.display = 'block';
+    }
+  }
+}
+
+function checkvalue(){
+  if (document.getElementById('employment_employment_end').value == 'pilih')
+  {
+    showdiv();
+  }
+  else {
+    hidediv();
+  }
+}
+
+function hidedivkontrak() {
+if (document.getElementById) { // DOM3 = IE5, NS6
+  document.getElementById('hidesampai').style.display = 'none';
+  document.getElementById('employment_employment_type').value = "tetap"  ;
+  }
+  else {
+    if (document.layers) { // Netscape 4
+      document.hidesampai.display = 'none';
+    }
+    else { // IE 4
+      document.all.hidesampai.style.display = 'none';
+    }
+  }
+}
+
+function hidedivkeluar() {
+  if (document.getElementById) { // DOM3 = IE5, NS6
+    document.getElementById('NonTermination').style.display = 'none';
+  }
+  else {
+    if (document.layers) { // Netscape 4
+      document.NonTermination.display = 'none';
+    }
+    else { // IE 4
+      document.all.NonTermination.style.display = 'none';
+    }
+  }
+}
+
+function showdivkontrak() {
+  if (document.getElementById) { // DOM3 = IE5, NS6
+    document.getElementById('hidesampai').style.display = 'block';
+  }
+  else {
+    if (document.layers) { // Netscape 4
+      document.hidesampai.display = 'block';
+    }
+    else { // IE 4
+      document.all.hidesampai.style.display = 'block';
+    }
+  }
+}
+
+function checkvaluekontrak(){
+  if (document.getElementById('employment_employment_type').value == 'kontrak')
+  {
+    showdivkontrak();
+  }
+  else if (document.getElementById('employment_employment_type').value == 'tetap')
+  {
+    hidedivkontrak();
+  }
+  else
+  {
+    hidedivkeluar();
+  }
+}
+
+function onDepartment(data,type){
+    $("#div_unit").empty();
+    $("#div_group").empty();
+    $.ajax({
+        url: "/change_divisi/" + data.value + "?type=" +type,
+        data: "a=a",
+        type: "GET"
+      });
+  }
+
+ function onDivision(data,type){
+    $("#div_group").empty();
+      $.ajax({
+        url: "/change_unit/" + data.value + "?type=" +type,
+        data: "",
+        type: "GET"
+      });
+  }
+
+  function onUnit(data){
+      $.ajax({
+        url: "/change_group/" + data.value,
+        data: "",
+        type: "GET"
+      });
+  }
+
+  
+  function onEmployment1(data, person_id, id){
+    if (data.value == 'Tindakan'){
+    }else{
+      url = "/people/" + person_id + "/employments/" + id + "/edit?type=" + data.value;
+      $.ajax({
+        url: url,
+        data: "",
+        type: "GET"
+      });
+    }
+  }
+</script>
+<script type="text/javascript">
+	 $(document).ready(function(){
+    var m_names = new Array("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec");
+    var d = new Date();
+    var curr_date = d.getDate();
+    var curr_month = d.getMonth();
+    var curr_year = d.getFullYear();
+    var today = curr_date + " " + m_names[curr_month] + " " + curr_year;
+
+    $( "#ui-date3, #ui-date4" ).datepicker({
+      showOn: "button",
+      buttonImage: "/images/calendar.gif",
+      buttonImageOnly: true
+    })
+
+    <!--$( "#ui-date3, #ui-date4").datepicker( "option", "dateFormat", "d M  yy" ).val(today);-->
+
+   });
+
+   $(function() {
+		$( "#datepicker" ).datepicker();
+    $( "#datepicker2" ).datepicker();
+	});
+ </script>
+
+<% is_edit = controller_name=="employments" && action_name=="edit"%>
+<% is_data_edit = is_edit &&  params[:type]!="Tindakan" %>
+<% is_mutasi = is_edit && params[:type]=="Mutasi" %>
+<% emp = @person.current_employment %>
+  <span class="add-button right" style="margin:10px">
+    <form>
+        <select onchange="onEmployment1(this,<%= @person.id %>, <%=  @person.current_employment.id %>)">
+          <option value="" selected>Tindakan </option>
+            <% unless emp.type_employment=="Terminasi" %>
+              <option value="Mutasi">Mutasi</option>
+              <option value="Promosi">Promosi</option>
+              <option value="Demosi">Demosi</option>
+              <option value="Terminasi">Terminasi</option>
+            <% else %>
+              <option value="Masuk">Masuk lagi</option>
+            <% end %>
+            <% if is_edit %>
+              <option value="Cancel">Cancel</option>
+            <% end %>
+         </select>
+                   </form>
+                  <!--- <a class="grey_button_a add_barang" id="add_barang" href="<%= edit_person_employment_path(@person.id,@person.current_employment.id)%>">
+                      <span class="icons edit-icon">&nbsp;</span> Edit Informasi Jabatan
+                   </a>-->
+                 </span>
+                 <div class="view-information">
+                  <% form_remote_for @person.current_employment, :url => {:controller=>"employments",:action=>"update", :id=> @person.current_employment.id,:person_id=>@person.id} do |f| %>
+                   
+                    <span class="input">
+                       <label>Status</label><span class="left">:&nbsp;</span>
+                       <div id="div_employment_type" class="left">
+                        <% if is_data_edit %>
+                          <%= f.collection_select(:employment_type_id , EmploymentType.all, :id, :employment_type_name,
+                          {:selected => @employment.employment_type_id}) %>
+                        <% else %>
+                          <%  unless emp.employment_type.blank? %>
+                            <%= f.hidden_field :employment_type %>
+                            <%= emp.employment_type.employment_type_name  %>
+                         <% end %>
+                        <% end %>
+                       </div>
+                    </span>
+                    <span class="clear"></span>
+
+                    <span class="input">
+                      <label>Tanggal Mulai</label>:
+                      <% if is_data_edit %>
+                        <%= f.text_field :employment_start, :id => "ui-date3", :class => "ui-date"  %>
+                        <div id="div_employment_start" style="margin-left:166px;"></div>
+                      <% else %>
+                        <%= f.hidden_field :employment_start%>
+                        <%= emp.employment_start %>
+                      <% end %>
+                      </span>
+                    <span class="clear"></span>
+
+                    <span class="input">
+                      <label>Tanggal Selesai</label>:
+                       <% if is_data_edit %>
+                          <%= f.select (:employment_end, "<option value='now' #{@employment.employment_end.to_s.empty? ? 'selected=selected' : ''}>Sekarang</option><option value ='pilih' #{@employment.employment_end.to_s.empty? ? '' : 'selected=selected' }>Pilih tanggal</option>", {},:onchange => 'checkvalue();') %>
+                          <div id="hideshow" style="display:<%= @employment.employment_end.to_s.empty? ? 'none' : 'block' %>;margin-top:5px;margin-left:167px;"><br>
+                        <%= f.text_field :employment_end , :id => "ui-date4", :class => "ui-date"  %>
+                        <%= error_message_on @employment, :employment_end %>
+                          <a href="javascript:hidediv()">Cancel</a>
+                          <div id="div_employment_end"></div>
+                          </div>
+                          
+                       <% else %>
+                         <%= f.hidden_field :employment_end %>
+                         <%= emp.employment_end %>
+                       <% end %>
+                     </span>
+                     <span class="clear"></span>
+
+                      <span class="input">
+                       <label>Departemen</label>:
+                       <% if is_data_edit %>
+                         <%= f.collection_select :department_id , Department.by_company("#{session[:platform_user]['user']['user_company']['id']}").all, :id, :department_name , {:selected => @employment.department_id, :prompt => 'Pilih Departemen'},
+                             :onChange => "onDepartment(this,'#{params[:type]}')" %>
+                       <% else %>
+                         <% unless emp.department.blank? %>
+                           <%= f.hidden_field :department_id %>
+                           <%= emp.department.department_name%>
+                         <% end %>
+                       <% end %>
+                       </span>
+                     <span class="clear"></span>
+
+                      <div id="div_divisi">
+                     <span class="input">
+                       <label>Divisi</label>:
+                       <% if is_data_edit  %>
+                         <% unless @employment.division.blank? || @employment.department.blank?%>
+                           <%= f.collection_select :work_division_id , Division.by_company("#{session[:platform_user]['user']['user_company']['id']}").all(:conditions=> "department_id=#{@employment.department_id}"), :id, :name , {:selected => @employment.work_division_id, :prompt => true},
+                           :onChange => "onDivision(this,'#{params[:type]}')" %>
+                         <% end %>                         
+                       <% else %>
+                         <% unless emp.division.blank? %>
+                           <%= f.hidden_field :work_division_id %>
+                           <%= emp.division.name %>
+                         <% end %>
+                       <% end %>
+                     </span>
+                     <span class="clear"></span>
+                     </div>
+
+                     <div id="div_unit">
+                     <span class="input">
+                       <label>Unit</label>:
+                       <% if is_data_edit %>
+                          <% unless (@employment.work_unit.nil? || @employment.division.blank?) %>
+                            <%= f.collection_select :work_unit_id , WorkUnit.all(:conditions=> "division_id=#{@employment.work_division_id}"), :id, :work_unit_name  , {:selected => @employment.work_unit_id },
+                            :onChange => "onUnit(this)" %>
+                          <% end %>                         
+                       <% else %>
+                         <% unless emp.work_unit.blank? %>
+                           <%= f.hidden_field :work_unit_id %>
+                           <%= emp.work_unit.work_unit_name  %>
+                         <% end %>
+                       <% end %>
+                     </span>
+                     <span class="clear"></span>
+                     </div>
+                     
+                     <div id="div_jabatan">
+                     <span class="input">
+                       <label>Jabatan</label>:
+                       <% if is_data_edit %>
+                         <% unless (@employment.position.blank? || @employment.division.blank?) %>
+                            <%= f.collection_select :position_id , Position.by_company("#{session[:platform_user]['user']['user_company']['id']}").all(:conditions=> "division_id=#{@employment.work_division_id}"), :id, :position_name , {:selected => @employment.position_id} %>
+                         <% end %>
+                       <% else %>
+                         <% unless emp.position.blank? %>
+                           <%= f.hidden_field :position_id %>
+                           <%= emp.position.position_name %>
+                         <% end %>
+                       <% end %>
+                     </span>
+                     <span class="clear"></span>
+                     </div>
+
+              <div id="div_group">
+                     <span class="input">
+                       <label>Group </label>:
+                       <% if is_data_edit %>
+                         <% unless @employment.work_group.blank? || @employment.work_unit.blank? %>
+                            <%= f.collection_select :work_group_id , WorkGroup.all(:conditions=> "work_unit_id=#{@employment.work_unit_id}"), :id, :work_group_name , {:selected => @employment.work_unit_id}%>
+                         <% end %>
+                       <% else %>
+                         <% unless emp.work_group.blank? %>
+                           <%= f.hidden_field :work_group_id %>
+                           <%= emp.work_group.work_group_name %>
+                         <% end %>
+                       <% end %>
+                     </span>
+                     <span class="clear"></span>
+</div>
+                     <span class="input">
+                       <label>Type Employment </label>:
+                       <% if is_data_edit %>
+                           <%= f.hidden_field :type_employment, :value=> params[:type]%>
+                         <%= params[:type] %>
+                       <% else %>
+                         <%= emp.type_employment %>
+                       <% end %>
+                     </span>
+                     <span class="clear"></span>
+
+                     <span class="input">
+                       <label>Shift </label>:                      
+                     </span>
+
+                      <span class="input">
+                        <label>Alasan perubahan </label>:
+                        <% if is_data_edit %>
+                          <%= f.text_area :reason_for_change, :rows => 3, :cols => 25 %>
+                        <% else %>
+                          <%= emp.reason_for_change %>
+                        <% end %>
+                      </span>
+                      <span class="clear"></span>
+          <% if is_data_edit %>
+             <hr />
+             <div class="left-center">
+               <%= f.submit 'Simpan', :class=>"blue_button" %>
+               <%= submit_to_remote  'Batal', 'Batal', :url=> {:action => "cancel",:person_id=> @person.id}, :class=>"grey_button" %>
+             </div>
+           </div>
+                     <% end %>
+                     <br class="clear" /> <br class="clear" />
+<% end %>

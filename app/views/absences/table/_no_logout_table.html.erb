@@ -1,0 +1,35 @@
+{
+"sEcho": <%=h @sEcho %>,
+"iTotalRecords": <%= @iTotalRecords %>,
+"iTotalDisplayRecords": <%= @iTotalDisplayRecords %>,
+"iDataExist": <%= @no_logout_exist %>,
+"aaData" : [
+<%- @no_logouts.each do |no_logout| %>
+  [
+  <%- if no_logout[:is_acted_upon] %>
+    "<%= "<input id='no_logout_#{no_logout[:id]}' name='no_logout_ids[]' type='checkbox' value=#{no_logout[:id]} disabled='disabled'/>" %>",
+  <%- else %>
+    "<%= "<input id='no_logout_#{no_logout[:id]}' name='no_logout_ids[]' type='checkbox' value=#{no_logout[:id]} />" %>",
+  <%- end %>
+  "<%= "<a href='#dailyabsence?id=#{no_logout[:person_id]}&date=#{no_logout[:date].strftime("%Y-%m-%d")}'> #{h no_logout[:person_name].titleize} </a>" %>",
+  "<%=h no_logout[:department].just_display %>",
+  "<%=h no_logout[:division].just_display %>",
+  "<%=h no_logout[:position].just_display unless no_logout[:position].blank? %>",
+  "<%= l no_logout[:date] %>",
+  "<%= no_logout[:start_work_session].strftime("%H:%M") if no_logout[:start_work_session] %>",
+  "<%= no_logout[:end_work_session].strftime("%H:%M") if no_logout[:end_work_session] %>",
+  <%- if no_logout[:is_acted_upon] %>
+    "-"
+  <%- else %>
+    <%  if no_logout[:start_work_session].blank? %>
+      "Tidak Absen Masuk"
+    <% else %>
+      "Tidak Absen Keluar"
+    <% end %>
+  <%- end %>
+  <%= "]," unless no_logout == @no_logouts.last %>
+<% end %>
+<%= "]" unless @no_logouts.blank? %>
+]
+}
+

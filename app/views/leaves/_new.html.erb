@@ -1,0 +1,37 @@
+<fieldset class="fm-table">
+  <legend>
+    <a href="#" id="help_dash" class="icons help-top-icon" title="Click to show/hide information">&nbsp;</a>
+    Tambah Cuti Karyawan
+  </legend>
+  <%= render :partial => "layouts/howto/howto_content"%>
+  <br/>
+  <div class="input-help-wide">
+    <label>Field dengan tanda <span class="redstar">*</span> harus diisi</label>
+  </div>
+  <div class="clear"></div>
+  <% form_remote_for :leave,  :url => { :action => "create"}, :method => :post do |f| %>
+    <div class="fifty-fifty left">
+      <%= render :partial => "leave_form", :locals => { :f =>f } %>
+    </div>
+    <span class="clear"></span>
+    <div id="button" class="block-btn-form">
+      <div id="div_load" style="display: none;"><br />
+        <%= image_tag 'ajax-loader.gif'%>
+        <span class="message_error">Silahkan Tunggu...</span><br /><br />
+      </div>
+      <input id="info_section_cancel_basic" class="grey_button" type="reset" value="Batal" name="info_section_cancel_basic" onclick="onCancel('#leaves')"/>
+      <input type="submit" value="Simpan" name="info_section_save_basic" id="info_section_save_basic" class="blue_button" onclick="setPersonId()"/>
+    </div>
+  <%  end %>
+</fieldset>
+<script type="text/javascript">
+  $(document).ready(function(){
+    $("#person-name").autocomplete(ar_name);
+  });
+  
+  function setPersonId(){
+    $('#button input').hide();
+    $("#div_load").show();
+    $("#person_id").val(ar_id[jQuery.inArray($("#person-name").val(), ar_name)]);
+  }
+</script>

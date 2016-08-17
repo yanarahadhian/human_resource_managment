@@ -1,0 +1,40 @@
+absence01:
+  id: 1
+  company_id: 1
+  person_id: 6
+  absence_date: 2011-04-08
+  absence_type_id: 1
+  absence_reason: "Ijin Pulang Kampung"
+
+absence02:
+  id: 2
+  company_id: 1
+  person_id: 6
+  absence_date: 2011-04-11
+  absence_type_id: 4
+  absence_reason: "AWOL"
+
+absence03:
+  id: 3
+  company_id: 1
+  person_id: 6
+  absence_date: 2011-04-21
+  absence_type_id: 5
+  absence_reason: "Menikah"
+
+absence04:
+  id: 4
+  company_id: 1
+  person_id: 6
+  absence_date: 2011-04-22
+  absence_type_id: 5
+  absence_reason: "Menikah"
+
+absence05:
+  id: 5
+  company_id: 1
+  person_id: 6
+  absence_date: 2011-04-25
+  absence_type_id: 7
+  absence_reason: "Jatuh dari atas tangga"
+

@@ -1,0 +1,7 @@
+emp_type01:
+  company_id: 1
+  employment_type_name: "Kontrak"
+emp_type02:
+  company_id: 1
+  employment_type_name: "Tetap"
+

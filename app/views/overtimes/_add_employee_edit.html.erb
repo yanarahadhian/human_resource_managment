@@ -1,0 +1,24 @@
+<span class="input-field hideFirst_1">
+  <%= label_tag :employee %>:
+  <%  unless @overtime.person.nil? %>
+    <%= text_field_tag 'employees', @overtime.person.full_data_name ,:class=>"employee"%>
+    <%= f.hidden_field :person_id %>
+  <%else%>
+    <%= text_field_tag 'employees[]', "", :class=>"employee" %>
+  <%end%>
+
+</span>
+<span class="clear"></span>
+
+<script  type="text/javascript">
+  $(document).ready(function(){
+    var current_count = <%= current_count_people.count %>;
+    if (ar_name.length != current_count){
+      ar_name = <%= current_people.map { |x| "#{x.full_data_name}" }.to_json %>;
+      ar_id = <%= current_people.map { |x| x.id }.to_json %>
+    }
+    $(".employee").autocomplete(ar_name);
+  });
+
+
+</script>

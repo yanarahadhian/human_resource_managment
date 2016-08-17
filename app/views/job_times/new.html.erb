@@ -1,0 +1,124 @@
+<script>
+  $(document).ready(function(){
+  $('#actionCombo_0').hide();
+  $('#actionTrigger_0').click(function(){
+  $('#actionCombo_0').show();
+  $('#status_0').hide();
+  })
+  })
+</script>
+<script type="text/javascript">
+  function changeProduk(){
+  $('#nm_produk').removeAttr('disabled').val('');
+  }
+  $(document).ready(function(){
+  var m_names = new Array("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec");
+  var d = new Date();
+  var curr_date = d.getDate();
+  var curr_month = d.getMonth();
+  var curr_year = d.getFullYear();
+  var today = curr_date + " " + m_names[curr_month] + " " + curr_year;
+
+  $( ".ui-date, .ui-date2" ).datepicker({
+  showOn: "button",
+  buttonImage: "images/calendar.gif",
+  buttonImageOnly: true
+  })
+  $( ".ui-date, .ui-date2").datepicker( "option", "dateFormat", "d M  yy" );
+  $( ".ui-date2").val(today);
+  $("#add_product").click(function(){
+  $('#box_retur_1').show();
+  });
+  $('#toleransi').hide();
+  $('#check_tolerans').click(function(){
+  if($(this).is(":checked")){
+  $('#toleransi').show();
+  }else{
+  $('#toleransi').hide();
+  }
+  });
+  $('#check_istirahat').click(function(){
+  if($(this).is(":checked")){
+  $('#istirahat').hide();
+  }else{
+  $('#istirahat').show();
+  }
+  });
+  })
+</script>
+
+<legend>
+  <a href="#" id="help_dash" class="icons help-top-icon" title="Click to show/hide information">&nbsp;</a>
+  Setting Jam Kerja
+</legend>
+<%= render :partial => "layouts/howto/howto_content"%>
+<br/>
+<div id="info_pribadi" class="view-information">
+  <%  form_for :job, :url => { :action => "create"} do |j|%>
+    <span class="input width520px">
+      <label>Hari</label>
+
+      <label class="label-radio"><%=  check_box_tag :monday , 'monday', :checked=>'true'%>Senin </label>
+      <label class="label-radio"><%=  check_box_tag :tuesday , 'tuesday', :checked=>'true'%> Selasa </label>
+      <label class="label-radio"><%=  check_box_tag :wednesday , 'wednesday', :checked=>'true'%> Rabu </label>
+      <span class="clear"></span>
+      <label>&nbsp;</label>
+      <label class="label-radio"><%=  check_box_tag :thursday , 'thursday', :checked=>'true'%> Kamis </label>
+      <label class="label-radio"><%=  check_box_tag :friday , 'friday', :checked=>'true'%> Jum'at </label>
+      <label class="label-radio"><%=  check_box_tag :saturday , 'saturday', :checked=>'true'%> Sabtu </label>
+      <span class="clear"></span>
+      <label>&nbsp;</label>
+      <label class="label-radio"><%=  check_box_tag :sunday , 'sunday', :checked=>'true'%> Minggu </label>
+      <span class="clear"></span>
+    </span>
+    <span class="clear"></span>
+    <span class="input width520px">
+      <%= label_tag :start_time_1, 'Jam Mulai Kerja <span class="redstar">*</span>' %>:
+      <%= text_field_tag :start_time_1,'00', :class=>'small-text' %> :
+      <%= text_field_tag :start_time_2,'00', :class=>'small-text' %>
+      &nbsp;&nbsp;&nbsp;
+      <%= check_box_tag :check_tolerans %>
+      Ada toleransi keterlambatan
+      <span class="clear"></span>
+    </span>
+    <span class="clear"></span>
+
+    <span id="toleransi" class="input" style="display: none;">
+      <label>&nbsp;</label> &nbsp;
+      <%@hr = HrSetting.find(:first)%>
+      <%= text_field_tag :late_tolerance , @hr.lateness_tolerance_in_minutes, :class=>'small-text' %> Menit
+
+    </span>
+
+    <span class="clear"></span>
+    <span class="input width520px">
+      <%= label_tag "Pegawai dengan Status"%>:
+      <%= select_tag "contract_type", options_from_collection_for_select(ContractType.all, "id", "contract_type_name", params[:contract_type]), :include_blank => 'Please Select' %>
+    </span>
+    <span class="clear"></span>
+    <span class="input width520px">
+      <%=  label_tag "Keterangan" %>:
+      <%= select_tag :keterangan, options_for_select([['Hari Efektif','Hari Efektif'],['Hari Non Efektif','Hari Non Efektif']])%>
+
+    </span>
+    <span class="clear"></span>
+    <span class="input width520px">
+      <%= label_tag 'Lama Jam Kerja<span class="redstar">*</span>'%>:
+      <%= text_field_tag :length_in_hours, '0', :class=>'small-text' %>
+      <%= check_box_tag :check_istirahat %>
+      Termasuk Istirahat
+    </span>
+    <span class="clear"></span>
+    <span id="istirahat" class="input width520px">
+      <%= label_tag 'Lama Waktu Istirahat<span class="redstar">*</span>' %>:
+      <%= text_field_tag :break_duration,'0', :class=>'small-text' %> Menit
+    </span>
+    <br/><br/>
+    <span class="clear"></span>
+    <hr/>
+    <div class="center-text box-form">
+      <%= j.submit("Batal", { :name => 'reset', :id => 'info_section_cancel_basic', :type => "reset" , :class=>'grey_button' }) %>
+      <%= j.submit "Simpan", {:class=>'blue_button', :id=>'info_section_save_basic'} %>
+    </div>
+  <%end%>
+</div>

@@ -1,0 +1,2 @@
+$('select[name=\'filter[division]\']').html('<%= options_for_select([["Pilih Bagian",0]]+@divisions.map {|d| [d.name, d.id]}).gsub(/\n/, '') %>');
+

@@ -1,0 +1,142 @@
+<% input_lokasi = "input-field" %>
+<% err_lokasi = error_message_on @accident, :accident_location %>
+<% input_lokasi = "input-error" unless err_lokasi.blank? %>
+
+<% input_karyawan = "input-field" %>
+<% err_karyawan = error_message_on @accident, :person_id %>
+<% input_karyawan = "input-error" unless err_karyawan.blank? %>
+
+<% input_tg_jawab = "input-field" %>
+<% err_tg_jawab = error_message_on @accident, :accident_person_in_charge %>
+<% input_tg_jawab = "input-error" unless err_tg_jawab.blank? %>
+
+<% input_tgl = "input-field" %>
+<% err_tgl = error_message_on @accident,:accident_date %>
+<% input_tgl = "input-error" unless err_tgl.blank? %>
+
+<% input_kategori_kecelakaan = "input-field" %>
+<% err_kategori_kecelakaan = error_message_on @accident, :accident_category %>
+<% input_kategori_kecelakaan = "input-error" unless err_kategori_kecelakaan.blank? %>
+
+<div class="fifty-fifty left">
+    <div class="input">
+  <div class="input-field">
+    <span class="<%= input_karyawan %>">
+      <label>Nama karyawan <span class="redstar">*</span></label><span class="left">:&nbsp;</span>
+      <% if @pers_id.blank? %>
+        <% unless @person.blank? %>
+          <% if @person.id.blank? %>
+            <%= f.text_field :person_name, :id => "person_name" %>
+          <% else %>
+            <%= f.text_field :person_name, :value => @person.full_data_name, :disabled => true %>
+          <% end %>
+        <% else %>
+          <%= f.text_field :person_name, :id => "person_name" %>
+        <% end %>
+      <% else %>
+        <%= f.text_field :person_name, :value => @person.full_data_name, :disabled => true %>
+      <% end %>
+      <%= err_karyawan %>
+      <%= f.hidden_field :pers_id, :value => @pers_id %>
+    </span>
+    <span class="clear"></span>
+
+    <% style = "display:none" %>
+    <% no_jamsotek ="" %>
+    <% if params[:action] == "edit" || (params[:action] == "new" && !@person.blank? && !@person.id.blank?)%>
+       <% style= "" %>
+       <% no_jamsotek = @person.jamsostek_number.blank? ? "Tidak ada Jamsostek" : @person.jamsostek_number%>
+    <% end %>
+
+    <span class="<%= input_tgl %>" id="span_jamsotek" style="<%= style %>">
+      <label>No Jamsostek</label><span class="left">:&nbsp;</span>
+      <div id="jamsostek"><%= no_jamsotek %></div>
+    </span>
+    <span class="clear"></span>
+
+    <span class="<%= input_tgl %>">
+      <label>Tanggal kejadian<span class="redstar">*</span></label><span class="left">:&nbsp;</span>
+      <%= f.text_field :accident_date, :class => "ui-date", :value => (@accident.accident_date.blank? ? '' : @accident.accident_date.strftime('%d/%m/%Y')) %>
+      <%= err_tgl %>
+    </span>
+    <span class="clear"></span>
+
+    <span class="<%= input_lokasi %>">
+      <%= hidden_field_tag "hidden_ajax_accident_location_path", @locations, :id => 'hidden_ajax_accident_location_path' %>
+      <label>Lokasi kejadian <span class="redstar">*</span></label><span class="left">:&nbsp;</span>
+      <%= f.text_field :accident_location, :id => 'autocomplete_accident_location_name', :autocomplete => 'off' %>
+      <%= err_lokasi %>
+    </span>
+    <span class="clear"></span>
+
+    <span class="input-field">
+      <label>Deskripsi penyebab</label><span class="left">:&nbsp;</span>
+      <%= f.text_area :causes, :rows => 3, :cols => 25  %>
+    </span>
+    <span class="clear"></span>
+
+    <span class="input-field">
+      <label>Tindakan</label><span class="left">:&nbsp;</span>
+      <%= f.text_area :action_taken, :rows => 3, :cols => 25  %>
+    </span>
+    
+  </div>
+</div>
+</div>
+<div class="fifty-fifty left">
+    <div class="input">
+        <span class="<%= input_tg_jawab %>">
+      <label>Penanggung jawab<span class="redstar">*</span></label><span class="left">:&nbsp;</span>
+      <%= f.text_field :accident_person_in_charge %>
+      <%= err_tg_jawab %>
+    </span>
+    <span class="clear"></span>
+
+    <span class="<%= input_kategori_kecelakaan %>">
+      <label>Kategori kecelakaan <span class="redstar">*</span></label><span class="left">:&nbsp;</span>
+      <%= f.select :accident_category, @accident.options[:category].collect{|p| [p.humanize,p]}, :prompt => "Pilih" %>
+      <%= err_kategori_kecelakaan %>
+    </span>
+    <span class="clear"></span>
+
+    <span class="input-field">
+      <label>Klaim</label><span class="left">:&nbsp;</span>
+      <%= f.text_area :claim, :rows => 3, :cols => 25  %>
+    </span>
+    <span class="clear"></span>
+
+    <span class="input-field">
+      <label>Biaya</label><span class="left">:&nbsp;</span>
+      <%= f.text_field :biaya, :rows => 3, :cols => 25  %>
+    </span>
+    
+    </div>
+</div>
+
+<script>
+  $(document).ready(function(){
+    $('#accident_biaya').numeric();
+
+    var current_count = <%= current_count_people.count %>;
+    if (ar_name.length != current_count){
+      ar_name = <%= current_people.map { |x| "#{x.full_data_name}" }.to_json %>;
+      ar_id = <%= current_people.map { |x| x.id }.to_json %>
+    }
+    $("#person_name").autocomplete(ar_name);
+
+    $("#person_name").result(function(event, data, formatted) {
+       var u = this;
+       $.ajax({
+          type: "GET",
+          url: "/job_accidents/get_data_person_in_autocomplete?person_data=" + data,
+          success: function(){
+            $("#span_jamsotek").show();
+          }
+        });
+     });
+
+    $( ".ui-date, .ui-date2" ).datepicker({
+      buttonImageOnly: true
+    });
+  });
+</script>

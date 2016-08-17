@@ -1,0 +1,53 @@
+<!-- <div class="profile_top_wash">
+  <div class="profile_color_bar"> -->
+    <div id="pagelet_above_html">
+       <h1><%= link_to  @person.full_name.humanize, person_path(@person.id) %></h1><br/><h3><%= link_to "#{@person.current_position.header_display}" , person_employments_path(@person.id) %></h3><br/></div>
+    <div class="left_column_container">
+        <div class="left_column" id="left_column">
+          <div id="pagelet_profile_photo">
+            <div class="profileimage can_edit" id="profileimage">
+            <%= link_to(image_tag(@person.headshot.url, :class => 'thumbnail'),@person.headshot.url,{:class => 'facebox', :title => link_to('download', @person.headshot.url, :target => '_blank')}) if File.exist?(@person.headshot.path.to_s)%>
+            </div>
+            <div id="pagelet_left_column">
+              <div id="basic_info_summary_box" class="box basic_info_summary">
+                <h5 class="box_header UITitle UITitle_h5">Nomor Induk Karyawan</h5>
+                <div class="inside basic_info_summary_list">
+                  <%#=  link_to 'Print', '/people/print_card/' + @person.id.to_s %>
+                  <%= @person.holding_company.name %><br />
+                  <%= @person.employment_id %><br />
+                  <%= link_to 'Print', people_print_employee_id_card_path(@person) %>
+                </div>
+              </div>
+              <div id="basic_info_summary_box" class="box basic_info_summary">
+                <h5 class="box_header UITitle UITitle_h5">Resume</h5>
+                <div class="inside basic_info_summary_list">
+                  <%=  link_to 'Download', @person.resume.url %>
+                </div>
+              </div>
+              <div id="basic_info_summary_box" class="box basic_info_summary">
+                <h5 class="box_header UITitle UITitle_h5">KTP</h5>
+                <div class="inside basic_info_summary_list">
+                  <%=  link_to(image_tag(@person.ktp.url, :class => 'thumbnail-landscape'),@person.ktp.url,{:class => 'facebox', :title => link_to('download', @person.ktp.url)})%>
+                </div>
+              </div>
+              <div id="basic_info_summary_box" class="box basic_info_summary">
+                <h5 class="box_header UITitle UITitle_h5">NPWP</h5>
+                <div class="inside basic_info_summary_list">
+                  <%=  link_to(image_tag(@person.npwp.url, :class => 'thumbnail-landscape'),@person.npwp.url,{:class => 'facebox', :title => link_to('download', @person.npwp.url)})%>
+                </div>
+              </div>      
+            <div id="boxes_left" class="box_column"></div>
+          </div>
+          </div>
+        </div>
+    </div>  
+    
+<!--   </div>
+</div> -->
+<div class="tab_content profile_bottom_wash" id="tab_content">
+    <div class="profile_bottom_container">
+    <div class="right_column_container clearfix">
+        <div id="pagelet_ads"></div>
+            <div class="right_column" id="right_column">
+            <div id="pagelet_tab_content">
+                    <div id="tab_canvas">

@@ -1,0 +1,34 @@
+
+<fieldset class="fm-table">
+  <legend>
+    <a href="#" id="help_dash" class="icons help-top-icon" title="Click to show/hide information">&nbsp;</a>
+    Edit data master gaji
+  </legend>
+  <%= render :partial => "layouts/howto/howto_content"%>
+  <div style="width: 82%;" class="left">
+    <div id="content-dynamic">
+      <div class="box-form">
+        <div id="box_retur_0">
+          <% form_remote_for @data_master_salary, :url => salary_master_data_path(@data_master_salary), :method => :put, :html => {:multipart => true} do |f| %>
+            <%= render :partial => "form_master_salary", :locals => {:f => f} %>
+            <br class="clear" />
+            <hr />
+            <div class="block-btn-form">
+              <%= render :partial => "layouts/button_loader" %>
+              <div id="button">
+                <input id="info_section_cancel_basic" class="grey_button" type="reset" value="Batal" name="info_section_cancel_basic" onclick='onCancel("#salary_master_datas")'/>
+                <input type="submit" value="Simpan" name="info_section_save_basic" id="info_section_save_basic" class="blue_button" onclick="load_simpan()"/>
+              </div>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</fieldset>
+<script>
+  function load_simpan(){
+    $("#button").hide();
+    $("#ajax-load1").show();
+  }
+</script>

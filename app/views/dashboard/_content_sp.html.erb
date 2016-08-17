@@ -1,0 +1,77 @@
+<% if !@sp1.blank? || !@sp2.blank? || !@sp3.blank?%>
+<script type="text/javascript" src="http://www.google.com/jsapi"></script>
+<%= javascript_include_tag "#{ApplicationController::APPSCHEF_URL}/javascripts/jquery-1.4.2.min.js","jquery.gvChart-1.0.1.min.js" %>
+
+<script>
+gvChartInit();
+$(document).ready(function(){
+  jQuery('#c_sp').gvChart({
+    chartType: 'ColumnChart',
+    gvSettings: {
+      width: 700,
+      height: 300,
+      vAxis :{maxValue : 100, minValue:0 }
+    }
+  });
+});
+</script>
+  <div id="div_sp">
+    <div class="dashboard-chart">
+      <fieldset class="chart-block" style="min-height:183px;width:30%">
+        <div class="control-box">
+          <p class="bold auto">Grafik Surat Peringatan</p>
+        </div>
+        <div class="chart">
+          <table id="c_sp" border="1">
+             <thead>
+               <th></th>
+               <% @bln.each do |x| %>
+                 <th><%= x %></th>
+               <% end %>
+             </thead>
+             <tbody>
+               <tr>
+                 <th>Warning</th>
+                 <% @warning.each do |x| %>
+                   <td><%= x %></td>
+                 <% end %>
+               </tr>
+               <tr>
+                 <th>SP1</th>
+                 <% @sp1.each do |x| %>
+                   <td><%= x %></td>
+                 <% end %>
+               </tr>
+               <tr>
+                 <th>SP2</th>
+               <% @sp2.each do |x| %>
+                 <td><%= x %></td>
+               <% end %>
+               </tr>
+               <tr>
+                 <th>SP3</th>
+               <% @sp3.each do |x| %>
+                 <td><%= x %></td>
+               <% end %>
+               </tr>
+             </tbody>
+            </table>
+        </div>
+      </fieldset>
+    </div>
+  </div>
+<% else %>
+  <div id="sp_desc_role">
+  <% unless params[:filter].blank? %>
+    <div class="dashboard-chart" id="c3">
+          <fieldset class="chart-block4">
+             <div class="control-box"></div>
+               <div no-chart="">
+                 <div id="desc_role" class="no-data-chart">Belum ada data SP saat ini
+               </div>
+             </div>
+          </fieldset>
+        </div>
+  <% end %>
+  </div>
+<% end %>

@@ -1,0 +1,87 @@
+<!-- popup -->
+
+<div style="display:none;">
+  <div class="frm-popup" id="popup_more_hour">
+    <div id="popup2">
+      <%- if @presence %>
+        <div class="title-page-tambah"><%= @presence[:name].titleize %></div>
+        <div class="input-help">
+          <label>Field dengan tanda <span class="redstar">*</span> harus diisi</label>
+        </div>
+        <fieldset>
+          <span class="input">
+            <label style="width:200px;">Tanggal</label> :
+            <%= @presence[:date].strftime("%d/%m/%Y") %>
+          </span>
+          <span class="clear"></span>
+          <span class="input">
+            <label style="width:200px;">Jam Kerja Normal</label> :
+            <% if NationalHoliday.is_holiday?(current_company_id, @presence[:date]) %>
+              Libur
+            <% elsif @presence[:standard_work_length].to_i > 0 %>
+              <%= Presence.hours_to_hour_text(@presence[:standard_work_length].to_f) %>
+            <% else %>
+              Belum ada shift
+            <% end %>
+          </span>
+          <span class="clear"></span>
+          <span class="input">
+            <label style="width:200px;">Jam Kerja Total</label> :
+            <%= Presence.hours_to_hour_text(@presence[:work_hour].to_f) %>
+          </span>
+          <span class="clear"></span>
+          <span class="input">
+            <label style="width:200px;">Total Jam Kerja Lebih</label> :
+            <%= Presence.hours_to_hour_text(@presence[:more_hour].to_f) %>
+          </span>
+          <span class="clear"></span>
+          <%- if @popup_id == 1 %>
+            <span class="input">
+              <label>Dianggap Lembur</label>
+              <%= select_tag "hours", options_for_select(@hours,(@presence[:more_hour]/1).to_i), :style=>"width:50px" %> Jam
+              <%= select_tag "minutes", options_for_select(@minutes,((@presence[:more_hour]%1)*60).to_i), :style=>"width:50px" %> Menit
+            </span>
+            <span class="input">
+              <label>Jenis Lembur</label>
+              <%= select_tag "overtime_type", options_for_select([['Lembur biasa', 'Lembur Biasa'], ['Lembur khusus(luar kota)', 'Lembur Khusus']]) %>
+            </span>
+            <span class="clear"></span>
+          <%- else %>
+            <span class="input">
+              <label class="label-kerja-hari-lain">Kerja di hari lain <span class="redstar">*</span></label>
+              <%= text_field_tag "alt_tempdate",{},{:style => "width:120px", :class => "alt_tempdate", :id => "alt_tempdate_#{@presence[:id]}"}%>
+              <%= hidden_field_tag :date,{},{:class => "alt_datepick", :id => "alt_datepick_#{@presence[:id]}"} %>
+              <div class="formError error-kerja-hari-lain" style="display:none;">Kerja di hari lain tidak boleh kosong</div>
+            </span>
+            <span class="clear"></span>
+            <span class="input">
+              <label>Lama Kerja</label>
+              <%= select_tag "hours", options_for_select(@hours,(@presence[:more_hour]/1).to_i), :style=>"width:50px" %> Jam
+              <%= select_tag "minutes", options_for_select(@minutes,number_with_precision((@presence[:more_hour]%1)*60, :precision => 0).to_i), :style=>"width:50px" %> Menit
+            </span>
+          <%- end %>
+          <%= hidden_field_tag :popup_id, @popup_id %>
+          <span class="clear"></span>
+          <span class="input">
+            <label>Alasan</label>
+            <textarea id="more_desription" cols="35" rows="3"></textarea>
+          </span>
+          <span class="clear"></span>
+          <span class="input">
+            <label>Anggap sama semua</label>
+            <%= check_box_tag "same"%>
+          </span>
+          <span class="clear"></span>
+          <hr>
+          <div class="center-text  box-form">
+            <input type="reset" id="info_section_cancel_basic" class="grey_button" value="Batal" name="info_section_cancel_basic" onclick="javascript:$.colorbox.close(); gaiSelected = [];return false;">
+            <input type="submit" value="Simpan" name="info_section_save_basic" id="info_section_save_basic2" class="blue_button">
+          </div>
+        </fieldset>
+      <%- end %>
+    </div>
+  </div>
+</div>
+<div class="clear"></div>
+<!-- end popup -->
+

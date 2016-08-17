@@ -1,0 +1,115 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <title>Employee ID Card</title>
+    <style type="text/css">
+    #card {
+        padding:0px;      
+        margin-bottom:4px;
+    }
+    #card .passphoto {
+        width:2.2cm;
+        height:3cm;
+      }
+    #card .barcode {
+        padding-left:0;
+      }
+    #card table {
+        width:85.60mm;
+        height:53.98mm;
+        border:5px solid gray;
+        background: #D3D3D3;
+        font-family:arial;
+        font-size:12px;
+        padding:10px 10px;
+      }
+    #card td {
+        padding:5px 10px;
+      }
+    #card .company_title {
+        font-family:verdana;
+        font-weight:bold;
+        font-size:14px;
+        border-bottom:1px solid #666;
+    }
+    #card .nospace {
+        padding-top:0;
+        padding-bottom:0;
+        margin-bottom:0;
+        margin-top:0;
+        vertical-align:top;
+        width:auto;
+        word-wrap:break-word;
+      }
+     @media print {
+        .nonprintable {
+          display: none;
+        }
+     }
+    </style>
+  </head>
+  <body>
+  <div id="card">
+    <table>
+       <tr>
+        <td colspan="3" class="company_title"><%= @company %></td>
+      </tr>
+      <tr>
+        <td rowspan="8">
+          <%= image_tag @person.headshot.url, :class => 'passphoto' if File.exist?(@person.headshot.path.to_s)%>
+        </td>
+        <td colspan="2">&nbsp;</td>
+      </tr>
+      <tr>
+        <td class="nospace">
+          Nama
+        </td>
+        <td class="nospace">
+          : <%=h @person.full_name %>
+        </td>
+      </tr>
+      <tr>
+        <td class="nospace">
+          Jabatan
+        </td>
+        <td class="nospace">
+          : <%=h @person.current_employment.position.display %>
+        </td>
+      </tr>
+      <tr>
+        <td class="nospace">
+        </td>
+      </tr>
+
+      <tr>
+        <td class="nospace">
+          Divisi
+        </td>
+        <td class="nospace">
+          : <%=h @person.current_employment.division.name %>
+        </td>
+      </tr>
+      <tr>
+        <td class="nospace">
+          NIK
+        </td>
+        <td class="nospace">
+          : <%=h @person.employment_id %>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2" class="barcode">
+          <%= barcode @person.employment_id,  :height => 40, 
+                                      :width  => 160,
+                                      :margin => 10,
+                                      :xoff   => 8,
+                                      :yoff   => 16
+          %> 
+        </td>
+      </tr>
+    </table>
+    </div>
+    <div class="nonprintable"><button onclick="window.print()">PRINT</button></div>
+  </body>
+</html>

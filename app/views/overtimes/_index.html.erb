@@ -1,0 +1,159 @@
+<%= render :partial=> "layouts/shared/breadcrumbs" %>
+<%= render :partial => "layouts/howto_menu" %>
+<fieldset class="fm-table">
+  <%= render :partial => "layouts/delete_message" %>
+  <legend>
+    <a href="#" id="help_dash" class="icons help-top-icon" title="Click to show/hide information">&nbsp;</a>
+    Rencana lembur
+  </legend>
+  <%= render :partial => "layouts/howto/howto_content"%>
+  <div class="panelFilter">
+    <table cellpadding="0" cellspacing="0">
+      <tbody>
+        <tr>
+          <td style="width:97px;" id="id_more_action">
+            <div class="action_menu">
+              <ul>
+                <li>
+                  <a class="grey_button2" >
+                    <span class="left">More Actions</span>
+                    <span class="icons drop_arrow_ico">&nbsp;</span>
+                  </a>
+                  <div class="clear"></div>
+                  <ul>
+                    <li><a class="list" onclick="onDelete('overtimes')">Delete</a></li>
+                    <% if current_features.include?('overtime_status_update') %>
+                      <li><a class="list" onclick="onApprove('approved')">Approve</a></li>
+                      <li><a class="list" onclick="onApprove('Rejected')">Reject</a></li>
+                    <% end %>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+          </td>
+          <td id="id_filter">
+            <div class="action_menu">
+              <ul>
+                <li>
+                  <a class="grey_button2" id="filter_trigger" style="color: rgb(89, 119, 156); ">
+                    <span class="icons filter-ico">&nbsp;</span> Filter
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </td>
+          <td style="width:251px;">
+            <div class="pagination">
+              <%= link_to '<span class="icons add_ico">&nbsp;</span> Tambah Rencana Lembur',
+                "#overtimes/new", :class=>'grey_button2'%>
+            </div>
+            <div class="clear"></div>
+          </td>
+        </tr>
+        <tr id="filter_block" style="display: table-row; ">
+          <td colspan="3">
+            <% unless @overtimes.blank? %>
+              <div class="expand_filter">
+                <div id="filter_st" style="display: block; ">
+                  <% form_remote_tag :url => {:controller=>:overtimes, :action=>:index}, :method => :get  do -%>
+                    <div class="filter_opt">
+                      <div class="center">
+                        <label class="" style="float: none">Periode</label>
+                        <select class="" name="filter[filter_select]" id="date_select" style="width: 100px" onchange="date_display()">
+                          <option value="1">Harian</option>
+                          <option value="2">Antara</option></select>
+                        <span class="" id="date_start">
+                          <input type="text" name="filter[start_periode]" class="ui-date" id="filter_start_periode"/>
+                        </span>
+                        <span  id="antara" style="display:none;">
+                          &nbsp; s.d. &nbsp;
+                        </span>
+                        <span id="date_end" style="display:none;">
+                          <input type="text" name="filter[end_periode]" class="ui-date" id="filter_end_periode"/>
+                        </span>
+                      </div>
+                    </div>
+                    <div class="clear"></div>
+                    <div class="center filter-btn">
+                      <%= render :partial => "layouts/button_loader" %>
+                      <span class="center" id="filter_button">
+                        <%= submit_tag 'Tampilkan', :class=>"grey_button2", :onclick=> "progress_filter()", :style => 'float :none; margin-bottom :3px;'%>
+                      </span>
+                    </div>
+                  <% end %>
+                </div>
+              </div>
+            <% end %>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="clear"></div>
+  <div id="div_list_overtimes">
+    <%= render :partial => "list_overtimes" %>
+  </div>
+</fieldset>
+
+<script type="text/javascript">
+  var gaiSelected =  [];
+  $(document).ready(function() {
+    removeNotifyMessage();
+    $('#filter_start_periode').datepicker("setDate",<%="#{Date.today.strftime("%d/%m/%Y")}"%>);
+    $('#filter_start_periode').val('<%= Date.today.strftime("%d/%m/%Y") %>');
+    $('#filter_end_periode').datepicker("setDate",<%="#{Date.today.strftime("%d/%m/%Y")}"%>);
+    $(".ui-date, .ui-date2").datepicker({
+      buttonImageOnly: true,
+      gotoCurrent: true,
+      format: 'dd/mm/YY'
+    });
+
+    $('#filter_trigger').addClass("filter-active");
+    $('#filter_block').show();
+    $('#filter_trigger').click(function(){
+      $(this).toggleClass("filter-active");
+      $('#filter_block').toggle();
+    });
+    $('.expand_filter .reset-filter-ico').click(function(){
+      $('#filter_block').hide();
+      $('#filter_trigger').removeClass("filter-active")
+    });
+    //Filter_Step
+    $('#filter_nd').hide();
+    $('#next_step').click(function(){
+      $('#filter_st').hide();
+      $('#filter_nd').show();
+    });
+    $('#save_create, #cancel_create').click(function(){
+      $('#filter_st').show();
+      $('#filter_nd').hide();
+    });
+
+
+  });
+
+  function date_display(){
+    var val = $("#date_select").val();
+    if (val == "1"){
+      $("#antara").hide();
+      $("#date_end").hide();
+      $('#filter_start_periode').datepicker("setDate",<%="#{Date.today.strftime("%d/%m/%Y")}"%>);
+      $('#filter_end_periode').datepicker("setDate",<%="#{Date.today.strftime("%d/%m/%Y")}"%>);
+    }else{
+      $("#antara").show();
+      $("#date_end").show();
+      $('#filter_start_periode').datepicker("setDate",<%="#{Date.today.strftime("%d/%m/%Y")}"%>);
+      $('#filter_end_periode').datepicker("setDate",<%="#{Date.today.strftime("%d/%m/%Y")}"%>);
+    }
+  }
+
+  function progress_filter(){
+    $('#ajax-load1').show();
+    $('#filter_button').hide();
+  }
+
+  function stop_filter(){
+    $('#ajax-load1').hide();
+    $('#filter_button').show();
+  }
+</script>

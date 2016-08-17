@@ -1,0 +1,141 @@
+<script>
+  function onHubungan(fr){
+    if (fr.value == "Lain"){
+      $('#div_hubungan').hide();
+      $('#div_hubungan_lain').show();
+    }
+  }
+
+  function onCancelHubungan(){
+    $('#div_hubungan').show();
+    $('#div_hubungan_lain').hide();
+    $('#family_relationship_to_person').val('');
+  }
+
+  function onChangeFamilyField(){
+    $('#field_full_name').show();
+    $('#lbl_full_name').hide();
+    $('#field_gender').show();
+    $('#lbl_gender').hide();
+    $('#field_city_of_birth').show();
+    $('#lbl_city_of_birth').hide();
+    $('#field_birth_date').show();
+    $('#lbl_birth_date').hide();
+    $('#field_current_job').show();
+    $('#lbl_current_job').hide();
+    $('#field_highest_education').show();
+    $('#lbl_highest_education').hide();
+    $('#field_relationship_to_person').show();
+    $('#lbl_relationship_to_person').hide();
+    $('#field_hubungan_lain').show();
+    $('#lbl_hubungan_lain').hide();
+    $('#field_field_alamat').show();
+    $('#field_notelp').show();
+    $('#hide').show();
+    onChangeField();
+  }
+
+<% input_nama = "input-field" %>
+<% err_nama = error_message_on @family, :full_name %>
+<% input_nama = "input-error" unless err_nama.blank? %>
+
+<% input_jk = "input-field" %>
+<% err_jk = error_message_on @family, :gender %>
+<% input_jk = "input-error" unless err_jk.blank? %>
+
+</script>
+
+<div class="input">
+  <%= link_to "<span class='icons edit-icon'>&nbsp;</span>Edit", "#",:class=>"grey_button_a top-right", :onclick=>"onChangeFamilyField()" %>
+<span class="<%= input_nama %>">
+  <label>Nama<span class="redstar">*</span></label><span class="left">:&nbsp;</span>
+  <div id="field_full_name" style="display:none;">
+    <%= f.text_field :full_name, :class => 'inputtext' %>
+    <%= err_nama %>
+  </div>
+  <div id="lbl_full_name">
+    <%= @family.full_name %>
+  </div>
+</span>
+<span class="clear"></span>
+
+<span class="<%= input_jk %>">
+  <label>Jenis Kelamin <span class="redstar">*</span></label><span class="left">:&nbsp;</span>
+  <div id="field_gender" style="display:none;">
+    <%= f.select :gender, @family.options[:gender].collect{|p| [p.display,p]}, { :include_blank => 'Pilih' } %>
+    <%= err_jk %>
+  </div>
+  <div id="lbl_gender">
+    <%= @family.gender %>
+  </div>
+</span>
+<span class="clear"></span>
+
+<span class="input-field">
+  <%= hidden_field_tag "autocomplete_family_city_array", @city, :id => 'autocomplete_family_city_array' %>
+  <label>Kota Kelahiran</label><span class="left">:&nbsp;</span>
+  <div id="field_city_of_birth" style="display:none;">
+    <%= f.text_field :city_of_birth, :id => 'autocomplete_family_city', :autocomplete => 'off' %>
+  </div>
+  <div id="lbl_city_of_birth">
+    <%= @family.city_of_birth.blank? ? "-" : @family.city_of_birth %>
+  </div>
+</span>
+<span class="clear"></span>
+
+<span class="input-field">
+  <label>Tanggal Lahir </label><span class="left">:&nbsp;</span>
+  <div id="field_birth_date" style="display:none">
+    <% val = @family.birth_date.blank? ? "" : @family.birth_date.strftime("%d/%m/%Y") %>
+    <%= f.text_field :birth_date, :class => "ui-date", :value => val %>
+  </div>
+  <div id="lbl_birth_date">
+    <%= @family.birth_date.strftime("%d/%m/%Y") unless @family.birth_date.blank? %>
+  </div>
+</span>
+<span class="clear"></span>
+
+<span class="input-field">
+  <label>Pekerjaan</label><span class="left">:&nbsp;</span>
+  <div id="field_current_job" style="display:none;">
+    <%= f.text_field :current_job, :class => 'inputtext' %>
+  </div>
+  <div id="lbl_current_job">
+    <%= @family.current_job.blank? ? "-" : @family.current_job %>
+  </div>
+</span>
+<span class="clear"></span>
+
+<span class="input-field">
+  <label>Pendidikan Terakhir</label><span class="left">:&nbsp;</span>
+  <div id="field_highest_education" style="display:none;">
+    <%= f.select :highest_education, @family.options[:highest_education].collect{|p| [p.just_display,p]}, { :include_blank => 'Pilih' } %><%= error_message_on @family, :highest_education %>
+  </div>
+  <div id="lbl_highest_education">
+    <%= @family.highest_education.blank? ? "-" : @family.highest_education %>
+  </div>
+</span>
+<span class="clear"></span>
+
+<span class="input-field">
+  <label>Hubungan</label><span class="left">:&nbsp;</span>
+  <div id="div_hubungan">
+    <div id="field_relationship_to_person" style="display:none;">
+      <%= f.select :relationship_to_person, @family.options[:relationship_to_person].collect{|p| [p.display,p]}, { :include_blank => 'Pilih' }, :onchange=> "onHubungan(this)" %>
+    </div>
+    <div id="lbl_relationship_to_person">
+    <%= @family.relationship_to_person.blank? ? "-" : @family.relationship_to_person %>
+  </div>
+ </div>
+  <div id="div_hubungan_lain" style="display:none;">
+    <%= f.text_field :hubungan_lain %>
+    <br class="clear"/>
+    <div style="margin-left:158px;"><a onclick="onCancelHubungan()">Cancel</a></div>
+  </div>
+  <%= error_message_on @family, :relationship_to_person %>
+</span>
+<span class="clear"></span>
+</div>
+<% f.fields_for :address do |address| -%>
+  <%= render :partial => 'addresses/popup_edit_form.html.erb', :locals => {:f => address} %>
+<% end -%>

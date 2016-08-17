@@ -1,0 +1,110 @@
+<script type="text/javascript">
+  function ajaxLoadSetting(url){
+    $("#ajax-load").show();
+    $.get(url, function(data) {
+      $("#ajax-load").hide();
+      $('.top_menu').removeClass('active');
+      $(this).addClass('active');
+    });
+  }
+  $(document).ready(function(){
+    $('.top_menu').click(function(){
+      $('.top_menu').removeClass('active');
+      $(this).addClass('active');
+    });
+  });
+</script>
+
+<% if current_features.include?('hr_setting_index') %>
+  <li>
+    <%= link_to "HR Setting", "#settings", :class=> 'top_menu setting_menu first' %>
+  </li>
+<% end %>
+
+<% if current_features.include?('holiday_index') %>
+  <li>
+    <%= link_to "Hari libur", "#holidays", :class=> 'top_menu holiday_menu' %>
+  </li>
+<% end %>
+
+<% if current_features.include?('leave_index') %>
+  <li>
+    <%= link_to "Jenis Tidak Masuk", "#cuti_sakit",
+      :class=> 'top_menu cuti_sakit_menu' %>
+  </li>
+<% end %>
+
+<% if current_features.include?('shift_index') %>
+  <li>
+    <%= link_to "Shift", "#shifts", :class=> 'top_menu shift_menu' %>
+  </li>
+<% end %>
+
+<li>
+  <%= link_to "Struktur Organisasi", "#organization_structure/departments", :class=> 'top_menu org_menu' %>
+  <div class="clear"></div>
+    <ul class="submenu-top">
+      <li class="parent">
+         <%= link_to "Departmen", "#organization_structure/departments", :id=>"department" %>
+         <% if current_features.include?('department_new') %>
+         <ul>
+            <li>
+              <%= link_to "<span class=\"add-top-menu\">&nbsp;</span> Tambah Departemen", '#organization_structure/departments/new'%>
+            </li>
+         </ul>
+         <% end %>
+      </li>
+      <li class="parent">
+         <%= link_to "Bagian", "#organization_structure/divisions", :id=>"divisi" %>
+         <% if current_features.include?('division_new') %>
+         <ul>
+            <li>
+              <%= link_to "<span class=\"add-top-menu\">&nbsp;</span> Tambah Bagian", '#organization_structure/divisions/new'%>
+            </li>
+         </ul>
+         <% end %>
+      </li>
+      
+      <li class="parent">
+         <%= link_to "Group", "#organization_structure/work_groups", :id=>"group" %>
+         <% if current_features.include?('group_new') %>
+         <ul>
+            <li>
+              <%= link_to "<span class=\"add-top-menu\">&nbsp;</span> Tambah Group", '#organization_structure/work_groups/new'%>
+            </li>
+         </ul>
+         <% end %>
+      </li>
+
+          <li class="parent">
+         <%= link_to "Jabatan", "#organization_structure/positions", :id=>"position" %>
+         <% if current_features.include?('position_new') %>
+         <ul>
+            <li>
+              <%= link_to "<span class=\"add-top-menu\">&nbsp;</span> Tambah Jabatan", '#new_position'%>
+            </li>
+         </ul>
+         <% end %>
+      </li>
+
+    </ul>
+</li>
+  
+<% if current_features.include?('schedule_index') %>
+  <li>
+    <%= link_to "Penjadwalan", "#schedules",
+      :class=> 'top_menu schedule_menu' %>
+  </li>
+<% end %>
+
+<% if current_features.include?('payroll_index') %>
+  <li>
+    <%= link_to "Payroll", "#payrolls", :class=> 'top_menu payroll_menu'  %>
+  </li>
+<% end %>
+
+<% if current_features.include?('fingerprint_index') %>
+  <li>
+    <%= link_to "Alat Sidik Jari", "#fingerprint_settings", :class=> 'top_menu fingerprint_menu'  %>
+  </li>
+<% end %>

@@ -1,0 +1,29 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+satu:
+  id: 1
+  absence_type_name: "Ijin"
+  company_id: 32
+  is_salary_paid: 0
+  allowance_are_paid: 1
+
+dua:
+  id: 2
+  absence_type_name: "Ijin Khusus"
+  company_id: 32
+  is_salary_paid: 0
+  allowance_are_paid: 1
+
+tiga:
+  id: 3
+  absence_type_name: "Sakit"
+  company_id: 32
+  is_salary_paid: 1
+  allowance_are_paid: 0
+
+empat:
+  id: 4
+  absence_type_name: "Cuti Bersama"
+  company_id: 32
+  is_salary_paid: 1
+  allowance_are_paid: 0

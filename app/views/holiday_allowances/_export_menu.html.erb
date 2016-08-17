@@ -1,0 +1,66 @@
+<script type="text/javascript" >
+  $(document).ready(function(){
+    $(".blue_button").attr("disabled", true);
+    $("#klik-bca").colorbox({width:"420px", inline:true, href:"#transfer-date"});
+    $("#datepicker" ).datepicker({buttonImageOnly: true});
+    $("#datepicker").change(function(){
+      if ($(this).val() != ""){
+        $(".blue_button").attr("disabled", false);
+      }
+    });
+     $(".grey_button").click(function(){
+      $.colorbox.close();
+    });
+
+    $(".blue_button").click(function(){
+      $.colorbox.close();
+    });
+
+  })
+</script>
+<ul>
+  <li>
+    <a class="grey_button2" href="">
+      <span class="left">Export Data to</span>
+      <span class="icons drop_arrow_ico">&nbsp;</span>
+    </a>
+    <div class="clear"></div>
+    <ul>
+      <li>
+        <%= link_to "<span class='icons xls_ico'>&nbsp;</span><span class='left'>XLS File</span>", export_holiday_allowances_path(:type =>'xls', :month_from => @month_from, :year_from => @year_from, :month_to => @month_to, :year_to => @year_to), :class=>"list" %>
+      </li>
+      <li>
+        <%= link_to "<span class='icons bca_ico'>&nbsp;</span><span class='left'>Klik BCA</span>", "#", :class=>"list", :id => "klik-bca" %>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<div style='display:none'>
+  <div id='transfer-date'>
+    <% form_tag export_salaries_path, :method => :get do %>
+      <%= hidden_field_tag :type, 'bca' %>
+      <%= hidden_field_tag :month_from, @month_from %>
+      <%= hidden_field_tag :year_from, @year_from %>
+      <%= hidden_field_tag :month_to, @month_to %>
+      <%= hidden_field_tag :year_to, @year_to %>
+      <div class="title-page-small">
+        Konfirmasi Export Data
+      </div>
+      <div class="popup-confirmation">
+        <p style="margin-top:-5px">
+          Tanggal Transfer: <%= text_field_tag :transfer_date, nil, :id => "datepicker" %>
+        </p>
+      </div>
+      <div class="clear"></div>
+      <%= render :partial => "layouts/button_loader" %>
+      <div class="box-form" id="button">
+        <input type="hidden" id="tamp" name="tamp"/>
+        <div class="right button">
+          <input type="submit" value="Export" class="blue_button" />
+          <input type="button" value="Keluar" class="grey_button"/>&nbsp;&nbsp;&nbsp;
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>

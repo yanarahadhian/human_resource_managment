@@ -1,0 +1,97 @@
+<%= render :partial=> "layouts/shared/breadcrumbs" %>
+<%= render :partial => "layouts/howto_menu" %>
+<%- if @group %>
+  <fieldset class="fm-table">
+    <legend><a href="#" id="help_dash" class="icons help-top-icon" title="Click to show/hide information">&nbsp;</a>
+      Informasi Detail Group <%=h @group.work_group_name.just_display %></legend>
+    <%= render :partial => "layouts/howto/howto_content"%>
+
+    <div class=" box-form">
+      <div class="edit_field"  style="display:none;">
+        <div class="input-help-wide">
+          <label>Field dengan tanda <span class="redstar">*</span> harus diisi</label>
+        </div>
+      </div>
+      <% input_nama = "input-field" %>
+      <% err_nama = error_message_on @group, :work_group_name %>
+      <% input_nama = "input-error" unless err_nama.blank? %>
+
+      <% input_div = "input-field" %>
+      <% err_div = error_message_on @group, :division_id %>
+      <% input_div = "input-error" unless err_div.blank? %>
+
+      <% form_remote_for [:organization_structure, @group], :html => { :multipart => true }  do |f| %>
+
+        <div class="input big">
+          <div class="top-right" style="top: 7px; right: 4px;">
+            <a id="edit_info" class="grey_button_a no-margin">
+              <span class="icons edit-icon">&nbsp;</span>
+              Edit
+            </a>
+          </div>
+          <span class="input-field show_field">
+            <label>Nama Bagian</label>:
+            <%=h @group.work_group_name.just_display %>
+          </span>
+
+          <span class="<%= input_nama %> edit_field" style="max-width:600px; display:none;">
+            <span class="left"><%= f.label :name, "Nama Group <span class='redstar'>*</span>" %>: &nbsp;</span>
+            <%= f.text_field :work_group_name %>
+            <%= err_nama %>
+          </span>
+
+          <span class="clear"></span>
+          <span class="input-field show_field">
+            <label>Nama Bagian</label>:
+            <%=h @group.division.name.just_display if @group.division %>
+          </span>
+          <span class="<%= input_div %> edit_field" style="max-width:600px; display:none;">
+            <span class="left"><label>Pilih Bagian<span class="redstar">*</span></label>: &nbsp;</span>
+            <%= collection_select(:work_group, :division_id, @divisions, :id, :name, options ={:index => @group.division_id}) %>
+            <%= err_div %>
+          </span>
+        </div>
+        <span class="clear"></span>
+        <hr/>
+        <div class="center-text box-form">
+          <%= render :partial => "layouts/button_loader"  %>
+        </div>
+        <div id="button" style="display:none">
+          <div class="center-text box-form" id="submit">
+            <input id="info_section_cancel_basic" class="grey_button" type="reset" value="Batal" name="info_section_cancel_basic"/>
+            <input type="submit" value="Simpan" name="info_section_save_basic" id="info_section_save_basic" class="blue_button" onclick="ajaxLoad1('#organization_structure/work_groups','button','ajax-load1')"/>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </fieldset>
+<%- else %>
+  <div class="center-text">
+    Maaf tidak ada group dengan id <%= params[:id] %> di perusahaan ini
+  </div>
+<%- end %>
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('#edit_info').click(function(e){
+      e.preventDefault()
+      edit_info();
+    });
+
+    $('#info_section_cancel_basic').click(function(e){
+      e.preventDefault()
+      $('.show_field').show();
+      $('.edit_field').hide();
+      $('#button').hide();
+    });
+
+    $('#errorExplanation ul').hide();
+
+  });
+
+  function edit_info(){
+    $('.show_field').hide();
+    $('.edit_field').show();
+    $('#button').show();
+  }
+
+</script>

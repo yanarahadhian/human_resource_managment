@@ -1,0 +1,18 @@
+<script>
+  function changeGroup(value){
+    $('#changeGroupID').load("/add_group?value="+value+"&index=0");
+  }
+
+  $(document).ready(function(){
+    $('#changeGroupID').load("/add_group?value="+$('#division').val()+"&index=0");
+  })
+</script>
+
+<span class="input-field special">
+  <%= label_tag :division, "Divisi / Group" %> :
+  <%= select_tag :division, options_from_collection_for_select(@divisions,'id','name',@overtime.division_id),
+    :onchange => 'changeGroup(this.value)'%>
+  <span id="changeGroupID">
+    <%= select_tag :group, options_for_select(["pilih group"], :selected => @overtime.work_group_id)  %>
+  </span>
+</span>

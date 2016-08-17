@@ -1,0 +1,16 @@
+
+<div>
+<% form_remote_for @premium, :url => {:action => :update_premium} do |f|-%>
+<tr id=<%= "tr_#{@row}" %> >
+    <td class="center-text">                        
+      <%= f.text_field :premium_name %>
+    </td>
+      <td><%= f.select( 'calculated_on_overtime', @row, { 'Ya' => 1, 'Tidak' => 0}) %></td>
+       <td><%= f.select( 'calculated_on_salary_cut', @row, { 'Ya' => 1, 'Tidak' => 0}) %></td>
+       <td><%= f.select( 'count_daily', @row, { 'Ya' => 1, 'Tidak' => 0}) %></td>
+
+      <td><%= select( "payment", "id", { "Visa" => "1", "Mastercard" => "2"}) %></td>
+</tr>
+<%end%> 
+
+</div>

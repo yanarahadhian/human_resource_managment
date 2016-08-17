@@ -1,0 +1,146 @@
+<% input_pendidikan = "input-field" %>
+<% err_pendidikan = error_message_on @education, :pendidikan_terakhir %>
+<% input_pendidikan = "input-error" unless err_pendidikan.blank? %>
+
+<% input_nilai_akhir = "input-field" %>
+<% err_nilai_akhir = error_message_on @education, :gpa %>
+<% input_nilai_akhir = "input-error" unless err_nilai_akhir.blank? %>
+
+<% input_no_ija = "input-field" %>
+<% err_no_ija = error_message_on @education, :no_ijazah %>
+<% input_no_ija = "input-error" unless err_no_ija.blank? %>
+
+<div class="input">
+   <a onclick="onChangeField()" class="grey_button_a top-right">
+      <span class="icons edit-icon">&nbsp;</span>
+        Edit
+    </a>
+  <span class="<%= input_pendidikan %>">
+    <label>Pendidikan Terakhir<span class="redstar">*</span></label><span class="left">:&nbsp;</span>
+    <div id="field_pendidikan_terakhir" style="display:none">
+      <%= f.select :pendidikan_terakhir, @education.options[:pendidikan_terakhir].collect{|p| [p.just_display,p]}, { :include_blank => 'Pilih' }%>
+            <%= err_pendidikan %>
+    </div>
+    <div id="label_pendidikan_terakhir">
+      <%= @education.pendidikan_terakhir %>
+    </div>
+  </span>
+  <span class="clear"></span>
+
+  <span class="input-field">
+    <label>Institusi</label><span class="left">:&nbsp;</span>
+    <div id="field_institution_name" style="display:none">
+      <%= f.text_field :institution_name %>
+    </div>
+    <div id="label_institution_name">
+       <%= @education.institution_name.blank? ? "-" : @education.institution_name %>
+    </div>
+  </span>
+  <span class="clear"></span>
+
+  <span class="input-field">
+    <label>Jurusan</label><span class="left">:&nbsp;</span>
+    <div id="field_field_major" style="display:none">
+      <%= f.text_field :field_major %>
+    </div>
+    <div id="label_field_major">
+      <%= @education.field_major.blank? ? "-" : @education.field_major %>
+    </div>
+  </span>
+  <span class="clear"></span>
+
+  <span class="input-field">
+    <label>Tahun Masuk</label><span class="left">:&nbsp;</span>
+    <div id="field_entry_year" style="display:none">
+      <select name="education[entry_year]">
+        <option selected="selected" value="">Pilih</option>
+        <% for i in 1950..Time.now.year do %>
+          <% if i== @education.entry_year%>
+            <option selected="selected "value="<%= i %>"><%= i %></option>
+          <% else %>
+            <option value="<%= i %>"><%= i %></option>
+          <% end %>
+        <% end %>
+      </select>
+      <%#= f.text_field :entry_year, :size => 4, :maxlength => 4 %>
+    </div>
+    <div id="label_entry_year">
+      <%= @education.entry_year.blank? ? "-" : @education.entry_year %>
+    </div>
+  </span>
+  <span class="clear"></span>
+
+  <span class="input-field">
+    <label>Tahun Keluar</label><span class="left">:&nbsp;</span>
+    <div id="field_graduation_year" style="display:none">
+      <select name="education[graduation_year]">
+        <option selected="selected" value="">Pilih</option>
+        <% for i in 1950..Time.now.year do %>
+          <% if i== @education.graduation_year %>
+            <option selected="selected "value="<%= i %>"><%= i %></option>
+          <% else %>
+            <option value="<%= i %>"><%= i %></option>
+          <% end %>
+        <% end %>
+      </select>
+      <%#= f.text_field :graduation_year, :size => 4, :maxlength => 4 %>
+    </div>
+    <div id="label_graduation_year">
+      <%= @education.graduation_year.blank? ? "-" : @education.graduation_year %>
+    </div>
+  </span>
+  <span class="clear"></span>
+
+  <span class="<%= input_nilai_akhir %>">
+    <label>Nilai Akhir</label><span class="left">:&nbsp;</span>
+    <div id="field_gpa" style="display:none">
+      <%= f.text_field :gpa, :size => 4, :maxlength => 5%>
+      <%= err_nilai_akhir %>
+    </div>
+    <div id="label_gpa">
+      <%= @education.gpa.blank? ? "-" : @education.gpa %>
+    </div>
+  </span>
+  <span class="clear"></span>
+
+  <span class="input-field">
+    <label>Keterangan Lain </label><span class="left">:&nbsp;</span>
+    <div id="field_education_description" style="display:none">
+      <%= f.text_area :education_description, :rows=>3, :cols=>20 %>
+    </div>
+    <div id="label_education_description">
+      <%= @education.education_description.blank? ? "-" : @education.education_description %>
+    </div>
+  </span>
+  <span class="clear"></span>
+
+  <span class="<%= input_no_ija %>">
+    <label>No Ijazah</label><span class="left">:&nbsp;</span>
+    <div id="field_no_ijazah" style="display:none">
+      <%= f.text_field :no_ijazah %>
+      <%= err_no_ija %>
+    </div>
+    <div id="label_no_ijazah">
+      <%= @education.no_ijazah.blank? ? "-" : @education.no_ijazah %>
+    </div>
+  </span>
+  
+
+  <span class="input-field">
+    <label>Sertifikat</label><span class="vtop">:</span>
+    <% unless @education.id.blank? %>
+      
+        <% unless @thm.certificate.url.blank?  %>
+          <%= link_to(image_tag(@thm.certificate.url, :size => "80x80"),@thm.certificate.url,{:class => 'facebox', :title => link_to('download',@thm.certificate.url)}) if File.exist?(@thm.certificate.path.to_s) %>
+        <% end %>
+     
+    <% end%>
+  </span>
+  
+  <span class="input-field">
+    <label>&nbsp;</label>
+    <span id="field_certificate" style="display:none">
+      <%= f.file_field :certificate %><%= error_message_on @education, :certificate_content_type %>
+    </span>
+  </span>
+</div>

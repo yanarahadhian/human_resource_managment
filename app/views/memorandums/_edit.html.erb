@@ -1,0 +1,58 @@
+<%= render :partial=> "layouts/shared/breadcrumbs" %>
+<%= render :partial => "layouts/howto_menu" %>
+<fieldset class="fm-table">
+  <legend>
+    <a href="#" id="help_dash" class="icons help-top-icon" title="Click to show/hide information">&nbsp;</a>  
+    Edit Surat Peringatan
+  </legend>
+  <%= render :partial => "layouts/howto/howto_content"%>
+  <div class="right-information">
+    <div id="content-dynamic">
+      <div class="input-help">
+        <label>Field dengan tanda <span class="redstar">*</span> harus diisi</label>
+      </div><div class="clear"></div>
+      <div class="box-form">
+        <% form_remote_for @violation, :url => memorandum_path(@violation.id) do |f| %>
+          <div id="box_retur_0">
+            <%= render :partial => 'violation_form', :locals => {:f => f} %>
+            <div class="clear"></div>
+            
+            <div class="block-btn-form">
+              <%= render :partial => "layouts/button_loader" %>
+              <div id="button">
+                
+                  <% if @pers_id.blank? %>
+                    <input id="info_section_cancel_basic" class="grey_button" type="reset" value="Batal" name="info_section_cancel_basic" onclick="onCancel('#memorandums')"/>
+                  <%else%>
+                    <% url = "#people/#{@pers_id}/employments?tab=3" %>
+                    <input id="info_section_cancel_basic" class="grey_button" type="reset" value="Batal" name="info_section_cancel_basic" onclick='onCancel("<%= url.to_s %>")'/>
+                  <%end%>
+                  <input type="submit" value="Simpan" name="info_section_save_basic" id="info_section_save_basic" class="blue_button" onclick="ajaxLoad1('button', 'ajax-load1')"/>
+               
+              </div>
+            </div>
+          <% end-%>
+        </div>
+      </div>
+    </div>
+  </div>
+</fieldset>
+
+<script type="text/javascript">
+  
+  function onCancel(url){
+    window.location.href = url;
+  }
+  
+  $(document).ready(function(){
+    $( ".ui-date, .ui-date2" ).datepicker({
+      buttonImageOnly: true
+    })
+  });
+
+  function ajaxLoad1(div_btn, div_load){
+    $("#" + div_load + "").show();
+    $("#" + div_btn + "").hide();
+  }
+
+</script>

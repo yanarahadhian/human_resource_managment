@@ -1,0 +1,34 @@
+<div id="list_keterlambatan" class="list" style="display: none; ">
+   <ul>
+     <li style="cursor: default; list-style-image: none;">
+       <b>Toleransi Keterlambatan</b>: toleransi keterlambatan yang diterima perusahaan dalam menit. Contoh: 10 menit.
+     </li>
+   </ul>
+</div>
+
+<div id="list_kelipatan_hitung" class="list" style="display: none; ">
+   <ul>
+     <li style="cursor: default; list-style-image: none;">
+       <b>Waktu kelipatan perhitungan</b>: kelipatan perhitungan lembur perusahaan. Contoh: 10 menit. Maka jika karyawan lembur 11 menit, maka karyawan dianggap lembur 10 menit (dibulatkan ke bawah).
+     </li>
+   </ul>
+</div>
+
+<div id="list_cuti_thn_pertama" class="list" style="display: none; ">
+   <ul>
+     <li style="cursor: default; list-style-image: none;">
+       <b>Jatah cuti tahun pertama</b>: jatah cuti yang diberikan karyawan yang bekerja kurang dari 1 tahun lamanya. Contoh: 0 hari (karyawan baru tidak diberikan jatah cuti).
+     </li>
+   </ul>
+</div>
+
+<div id="list_cuti_tiap_thn" class="list" style="display: none; ">
+   <ul>
+     <li style="cursor: default; list-style-image: none;">
+       <b>Jatah cuti setiap tahun</b>: jatah cuti yang akan diakumulasikan ke jatah cuti masing-masing karyawan setiap tahunnya. Jatah cuti ini termasuk sebagai jatah cuti bersama, sehingga jika ada jatah cuti bersama yang digunakan karyawan, maka nilai jatah cuti ini akan berkurang sejumlah jatah cuti bersama yang digunakan. Contoh: 12 hari.
+     </li>
+   </ul>
+</div>
+
+
+<%= javascript_include_tag  'tax_status_tooltips' %>

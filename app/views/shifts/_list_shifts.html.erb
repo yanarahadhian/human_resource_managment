@@ -1,0 +1,193 @@
+<%= javascript_include_tag  'pagination' %>
+<div id="the_table">
+  <table class="tablesorter" id="table_shift">
+    <thead>
+      <tr>
+        <th width="74" class="center-text">
+          <%= check_box_tag("checkall", :id =>"checkall")%>
+        </th>
+        <th width="96">
+          <a href=""> Kode Shift <span class="icons sorter_ico">&nbsp;</span></a>
+        </th>
+        <th width="296">
+          <a href="">Nama Shift <span class="icons sorter_ico">&nbsp;</span></a>
+        </th>
+        <th width="309">
+         <a href=""> Rata Rata Istirahat per Hari <span class="icons sorter_ico">&nbsp;</span></a>
+        </th>
+        <th width="309">
+         <a href=""> Rata Rata Istirahat per Jam <span class="icons sorter_ico">&nbsp;</span></a>
+        </th>
+
+        <th width="290" class="center-text">
+          <a href="">  Total Jam Kerja dalam 1 Minggu <span class="icons sorter_ico">&nbsp;</span></a>
+        </th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <%unless @shift.blank?%>
+        <% @shift.each_with_index  do |p,index| %>
+          <tr id="<%= p.id %>">
+            <td class="center vtop"><%=  check_box_tag "delete_ids[]", p.id, false%></td>
+            <td class="left-text"><%=h p.shift_code %></td>
+            <td class="left-text"><%= link_to_if current_features.include?('shift_edit'), h(p.shift_name), "#sh/edit/#{p.id}", :class => "shift_name"%></td>
+            <td class="left-text">
+              <%
+              total_hour = 0
+              total_per_hour = 0
+              divider =  0
+              unless p.monday_time.break_length_in_minutes == 0 &&
+                  p.monday_time.break_per_hour_in_minutes == 0
+                divider = divider + 1
+                total_hour = total_hour +  p.monday_time.break_length_in_minutes
+                total_per_hour = total_per_hour + (p.monday_time.break_per_hour_in_minutes.blank? ? 0 : p.monday_time.break_per_hour_in_minutes)
+              end
+              unless p.tuesday_time.break_length_in_minutes == 0 &&
+                  p.tuesday_time.break_per_hour_in_minutes == 0
+                divider = divider + 1
+                total_hour = total_hour + p.tuesday_time.break_length_in_minutes
+                total_per_hour = total_per_hour +  + (p.monday_time.break_per_hour_in_minutes.blank? ? 0 : p.monday_time.break_per_hour_in_minutes)
+              end
+              unless p.wednesday_time.break_length_in_minutes == 0 &&
+                  p.wednesday_time.break_per_hour_in_minutes == 0
+                divider = divider + 1
+                total_hour = total_hour + p.wednesday_time.break_length_in_minutes
+                total_per_hour = total_per_hour +  + (p.monday_time.break_per_hour_in_minutes.blank? ? 0 : p.monday_time.break_per_hour_in_minutes)
+              end
+              unless p.thursday_time.break_length_in_minutes == 0 &&
+                  p.thursday_time.break_per_hour_in_minutes == 0
+                divider = divider + 1
+                total_hour = total_hour + p.thursday_time.break_length_in_minutes
+                total_per_hour = total_per_hour +  + (p.monday_time.break_per_hour_in_minutes.blank? ? 0 : p.monday_time.break_per_hour_in_minutes)
+              end
+              unless p.friday_time.break_length_in_minutes == 0 &&
+                  p.friday_time.break_per_hour_in_minutes == 0
+                divider = divider + 1
+                total_hour = total_hour + p.friday_time.break_length_in_minutes
+                total_per_hour = total_per_hour +  + (p.monday_time.break_per_hour_in_minutes.blank? ? 0 : p.monday_time.break_per_hour_in_minutes)
+              end
+              unless p.saturday_time.break_length_in_minutes == 0 &&
+                  p.saturday_time.break_per_hour_in_minutes == 0
+                divider = divider + 1
+                total_hour = total_hour + p.saturday_time.break_length_in_minutes
+                total_per_hour = total_per_hour +  + (p.monday_time.break_per_hour_in_minutes.blank? ? 0 : p.monday_time.break_per_hour_in_minutes)
+              end
+              unless p.sunday_time.blank?
+                unless p.sunday_time.break_length_in_minutes == 0 &&
+                    p.sunday_time.break_per_hour_in_minutes == 0
+                  divider = divider + 1
+                  total_hour = total_hour + (p.sunday_time.break_length_in_minutes.blank? ? 0 : p.sunday_time.break_length_in_minutes)
+                  total_per_hour = total_per_hour +  + (p.monday_time.break_per_hour_in_minutes.blank? ? 0 : p.monday_time.break_per_hour_in_minutes)
+                end
+              end
+              unless total_hour == 0
+                total_hour = total_hour / divider
+                total_per_hour = total_per_hour / divider
+              else
+                total_hour = 0
+                total_per_hour = 0
+              end
+            %>
+
+              <%if total_hour == 0%>
+                0 Menit
+              <% else %>
+                <%=h total_hour %> Menit
+              <%end%>
+
+            </td>
+            <td class="left-text">
+              <%if total_per_hour == 0%>
+                0 Menit
+              <% else %>
+                <%=h total_per_hour %> Menit
+              <%end%></td>
+            <td class="right-text">
+              <%=h p.total_hours %>
+            </td>
+          </tr>
+        <%end%>
+      <%else%>
+        <tr class="no-data">
+          <td class="center-text" colspan="7">
+            <div class="description">Belum Ada Data Shift. </div>
+            <div class="info">Silahkan  <%= link_to 'Tambah Shift', "#shift/new" %> untuk menambah data</div>
+          </td>
+        </tr>
+      <%end%>
+    </tbody>
+  </table>
+</div>
+
+  <div class="panelFilter">
+    <div class="pagination">
+      <% if @shift.count > 0 %>
+        <span class="paginationResult">
+          <% a = format_paginate1(@shift, @per_page, @shift.total_entries) %>
+          <%= a[:a] %> - <%= a[:b] %> dari <%= @shift.total_entries %>
+        </span>
+        <%= a[:paginate] %>
+      <% else %>
+      &nbsp;
+      <% end %>
+      <div class="clear"></div>
+    </div>
+  </div>
+
+<script type="text/javascript">
+
+  $(document).ready(function(){
+    <%= render :partial => "layouts/shared/tooltip_hr_setting"   %>
+  });
+
+
+   function onDeleteShifts(){
+      var arr_params = new Array();
+      $('#table_shift tbody input:checked').each(function() {
+        arr_params = arr_params.concat($(this).val());
+      });
+      if (arr_params.length > 0){
+        $('#div_sign').html('shift');
+        $('#div_btn_hapus').html('<input type="button" value="Ya" class="blue_button" onclick="delete_shifts()"/>');
+        jQuery().colorbox({width:"auto",height:"auto", inline:true,href:"#message_delete",
+          onClosed:function(){
+          }
+        });
+      }else{
+        return false;
+      }
+  }
+
+  function delete_shifts(){
+      var arr_params = new Array();
+      $('#table_shift tbody input:checked').each(function() {
+        arr_params = arr_params.concat($(this).val());
+      });
+      var controller = "/shifts/delete_multiple";
+      $("#ajax-load").show();
+      $.ajax({
+        type: "post",
+        url: escape(controller),
+        data:{'_method': 'post',"ids":arr_params},
+        dataType: 'script',
+        success: function(){
+          $("#ajax-load").hide();
+          $.fn.colorbox.close();
+        }
+      })
+  }
+
+  $(".tablesorter").tablesorter({
+    widgets: ['zebra'],
+    headers: {
+            0: { sorter: false }
+          }
+  });
+  $(function () {
+    $('#checkall').click(function () {
+      $(this).parents('table:eq(0)').find(':checkbox').attr('checked', this.checked);
+    });
+  });
+
+</script>

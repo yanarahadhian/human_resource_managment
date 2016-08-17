@@ -1,0 +1,14 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+satu:
+  id: 1
+  company_id: 32
+  person_id: 1
+  start_overtime: "2012-03-3 09:00:00"
+  end_overtime: "2012-03-3 19:39:47"
+  overtime_length_in_minutes: 120
+  overtime_status: "Approved"
+  overtime_date: "2012-03-3"
+#
+# two:
+#   column: value

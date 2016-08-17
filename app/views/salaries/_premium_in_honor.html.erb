@@ -1,0 +1,11 @@
+<div class="fields">
+    <span>
+        <%= select("premiums", "id", Premium.all.collect {|p| [ p.premium_name, p.id ] }, { :include_blank => false, :prompt => 'Pilih Tunjangan/Premi' }, :width => 30) %>
+    </span>
+    <span>
+        Rp. <%= f.text_field :premium_value, :class=>'small-text-table' %> ,-
+    </span>
+    <span>
+        <%= remove_child_link " ", f %>
+    </span>
+</div>

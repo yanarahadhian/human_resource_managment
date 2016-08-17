@@ -1,0 +1,240 @@
+<legend>
+  <a href="#" id="help_dash" class="icons help-top-icon" title="Click to show/hide information">&nbsp;</a>
+  Absensi Karyawan <span class="bold underline">Feb 2011</span>
+</legend>
+<%= render :partial => "layouts/howto/howto_content"%>
+<br class="clear"/>
+<div class="box-form">
+  <span class="input">
+    <label>Sakit Tanpa Surat <br/>Dokter</label>:
+    1 Hari
+  </span>
+  <span class="clear"></span>
+  <span class="input">
+    <label>Sakit Dengan Surat Dokter</label>:
+    0 Hari
+  </span>
+  <span class="clear"></span>
+  <span class="input">
+    <label>Ijin/Cuti Lainnya</label>:
+    0 Hari
+  </span>
+  <span class="clear"></span>
+  <span class="input">
+    <label> Tanpa Keterangan </label>:
+    0 Hari
+  </span>
+  <span class="clear"></span>
+  <span class="input center">
+                         	Kekurangan Waktu Kerja Anda : <span class="bold">60 Jam 10 Menit</span>
+  </span>
+  <span class="clear"></span>
+</div>
+<span class="clear"></span>
+<div class="panelFilter">
+  <div id="action_menu"> <span class="form-label">Tampilkan :</span> </div>
+  <div id="action_menu">
+    <form method="get" name="frm-filter" action="">
+      <select class="month" id="month" name="month">
+        <option selected="selected">Pilih Bulan</option>
+        <option>
+
+        </option>
+        <option>Januari</option>
+        <option>Febuari</option>
+        <option>Maret</option>
+        <option>April</option>
+        <option>Mei</option>
+        <option>Juni</option>
+        <option>Juli</option>
+        <option>Agustus</option>
+        <option>Sepetember</option>
+        <option>Oktober</option>
+        <option>November</option>
+        <option>Desember</option>
+      </select>
+      <select class="month" id="month" name="month">
+        <option selected="selected">Pilih Tahun</option>
+        <option>
+
+        </option>
+        <option>2011</option>
+        <option>2010</option>
+        <option>2009</option>
+        <option>2008</option>
+        <option>2007</option>
+        <option>2006</option>
+      </select>
+    </form>
+  </div>
+  <div id="action_menu">
+    <input type="button" value="Go" class="grey_button" name="report_go"/>
+  </div>
+  <div class="pagination">
+    <div id="action_menu">
+      <ul>
+        <li>
+          <div class="clear"></div>
+          <ul>
+            <li><a class="list" href="URL sub 1">Penjualan Usha</a></li>
+            <li><a class="list" href="URL sub 2">Piutang</a></li>
+            <li><a class="list" href="URL sub 3">Retur Pembelian Barang</a></li>
+            <li><a class="list" href="URL sub 3">Hutang</a></li>
+            <li><a class="list" href="URL sub 3">Pajak PPn</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+    <span class="paginationResult">1-12 dari 20</span> <a href=""><span class="icons last_ico">&nbsp;</span></a> <a href=""><span class="icons next_ico">&nbsp;</span></a> <a href=""><span class="icons prev_ico">&nbsp;</span></a> <a href=""><span class="icons first_ico">&nbsp;</span></a>
+  </div>
+  <div class="clear"></div>
+</div>
+<table width="997">
+  <thead>
+    <tr>
+      <th width="107"> <a href=""> <span class="center-text">Hari</span><span class="icons sorter_ico">&nbsp;</span></a> </th>
+      <th width="194" class="center-text"> <a class="left-text"> Tanggal<span class="icons sorter_ico">&nbsp;</span> </a> </th>
+      <th width="185" class="center-text"> <a>Jam Masuk <span class="icons sorter_ico">&nbsp;</span></a></th>
+      <th width="145" class="center-text"><a>Jam Keluar <span class="icons sorter_ico">&nbsp;</span></a></th>
+      <th width="169" class="center-text"><a>Lama Kerja <span class="icons sorter_ico">&nbsp;</span></a></th>
+      <th width="169" class="center-text">Keterangan</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td class="bold center-text">Minggu Ke-1</td>
+      <td class="left-text">&nbsp;</td>
+      <td class="center-text">&nbsp;</td>
+      <td class="center-text">&nbsp;</td>
+      <td class="center-text">&nbsp;</td>
+      <td class="center-text">&nbsp;</td>
+    </tr>
+    <tr class="alt">
+      <td class="center">Senin</td>
+      <td class="center-text">28 Feb 2011</td>
+      <td class="center-text">08.20</td>
+      <td class="center-text">17.45</td>
+      <td class="center-text">09 Jam 00 Menit</td>
+      <td class="center-text">-</td>
+    </tr>
+    <tr>
+      <td class="center">Selasa</td>
+      <td class="center-text">1 Mar 2011</td>
+      <td class="center-text">08.35</td>
+      <td class="center-text">18.20</td>
+      <td class="center-text">09 Jam 40 Menit</td>
+      <td class="center-text">-</td>
+    </tr>
+    <tr class="alt">
+      <td class="center">Rabu</td>
+      <td class="center-text">2 Mar 2011</td>
+      <td class="center-text">08.00</td>
+      <td class="center-text">13.00</td>
+      <td class="center-text">04 Jam 40 Menit</td>
+      <td class="center-text">Sakit Izin Pulang</td>
+    </tr>
+    <tr>
+      <td class="center">Kamis</td>
+      <td class="center-text">3 Mar 2011</td>
+      <td class="center-text">00.00</td>
+      <td class="center-text">00.00</td>
+      <td class="center-text">00 Jam 00 Menit</td>
+      <td class="center-text">Sakit</td>
+    </tr>
+    <tr class="alt">
+      <td class="center">Jum'at</td>
+      <td class="center-text">4 Mar 2011</td>
+      <td class="center-text">09.10</td>
+      <td class="center-text">18.30</td>
+      <td class="center-text">09 Jam 25 Menit</td>
+      <td class="center-text">-</td>
+    </tr>
+    <tr>
+      <td class="center-text"><span class="bold">Minggu Ke-2</span></td>
+      <td class="center-text">&nbsp;</td>
+      <td class="center-text">&nbsp;</td>
+      <td class="center-text">&nbsp;</td>
+      <td class="center-text">&nbsp;</td>
+      <td class="center-text">&nbsp;</td>
+    </tr>
+    <tr class="alt">
+      <td class="center">Senin</td>
+      <td class="center-text">7 Mar 2011</td>
+      <td class="center-text">08.50</td>
+      <td class="center-text">18.15</td>
+      <td class="center-text">09 Jam 30 Menit</td>
+      <td class="center-text">-</td>
+    </tr>
+    <tr>
+      <td class="center">Selasa</td>
+      <td class="center-text">8 Mar 2011</td>
+      <td class="center-text">08.50                      </td>
+      <td class="center-text">17.20</td>
+      <td class="center-text">08 Jam 40 Menit</td>
+      <td class="center-text">-</td>
+    </tr>
+    <tr class="total">
+      <td class="right-text" colspan="4">Total Jam Kerja</td>
+      <td class="center-text">38 Jam 40 Menit</td>
+      <td class="center-text">-</td>
+    </tr>
+  </tbody>
+</table>
+<div class="panelFilter">
+  <div id="action_menu"> <span class="form-label">Tampilkan :</span> </div>
+  <div id="action_menu">
+    <form method="get" name="frm-filter" action="">
+      <select class="month" id="month" name="month">
+        <option selected="selected">Pilih Bulan</option>
+        <option>
+
+        </option>
+        <option>Januari</option>
+        <option>Febuari</option>
+        <option>Maret</option>
+        <option>April</option>
+        <option>Mei</option>
+        <option>Juni</option>
+        <option>Juli</option>
+        <option>Agustus</option>
+        <option>Sepetember</option>
+        <option>Oktober</option>
+        <option>November</option>
+        <option>Desember</option>
+      </select>
+      <select class="month" id="month" name="month">
+        <option selected="selected">Pilih Tahun</option>
+        <option>
+
+        </option>
+        <option>2011</option>
+        <option>2010</option>
+        <option>2009</option>
+        <option>2008</option>
+        <option>2007</option>
+        <option>2006</option>
+      </select>
+    </form>
+  </div>
+  <div id="action_menu">
+    <input type="button" value="Go" class="grey_button" name="report_go"/>
+  </div>
+  <div class="pagination">
+    <div id="action_menu">
+      <ul>
+        <li>
+          <div class="clear"></div>
+          <ul>
+            <li><a class="list" href="URL sub 1">Penjualan Usha</a></li>
+            <li><a class="list" href="URL sub 2">Piutang</a></li>
+            <li><a class="list" href="URL sub 3">Retur Pembelian Barang</a></li>
+            <li><a class="list" href="URL sub 3">Hutang</a></li>
+            <li><a class="list" href="URL sub 3">Pajak PPn</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+    <span class="paginationResult">1-12 dari 20</span> <a href=""><span class="icons last_ico">&nbsp;</span></a> <a href=""><span class="icons next_ico">&nbsp;</span></a> <a href=""><span class="icons prev_ico">&nbsp;</span></a> <a href=""><span class="icons first_ico">&nbsp;</span></a>
+  </div>
+  <div class="clear"></div>
+</div>

@@ -1,0 +1,16 @@
+<fieldset class="fm-table">
+  <legend><a href="#" id="help_dash" class="icons help-top-icon" title="Click to show/hide information">&nbsp;</a>
+   Edit THR</legend>
+  <%= render :partial => "layouts/howto/howto_content"%>
+  <div id ="person-details">
+<%= render :partial => 'salaries/person_details' %>
+  </div>
+
+  <div id ="honor-details">
+    <% unless @person.blank? %>
+      <%= render :partial => 'thr_details'  %>
+    <% else %>
+      Silahkan pilih Periode dan Karyawan yang akan dicetak THR-nya!
+    <% end %>
+  </div>
+</fieldset>

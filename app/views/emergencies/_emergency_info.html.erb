@@ -1,0 +1,74 @@
+<script type="text/javascript">
+  function onEdit(id){
+  $("#div_field_nama_kontak").show();
+  $("#div_field_no_kontak").show();
+  $("#div_field_relasi").show();
+  $("#div_button").show();
+  $("#div_label_nama_kontak").hide();
+  $("#div_label_no_kontak").hide();
+  $("#div_label_relasi").hide();
+  $("#person_tab_name").val("kontak_darurat");
+  }
+
+  function onCancelEmergency(){
+  $("#div_field_nama_kontak").hide();
+  $("#div_field_no_kontak").hide();
+  $("#div_field_relasi").hide();
+  $("#div_button").hide();
+  $("#div_label_nama_kontak").show();
+  $("#div_label_no_kontak").show();
+  $("#div_label_relasi").show();
+  $("#person_tab_name").val("kontak_darurat");
+  }
+</script>
+<% form_remote_for @person, :url=> person_path(@person.id),:html => { :method => "put" } do |f|  %>
+  <div class="input big">
+    <% unless @is_user_login %>
+      <%= link_to "<span class='icons edit-icon'>&nbsp;</span> Edit", "#people/#{@person.id}?tab=0", :onclick=> "onEdit('#{@person.id}')", :class => "grey_button_a add_barang top-right" %>
+    <% end %>
+    <span class="input-field">
+      <label>Nama</label><span class="left">:&nbsp;</span>
+      <div id="div_field_nama_kontak" style="display:none;" class="left">
+        <%= f.text_field :nama_kontak_darurat  %>
+      </div>
+      <div id="div_label_nama_kontak">
+        <%=h @person.nama_kontak_darurat.blank? ? "-" : @person.nama_kontak_darurat %>
+      </div>
+    </span>
+    <span class="clear"></span>
+    <span class="input-field">
+      <label>No telp</label><span class="left">:&nbsp;</span>
+      <div id="div_field_no_kontak" style="display:none;" class="left">
+        <%= f.text_field :no_telp_kontak_darurat, :maxlength => "15"  %>
+      </div>
+      <div id="div_label_no_kontak">
+        <%=h @person.no_telp_kontak_darurat.blank? ? "-" : @person.no_telp_kontak_darurat %>
+      </div>
+    </span>
+
+    <span class="input-field">
+      <label>Relasi</label><span class="left">:&nbsp;</span>
+      <div id="div_field_relasi" style="display:none;" class="left">
+        <%= f.text_field :relasi_kontak_darurat, :maxlength => "15"  %>
+      </div>
+      <div id="div_label_relasi">
+        <%= @person.relasi_kontak_darurat %>
+      </div>
+    </span>
+    <span class="clear"></span>
+  </div>
+
+  <span class="clear"></span>
+  <%= f.hidden_field :tab_name %>
+  <div id="div_button" style="display:none;">
+    <br class="clear"/>
+    <hr/>
+    <div class="center-text">
+      <%= render :partial => "layouts/button_loader"  %>
+      <div id="button">
+        <input type="reset" id="info_section_cancel_basic" class="grey_button" value="Batal" name="info_section_cancel_basic" onclick="onCancelEmergency()"/>
+        <input type="submit" value="Simpan" name="info_section_save_basic" id="info_section_save_basic" class="blue_button" onclick="ajaxLoad1('<%= person_path(@person.id) %>','button','ajax-load1')"/>
+      </div>
+    </div>
+  </div>
+<% end %>

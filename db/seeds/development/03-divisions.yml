@@ -1,0 +1,30 @@
+# Auto-generated template
+divisions_01:
+  id: 1
+  name: "Gudang"
+  company_id: 1
+  department_id: 1
+
+divisions_02:
+  id: 2
+  name: "Teknik"
+  company_id: 1
+  department_id: 1
+
+divisions_03:
+  id: 3
+  name: "Egraving"
+  company_id: 1
+  department_id: 2
+
+divisions_04:
+  id: 4
+  name: "laboratorium"
+  company_id: 1
+  department_id: 2
+
+divisions_05:
+  id: 5
+  name: "colour kitchen"
+  company_id: 1
+  department_id: 2

@@ -1,0 +1,14 @@
+<%= javascript_include_tag  'pagination' %>
+<% unless @formasi.blank? %>
+  <span class="paginationResult">
+    <% a = "" %>
+    <% unless @formasi.blank? %>
+      <% a = format_paginate1(@formasi, 25, @formasi.total_entries,'get_formasi_table') %>
+      <%= a[:a] %> - <%= a[:b] %> dari <%= @formasi.total_entries %>
+    <% end %>
+    </span>
+    <%= a[:paginate] unless a.blank? %>
+  <% else %>
+    &nbsp;
+  <% end %>
+<div class="clear"></div>

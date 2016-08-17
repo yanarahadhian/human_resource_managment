@@ -1,0 +1,93 @@
+  <table  id="presence_detail">
+    <thead>
+      <tr>
+        <th>Jam Masuk</th>
+        <th class="center-text">Jam Keluar</th>
+        <th class="center-text">Lama Kerja</th>
+        <% if @my_presence %>
+          <th width="5%"></th>
+        <% end %>
+      </tr>
+    </thead>
+    <tbody>
+      <% unless @my_presence.blank? %>
+        <%- @my_presence.each do |presence| %>
+          <% my_presence_details = presence.presence_details(:order => :start_working) %>
+          <%- my_presence_details.each do |presence_detail| %>
+            <tr>
+               <td class="left-text">
+                 <%= render :partial => "message_delete", :locals =>  {:id=> presence_detail.id, :person_id =>@current_person.id }%>
+                 <% time_start =  presence_detail.start_working.nil? ? "-" : "#{l presence_detail.start_working.getlocal, :format => '%A'}, #{presence_detail.start_working.getlocal.strftime("%d/%m/%Y")}@ #{presence_detail.start_working.getlocal.strftime("%H:%M")}" %>
+                 <%= time_start %>
+               </td>
+               <%- if presence_detail.end_working %>
+                 <% time_end =  presence_detail.end_working.nil? ? "-" : "#{l presence_detail.end_working.getlocal, :format => '%A'}, #{presence_detail.end_working.getlocal.strftime("%d/%m/%Y")}@ #{presence_detail.end_working.getlocal.strftime("%H:%M")}" %>
+                 <td class="left-text"><%= time_end %></td>
+                 <td class="left-text"><%= Presence.minutes_to_hour_text(presence_detail.work_session_length_in_minutes.to_i)%></td>
+                 <% if !presence_detail.nil? && (presence_detail.presence.is_acted_upon.blank? || presence_detail.presence.is_acted_upon == 0) %>
+                   <td class="center-text">
+                     <a id="link_<%= presence_detail.id %>" class="icons delete-icon" onclick="openColor(<%=  presence_detail.id %>)"></a>
+                   </td>
+                 <% end %>
+               <%- else %>
+                 <td class="left-text">
+                  <% form_tag(end_absence_path, :method => "get") do %>
+                    <%= hidden_field_tag "id", @current_person.id %>
+                    <input type="submit" value="Keluar" class="grey_button2">
+                  <% end %>
+                 </td>
+                 <td class="left-text"></td>
+                 <% if presence_detail.presence.is_acted_upon.blank? || presence_detail.presence.is_acted_upon == 0 %>
+                   <td class="center-text">
+                     <a id="link_<%= presence_detail.id %>" class="icons delete-icon" onclick="openColor(<%=  presence_detail.id %>)"></a>
+                   </td>
+                 <% end %>
+               <%- end %>
+             </tr>
+           <%- end %>
+           <%- if !my_presence_details.last.nil? && my_presence_details.last.end_working && presence.in_schedule?%>
+           <tr>
+             <td class="left-text">
+                  <% form_tag(start_absence_path, :method => "get") do %>
+                    <%= hidden_field_tag "id", @current_person.id %>
+                    <input type="submit" value="masuk" class="grey_button2">
+                  <% end %>
+                </td>
+                <td class="left-text"></td>
+                <td class="left-text"></td>
+              </tr>
+           <% end %>
+           <%- if !my_presence_details.first.nil? && my_presence_details.first.end_working %>
+              <tr>
+                <td class="right-text" colspan="2">Total</td>
+                <td class="left-text" colspan="2"><%= Presence.hours_to_hour_text(presence.presence_length_in_hours.to_f) %></td>
+              </tr>
+           <%- end %>
+         <%- end %>
+       <% else %>
+         <tr>
+           <td class="center-text" colspan="4">Karyawan tidak masuk kerja!</td>
+         </tr>
+       <% end %>
+    </tbody>
+  </table>
+<script type="text/javascript">
+  function removePresence(presence_id,person_id){
+    $("ajax-load").show();
+    var url_param = '?presence_id='+presence_id+'&id='+person_id+'&date1='+$('#filter_date1').val()+'&date2=' + $('#filter_date2').val();
+    $.get('/absences/remove_presence' + url_param, function(data){
+      $("ajax-load").hide();
+    });
+  }
+
+  function get_split(pstr){
+    var mySplitResult = pstr.split("/");
+    var strResult = mySplitResult[2] + "-" + mySplitResult[1] + "-" + mySplitResult[0];
+    return strResult;
+  }
+
+  function openColor(id){
+    $("#link_"+id).colorbox({width:"auto",height:"auto", inline:true, href:"#popup_"+id});
+  }
+</script>
+

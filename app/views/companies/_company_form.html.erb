@@ -1,0 +1,40 @@
+<table class="editor" id="product_detail_form">
+	<tr>
+		<td class="label">
+			<%
+	      case params[:experience_type]
+	        when 'work'
+	          type = 'Perusahaan'
+	        when 'training'
+	          type = 'Perusahaan'
+	        when 'organizational'
+	          type = 'Organisasi'
+	      end %>
+  		<%= f.label "Nama #{type} <span id='star'>*</span>", nil, :class => :row_description %></td>
+		<td> <%= f.text_field :company_name, :class => 'required inputtext'  %>
+		<%= hidden_field_tag :person_id, params[:person_id]%>
+		<%= hidden_field_tag :id, params[:id]%>
+		<%= hidden_field_tag :experience_type, params[:experience_type]%></td>
+	</tr>
+	<tr>
+		<td class="label">
+  		<%= f.label 'Ruang Industri <span id="star">*</span>', nil, :class => :row_description %></td>
+		<td> <%= f.text_field :company_industry, :class => 'required inputtext'  %></td>
+	</tr>
+	<% f.fields_for :addresses, @address do |address| %>
+  <tr>
+    <td class="label"><%= address.label 'Alamat <span id="star">*</span>', nil, :class => :row_description %></td>
+		<td> <%= address.text_field :street1, :class => 'required inputtext', :style => "margin: 2.5px 0px;" %><br/><%= address.text_field :street2, :class => 'inputtext', :style => "margin: 2.5px 0px;" %><%= error_message_on :addresses, :street1 %></td>
+  </tr>
+	<tr>
+    <td class="label">
+		<%= hidden_field_tag "autocomplete_address_city_array", @city, :id => 'autocomplete_address_city_array' %>
+		<%= address.label 'Kota <span id="star">*</span>', nil, :class => :row_description %></td><td> <%= address.text_field :city, :id => 'autocomplete_address_city', :autocomplete => 'off', :class => 'required inputtext' %></td>
+  </tr>
+	<tr>
+    <td class="label">
+	  <%= hidden_field_tag "autocomplete_address_state_array", @state, :id => 'autocomplete_address_state_array' %>
+		<%= address.label 'Propinsi <span id="star">*</span>', nil, :class => :row_description %></td><td> <%= address.text_field :state, :id => 'autocomplete_address_state', :autocomplete => 'off', :class => 'required inputtext' %></td>
+  </tr>
+  <% end %>
+</table>

@@ -1,0 +1,100 @@
+ <% input_pendidikan = "input-field" %>
+ <% err_pendidikan = f.error_message_on :pendidikan_terakhir %>
+ <% input_pendidikan = "input-error" unless err_pendidikan.blank? %>
+
+ <% input_na = "input-field" %>
+ <% err_na = f.error_message_on :gpa %>
+ <% input_na = "input-error" unless err_na.blank? %>
+
+ <% input_entry = "input-field" %>
+ <% err_entry = f.error_message_on :entry_year %>
+ <% input_entry = "input-error" unless err_entry.blank? %>
+
+ <% input_grad = "input-field" %>
+ <% err_grad = f.error_message_on :graduation_year %>
+ <% input_grad = "input-error" unless err_grad.blank? %>
+
+<% input_no_ija = "input-field" %>
+<% err_no_ija = f.error_message_on :no_ijazah %>
+<% input_no_ija = "input-error" unless err_no_ija.blank? %>
+
+<div class="input">
+  <span class="<%= input_pendidikan %>">
+    <label>Pendidikan Terakhir<span class="redstar">*</span></label><span class="left">:&nbsp;</span>
+    <%= f.select :pendidikan_terakhir, @education.options[:pendidikan_terakhir].collect{|p| [p.just_display,p]}, { :include_blank => 'Pilih' }%>
+          <%= err_pendidikan %>
+  </span>
+  <span class="clear"></span>
+
+  <span class="input-field">
+    <label>Institusi</label>:
+    <%= f.text_field :institution_name %>
+  </span>
+  <span class="clear"></span>
+
+  <span class="input-field">
+    <label>Jurusan</label>:
+    <%= f.text_field :field_major %>
+  </span>
+  <span class="clear"></span>
+
+  <span class="<%= input_entry %>">
+    <label>Tahun Masuk</label><span class="left">:&nbsp;</span>
+    <select name="education[entry_year]">
+      <option selected="selected" value="">Pilih</option>
+      <% for i in 1950..Time.now.year do %>
+        <% sel = "" %>
+        <% if params[:education] %>
+          <% sel = "selected='selected'" if params[:education][:entry_year].to_i == i %>
+        <% end %>
+        <option value="<%= i %>" <%= sel %> > <%= i %></option>
+      <% end %>
+    </select>
+    <%= err_entry %>
+  </span>
+  <span class="clear"></span>
+
+  <span class="<%= input_grad %>">
+    <label>Tahun Keluar</label><span class="left">:&nbsp;</span>
+    <select name="education[graduation_year]">
+    <option selected="selected" value="">Pilih</option>
+    <% for i in 1950..Time.now.year do %>
+       <% sel = "" %>
+       <% if params[:education] %>
+         <% sel = "selected='selected'" if params[:education][:graduation_year].to_i == i %>
+       <% end %>
+       <option value="<%= i %>" <%= sel %> > <%= i %></option>
+    <% end %>
+    </select>
+    <%= err_grad %>
+  </span>
+  <span class="clear"></span>
+
+  <span class="<%= input_na %>">
+    <label>Nilai Akhir</label><span class="left">:&nbsp;</span>
+    <%= f.text_field :gpa, :size => 4, :maxlength => 5%>
+    <%= err_na %>
+  </span>
+  <span class="clear"></span>
+
+  <span class="input-field">
+    <label>Keterangan Lain </label><span class="left">:&nbsp;</span>
+    <%= f.text_area :education_description, :rows=>3, :cols=>20 %>
+  </span>
+  <span class="clear"></span>
+
+  <span class="<%= input_no_ija %>">
+    <label>No Ijazah</label>:
+    <%= f.text_field :no_ijazah %>
+    <%= err_no_ija %>
+  </span>
+  <span class="clear"></span>
+
+  <span class="input-field">
+    <label>Sertifikat</label>:
+    <% unless @education.id.blank? %>
+      <%=  link_to(image_tag(@thm.certificate.url),@thm.certificate.url,{:class => 'facebox', :title => link_to('download',@thm.certificate.url)}) if File.exist?(@thm.certificate.path.to_s)%>
+    <% end%>
+    <%= f.file_field :certificate, :size => 15 %><%= error_message_on @education, :certificate_content_type %>
+  </span>
+</div>

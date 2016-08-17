@@ -1,0 +1,146 @@
+<%= render :partial=> "layouts/shared/breadcrumbs" %>
+<%= render :partial => "layouts/howto_menu" %>
+<%- title_page = (@current_person.user_id == current_user.id)? "Absensi Bulanan Saya" : "Absensi Bulanan #{@current_person.full_name}" %>
+<div class="clear"></div>
+<fieldset class="fm-table">
+  <legend>
+    <a href="#" id="help_dash" class="icons help-top-icon" title="Click to show/hide information">&nbsp;</a>
+    <%= title_page %>
+  </legend>
+  <%= render :partial => "layouts/howto/howto_content"%>
+  <div class="clear"></div>
+  <%= render :partial => "layouts/top_menu_myabsence" %>
+  <div class="panelFilter">
+    <table cellspacing="0" cellpadding="0">
+      <tbody><tr>
+          <td width="103px">
+          </td>
+
+          <td>
+            &nbsp;
+          </td>
+          <td width="108px" class="right">
+            <div id="action_menu">
+              <ul>
+                <li>
+                  <a class="grey_button2">
+                    <span class="left">Export Data to</span>
+                    <span class="icons drop_arrow_ico">&nbsp;</span>
+                  </a>
+                  <div class="clear"></div>
+                  <ul>
+                    <li>
+                      <a href="/absences/export_my_monthly_absence" class="list"><span class="icons xls_ico">&nbsp;</span><span class="left">XLS File</span></a>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+          </td>
+
+        </tr>
+        <tr>
+          <td></td>
+          <td width="600px;">
+            <div class="expand_filter">
+              <div class="filter_opt" id="date_filter">
+                <%= render :partial => "salaries/periode", :locals => {:item => "absence_bulanan"} %>
+
+                <div class="clear"></div>
+              </div>
+              <div class="filter_opt" id="filter_show" style="display:none;">
+                <label class="left">Periode</label>
+                <span class="left result_filter"></span>
+                <a  class="icons cancel_ico remove_filter">&nbsp;</a>
+                <div class="clear"></div>
+              </div>
+
+              <a class="grey_button2" id="filter_button">
+                <span class="left">Go</span>
+                <div class="clear"></div>
+              </a>
+            </div>
+          </td>
+          <td></td>
+        </tr>
+      </tbody></table>
+
+  </div>
+  <div class="clear"></div>
+  <%= render :partial => "list_my_monthly_absences" %>
+  <div class="panelFilter">
+    &nbsp;
+    <div class="clear"></div>
+  </div>
+</fieldset>
+
+<script type="text/javascript" >
+  var oTable;
+
+
+  $(document).ready(function() {
+    $('#date_start_month').val(<%= @date_start_month%>);
+    $('#date_start_year').val(<%= @date_start_year%>);
+    $('#date_end_month').val(<%= @date_end_month%>);
+    $('#date_end_year').val(<%= @date_end_year%>);
+    oTable = $('#my_monthly_table').dataTable( {
+      "aoColumnDefs": [ { "bSortable": false, "aTargets": [ 0, 1, 2, 3, 4,5,6 ] }
+      ],
+      "bFilter": false,
+      "bLengthChange": false,
+      "bInfo":false,
+      "bProcessing": false,
+      "bServerSide": true,
+      "iDisplayLength": 40,
+      "fnDrawCallback": function(){
+        $('.dataTables_empty').parent().addClass('no-data');
+      },
+      "sAjaxSource":  "/my_monthly_absence_table?id=<%= @current_person.id %>",
+      "oLanguage": {
+        "sZeroRecords": "<div class='description center-text'>Data tidak ditemukan!</div>"
+      },
+      "fnRowCallback": function( nRow, aData, iDisplayIndex ) {
+        /* Add Total Work Hour*/
+        if ( aData[1] == "TOTAL BULANAN :" ){
+          $(nRow).addClass( "total2" );
+          $('td:eq(1)',nRow).addClass("right-text")
+        }
+        return nRow;
+      },
+      "fnServerData": function ( sSource, aoData, fnCallback ) {
+        /* Add some extra data to the sender */
+        aoData.push( { "name": "date_start_month", "value": $('#date_start_month').val() } );
+        aoData.push( { "name": "date_start_year", "value": $('#date_start_year').val() } );
+        aoData.push( { "name": "date_end_month", "value": $('#date_end_month').val() } );
+        aoData.push( { "name": "date_end_year", "value": $('#date_end_year').val() } );
+        $.getJSON( sSource, aoData, function (json) {
+          $('.result_filter').html("1 "+$('#date_month option:selected').text()+" "+$('#date_year').val()+" - "+json.iTotalRecords+" "+$('#date_month option:selected').text()+" "+$('#date_year').val() );
+          fnCallback(json)
+        });
+      }
+    } );
+
+    $('.remove_filter').click(function (e) {
+      e.preventDefault();
+      $(this).parent().hide();
+      $('#date_filter').show();
+      $('#filter_button').show();
+      $('#date_month').val(<%= Date.today.month%>);
+      $('#date_year').val(<%= Date.today.year%>);
+      oTable.fnDraw();
+    });
+
+    $('#filter_button').click(function (e) {
+      e.preventDefault();
+      //$(this).hide();
+      //$('#date_filter').hide();
+      //$('#filter_show').show();
+      oTable.fnDraw();
+      return false;
+    } );
+
+  } );
+
+
+</script>
+

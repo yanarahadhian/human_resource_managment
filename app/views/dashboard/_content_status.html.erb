@@ -1,0 +1,57 @@
+<% unless @data_chart.blank? %>
+
+<script type="text/javascript" src="http://www.google.com/jsapi"></script>
+<%= javascript_include_tag "jquery/jquery.js","jquery.gvChart-1.0.1.min.js" %>
+
+<script>
+  gvChartInit();
+  $(document).ready(function(){
+    jQuery('#c_status').gvChart({
+        chartType: 'PieChart',
+        gvSettings: {
+            width: 600,
+            height: 300
+            }
+    });
+  });
+</script>
+
+<div id="div_status">
+   <div class="dashboard-chart">
+      <fieldset class="chart-block" style="min-height:183px;width:30%">
+         <div class="control-box">
+           <p class="bold auto">Grafik Status karyawan</p>
+         </div>
+         <div class="chart">
+           <table id="c_status" border="1">
+             <thead>
+               <th></th>
+               <% @data_chart[:kontrak_name].each do |x| %>
+                 <th><%= x %></th>
+               <% end %>
+             </thead>
+             <tbody>
+               <tr>
+               <% @data_chart[:kontrak_val].each do |x| %>
+                 <td><%= x %></td>
+               <% end %>
+               </tr>
+             </tbody>
+            </table>
+         </div>
+       </fieldset>
+    </div>
+</div>
+<% else %>
+  <div id="status_desc_role">
+   <div class="dashboard-chart" id="c3">
+        <fieldset class="chart-block4">
+           <div class="control-box"></div>
+             <div no-chart="">
+               <div id="desc_role" class="no-data-chart">Belum ada data status kontrak saat ini
+             </div>
+           </div>
+        </fieldset>
+      </div>
+    </div>
+<% end %>

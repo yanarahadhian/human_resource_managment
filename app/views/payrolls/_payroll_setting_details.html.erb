@@ -1,0 +1,47 @@
+<div class="left">
+  <div class="box-form">
+    <span class="input" id="beri_jamsostek">
+      <label class="auto widthAuto">
+        <%=h @company_name %>
+        <span class="bold"> <%=h @payroll.jamsostek_by_company? ? "memberikan" : "tidak memberikan" %> </span> Jamsostek
+      </label>
+    </span>
+    <div class="clear"></div>
+
+    <span class="input" id="byr_jamsostek">
+      <label class="auto widthAuto">
+        <%=h @company_name %>
+        <span class="bold">
+          <% if !@payroll.company_cover_jamsostek.blank? && @payroll.company_cover_jamsostek <= 0 %>
+            membayarkan
+          <% else %>
+            tidak membayarkan
+          <% end %>
+        </span>
+        Jamsostek
+      </label>
+    </span>
+    <div class="clear"></div>
+
+    <% if @payroll.jamsostek_by_company %>
+      <span class="input" id="jlh_jamsostek">
+        <label class="auto widthAuto">Jumlah yang dibayarkan <%=h @company_name %> sebanyak <span class="bold"><%=h @payroll.company_cover_jamsostek %> %</span></label>
+      </span>
+      <div class="clear"></div>
+    <% end %>
+
+    <span class="input">
+      <label class="auto widthAuto">
+        Total hari kerja di <%=h @company_name %> adalah <span class="bold"><%=h @payroll.full_working_days %> hari</span>
+      </label>
+    </span>
+    <div class="clear"></div>
+
+    <span class="input">
+      <label class="auto widthAuto">
+        Tanggal cut-off payroll di <%=h @company_name %> adalah <span class="bold"> tanggal <%=h @payroll.cut_off_date %></span>
+      </label>
+    </span>
+    <%= render :partial => 'bca_accounts' if @payroll.payroll_by_bca? %>
+  </div>
+</div>

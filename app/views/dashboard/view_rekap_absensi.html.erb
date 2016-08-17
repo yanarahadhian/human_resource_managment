@@ -1,0 +1,175 @@
+<%= render :partial=> "layouts/shared/breadcrumbs" %>
+<fieldset class="fm-table">
+  <legend>
+    <a href="#" id="help_dash" class="icons help-top-icon" title="Click to show/hide information">&nbsp;</a>
+    Rekap Kehadiran
+  </legend>
+  <%= render :partial => "layouts/howto/howto_content"%>
+  <div class="clear"></div>
+  <div class="box-form">
+    <div class="panelFilter">
+      <table cellpadding="0" cellspacing="0">
+        <tbody>
+          <tr>
+            <td>
+              <a class="grey_button2" id="filter_trigger_rekap_absensi">
+                <span class="icons filter-ico">&nbsp;</span> Filter
+              </a>
+              <span id="button-block-top_absensi">
+                <a class="grey_button2" id="export_xls">
+                  <span class="icons xls_ico">&nbsp;</span> Export to Excel
+                </a>
+                <%#*<a class="grey_button2" id="print_absence_report">%>
+                  <%#*<span class="icons print-icon">&nbsp;</span> Cetak%>
+                <%#*</a>%>
+              </span>
+            </td>
+          </tr>
+          <tr id="filter_block_rekap_absensi">
+            <td>
+            	<div class="expand_filter">
+                <div id="filter_st">
+                    <div class="left-filter auto-size">
+                      <div class="filter_opt">
+                        <label>Departemen:</label>
+                        <%= collection_select(:filter, :department, @departments, :id, :department_name, options ={:prompt => "Pilih Departemen"}, html_options = {:id => "rekap_absen_department"}) %>
+                      </div>
+                      <div class="clear"></div>
+                      <div id="div_divisi_absensi">
+                        <div class="filter_opt">
+                          <label>Bagian:</label>
+                          <%= collection_select(:filter, :division, @divisions, :id, :name, options ={:prompt => "Pilih Bagian"}, html_options = {:id => "rekap_absen_division"}) %>
+                        </div>
+                      </div>
+                      <div class="clear"></div>
+                      <div class="filter_opt">
+                        <label>Periode:</label>
+                        <%= text_field_tag "temp_date",{},{:style => "width:100px !important;"}%>
+                        <%= hidden_field_tag :date_start,{},{:id => "date_pick_absen"} %>
+                        &nbsp; s.d. &nbsp;
+                        <%= text_field_tag "temp_date2",{},{:style => "width:100px !important;"}%>
+                        <%= hidden_field_tag :date_end,{},{:id => "date_pick_absen2"} %>
+                      </div>
+                    </div>
+
+                    <div class="right-filter">
+                      <div class="filter_opt">
+                        <label style="width:190px">NIK:</label>
+                        <input id="rekap_absen_nik" type="text" />
+                      </div>
+                      <div class="clear"></div>
+                      <div class="filter_opt">
+                        <label style="width:190px">Nama Karyawan:</label>
+                        <input id="rekap_absen_name" type="text" />
+                      </div>
+                      <div class="clear"></div>
+                      <div class="filter_opt">
+                        <label style="width:190px">Status Kontrak:</label>
+                        <%= collection_select(:filter, :contract, @contract_types, :id, :contract_type_name, options ={:prompt => "Pilih status kontrak"}, html_options = {:id => "rekap_absen_contract"}) %>
+                      </div>
+                      <div class="clear"></div>
+                    </div>
+                    <div class="clear"></div>
+                    <div class="center-text filter-btn" id="b1">
+                      <div class="center-text">
+                        <input type="button" class="grey_button2 none" value="Tampilkan" id="trigger_absensi"/>
+                      </div>
+                    </div>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="clear"></div>
+  
+    <div id="presence_report_page">
+      <%= render :partial => "/absences/list_presence_report" %>
+    </div>
+  
+</fieldset>
+<%= render :partial => "/absences/popup_pages/popup_export_report" %>
+
+<script type="text/javascript" >
+
+  $(document).ready(function() {
+    $('#filter_block_rekap_absensi').show();
+    $('#filter_trigger_rekap_absensi').addClass("filter-active")
+    $('#filter_trigger_rekap_absensi').click(function(){
+      $(this).toggleClass("filter-active");
+      $('#filter_block_rekap_absensi').toggle();
+    });
+    $('.expand_filter .reset-filter-ico').click(function(){
+      $('#filter_block_rekap_absensi').hide();
+      $('#filter_trigger_rekap_absensi').removeClass("filter-active");
+    });
+    $('#rekap_absen_division').attr('disabled', 'disabled');
+    $('#button-block-top_absensi, #rekap_absensi').hide();
+
+    $('#trigger_absensi').click(function(e){
+      var first_date = new Date($("#date_pick_absen2").val());
+      var last_date = new Date($("#date_pick_absen").val());
+      var selisih = Math.floor(((first_date - last_date) / (60*60*24)) / 1000)
+      if(selisih > 30){
+         alert("Periode waktu tidak boleh lebih dari 30 hari");
+         return false;
+      }else{
+        e.preventDefault();
+        resetTablePage($('#date_pick_absen').val(), $('#date_pick_absen2').val(),
+        $('#rekap_absen_name').val(), $('#rekap_absen_department').val(),
+        $('#rekap_absen_division').val(), $('#rekap_absen_nik').val(),
+        $('#rekap_absen_contract').val(), dataLength, displayStart);
+        $('#button-block-top_absensi, #rekap_absensi').show();
+      }
+    });
+
+    $("#date_pick_absen").datepicker({
+      altField: '#temp_date',
+      altFormat: 'dd/mm/yy',
+      dateFormat: 'yy-mm-dd',
+      maxDate: '+0',
+      buttonImageOnly: true
+    });
+    $("#date_pick_absen2").datepicker({
+      altField: '#temp_date2',
+      altFormat: 'dd/mm/yy',
+      dateFormat: 'yy-mm-dd',
+      buttonImageOnly: true,
+      maxDate: '+0'
+    });
+    $("#popup_date_pick").datepicker({
+      altField: '#popup_temp_date',
+      altFormat: 'dd/mm/yy',
+      dateFormat: 'yy-mm-dd',
+      buttonImageOnly: true,
+      maxDate: '+0'
+    });
+    $("#popup_date_pick2").datepicker({
+      altField: '#popup_temp_date2',
+      altFormat: 'dd/mm/yy',
+      dateFormat: 'yy-mm-dd',
+      buttonImageOnly: true,
+      maxDate: '+0'
+    });
+
+    $('#date_pick_absen').datepicker("setDate",<%="#{Date.today.strftime("%d/%m/%Y")}"%>);
+    $('#date_pick_absen2').datepicker("setDate",<%="#{Date.today.strftime("%d/%m/%Y")}"%>);
+
+    $("#export_xls").colorbox({width:"auto",height:"auto", inline:true, href:"#popup_export_report",
+      onComplete: function(){
+        $('#popup_date_pick').datepicker("setDate",$('#date_pick_absen').val());
+        $('#popup_date_pick2').datepicker("setDate",$('#date_pick_absen2').val());
+      },
+      onClosed: function(){
+      }
+    });
+
+    $('#rekap_absen_department').change(function() {
+      if($(this).val()==""){$('#rekap_absen_division').attr('disabled', 'disabled');}else{$('#rekap_absen_division').removeAttr('disabled');}
+      $.get("/absences/divisions_by_department", {id: $(this).val()}, null, "script");
+    });
+  });
+
+</script>

@@ -1,0 +1,88 @@
+<%= javascript_include_tag  'pagination' %>
+<%= render :partial => "memorandums_script" %>
+<table id="memorandums_table" class="tablesorter">
+  <thead>
+    <tr>
+      <th width="10" class="center-text"><input type="checkbox"/></th>
+      <th width="120" class="center-text">NIK</th>
+      <th width="120" class="center-text">Nama Karyawan</th>
+      <th width="120" class="center-text">Jenis SP</th>
+      <th width="120" class="left-text">Kategori Pelanggaran</th>
+      <th width="120" class="left-text">Tgl SP Diberikan</th>
+      <th width="140" class="left-text">SP Berlaku Sampai</th>
+      <th class="left-text">Keterangan</th>
+    </tr>
+  </thead>
+  <tbody>
+    <%unless @violations.blank?%>
+      <% @violations.each do |p|  %>
+        <tr>
+          <td class="center-text"><%= check_box_tag'myrow[ids][]', p.id, false %></td>
+          <td class="left-text">
+            <% unless p.person_id.blank? %>
+              <%= link_to p.person.employee_identification_number, "#people/#{p.person_id}?tab=0" %>
+            <% end %>
+          </td>
+          <td class="left-text">
+            <% unless p.person_id.blank? %>
+              <%= link_to p.person.full_name, "#people/#{p.person_id}?tab=0" unless p.person.blank? %>
+            <% end %>
+          </td>
+          <td class="left-text"><%= p.action_taken %></td>
+          <td><%= p.violation_category %></td>
+          <td class="left-text">
+            <% unless p.occurence_date.blank?%>
+              <a href="#memorandums/<%= p.id %>/edit"><%= p.occurence_date.strftime("%d/%m/%Y") %></a>
+            <% else %>
+              "-"
+            <% end %>
+          </td>
+          <td class="left-text">
+            <% unless p.active_until.blank?%>
+              <a href="#memorandums/<%= p.id %>/edit"><%= p.active_until.strftime("%d/%m/%Y") %></a>
+            <% else %>
+              "-"
+            <% end %>
+          </td>
+          <td class="left-text"><%= p.violation_description.blank? ? "-" : p.violation_description %></td>
+        </tr>
+      <% end %>
+    <%else%>
+      <tr class="no-data">
+        <td colspan="10" class="center-text">
+          <div class="description">
+           <% if params[:filter] %>
+              Data Tidak Ditemukan
+            <% else %>
+              Belum Ada Data Surat Peringatan
+            <% end %>
+          </div>
+          <div class="info">
+            <% if params[:filter] %>
+              Silahkan <a id="reset_filter2"> Reset Filter</a> untuk mengubah parameter anda
+            <% else %>
+              Silahkan klik <%= link_to 'Tambah Surat Peringatan', "#memorandums/new" %> untuk menambah data
+            <% end %>
+          </div>
+          </td>
+      </tr>
+    <%end%>
+  </tbody>
+</table>
+<div class="panelFilter">
+  <div class="pagination">
+    <% if @violations.count > 0 %>
+      <span class="paginationResult">
+        <% a = "" %>
+        <% unless @violations.blank? %>
+          <% a = format_paginate1(@violations, @per_page, @violations.total_entries) %>
+          <%= a[:a] %> - <%= a[:b] %> dari <%= @violations.total_entries %>
+        <% end %>
+      </span>
+      <%= a[:paginate] unless a.blank? %>
+    <% else %>
+      &nbsp;
+    <% end %>
+    <div class="clear"></div>
+  </div>
+</div>

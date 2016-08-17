@@ -1,0 +1,188 @@
+<%= javascript_include_tag  'pagination' %>
+<table width="1450" id="leaves_table">
+  <thead>
+    <tr>
+      <th width="10"><input type="checkbox"></th>
+      <th width="163">Nama</th>
+      <th width="133">Tanggal Dibuat</th>
+      <th width="133">Tanggal Cuti</th>
+      <th width="127"><a>Alasan Cuti</a></th>
+      <th width="187">Keterangan</th>
+      <th width="127">Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% unless @leaves.blank?%>
+      <% @leaves.each do |leave| %>
+        <tr>
+          <td>
+            <% if leave.leave_status.to_s.downcase != "approved" && leave.leave_status.to_s.downcase != "rejected" && current_features.include?('employee_leave_management_change_status') %>
+              <%= check_box_tag'myrow[ids][]', leave.id, false %>
+            <% end %>
+          </td>
+          <td>
+            <% person_name = leave.person.blank?? "" : leave.person.full_name.titleize %>
+            <% if leave.leave_status.to_s.downcase != "approved" && leave.leave_status.to_s.downcase != "rejected" && current_features.include?('employee_leave_management_edit') %>
+              <%= "<a href='#leaves/#{leave.id}/edit'> #{person_name} </a>" %>
+            <% else %>
+              <%= person_name %>
+            <% end %>
+          </td>
+          <td><%= leave.created_at.strftime("%d/%m/%Y") %></td>
+          <td><%= leave.leave_date.strftime("%d/%m/%Y") %> - <%= last_periode(leave) %></td>
+          <td><%= leave.absence_type.nil? ? "-" : leave.absence_type.absence_type_name %></td>
+          <td><%= leave.leave_description %></td>
+          <td><%= leave.leave_status.titleize unless leave.leave_status.blank? %></td>
+        </tr>
+      <% end %>
+    <% else %>
+      <tr class="no-data">
+        <td colspan="7" class="center-text">
+          <div class="description">
+            <% if params[:filter] %>
+              Data Tidak Ditemukan
+            <% else %>
+              Belum Ada Data Cuti karyawan
+            <% end %>
+          </div>
+          <div class="info">
+            <% if params[:filter] %>
+              Silahkan <a id="reset_filter2"> Reset Filter</a> untuk mengubah parameter anda
+            <% else %>
+              Silahkan <%= link_to 'Tambah Cuti karyawan', "#leaves/new" %> untuk menambah data
+            <% end %>
+          </div>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<% if !@leaves.nil? %>
+  <div class="panelFilter">
+    <div class="pagination">
+      <% unless @leaves.blank? %>
+        <span class="paginationResult">
+          <% a = format_paginate1(@leaves, @per_page, @leaves.total_entries) %>
+          <%= a[:a] %> - <%= a[:b] %> dari <%= @leaves.total_entries %>
+        </span>
+        <%= a[:paginate]  %>
+      <% end %>
+      <div class="clear"></div>
+    </div>
+  </div>
+<% end %>
+
+<script>
+
+  var gaiSelected =  [];
+
+  $(document).ready(function() {
+    $('#leaves_table thead tr th input').click(function () {
+      if ($(this).is(":checked")) {
+        $('#leaves_table tbody tr td input').each(function (){
+          $(this).attr( 'checked', true );
+          $(this).parent().parent().addClass('row_selected');
+          var iId = this ;
+          if ( jQuery.inArray(iId.value, gaiSelected) == -1 ){
+            gaiSelected[gaiSelected.length++] = iId.value;
+          }
+        });
+      }else{
+        $('#leaves_table tbody tr').each(function (){
+          $(this).removeClass('row_selected');
+          var iId = $('#leaves_table tbody tr td input');
+          gaiSelected = [];
+          iId.attr( 'checked', false );
+        });
+      }
+    });
+  });
+
+  function onDelete(act_name){
+    var arr_params = new Array();
+    $('#leaves_table tbody input:checked').each(function() {
+      arr_params = arr_params.concat($(this).val());
+    });
+    if (arr_params.length > 0){
+      $('#div_sign').html('cuti karyawan');
+      $('#div_nama_comfirm').html('Penghapusan');
+      $('#div_aksi').html('menghapus');
+      $('#div_btn_hapus').html("<input type='button' value='Ya' class='blue_button' onclick='delete_cuti_karyawan(\"" + act_name + "\")'/>");
+      jQuery().colorbox({width:"auto",height:"auto", inline:true,href:"#message_delete",
+        onClosed:function(){}
+      });
+    }else{
+      return false;
+    }
+  }
+
+
+  function delete_cuti_karyawan(act_name){
+    var arr_params = new Array();
+    $('#leaves_table tbody input:checked').each(function() {
+      arr_params = arr_params.concat($(this).val());
+    });
+    var controller = "/leaves/delete_multiple";
+    $("#ajax-load").show();
+    var action = act_name
+    $.ajax({
+      type: "post",
+      url: escape(controller),
+      data:{'_method': 'post',"ids":arr_params, "act_name" : action},
+      dataType: 'script',
+      success: function(){
+        $("#ajax-load").hide();
+        $.fn.colorbox.close();
+      }
+    })
+  }
+
+  function onApprove(act_name){
+    var arr_params = new Array();
+    $('#leaves_table tbody input:checked').each(function() {
+      arr_params = arr_params.concat($(this).val());
+    });
+    if (arr_params.length > 0 && act_name == 'approved'){
+      $('#div_sign').html('cuti karyawan');
+      $('#div_nama_comfirm').html('Approve');
+      $('#div_aksi').html('meng-aprove');
+      $('#div_btn_hapus').html("<input type='button' value='Ya' class='blue_button' onclick='approve_cuti_karyawan(\"" + act_name + "\")'/>");
+      jQuery().colorbox({width:"auto",height:"auto", inline:true,href:"#message_delete",
+        onClosed:function(){}
+      });
+    }
+    else if (arr_params.length > 0 && act_name == 'rejected'){
+      $('#div_sign').html('cuti karyawan');
+      $('#div_nama_comfirm').html('Reject');
+      $('#div_aksi').html('me-reject');
+      $('#div_btn_hapus').html("<input type='button' value='Ya' class='blue_button' onclick='approve_cuti_karyawan(\"" + act_name + "\")'/>");
+      jQuery().colorbox({width:"auto",height:"auto", inline:true,href:"#message_delete",
+        onClosed:function(){}
+      });
+    }else{
+      return false;
+    }
+  }
+
+
+  function approve_cuti_karyawan(act_name){
+    var arr_params = new Array();
+    $('#leaves_table tbody input:checked').each(function() {
+      arr_params = arr_params.concat($(this).val());
+    });
+    var controller = "/leaves/update_status";
+    $("#ajax-load").show();
+    var action = act_name;
+    $.ajax({
+      type: "post",
+      url: escape(controller),
+      data:{'_method': 'post',"ids":arr_params, "act_name" : action},
+      dataType: 'script',
+      success: function(){
+        $("#ajax-load").hide();
+        $.fn.colorbox.close();
+      }
+    });
+  }
+
+</script>

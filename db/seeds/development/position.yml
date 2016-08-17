@@ -1,0 +1,16 @@
+01:
+  id: 1
+  company_id: 1
+  position_name: "Staff"
+02:
+  id: 2
+  company_id: 1
+  position_name: "Operator"
+03:
+  id: 3
+  company_id: 1
+  position_name: "Wakaru"
+04:
+  id: 4
+  company_id: 1
+  position_name: "Inspector 0"

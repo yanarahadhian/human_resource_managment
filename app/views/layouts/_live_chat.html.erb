@@ -1,0 +1,171 @@
+<script type="text/javascript">
+   $(document).ready(function(){
+      $(".feedback").colorbox({width:"auto",height:"auto", inline:true, href:"#feedback-area"});
+      //Adjust panel height
+      $.fn.adjustPanel = function(){
+      $(this).find("ul, .subpanel").css({ 'height' : 'auto'}); //Reset subpanel and ul height
+
+      var windowHeight = $(window).height(); //Get the height of the browser viewport
+      var panelsub = $(this).find(".subpanel").height(); //Get the height of subpanel
+      var panelAdjust = windowHeight - 100; //Viewport height - 100px (Sets max height of subpanel)
+      var ulAdjust =  panelAdjust - 25; //Calculate ul size after adjusting sub-panel (27px is the height of the base panel)
+
+      if ( panelsub >= panelAdjust ) {	 //If subpanel is taller than max height...
+        $(this).find(".subpanel").css({ 'height' : panelAdjust }); //Adjust subpanel to max height
+        $(this).find("ul").css({ 'height' : ulAdjust}); //Adjust subpanel ul to new size
+      }
+      else if ( panelsub < panelAdjust ) { //If subpanel is smaller than max height...
+        $(this).find("ul").css({ 'height' : 'auto'}); //Set subpanel ul to auto (default size)
+      }
+    };
+
+    //Execute function on load
+    $("#chatpanel").adjustPanel(); //Run the adjustPanel function on #chatpanel
+    $("#alertpanel").adjustPanel(); //Run the adjustPanel function on #alertpanel
+
+    //Each time the viewport is adjusted/resized, execute the function 
+    $(window).resize(function () {
+      $("#chatpanel").adjustPanel();
+      $("#alertpanel").adjustPanel();
+    });
+
+    //Click event on Chat Panel + Alert Panel
+    $("#chatpanel a:first, #alertpanel a:first").click(function() { //If clicked on the first link of #chatpanel and #alertpanel...
+      if($(this).next(".subpanel").is(':visible')){ //If subpanel is already active...
+        $(this).next(".subpanel").hide(); //Hide active subpanel
+          $("#footpanel li a").removeClass('active'); //Remove active class on the subpanel trigger
+        }
+      else { //if subpanel is not active...
+        $(".subpanel").hide(); //Hide all subpanels
+        $(this).next(".subpanel").toggle(); //Toggle the subpanel to make active
+        $("#footpanel li a").removeClass('active'); //Remove active class on all subpanel trigger
+        $(this).toggleClass('active'); //Toggle the active class on the subpanel trigger
+      }
+      return false; //Prevent browser jump to link anchor
+    });
+
+    //Click event outside of subpanel
+    $(document).click(function() { //Click anywhere and...
+      $(".subpanel").hide(); //hide subpanel
+      $("#footpanel li a").removeClass('active'); //remove active class on subpanel trigger
+    });
+
+    $('.subpanel ul').click(function(e) {
+      e.stopPropagation(); //Prevents the subpanel ul from closing on click
+    });
+
+    //Delete icons on Alert Panel
+    $("#alertpanel li").hover(function() {
+      $(this).find("a.delete").css({'visibility': 'visible'}); //Show delete icon on hover
+    },function() {
+      $(this).find("a.delete").css({'visibility': 'hidden'}); //Hide delete icon on hover out
+    });
+  });
+</script>
+
+<% unless params[:action] == "logout_confirm" && params[:controller] == "user_sessions" %>
+  <div id="footpanel">
+    <ul id="mainpanel">
+        <!--<li><a href="<?php echo Router::url('/'); ?>" class="home">Home<small>Home AppsChef</small></a></li>-->
+        <li id="chatpanel">
+            <a class="chat" href="" target="_blank" onClick="window.open(encodeURI('https://oggchat.icoa.com/cp?font=Verdana&fontsize=10pt&bgcolor=FFFFFF&cid=c08f011a2f77d861012f8b4e4974015d&website=appschef.com&text=Live Chat&height=450&width=380&r='+document.referrer), 'OggChat', 'toolbar=0,scrollbars=1,location=0,status=0,menubar=0,resizable=1,width=380,height=450');return false;">Live Chat</a>
+        </li>
+        <li id="contactpanel">
+            <a href="#" class="contact">Feedback</a>
+            <div class="subpanel">
+                <h3><span> &ndash; </span>Kirim Saran/Pesan</h3>
+                <div class="block">
+                    <form action="" name="formFeedback" id="formFeedback" method="post">
+                        <label><span>Nama: </span></label>
+                        <input type="text" name="nama_fFeedback" id="nama_fFeedback" value="" />
+                        <label><span>Email: </span></label>
+                        <input type="text" name="email_fFeedback" id="email_fFeedback" value="" />
+                        <label><span>Kategori: </span></label>
+                        <select name="kategori_fFeedback" id="kategori_fFeedback">
+                            <option value="Saran">Saran</option>
+                            <option value="Kritik">Kritik</option>
+                            <option value="Pertanyaan">Pertanyaan</option>
+                            <option value="Rating">Rating</option>
+                            <option value="Testimonial">Testimonial</option>
+                            <option value="Bug Report">Bug Report</option>
+                        </select>
+                        <label><span>Pesan: </span></label>
+                        <textarea name="komentar_fFeedback" id="komentar_fFeedback"></textarea>
+
+                        <label><span>&nbsp;</span></label>
+                        <input type="button" name="submitFeedback" id="submitFeedback" class="submit" value="Kirim" />
+                    </form>
+                </div>
+            </div>
+        </li>
+        <li id="consultationpanel">
+            <a href="#" class="consultation">Konsultasi</a>
+            <div class="subpanel">
+                <h3><span> &ndash; </span>Form Konsultasi</h3>
+                <div class="block">
+                    <form action="" name="formKonsultasi" id="formKonsultasi" method="post">
+                        <label><span>Konsultasi dengan: </span></label>
+                        <select name="konsultasi_dengan_fKonsultasi" id="konsultasi_dengan_fKonsultasi">
+                            <option value="Kadin">Kadin</option>
+                            <option value="Lainnya">Lainnya</option>
+                        </select>
+                        <label><span>Kategori: </span></label>
+                        <select name="kategori_fKonsultasi" id="kategori_fKonsultasi">
+                            <option value="Bisnis">Bisnis</option>
+                            <option value="Keuangan">Keuangan</option>
+                            <option value="Permodalan">Permodalan</option>
+                            <option value="Hukum">Hukum</option>
+                        </select>
+                        <label><span>Nama: </span></label>
+                        <input type="text" name="nama_fKonsultasi" id="nama_fKonsultasi" value="" />
+                        <label><span>Email: </span></label>
+                        <input type="text" name="email_fKonsultasi" id="email_fKonsultasi" value="" />
+                        <label><span>Pesan: </span></label>
+                        <textarea name="pesan_fKonsultasi" id="pesan_fKonsultasi"></textarea>
+
+                        <label><span>&nbsp;</span></label>
+                        <input type="button" name="submitKonsultasi" id="submitKonsultasi" class="submit" value="Kirim" />
+                    </form>
+                </div>
+            </div>
+        </li>
+
+    </ul>
+</div>
+  <% end %>
+  <div style="display:none;">
+      <div id="feedback-area" class="popup" >
+        <h2>Send us Feedback</h2>
+        <form method="post">
+            <div class="field">
+               <label>Name/Username</label>
+               <div class="clear"></div>
+               <input type="text" />
+            </div>
+            <div class="clear"></div>
+
+            <div class="field">
+               <label>Email Address</label>
+               <div class="clear"></div>
+               <input type="text" />
+            </div>
+            <div class="clear"></div>
+
+            <div class="field">
+               <label>Problems</label>
+               <div class="clear"></div>
+               <select>
+                <option value="">Idea</option>
+                <option value="">Problems</option>
+                <option value="">Questions</option>
+               </select>
+            </div>
+            <div class="clear"></div>
+            <div class="text-area">
+             <textarea cols="65" id="text-editor"></textarea>
+            </div>
+            <div class="clear"></div>
+            <input class="green" type="submit" value="Send"/>
+        </form>
+      </div>
+  </div>

@@ -1,0 +1,136 @@
+<table id="overtime_report_table">
+  <thead>
+    <tr>
+      <th width="5%" class="center-text"><a>No.</a></th>
+      <th width="10%" class="center-text"><a>Departemen</a></th>
+      <th width="10%" class="center-text"><a>NIK</a></th>
+      <th width="25%" class="center-text"><a>Nama Karyawan</a></th>
+      <th width="25%" class="center-text"><a>Total lembur wajib</a></th>
+      <th width="25%" class="center-text"><a>Total lembur tidak wajib</a></th>
+    </tr>
+  </thead>
+  <tbody>
+  </tbody>
+</table>
+<div class="clear"></div>
+<div class="panelFilter">
+  <table cellpadding="0" cellspacing="0">
+    <tbody>
+      <tr>
+        <td></td>
+        <td>&nbsp;</td>
+        <td class="right-text">
+          <div class="pagination right">
+            <span class="paginationResult"></span>
+            <a ><span class="icons last_ico" id="last_lembur_page">&nbsp;</span></a>
+            <a ><span class="icons next_ico" id="next_lembur_page">&nbsp;</span></a>
+            <a ><span class="icons prev_ico" id="prev_lembur_page">&nbsp;</span></a>
+            <a ><span class="icons first_ico" id="first_lembur_page">&nbsp;</span></a>
+            <div class="clear"></div>
+          </div>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<script type="text/javascript" >
+  var displayStart = <%= @start_index.to_i %>;
+  var dataLength = 25;
+  var oTable;
+
+  $(document).ready(function() {
+    oTable = $('#overtime_report_table').dataTable( {
+      "aoColumnDefs": [ { "bSortable": false, "aTargets": [ 0, 1, 2, 3, 4, 5 ] },
+        { "sClass": "center-text", "aTargets": [ 0, 4, 5 ] }
+      ],
+      "bFilter": false,
+      "bLengthChange": false,
+      "bInfo":false,
+      "bProcessing": false,
+      "bServerSide": true,
+      "iDisplayLength": 15,
+      "fnDrawCallback": function(){
+        gaiSelected=[];
+        $('.dataTables_empty').parent().addClass('no-data');
+      },
+      "sAjaxSource":  "/overtimes/overtime_report_table",
+      "oLanguage": {
+        "sZeroRecords": "<div class='description center-text'>Data tidak ditemukan!</div>"
+      },
+      "fnServerData": function ( sSource, aoData, fnCallback ) {
+        /* Add some extra data to the sender */
+
+        aoData.push( { "name": "date_start", "value": $('#date_pick_lembur').val() } );
+        aoData.push( { "name": "date_end", "value": $('#date_pick_lembur2').val() } );
+        aoData.push( { "name": "department", "value": $('#rekap_lembur_department').val() } );
+        aoData.push( { "name": "division", "value": $('#rekap_lembur_division').val() } );
+        aoData.push( { "name": "contract", "value": $('#rekap_lembur_contract').val() } );
+        aoData.push( { "name": "nik", "value": $('#nik').val() } );
+        aoData.push( { "name": "name", "value": $('#name').val() } );
+        //          aoData.push( { "name": "min", "value": $('#pers_min').val() } );
+        //          aoData.push( { "name": "max", "value": $('#pers_max').val() } );
+        fnSetKey(aoData, "iDisplayStart", displayStart );
+        dataLength = fnGetKey(aoData, "iDisplayLength");
+        $.getJSON( sSource, aoData, function (json) {
+          if (json.iTotalDisplayRecords > 0){
+            $( '#overtime_report_page .paginationResult' ).html( parseInt(displayStart) + 1 +" - "+ (parseInt(json.iTotalDisplayRecords) + parseInt(displayStart)) +" dari <span id='totalOvertimeRecords'>"+ json.iTotalRecords +"</span>");
+          }
+          else{
+            $( '#overtime_report_page .paginationResult' ).html("&nbsp;");
+          }
+          if (json.iTotalRecords < dataLength ){
+            $( '.panelFilter .pagination' ).hide();
+          } else{
+            $( '.panelFilter .pagination' ).show();
+          }
+          fnCallback(json)
+        });
+      }
+    });
+
+    $('#next_lembur_page').click(function(e){
+      e.preventDefault();
+      if (displayStart + dataLength < $('#totalOvertimeRecords').text()){
+        $("#ajax-load").show();
+        displayStart = displayStart + dataLength;
+        oTable.fnDraw();
+        $("#ajax-load").hide();
+      }
+      return false;
+    } );
+
+    $('#last_lembur_page').click(function(e){
+      e.preventDefault();
+      if (displayStart + dataLength < $('#totalOvertimeRecords').text()){
+        $("#ajax-load").show();
+        displayStart = (Math.floor((parseInt($('#totalOvertimeRecords').text()-1)/dataLength))*dataLength);
+        oTable.fnDraw();
+        $("#ajax-load").hide();
+      }
+      return false;
+    } );
+
+    $('#prev_lembur_page').click(function(e){
+      e.preventDefault();
+      if (displayStart > 0){
+        $("#ajax-load").show();
+        displayStart = displayStart - dataLength;
+        oTable.fnDraw();
+        $("#ajax-load").hide();
+      }
+      return false;
+    } );
+
+    $('#first_lembur_page').click(function(e){
+      e.preventDefault();
+      if (displayStart > 0){
+        $("#ajax-load").show();
+        displayStart = 0;
+        oTable.fnDraw();
+        $("#ajax-load").hide();
+      }
+      return false;
+    } );
+
+  });
+
+</script>

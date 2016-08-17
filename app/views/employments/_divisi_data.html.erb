@@ -1,0 +1,73 @@
+<% disabled_status = @divisions.blank?? "disabled" : "" %>
+
+<% if ["kecelakaan_kerja", "memorandum", "karyawan"].include?(params[:type]) %>
+  <div class="filter_opt input-field">
+    <label class="left">Bagian</label>
+    <select name="filter[division_id]" id="filter_division_id" <%= disabled_status %>>
+      <option value="">Pilih Bagian</option>
+      <% @divisions.each do |x| %>
+        <option value="<%=x.id%>"><%=x.name %></option>
+      <% end unless @divisions.blank? %>
+    </select>
+    <% if params[:type]=="kecelakaan_kerja" %>
+      <a id="icon_cancel_opt2" class="icons cancel_ico" href="#job_accidents">&nbsp;</a>
+    <% end %>
+  </div>
+<% elsif ["report_formasi", "report_formasi_jabatan", "report_formasi_departemen", "report_formasi_bagian","view_absensi"].include?(params[:type]) %>
+  <div class="filter_opt input-field">
+    <label class="left">Bagian:</label>
+    <% if params[:type] == "report_formasi" %>
+      <% name = "filter_formasi[work_division_id]" %>
+      <% the_id = "filter_formasi_work_division_id" %>
+    <% end %>
+    <% if params[:type] == "report_formasi_jabatan" %>
+      <% name = "filter_formasi_jabatan[work_division_id]" %>
+      <% the_id = "filter_formasi_jabatan_work_division_id" %>
+    <% end %>
+    <% if params[:type] == "report_formasi_departemen" %>
+      <% name = "filter_formasi_departemen[work_division_id]" %>
+      <% the_id = "filter_formasi_departemen_work_division_id" %>
+    <% end %>
+    <% if params[:type] == "report_formasi_bagian" %>
+      <% name = "filter_formasi_bagian[work_division_id]" %>
+      <% the_id = "filter_formasi_bagian_work_division_id" %>
+    <% end %>
+    <% if params[:type] == "view_absensi" %>
+      <% name = "filter_absensi[work_division_id]" %>
+      <% the_id = "filter_absensi_work_division_id" %>
+    <% end %>
+    <select name="<%= name %>" id="<%= the_id %>" <%= disabled_status %>>
+      <option value="">Semua Bagian</option>
+      <% @divisions.each do |x| %>
+        <option value="<%=x.id%>"><%=x.name %></option>
+      <% end unless @divisions.blank? %>
+    </select>
+  </div>
+<% else %>
+  <%- if @view.blank? %>
+    <% style = "" %>
+    <% judul = "Pilih Bagian" %>
+    <% name = "employment[work_division_id]" %>
+    <span class="input-field hide">
+      <label<%= style %>>Bagian</label> :
+      <select onchange="onDivision(this)" name="<%= name %>" id="employment_work_division_id" <%= disabled_status %>>
+        <option value=""><%= judul %></option>
+        <% @divisions.each do |x| %>
+          <option value="<%=x.id%>"><%=x.name %></option>
+        <% end unless @divisions.blank? %>
+      </select>
+    </span>
+    <span class="clear"></span>
+  <%- else %>
+    <span class="input-field">
+      <label>Bagian</label> :
+      <select name="employment[work_division_id]" id="employment_work_division_id" <%= disabled_status %>>
+        <option value="">Semua bagian</option>
+        <% @divisions.each do |x| %>
+          <option value="<%=x.id%>"><%=x.name %></option>
+        <% end unless @divisions.blank? %>
+      </select>
+    </span>
+    <span class="clear"></span>
+  <%- end %>
+<% end %>

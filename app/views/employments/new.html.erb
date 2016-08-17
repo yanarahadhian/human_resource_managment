@@ -1,0 +1,84 @@
+<div class="left" style="width:82%;">
+  <%= render :partial=>"layouts/top_menu_detail_karyawan" %>
+  <div id="content-dynamic">
+
+    <fieldset class="fm-table">
+      <div class="inner-title">Tambah Jabatan</div>
+        <div class="box-form">
+        <% form_for @employment, :url => person_employments_path do |f| %>
+           <div id="box_retur_0">
+             <%= render :partial => 'employment_add_form', :locals => {:f => f, :employment => @employment} %>
+             <span class="clear"></span>
+             <hr />
+             <div class="center-text">
+               <input id="info_section_cancel_basic" class="grey_button" type="reset" value="Cancel" name="info_section_cancel_basic" onclick="javascript:window.location='<%=person_employments_path(@person)%>'"/>
+               <input type="submit" value="Simpan" name="info_section_save_basic" id="info_section_save_basic" class="blue_button"/>               
+             </div>
+           </div>
+        <% end-%>
+      </div>
+    </fieldset>
+  </div>
+</div>
+	
+<%#= render :partial => 'layouts/emp_form_frame'%>
+<!--<div class="tab_content profile_bottom_wash" id="tab_content">
+    <div class="profile_bottom_container">
+    <div class="right_column_container clearfix">
+        <div id="pagelet_ads"></div>
+            <div class="right_column" id="right_column">
+            <div id="pagelet_tab_content">
+                    <div id="tab_canvas">
+                        <div>
+                            <div id="info_tab" class="info_tab" style="padding:15px 0 20px">
+
+                              <div id="pagelet_stream_header" style="padding-top: 10px;">
+                                  <div class="clearfix UIIntentionalStream_Top">
+                                      <div class="UIIntentionalStream_Top_Icon UIImageBlock clearfix">
+                                          <div class="UIImageBlock_Content UIImageBlock_ICON_Content">
+                                              <li class="UIIntentionalStream_Top_Header">
+                                                  <span class="UIIntentionalStream_LiveHeader"><%=  @value.humanize if @value %> Jabatan</span>
+                                              </li>
+                                          </div>
+                                      </div>
+                                  </div>
+                              </div>
+                                <div id="info_section_basic" class="info_section edit_mode ">
+                                      <div class="section_header" id="info_section_header_basic">
+                                          <h3 class="clearfix">
+                                              <span>Info Karyawan</span>
+                                              <div class="divider"> </div>
+                                          </h3>
+                                      </div>
+                                  <div class="profile_info_container clearfix">
+                                          <div id="info_section_editor_basic" class="profile_info section_editor" style="height: auto;">
+                                              <div class="editor_panel clearfix">
+                                                  <%# form_for @employment, :url => person_employments_path do |f| %>
+                                                    <%#= render :partial => 'employment_form', :locals => {:f => f} %>
+                                                    <div class="clear"></div>
+                                                    <div style="float:left;width: 15%;margin-left:20px">* Harus di isi</div>
+                                                    <table class="editor">
+                                                            <tr>
+                                                                <td colspan="2">
+                                                                    <div class="buttons">
+                                                                        <input type="submit" value="Save" name="info_section_save_basic" id="info_section_save_basic" class="inputsubmit"/>
+                                                                        <input id="info_section_cancel_basic" class="inputbutton inputaux" type="reset" value="Cancel" name="info_section_cancel_basic" onclick="javascript:window.location='<%=person_employments_path(params[:person_id])%>'"/>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                    </table>
+                                                  <%# end-%>
+                                                </div>
+                                            </div>
+                                          </div>
+                                      </div>
+                                      <%#= render :partial => 'layouts/close_div'%>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>-->

@@ -1,0 +1,188 @@
+<%= javascript_include_tag  'pagination' %>  
+<table>
+  <thead>
+    <tr>
+      <% unless params[:action] == 'mine'%>
+        <th><%= check_box_tag("checkall", :id =>"checkall")%></th>
+        <th>Periode</th>
+        <th >NIK</th>
+        <th class="left-text">
+          Nama
+        </th>
+        <th class="left-text">Status</th>
+        <th class="left-text">Tanggal</th>
+      <% end %>
+      <th class="left-text">Bruto / Bln</th>
+      <th class="left-text">PTKP</th>
+      <th class="left-text">PKP</th>
+      <th class="left-text">PPH 21</th>
+      <th class="left-text">Take home</th>
+      <th class="left-text">Perlakuan</th>
+    </tr>
+  </thead>
+  <tbody id="list">
+    <% unless @salaries.blank?  %>
+      <% @salaries.each do |salary| %>
+        <% unless salary.person.blank? %>
+          <tr>
+            <% unless params[:action] == 'mine'%>
+              <td class="center-text">
+                <%= check_box_tag'myrow[ids][]', salary.id, false %>
+              </td>
+              <td><%= salary.start_period %> - <%= salary.end_period %></td>
+              <td>
+                <%= link_to salary.person.employee_identification_number,"#people/#{salary.person.id}?tab=0"%>
+              </td>
+              <td>
+                <%= link_to_if current_features.include?('salary_detail'), salary.person.full_name,"#people/#{salary.person.id}?tab=0"%>
+              </td>
+              <td class="left-text">
+                <% unless salary.person.current_status.blank? %>
+                  <%= salary.person.current_status.contract_type.contract_type_name unless salary.person.current_status.contract_type.blank?  %>
+                <% end %>
+              </td>
+              <td class="right-text">
+                <%= salary.honor_date %>
+              </td>
+            <% end %>
+
+            <td class="right-text">
+              <%= link_to (format_no_currency(salary.gross_income)),"#salary/#{salary.id}"  unless salary.blank? %>
+              </tdurrency(salary.gross_income) %>
+            </td>
+            <td class="right-text">
+              <%= format_no_currency(salary.ptkp) %>
+            </td>
+            <td class="right-text">
+              <%= format_no_currency(salary.pkp) %>
+            </td>
+            <td class="right-text">
+              <%= format_no_currency(salary.pph_indebted_per_month) %>
+            </td>
+            <td class="right-text">
+              <%= format_no_currency(salary.total_final_take_home_pay) %>
+            </td>
+            <td>
+              <%= link_to "Download", download_salary_path(salary) if current_features.include?('salary_download')%>
+            </td>
+          </tr>
+        <% end %>
+      <% end %>
+    <% else %>
+      <tr class="no-data">
+        <td class="center-text" colspan="12">
+          <div class="description">
+            <% unless params[:filter].blank? %>
+              Data Tidak Ditemukan
+            <% else %>
+              Belum Ada Data Gaji.
+            <% end %>
+          </div>
+          <div class="info">
+            <% unless params[:filter].blank? %>
+              Silahkan <a onclick="onBtnReset('/reset_list_salaries')"> Reset Filter</a> untuk mengubah parameter anda
+            <% else %>
+              <% if params[:action] != 'mine'%>
+                Silahkan klik <%= link_to 'Tambah Gaji', "#new_salary" %> untuk menambah data
+              <% end %>
+            <% end %>
+          </div>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<div class="panelFilter">
+  <div class="pagination">
+    <% if @salaries.count > 0 %>
+      <span class="paginationResult">
+        <% a = format_paginate1(@salaries, @per_page, @salaries.total_entries) %>
+        <%= a[:a] %> - <%= a[:b] %> dari <%= @salaries.total_entries %>
+      </span>
+      <%= a[:paginate] %>
+    <% else %>
+      &nbsp;
+    <% end %>
+  </div>
+</div>
+<%=hidden_field_tag "current_page", @salaries.current_page %>
+
+
+<script type="text/javascript">
+
+    <% if @salaries.blank? %>
+      $('#id_more_action').hide();$('#id_export').hide();
+    <% else %>
+      $('#id_more_action').show();$('#id_export').show();
+    <% end %>
+
+    <% if @salaries_all > 0 %>
+      $('#id_filter').show();$('#filter_block').show();
+    <% else %>
+      $('#id_filter').hide();$('#filter_block').hide();
+    <% end %>
+      
+    // Select all or deselect all checkboxes
+    $(function () {
+        $('#checkall').click(function () {
+            $(this).parents('table:eq(0)').find(':checkbox').attr('checked', this.checked);
+        });
+    });
+
+    // Destroy salaries that selected on checboxes
+    function onDelete(){
+      var arr_params = new Array();
+      $('#honors tbody input:checked').each(function() {
+        arr_params = arr_params.concat($(this).val());
+      });
+      if (arr_params.length > 0){
+        $('#div_sign').html('gaji');
+        $('#div_btn_hapus').html('<input type="button" value="Ya" class="blue_button" onclick="delete_gaji()"/>');
+        jQuery().colorbox({width:"auto",height:"auto", inline:true,href:"#message_delete",
+          onClosed:function(){
+          }
+        });
+      }else{
+        return false;
+      }
+    }
+
+    function delete_gaji(){
+      var arr_params = new Array();      
+
+      $('#honors tbody input:checked').each(function() {
+        arr_params = arr_params.concat($(this).val());
+      });
+      var controller = "/salaries/destroy";
+      $.ajax({
+        type: "DELETE",
+        url: escape(controller),
+        data:{'_method': 'post',"ids":arr_params,"is_thr": "0", 'date_start': $('#date_pick_absen').val()  , 'date_end': $('#date_pick_absen2').val() , 'current_page' : $('#current_page').val()},
+        dataType:"script",
+        success: function(){
+          $.fn.colorbox.close();
+        }
+      })
+    }
+
+    // Generate slip gaji
+    $(document).ready(function(){
+        $('#slip').click(function (event){
+            var arr_params = new Array();
+            $('#honors tbody input:checked').each(function() {
+                arr_params = arr_params.concat($(this).val());
+            });
+            if(arr_params.length > 0 ){
+                var url = "/salaries/print_slip?ids="+arr_params;
+                var windowName = "popUp";
+                var windowSize = "width=880,height=640,scrollbars=yes,location=no";
+                window.open(url, windowName, windowSize);
+                event.preventDefault();
+            }
+            else{
+                return false;
+            }
+        });
+    });
+</script>

@@ -1,0 +1,95 @@
+ <% if params[:department] %>
+                   <div class="filter_opt">
+                     <label class="left">Departemen :</label>
+                     <select class="left">
+                       <option>All</option>
+                       <% if params[:department] == "1" %>
+                         <option selected>Acounting & Finance</option>
+                       <% else %>
+                         <option>Acounting & Finance</option>
+                       <% end %>
+                       <% if params[:department] == "2" %>
+                         <option selected>Inspecting & Winding</option>
+                       <% else %>
+                         <option>Inspecting & Winding</option>
+                       <% end %>
+                     </select>
+                    </div>
+                  <% end %>
+                  <% if params[:unit] %>
+                    <div class="filter_opt">
+                       <label class="left">Unit :</label>
+                       <select class="left">
+                         <option>All</option>
+                         <% if params[:unit] == "1" %>
+                           <option selected>Expedisi</option>
+                         <% else %>
+                           <option>Expedisi</option>
+                         <% end %>
+                         <% if params[:unit] == "2" %>
+                           <option selected>Export local</option>
+                         <% else %>
+                           <option>Export local</option>
+                         <% end %>
+                       </select>
+                     </div>
+                   <% end %>
+                   <% if params[:bagian] %>
+                     <div class="filter_opt">
+                       <label class="left">Bagian :</label>
+                       <select class="left">
+                         <option>All</option>
+                         <% if params[:bagian] == "21" %>
+                           <option selected>Technical</option>
+                         <% else %>
+                           <option>Technical</option>
+                         <% end %>
+                         <% if params[:bagian] == "20" %>
+                           <option selected>Engineering</option>
+                         <% else %>
+                           <option>Engineering</option>
+                         <% end %>
+                         <% if params[:bagian] == "19" %>
+                           <option selected>DTY II</option>
+                         <% else %>
+                           <option>DTY II</option>
+                         <% end %>
+                       </select>
+                     </div>
+                   <% end %>
+                   <% if params[:group] %>
+                      <div class="filter_opt">
+                       <label class="left">Group :</label>
+                       <select class="left">
+                         <option>All</option>
+                         <% if params[:group] == "1" %>
+                           <option selected>Group A</option>
+                         <% else %>
+                           <option>Group A</option>
+                         <% end %>
+                         <% if params[:group] == "2" %>
+                           <option selected>Group B</option>
+                         <% else %>
+                           <option>Group B</option>
+                         <% end %>
+                       </select>
+                     </div>
+                   <% end %>
+                   <% if params[:position] %>
+                      <div class="filter_opt">
+                       <label class="left">Position :</label>
+                       <select class="left">
+                         <option>All</option>
+                         <% if params[:position] == "1" %>
+                           <option selected>Staff</option>
+                         <% else %>
+                           <option>Staff</option>
+                         <% end %>
+                         <% if params[:position] == "2" %>
+                           <option selected>Operator</option>
+                         <% else %>
+                           <option>Operator</option>
+                         <% end %>
+                       </select>
+                     </div>
+                   <% end %>

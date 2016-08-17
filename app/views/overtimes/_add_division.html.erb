@@ -1,0 +1,21 @@
+<% index ||= "DUMMY_PRODUCT_ID_2" %>
+
+<script>
+  function changeGroup(value,ind){
+    $('#' + ind).load("/add_group?value="+value+"&index="+ind);
+  }
+  $(document).ready(function(){
+    $('.removeLine').click(function(){
+      ($(this).parent().parent()).remove();
+    });
+  });
+</script>
+<span class="input hideFirst_2 widthAuto special">
+  <%= label_tag :division, "Divisi / Group" %> :
+  <%= select_tag 'divisions[]', "<option value='0'>Pilih Bagian</option>#{options_from_collection_for_select(@divisions,'id','name')}",
+    :id => "divisions_"+index.to_s, :onchange => "changeGroup(this.value, #{index})"%>
+  <span id=<%= index.to_s %>>
+  </span>
+  <span><%= link_to_function "Hapus","" ,:class=> 'removeLine'%></span>
+</span>
+<span class="clear"></span>

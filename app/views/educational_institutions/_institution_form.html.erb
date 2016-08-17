@@ -1,0 +1,49 @@
+<table class="editor">
+    <tr>
+        <td class="label">
+      <%= f.label 'Nama Institusi <span id="star">*</span>', nil, :class => :row_description %></td>
+        <td>
+					<%= f.text_field :institution_name, :class => 'required inputtext' %><%= error_message_on @education_institution, :institution_name %>
+					<%= hidden_field_tag :person_id, params[:person_id]%>
+					<%= hidden_field_tag :id, params[:id]%>
+				</td>
+    </tr>
+
+    <tr>
+        <td class="label">
+      <%= f.label 'Bidang <span id="star">*</span>', nil, :class => :row_description %></td>
+        <td> 
+        <%= f.select (:institution_type, "<option value='Training center'>Training center</option><option value='School'>School</option><option value='College'>College</option>", {},:onchange => 'checkvalue();') %>
+        </td>
+    </tr>
+		<% f.fields_for :addresses, @address do |address| %>
+	  <tr>
+	    <td class="label"><%= address.label 'Alamat <span id="star">*</span>', nil, :class => :row_description %></td>
+			<td> <%= address.text_field :street1, :class => 'required inputtext', :style => "margin: 2.5px 0px;" %><%= error_message_on :addresses, :street1 %></td>
+	  </tr>
+	  <tr>
+	    <td class="label"><%= hidden_field_tag "autocomplete_address_city_array", @city, :id => 'autocomplete_address_city_array' %>
+			<%= address.label 'Kota <span id="star">*</span>', nil, :class => :row_description %></td><td> <%= address.text_field :city, :id => 'autocomplete_address_city', :autocomplete => 'off', :class => 'required inputtext' %></td>
+	  </tr>
+	  <tr>
+	    <td class="label"><%= hidden_field_tag "autocomplete_address_state_arrays", @state, :id => 'autocomplete_address_state_arrays' %>
+			<%= address.label 'Propinsi <span id="star">*</span>', nil, :class => :row_description %></td><td> <%= address.text_field :state, :id => 'autocomplete_address_states', :autocomplete => 'off', :class => 'inputtext ac_input' %></td>
+	  </tr>
+
+              <% if @role.name != 'superadmin' %>
+    <tr class="tallrow">
+    <td class="label">
+    <%= label_tag "Supervisor approval <span id='star'>*</span>", nil, :class => :row_description %>
+    </td>
+    <td>
+      <%= check_box_tag 'spv_chd',nil, false, :onclick => 'showPasswordField()' %> Setuju <br/>
+        <div id='password_field' style="margin-top: 8px;display:none;">
+          Username : <%= text_field_tag :username, nil, {:class => 'inputtext', :style => 'width:100px'} %><br/>
+          Password : <%= password_field_tag :password, nil, {:class => 'inputtext', :style => 'width: 100px; margin-top: 10px;'} %>
+        </div>
+    </td>
+    </tr>
+    <% end %>
+	  <% end %>
+
+</table>

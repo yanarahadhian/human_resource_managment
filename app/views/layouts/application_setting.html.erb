@@ -1,0 +1,157 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="description" content="AppsChef" />
+    <meta name="keywords" content="AppsChef" />
+    <link rel="icon" href="<%= ApplicationController::APPSCHEF_URL %>/images/favicon.ico" type="image/x-icon"/>
+    <%= stylesheet_link_tag  "#{ApplicationController::APPSCHEF_URL}/stylesheets/private2.css",
+      "#{ApplicationController::APPSCHEF_URL}/stylesheets/fm_form.css",
+      "#{ApplicationController::APPSCHEF_URL}/stylesheets/960gs/fluid_grid.css",
+      "#{ApplicationController::APPSCHEF_URL}/stylesheets/colorbox.css",
+      "#{ApplicationController::APPSCHEF_URL}/stylesheets/footpanel.css",
+      "#{ApplicationController::APPSCHEF_URL}/stylesheets/redmond/jquery-ui-1.8.7.custom.css",
+      "jquery.autocomplete.css"%>
+
+    <title>Human Resources Management: <%= render :partial => "layouts/title" %></title>
+
+
+    <style>.ui-date{background:#FFF !important; width:140px !important;}
+    </style>
+
+    <%= javascript_include_tag "#{ApplicationController::APPSCHEF_URL}/javascripts/jquery.js",'jrails',
+      'jquery-idleTimeout.js',
+      "#{ApplicationController::APPSCHEF_URL}/javascripts/jquery.spinner.js",
+      "#{ApplicationController::APPSCHEF_URL}/javascripts/jquery-ui-1.8.7.custom.min.js",
+      'jquery-ui-1.8.7.custom/development-bundle/ui/jquery.ui.core.js',
+      'jquery-ui-1.8.7.custom/development-bundle/ui/jquery.ui.widget.js',
+      'jquery-ui-1.8.7.custom/development-bundle/ui/jquery.ui.datepicker.js',
+      'jquery-ui-1.8.7.custom/development-bundle/ui/i18n/jquery.ui.datepicker-id.js',
+      "#{ApplicationController::APPSCHEF_URL}/javascripts/jquery.colorbox.js",
+      "#{ApplicationController::APPSCHEF_URL}/javascripts/jquery.hint.js",
+      "#{ApplicationController::APPSCHEF_URL}/javascripts/jquery.tooltip.min.js",
+      "#{ApplicationController::APPSCHEF_URL}/javascripts/ui.spinner.js", "pagination.js",
+      "#{ApplicationController::APPSCHEF_URL}/javascripts/ac_cross_script.js"
+      %>
+
+    <%= javascript_include_tag 'jquery.tablesorter.js','jquery.tablesorter.pager.js', "jquery.dataTables.min",
+      'jquery.address-1.3.2.min', 'application.js', 'jquery.labelify.js'%>
+    <%= javascript_include_tag 'jquery.autocomplete' %>
+
+    <script  type="text/javascript">
+      var __PLATFORM_URL = '<%= "#{ApplicationController::APPSCHEF_URL}" %>';
+      var __APP_URL = '<%= "#{ApplicationController::BASE_URL}" %>';
+
+    
+      $(document).ready(function(){
+        updateActiveTime("<%= ApplicationController::APPSCHEF_URL %>","<%=session[:user_log_id]%>");
+
+        $.datepicker.setDefaults({
+          showOn: "button",
+          buttonImage: "<%= ApplicationController::APPSCHEF_URL %>/images/calendar.gif",
+          changeMonth: true,
+          changeYear: true,
+          dateFormat: 'dd/mm/yy',
+          altFormat: 'dd/MM/yy',
+          firstDay: 1
+        });
+      });
+
+      function ajaxLoad1(url, div_btn, div_load){
+        $("#" + div_load + "").show();
+        $("#" + div_btn + "").hide();
+        $.get(url, function(data) {
+          $("#ajax-load").hide();
+        });
+      }
+      
+    </script>
+    <%= yield :head %>
+
+  </head>
+
+  <body>
+    <div id="page-wrap">
+      <div id="inside">
+        <%=render :partial=> "layouts/header" %>
+        <style type="text/css">
+          .input-data .input-help label, .input-data .box-form .input-help label, .input-data .input-help-wide label, .input-data .box-form .input-help-wide label {
+            float: none;
+          }
+          .full-width {
+              width: 1190px !important;
+          }
+          .frm-popup .input-help label {
+              float: none;
+          }
+          .pagination, .pager {
+              float: right;
+          }
+        </style>
+        <div id="top">
+          <div class="topContent">
+            <div class="Logo resolved">
+              <a href="#dashboard">
+                <img src="<%= session[:platform_user]['user']['user_company']['logo'] unless session[:platform_user]['user']['user_company']['logo'].blank? %>" alt="appchef_logo" />
+              </a>
+            </div>
+            <div class="notify_error">
+              <span class="message"><%= flash[:notice] %></span>
+              <a class="icons close-error-icon right" onclick="CloseNotify()">&nbsp;</a>
+            </div>
+          </div>
+          <div class="clear"></div>
+        </div>
+
+        <div id="application_setting_container">
+          <div id="main-content" class="main-content-setting">
+            <div class="contentTable">
+              <div class="panelNavTab panelNavTab-setting">
+                <ul>
+                  <%= render :partial=>"layouts/top_side_setting" %>
+                </ul>
+              </div>
+              <div class="input-data setting-con" id="setting-con">
+                <%= yield %>
+              </div>
+              <div class="clear"></div>
+              <span class="copyright">Copyright © <%= Time.now().strftime('%Y') %>  AppsChef. All rights reserved.</span>
+            </div>
+          </div>
+          
+          <div class="clear"></div>
+        </div>
+        <%= render :partial =>"layouts/footer" unless session[:platform_user]['user']['app_mode'] == 'on_premise' %>
+        <div class="clear"></div>
+      </div>
+    </div>
+
+
+    <script type="text/javascript">
+      $(document).ready(function(){
+        $( ".ui-date, .ui-date2" ).datepicker({
+          buttonImageOnly: true
+        });
+
+        $("#add_product").click(function(){
+          $('#box_retur_1').show();
+        });
+
+        $('#login_approve').hide();
+        $('#approval_cek').click(function(){
+          if($(this).is(':checked')){
+            $('#login_approve').show();
+          }else{
+            $('#login_approve').hide();
+          }
+        });
+
+        $( "#datepicker" ).datepicker();
+        $( "#datepicker2" ).datepicker();
+      });
+    </script>
+
+    <%= yield :script %>
+  </body>
+</html>
+

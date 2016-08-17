@@ -1,0 +1,549 @@
+<% if controller_name == "departments" %>
+  <% if action_name == "index" %>
+    Pada halaman ini Anda dapat melihat daftar departemen yang terdaftar pada perusahaan.
+    <% if current_features.include?('department_new') %>
+      Anda juga dapat menambahkan data departemen yang ada di perusahaan.
+    <% end %> <!-- end current_features -->
+    <% if current_features.include?('department_edit') %>
+      Jika terjadi kesalahan input data departemen, Anda dapat melakukan pengeditan data.
+    <% end %> <!-- end current_features -->
+    <% if current_features.include?('department_delete') %>
+      Data departemen yang sudah tidak digunakan juga dapat Anda hapus.
+    <% end %> <!-- end current_features -->
+  <% elsif action_name == "new" %>
+    Anda dapat menambah data departemen baru yang ada pada perusahaan Anda pada halaman ini, sehingga setiap
+    departemen yang ada terdaftar pada aplikasi dan dapat dikelola lebih baik.
+  <% elsif action_name == "show" %>
+    Halaman ini memungkinkan pengguna untuk melakukan pengeditan data departemen yang sudah terdaftar.
+  <%end%>
+
+<% elsif controller_name == "divisions" %>
+  <% if action_name == "index" %>
+    Pada halaman ini Anda dapat melihat daftar bagian yang terdaftar pada perusahaan.
+    <% if current_features.include?('division_new') %>
+      Anda juga dapat menambahkan data bagian yang ada di perusahaan.
+    <% end %> <!-- end current_features -->
+    <% if current_features.include?('division_edit') %>
+      Jika terjadi kesalahan input data bagian, Anda dapat melakukan pengeditan data.
+    <% end %> <!-- end current_features -->
+    <% if current_features.include?('division_delete') %>
+      Data bagian yang sudah tidak digunakan juga dapat Anda hapus.
+    <% end %> <!-- end current_features -->
+  <% elsif action_name == "new" %>
+    Anda dapat menambah data bagian yang ada pada perusahaan Anda untuk memastikan bahwa semua data bagian
+    yang ada sudah tersimpan dan dapat terkelola dengan baik di halaman ini.
+  <% elsif action_name == "show" %>
+    Halaman ini memungkinkan Anda mengedit data bagian yang ada pada perusahaan.
+  <% end %>
+
+<% elsif controller_name == "positions" %>
+  <% if action_name == "index" %>
+    Pada halaman ini Anda dapat melihat daftar jabatan yang terdaftar pada perusahaan.
+    <% if current_features.include?('position_new') %>
+      Anda juga dapat menambahkan data jabatan yang ada di perusahaan.
+    <% end %> <!-- end current_features -->
+    <% if current_features.include?('position_edit') %>
+      Jika terjadi kesalahan input data jabatan, Anda dapat melakukan pengeditan data.
+    <% end %> <!-- end current_features -->
+    <% if current_features.include?('position_delete') %>
+      Data jabatan yang sudah tidak digunakan juga dapat Anda hapus.
+    <% end %> <!-- end current_features -->
+  <% elsif action_name == "new" %>
+    Anda dapat menambah data jabatan baru yang ada pada perusahaan Anda di halaman ini.
+  <% elsif action_name == "show" %>
+    Halaman ini menampilkan data detail jabatan yang dapat Anda edit atau hapus.
+  <%  end %> <!-- end action_name -->
+
+<% elsif controller_name == "work_groups" %>
+  <% if action_name == "index" %>
+    Pada halaman ini Anda dapat melihat daftar group yang terdaftar pada perusahaan.
+    <% if current_features.include?('group_new') %>
+      Anda juga dapat menambahkan data group yang ada di perusahaan.
+    <% end %> <!-- end current_features -->
+    <% if current_features.include?('group_edit') %>
+      Jika terjadi kesalahan input data group, Anda dapat melakukan pengeditan data.
+    <% end %> <!-- end current_features -->
+    <% if current_features.include?('group_delete') %>
+      Data group yang sudah tidak digunakan juga dapat Anda hapus.
+    <%  end %> <!-- end current_features -->
+  <% elsif action_name == "new" %>
+    Anda dapat melakukan penambahan group yang ada pada bagian tertentu di perusahaan Anda di halaman ini.
+  <% elsif action_name == "show" %>
+    Halaman ini menampilkan data detail mengenai grup yang Anda pilih. Data grup ini dapat Anda edit ataupun
+    Anda hapus sesuai kebutuhan. Klik ‘edit’ jika Anda ingin mengedit data grup ini.
+  <% end %><!-- end action_name -->
+
+  <% elsif controller_name == "absences" %>
+    <% if action_name == "index" %>
+      Halaman ini menampilkan daftar absensi karyawan yang masuk pada periode yang dipilih.
+      <% if current_features.include?('present_employee') %>
+        Pada halaman ini Anda juga dapat mengabsensikan karyawan.
+      <% end %> <!-- end current_features -->
+    <% elsif action_name == "my_absence" %>
+      <% if current_features.include?('present_detail') %>
+        Halaman ini menampilkan data detail absensi karyawan pada hari tersebut, meliputi jam masuk kerja
+        dan jam selesai kerja karyawan. Jam masuk kerja dan jam selesai kerja jika terdata lebih dari 1 kali
+        maka jam tersebut termasuk dalam jam mulai istirahat dan jam selesai istirahat.
+      <% end %> <!-- end current_features -->
+    <% elsif action_name == "my_monthly_absence" %>
+      <% if current_features.include?('present_detail') %>
+        Halaman ini menampilkan data absensi bulanan karyawan, di mana data karyawan masuk kerja dan tidak masuk kerja akan tampil.
+      <% end %> <!-- end current_features -->
+    <% elsif action_name == "my_monthly_absence" %>
+      <% if current_features.include?('present_detail') %>
+        Halaman ini menampilkan data absensi tahunan karyawan. Hampir sama dengan absensi bulanan, tetapi data absensi yang ditampilkan dalam periode bulan.
+      <% end %> <!-- end current_features -->
+    <% elsif action_name == "my_yearly_absence" %>
+      <% if current_features.include?('present_detail') %>
+       Halaman ini menampilkan data absensi tahunan karyawan. Hampir sama dengan absensi bulanan, tetapi data absensi yang ditampilkan
+       dalam bentuk tiap bulan.
+      <% end %> <!-- end current_features -->
+    <% elsif action_name == "late" %>
+      <% if current_features.include?('present_detail') %>
+       Halaman ini menampilkan data karyawan yang terlambat pada periode yang sudah ditentukan.
+      <% end %> <!-- end current_features -->
+    <% elsif action_name == "more_hour" %>
+      Halaman ini menampilkan data karyawan yang memiliki jam kerja lebih dari yang telah ditentukan perusahaan. Anda bisa
+      menindaklanjuti karyawan yang memiliki kerja lebih dengan pilihan:
+      <br/>
+      1. Abaikan jam kerja lebih karyawan
+      <br/>
+      2. Anggap lembur jam kerja lebih karyawan
+      <br/>
+      3. Anggap jam kerja lebih karyawan sebagai kerja di hari lain
+    <% elsif action_name == "more_rest" %>
+      Halaman ini menampilkan data karyawan yang memiliki jam istirahat lebih. Anda bisa menindaklanjuti karyawan yang memiliki
+      jam istirahat lebih dengan pilihan:
+      <br/>
+      1. Disesuaikan
+      <br/>
+      2. Beri keterangan
+    <% elsif action_name == "less_hour" %>
+      Halaman ini menampilkan data karyawan yang memiliki jam kerja kurang dari yang telah ditentukan perusahaan. Anda bisa
+      menindaklanjuti karyawan yang memiliki kerja kurang dengan pilihan:
+      <br/>
+      1. Dianggap jam kerja kurang.
+      <br/>
+      2. Dianggap dinas luar kota.
+      <br/>
+      3. Dicutikan.
+      <br/>
+      4. Dianggap ijin.
+      <% elsif action_name == "less_rest" %>
+      Halaman ini menampilkan data karyawan yang memiliki jam istirahat kurang. Anda bisa menindaklanjuti karyawan yang memiliki
+      istirahat kurang dengan pilihan:
+      <br/>
+      1. Disesuaikan
+    <% elsif action_name == "absent" %>
+      Halaman ini menampilkan data karyawan yang tidak masuk pada periode yang ditentukan. Anda dapat menindaklanjuti
+      data yang ada dengan merubah data karyawan menjadi masuk, atau memberi jenis tidak masuk karyawan.
+    <% elsif action_name == "no_logout" %>
+      Halaman ini menampilkan data karyawan yang memiliki absen tidak lengkap, baik karyawan yang tidak absen keluar
+      ataupun karyawan yang tidak melengkapi absen ketika istirahat masuk dan keluar. Pada halaman ini Anda dapat melengkapi absensi karyawan.
+    <% elsif action_name == "mine" %>
+      Halaman ini menampilkan data absensi karyawan setiap periode dan jatah cuti karyawan.
+      <% end %><!-- end action_name -->
+
+  <% elsif controller_name == "dashboard" %>
+    <% if current_features.include?('formation_report') && action_name == "view_formasi_departemen" %>
+      <h2 class="topic">Laporan formasi departemen</h2>
+      Laporan ini disajikan dalam bentuk grafik, di mana grafik yang dimunculkan adalah grafik departemen yang ada pada perusahaan yang
+      menyertakan jumlah karyawan pada departemen dibanding dengan jumlah karyawan keseluruhan pada perusahaan tersebut.
+      <br/>
+    <% end %> <!-- end current_features -->
+    <%#*<br/>%>
+    <% if current_features.include?('formation_division_report') && action_name == "view_formasi_bagian" %>
+      <h2 class="topic">Laporan formasi bagian</h2>
+      Laporan ini disajikan dalam bentuk grafik, di mana grafik yang dimunculkan adalah grafik bagian-bagian yang ada pada suatu departemen
+      di perusahaan yang menyertakan jumlah karyawan pada bagian dibanding dengan jumlah karyawan keseluruhan pada departemen perusahaan tersebut.
+      <br/>
+   <% end %> <!-- end current_features -->
+   
+   <% if current_features.include?('formation_gender_report') && action_name == "view_formasi"%>
+      <h2 class="topic">Laporan formasi jenis kelamin</h2>
+      Laporan ini disajikan dalam bentuk grafik, di mana grafik yang dimunculkan adalah grafik jumlah karyawan sesuai dengan jenis kelaminnya
+      dibanding dengan jumlah karyawan keseluruhan pada perusahaan tersebut.
+      <br/>
+   <% end %> <!-- end current_features -->
+
+   <% if current_features.include?('formation_position_report') && action_name == "view_formasi_jabatan" %>
+      <h2 class="topic">Laporan formasi jabatan</h2>
+      Laporan ini disajikan dalam bentuk grafik, di mana grafik yang dimunculkan adalah grafik jumlah karyawan yang ada pada masing-masing
+      jabatan dibanding dengan jumlah keseluruhan karyawan yang ada pada perusahaan tersebut.
+      <br/>
+   <% end %> <!-- end current_features -->
+
+   <% if current_features.include?('in_out_employee_report') && action_name == "view_mutasi" %>
+      <h2 class="topic">Laporan keluar masuk</h2>
+      Laporan keluar masuk ditampilkan dalam bentuk grafik yang memberikan warna berbeda untuk setiap karyawan yang keluar atau masuk
+      dalam setiap periodenya, dengan nilai yang dimunculkan adalah jumlah karyawan yang keluar dan masuk.
+      <br/>
+   <% end %> <!-- end current_features -->
+
+   <% if current_features.include?('sp_report') && action_name =="view_sp" %>
+      <h2 class="topic">Laporan Surat Peringatan</h2>
+      Laporan Surat Peringatan ditampilkan dalam bentuk grafik dengan warna yang berbeda untuk masing-masing jenis Surat Peringatan yang ada. 
+      Grafik ditampilkan dengan perbandingan jumlah masing-masing jenis Surat Peringatan di setiap periodenya.
+      <br/>
+   <% end %> <!-- end current_features -->
+
+   <% if current_features.include?('employee_status_report') && action_name == "view_status" %>
+      <h2 class="topic">Laporan status kontrak</h2>
+      Laporan status kontrak ditampilkan dalam bentuk grafik sehingga pengguna dapat mengetahui jumlah karyawan dengan masing-masing
+      status kontrak yang dimiliki. Laporan dapat dimunculkan sesuai dengan periode yang ditentukan pengguna.
+      <br/>
+   <% end %> <!-- end current_features -->
+    
+   <% if current_features.include?('accident_report') && action_name == "view_accident" %>
+      <h2 class="topic">Laporan kecelakaan kerja</h2>
+      Laporan kecelakaan kerja ditampilkan dalam bentuk grafik linier yang menunjukkan jumlah kecelakaan kerja yang terjadi pada setiap periodenya.
+      <br/>
+   <% end %> <!-- end current_features -->
+    
+   <% if current_features.include?('absent_report') && action_name == "view_absensi" %>
+      <h2 class="topic">Laporan absensi</h2>
+      Laporan absensi disajikan dalam bentuk grafik, di mana grafik yang dimunculkan adalah grafik presentasi kehadiran dibanding ketidak hadiran,
+      grafik jumlah karyawan dengan absensi lengkap dibanding jumlah karyawan dengan absensi tidak lengkap, grafik linier jenis-jenis ketidakhadiran
+      yang sesuai dengan periode yang dipilih.
+      <br/>
+   <% end %> <!-- end current_features -->
+    
+   <% if current_features.include?('present_report') && action_name == "view_rekap_absensi" %>
+      <h2 class="topic">Laporan rekap kehadiran</h2>
+      Laporan rekap kehadiran muncul dalam bentuk daftar rekap absensi dengan data jam lama kerja karyawan di masing-masing tanggal, kode shift
+      pada tanggal tersebut, dan jumlah total lembur yang dilakukan karyawan.
+      <br/>
+   <% end %> <!-- end current_features -->
+    
+   <% if current_features.include?('overtime_recap') && action_name == "view_rekap_overtime" %>
+      <h2 class="topic">Laporan rekap lembur</h2>
+      Laporan rekap lembur karyawan memunculkan data lembur wajib dan lembur non wajib yang dilakukan karyawan berdasarkan shift yang telah
+      diassign kepada karyawan tersebut.
+      <br/>
+   <% end %> <!-- end current_features -->
+    
+   <% if current_features.include?('tax_recap') %>
+      <h2 class="topic">Laporan rekap PPh 21</h2>
+      Laporan rekap PPh 21 memunculkan data rekap PPh 21 yang dikenakan kepada karyawan. Laporan ini dapat digunakan sebagai laporan keuangan.
+      <br/>
+   <% end %> <!-- end current_features -->
+
+  <% elsif controller_name == "fingerprint_settings"%>
+    <% if action_name == "index" %>
+      Halaman ini memunculkan data alat sidik jari/fingerprint yang digunakan perusahaan. Melalui alat sidik jari yang terdaftar
+      di halaman ini, karyawan perusahaan dapat mengabsenkan diri. Data absensi karyawan pada mesin alat sidik jari tersebut akan
+      secara otomatis tersimpan pada aplikasi.
+      <% if current_features.include?('fingerprint_new') %>
+        Aplikasi memungkinkan Anda menggnakan satu atau lebih alat sidik jari untuk diintegrasikan dengan aplikasi.
+        Alat Finger print yang harus Anda sediakan adalah Solution X100-C yang dapat Anda beli dari kami seharga Rp. 1.800.000
+        ( belum termasuk ongkos kirim ).
+
+      <% end %> <!-- end current_features -->
+      <% if current_features.include?('fingerprint_edit') %>
+        Anda dapat melakukan pengeditan data alat sidik jari yang sudah Anda daftarkan jika terjadi kesalahan input dan Menambahkan
+        data alat sidik jari lainnya apabila Perusahaan Anda menggunakan lebih dari satu alat sidik jari.
+      <% end %> <!-- end current_features -->
+      <% if current_features.include?('fingerprint_delete') %>
+        Data sidik jari yang sudah tidak digunakan dapat Anda hapus melalui halaman ini.
+      <% end %> <!-- end current_features -->
+    <% elsif action_name == "new" %>
+      Anda dapat menambahkan informasi mengenai alat sidik jari yang digunakan perusahaan sehingga Anda dapat mengintegrasikan
+      absensi karyawan pada alat sidik jari tersebut dengan absensi pada aplikasi. Fitur ini memudahkan Anda dalam memantau absensi karyawan.
+    <% elsif action_name == "show" || action_name == "edit"%>
+      Halaman ini menampilkan data detail sidik jari yang Anda klik namanya. Pada halaman ini Anda dapat memilih untuk mengedit
+      data sidik jari. Silahkan klik tombol 'Edit Alat Sidik Jari' yang ada di kanan atas.
+    <% end %> <!-- end action_name -->
+
+<% elsif controller_name == "holiday_allowances"%>
+  <% if action_name == "index"%>
+    Halaman ini menampilkan data THR yang pernah diberikan perusahaan untuk karyawannya.
+    <% if current_features.include?('thr_new') %>
+      Pada halaman ini Anda juga dapat menghitung THR baru untuk karyawan perusahaan.
+    <% end %> <!-- end current_features -->
+    <% if current_features.include?('thr_edit') %>
+      Pada halaman ini juga Anda dapat melakukan pengeditan nilai THR untuk karyawan perusahaan.
+    <% end %> <!-- end current_features -->
+  <% elsif action_name == "new" %>
+    Halaman ini memungkinkan Anda untuk memberikan THR bagi karyawan perusahaan Anda dengan mencantumkan jumlah THR
+    yang ingin Anda berikan. Untuk memudahkan Anda mengetahui jumlah THR yang layak diberikan, tanggal karyawan masuk
+    juga ditampilkan di sini sebagai bahan referensi Anda sudah berapa lama karyawan bekerja di perusahaan.
+  <% elsif action_name == "edit" %>
+    Halaman ini memungkinkan Anda untuk melakukan edit data THR yang sudah terlanjur Anda hitung dengan merubah nilai
+    THR yang ingin Anda berikan. Untuk memudahkan Anda mengetahui jumlah THR yang layak diberikan, tanggal karyawan masuk
+    juga ditampilkan di sini sebagai bahan referensi Anda sudah berapa lama karyawan bekerja di perusahaan.
+  <% end %>
+
+<% elsif controller_name == "holidays" %>
+  <% if action_name == "index"%>
+    Halaman ini menampilkan daftar hari libur suatu perusahaan.
+    <% if current_features.include?('holiday_new') %>
+      Selain menampilkan daftar hari libur suatu perusahaan, halaman ini memungkinkan pengguna menambahkan data hari libur perusahaan.
+    <% end %> <!-- end current_features -->
+    <% if current_features.include?('holiday_edit') %>
+      Di halaman ini pengguna juga dapat mengedit data hari libur perusahaan.
+    <% end %> <!-- end current_features -->
+    <% if current_features.include?('holiday_delete') %>
+      Selain itu, hari libur yang sudah tidak digunakan dapat dihapus.
+    <% end %> <!-- end current_features -->
+  <% elsif action_name == "new" %>
+    Anda dapat mendata semua hari libur perusahaan yang ada sehingga pengelolaan hari libur menjadi lebih mudah
+    dan pencocokan absensi karyawan semakin maksimal. Penambahan data hari libur dapat dilakukan di halaman ini.
+  <% elsif action_name == "edit" %>
+    Halaman edit data hari libur memungkinkan Anda untuk merubah nilai di data hari libur yang salah Anda masukkan.
+  <% end %> <!--end action_name-->
+
+<% elsif controller_name == "job_accidents" %>
+  <% if action_name == "index"%>
+    Halaman ini menampilkan data kecelakaan kerja yang pernah dialami karyawan dan tercatat pada aplikasi.
+    <% if current_features.include?('accident_new') %>
+      Anda dapat menambah data kecelakaan kerja yang menimpa karyawan di halaman ini.
+    <% end %> <!-- end current_features -->
+    <% if current_features.include?('accident_edit') %>
+      Data kecelakaan kerja yang sudah tercatat dan ternyata ada kesalahan penginputan dapat Anda edit.
+    <% end %> <!-- end current_features -->
+    <% if current_features.include?('accident_delete') %>
+      Data kecelakaan kerja yang tidak digunakan kembali juga dapat dihapus.
+    <% end %> <!-- end current_features -->
+  <% elsif action_name == "new" %>
+    Pada halaman ini Anda dapat menambahkan data kecelakaan kerja yang dialami karyawan.
+  <% elsif action_name == "edit" %>
+    Pada halaman ini Anda dapat melakukan edit data kecelakaan kerja yang sudah pernah Anda simpan.
+  <% end %> <!--end action_name-->
+
+  <% elsif controller_name == "leaves"%>
+    <% if action_name == "index" %>
+      Halaman ini menampilkan daftar permintaan cuti karyawan.
+      <% if current_features.include?('employee_leave_management_add') %>
+        Anda dapat menambah data permintaan cuti karyawan di halaman ini.
+      <% end %> <!-- end current_features -->
+      <% if current_features.include?('employee_leave_management_edit') %>
+        Jika terjadi kesalahan dalam menginput data permintaan cuti, selama status permintaan cuti tersebut masih pending maka data dapat diedit.
+      <% end %> <!-- end current_features -->
+      <% if current_features.include?('employee_leave_management_delete') %>
+        Data permintaan cuti yang ditolak dapat dihapus.
+      <% end %> <!-- end current_features -->
+      <% if current_features.include?('employee_leave_management_change_status') %>
+        Anda juga dapat menindak lanjuti permintaan cuti karyawan dengan menerima atau menolak permintaan cuti melalui halaman ini.
+      <% end %> <!-- end current_features -->
+    <% elsif action_name == "new" %>
+      Halaman ini memungkinkan Anda untuk menambah data permintaan cuti karyawan.
+    <% elsif action_name == "edit" %>
+      Halaman ini memungkinkan Anda untuk mengedit data permintaan cuti karyawan.Anda dapat mengedit data permintaan cutinya, atau Anda juga dapat
+      menindaklanjuti permintaan cuti dengan menerima/approve atau menolak/reject permintaan cuti.
+    <% end %> <!-- end action_name -->
+
+  <% elsif controller_name == "memorandums"%>
+    <% if action_name == "index" %>
+      Halaman ini menampilkan data Surat Peringatan yang pernah diterima karyawan.
+      <% if current_features.include?('sp_new') %>
+        Anda dapat menambahkan data Surat Peringatan baru yang diberikan kepada karyawan.
+      <% end %> <!-- end current_features -->
+      <% if current_features.include?('sp_edit') %>
+        Jika terjadi kesalahan dalam penginputan data Surat Peringatan, Anda juga dapat melakukan edit data Surat Peringatan.
+      <% end %> <!-- end current_features -->
+      <% if current_features.include?('delete_sp') %>
+        Anda juga dapat menghapus data Surat Peringatan yang sudah tidak digunakan.
+      <% end %> <!-- end current_features -->
+    <% elsif action_name == "new" %>
+      Pada halaman ini Anda dapat menambahkan data Surat Peringatan baru yang Anda berikan kepada karyawan.
+    <% elsif action_name == "edit" %>
+      Pada halaman ini Anda dapat mengedit data Surat Peringatan yang sudah pernah Anda buat.
+    <% end %> <!-- end action_name -->
+
+<% elsif controller_name == "overtimes"%>
+  <% if action_name == "index_done" %>
+    Halaman ini menampilkan data karyawan yang sudah melakukan lembur, baik itu lembur wajib maupun lembur tidak wajib.
+  <% elsif action_name == "index" %>
+    Halaman ini menampilkan daftar rencana lembur karyawan perusahaan Anda.
+    <% if current_features.include?('overtime_new') %>
+      Anda dapat menambahkan data rencana lembur baru untuk karyawan.
+    <% end %> <!-- end current_features -->
+    <% if current_features.include?('overtime_edit') %>
+      Anda juga dapat mengedit data rencana lembur karyawan yang masih statusnya masih pending.
+    <% end %> <!-- end current_features -->
+    <% if current_features.include?('overtime_delete') %>
+      Data rencana lembur yang masih pending atau rejected juga dapat Anda hapus melalui halaman ini.
+    <% end %> <!-- end current_features -->
+    <% if current_features.include?('overtime_status_update') %>
+      Pada halaman ini Anda juga dapat menerima/menolak rencana lembur karyawan.
+    <% end %> <!-- end current_features -->
+  <% elsif action_name == "new" %>
+    Pada halaman ini Anda dapat menambahkan rencana lembur yang akan dilakukan karyawan. Rencana lembur ini dapat
+    berupa permintaan lembur dari karyawan maupun instruksi lembur dari atasan untuk karyawan.
+  <% end %> <!-- end action_name -->
+
+<% elsif controller_name == "payrolls" %>
+  <% if action_name == "index" %>
+      Anda dapat melakukan pengaturan penggajian karyawan sehingga Anda dapat memastikan sistem penggajian yang dilakukan
+      sesuai dengan kebijakan perusahaan Anda.      
+  <% elsif action_name == "new" %>
+    Anda dapat melakukan pengaturan penggajian karyawan sehingga Anda dapat memastikan sistem penggajian yang dilakukan
+    sesuai dengan kebijakan perusahaan Anda.
+    <br/>
+    Langkah-langkahnya:
+    <br/>
+    * Klik tombol ‘Edit’ di sisi kanan atas untuk mengedit informasi yang terdapat dalam pengaturan penggajian.
+  <% end %> <!-- end action_name -->
+
+  <% elsif controller_name == "people"%>
+    <% if action_name == "index" %>
+      Halaman ini menampilkan daftar data karyawan yang ada pada perusahaan. Untuk melihat detail data karyawan tersebut,
+      silahkan klik NIK atau nama karyawan yang Anda ingin lihat detail informasinya.
+      <% if current_features.include?('employee_import') %>
+        Anda juga dapat mengimpor data karyawan pada perusahaan Anda sehingga Anda tidak perlu repot memasukkan data karyawan satu persatu ke dalam aplikasi.
+      <% end %> <!-- end current_features -->
+      <% if current_features.include?('employee_new') %>
+        Anda dapat menambahkan data karyawan melalui halaman ini.
+      <% end %> <!-- end current_features -->
+      <% if current_features.include?('employee_edit') %>
+        Anda juga dapat merubah detail data karyawan melalui halaman ini.
+      <% end %> <!-- end current_features -->
+    <% elsif action_name == "new" %>
+      Anda dapat melakukan penambahan data karyawan untuk mengelola karyawan tersebut pada aplikasi.
+    <% elsif action_name == "show" %>
+      Halaman ini menampilkan data pribadi setiap karyawan diantaranya, informasi alamat, data keluarga, informasi kesehatan dan kontak darurat karyawan.
+      <% if current_features.include?('employee_edit') %>
+        Anda dapat merubah detail data karyawan yang ingin Anda rubah dengan mengklik tombol 'Edit' pada bagian-bagian yang ingin Anda rubah.
+      <% end %> <!-- end current_features -->
+    <% elsif action_name == "keluar_masuk" %>
+      Halaman ini menampilkan daftar karyawan yang keluar dan masuk perusahaan.
+    <% elsif action_name == "list_mutasi"%>
+      Halaman ini menampilkan daftar karyawan yang mengalami mutasi selama bekerja di perusahaan.
+    <% elsif action_name == "list_demosi"%>
+      Halaman ini menampilkan daftar karyawan yang mengalami demosi selama bekerja di perusahaan.
+    <% elsif action_name == "less_hour" %>
+      Halaman ini menampilkan data karyawan yang memiliki jam kerja kurang dari yang telah ditentukan perusahaan.
+      Anda bisa menindaklanjuti karyawan yang memiliki kerja kurang dengan pilihan:
+      <br/>
+      1. Dianggap jam kerja kurang.
+      <br/>
+      2. Dianggap dinas luar kota.
+      <br/>
+      3. Dicutikan.
+      <br/>
+      4. Dianggap ijin.
+    <% elsif action_name == "more_rest" %>
+      Halaman ini menampilkan data karyawan yang memiliki jam istirahat lebih. Anda bisa menindaklanjuti karyawan yang memiliki jam istirahat lebih dengan pilihan:
+      <br/>
+      1. Disesuaikan
+      <br/>
+      2. Beri keterangan
+    <% elsif action_name == "less_rest" %>
+      Halaman ini menampilkan data karyawan yang memiliki jam istirahat kurang. Anda bisa menindaklanjuti karyawan yang memiliki istirahat kurang dengan pilihan:
+      <br/>
+      1. Disesuaikan
+    <% elsif action_name == "absent" %>
+      Halaman ini menampilkan data karyawan yang tidak masuk pada periode yang ditentukan. Anda dapat menindaklanjuti data yang ada dengan merubah data karyawan
+      menjadi masuk, atau memberi jenis tidak masuk karyawan.
+    <% elsif action_name == "no_logout" %>
+      Halaman ini menampilkan data karyawan yang memiliki absen tidak lengkap, baik karyawan yang tidak absen keluar ataupun karyawan yang tidak melengkapi absen
+      ketika istirahat masuk dan keluar. Pada halaman ini Anda dapat melengkapi absensi karyawan.
+    <% elsif action_name == "history" %>
+      Halaman ini menampilkan data riwayat pekerjaan setiap karyawan diantaranya, riwayat pendidikan, riwayat pekerjaan, riwayat organisasi dan data sertifikasi/penghargaan yang pernah diperoleh karyawan.
+    <% end %> <!-- end action_name -->
+
+<% elsif controller_name == "promotions"%>
+  <% if action_name == "index" %>
+    Halaman ini menampilkan daftar karyawan yang mengalami promosi selama bekerja di perusahaan.
+  <% end %> <!-- end action_name -->
+
+<% elsif controller_name == "employments" %>
+  <% if action_name == "index" %>
+    Halaman ini menampilkan data pekerjaan setiap karyawan diantaranya, data jabatan, kontrak kerja, data pelatihan, data pelanggaran, dan informasi kecelakaan.
+  <% end %> <!-- end action_name -->
+
+<% elsif controller_name == "salaries" %>
+  <% if action_name == "index" %>
+    Halaman ini menampilkan daftar gaji karyawan perusahaan yang sudah diberikan untuk periiode tertentu.
+    <% if current_features.include?('salary_new') %>
+      Anda dapat menghitung gaji karyawan melalui halaman ini.
+    <% end %> <!-- end current_features -->
+    <% if current_features.include?('salary_edit') %>
+      Anda juga dapat melakukan pengeditan data gaji karyawan jika ada kesalahan dalam pemberian data gaji karyawan.
+    <% end %> <!-- end current_features -->
+  <% elsif action_name == "new" %>
+    Halaman ini digunakan untuk menghitung gaji karyawan untuk periode tertentu.
+  <% elsif action_name == "show" %>
+    Halaman ini memunculkan detail gaji dari karyawan yang sudah selesai dihitung. Anda dapat masuk ke halaman
+    edit gaji dengan klik tombol 'Edit Gaji' yang ada di sisi kanan atas.
+    Jika terjadi kesalahan menghitung data gaji, Anda dapat melakukan pengeditan dari halaman ini dengan klik
+    tombol 'Edit' yang ada di sisi kanan atas.
+  <% elsif action_name == "edit" %>
+    Halaman ini digunakan untuk melakukan pengeditan data gaji yang salah input. Silahkan rubah nilai komponen gaji yang menurut Anda salah di halaman ini.
+  <% elsif action_name == "informasi_gaji" %>
+    Halaman ini menampilkan data yang berhubungan dengan gaji karyawan seperti nama bank, no. rekening, nama pemilik rekening dan no. jamsostek.
+  <% end %> <!-- end action_name -->
+
+<% elsif controller_name == "salary_master_datas"%>
+  <% if action_name == "index" %>
+    Halaman ini menampilkan daftar master gaji karyawan, dengan data yang ditampilkan adalah data gaji pokok dan potongan koperasi. Jika perusahaan menambahkan
+    komponen premi/tunjangan pada pengaturan payroll setting, maka data tunjangan karyawan juga akan ditampilkan.
+    <% if current_features.include?('master_payroll_import') %>
+      Anda dapat mengimpor data master gaji karyawan perusahaan di halaman ini. Contoh file impor juga sudah disediakan.
+    <% end %> <!-- end current_features -->
+    <% if current_features.include?('master_payroll_edit') %>
+      Anda juga dapat mengedit data master gaji karyawan agar data komponen gaji karyawan tersebut sesuai.
+    <% end %> <!-- end current_features -->
+  <% elsif action_name == "edit" %>
+    Pada halaman ini Anda dapat melakukan pengeditan master gaji karyawan. Silahkan rubah nilai komponen gaji karyawan yang ingin Anda rubah di halaman ini.
+  <% end %> <!-- end action_name -->
+
+<% elsif controller_name == "schedules" %>
+  <% if action_name == "index" %>
+    Halaman ini merupakan halaman edit penjadwalan yang ada pada perusahaan Anda. Silahkan edit data yang perlu Anda edit.
+  <% elsif action_name == "new" %>
+    Halaman ini merupakan halaman edit scheduling yang ada pada perusahaan Anda. Silahkan edit data yang perlu Anda edit.
+  <% elsif action_name == "edit" %>
+    Halaman ini merupakan halaman edit scheduling yang ada pada perusahaan Anda. Silahkan edit data yang perlu Anda edit.
+  <% end %> <!-- end action_name -->
+
+<% elsif controller_name == "settings" %>
+  <% if action_name == "index" %>
+    Anda dapat melihat toleransi keterlambatan, waktu kelipatan penghitungan lembur, jatah cuti tahun pertama, dan jatah
+    cuti setiap tahun yang diterima setiap karyawan pada perusahaan Anda di halaman ini.
+    <% if current_features.include?('hr_setting_edit') %>
+      Untuk melakukan pengeditan, silahkan klik button ‘Edit’ di sisi kanan atas.
+    <% end %> <!-- end current_features-->
+  <% elsif action_name == "cuti_sakit" %>
+    Halaman ini menampilkan daftar cuti dan ijin sakit yang ada pada suatu perusahaan.
+    <% if current_features.include?('leave_new') %>
+      Pada halaman ini Anda juga dapat menambahkan data jenis cuti dan ijin sakit yang ada pada perusahaan Anda.
+    <% end %> <!-- end current_features -->
+    <% if current_features.include?('leave_edit') %>
+      Selain itu, data jenis cuti dan ijin sakit yang Anda masukkan juga dapat Anda edit jika terjadi kesalahan penginputan data.
+    <% end %> <!-- end current_features -->
+    <% if current_features.include?('leave_delete') %>
+      Jenis cuti dan ijin sakit perusahaan yang tidak digunakan, selain data default yang sudah disediakan tentunya juga dapat dihapus.
+    <% end %> <!-- end current_features-->
+  <% elsif action_name == "new" %>
+    <% if current_features.include?('hr_setting_edit') %>
+      Pada halaman ini Anda dapat melakukan pengeditan data HR setting perusahaan dengan merubah nilai yang tersedia pada masing-masing field.
+    <% end %> <!-- end current_features-->
+  <% elsif action_name == "new_cuti_sakit" %>
+    Anda dapat menambahkan data jenis cuti dan ijin sakit perusahaan pada halaman ini. Penambahan data dilakukan dengan tujuan memaksimalkan
+    pengelolaan data jenis cuti dan ijin sakit, sehingga absensi karyawan menjadi semakin terkontrol dan jelas.
+  <% elsif action_name == "edit_cuti_sakit" %>
+    Halaman ini memungkinkan Anda melakukan pengeditan data cuti dan ijin sakit yang ada sehingga jika terjadi kesalahan dapat direvisi dengan mudah.
+  <% end %> <!-- end action name-->
+
+<% elsif controller_name == "shifts" %>
+  <% if action_name == "index" %>
+    <% if current_features.include?('shift_new') %>
+      Anda dapat menambah data shift yang digunakan perusahaan.
+    <% end %> <!-- end current_features -->
+    <% if current_features.include?('shift_edit') %>
+      Anda juga dapat mengedit data shift jika terjadi kesalahan penginputan data.
+    <% end %> <!-- end current_features -->
+    <% if current_features.include?('shift_delete') %>
+      Jika ada data shift yang sudah tidak digunakan, Anda juga dapat menghapus data shift tersebut.
+    <% end %> <!-- end curret_features -->
+  <% elsif action_name == "new" %>
+    Anda dapat melakukan menambahkan data shift yang ada pada perusahaan Anda di halaman ini. Penambahan data shift
+    dilakukan untuk memastikan bahwa semua shift yang ada pada perusahaan tersimpan sehingga semua jadwal kerja yang ada pada perusahaan dapat tersimpan dengan baik.
+  <% elsif action_name == "edit" %>
+    Halaman ini dapat digunakan untuk mengedit data shift yang datanya salah sehingga data shift tetap akurat.
+  <% end %> <!-- end action_name -->
+
+<% else %>
+  Tidak ada deskripsi untuk halaman ini.
+<% end %>

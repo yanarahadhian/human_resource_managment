@@ -1,0 +1,126 @@
+<% input_mulai = "input-field" %>
+<% err_mulai = error_message_on @training, :training_start %>
+<% input_mulai = "input-error" unless err_mulai.blank? %>
+
+<% input_selesai = "input-field" %>
+<% err_selesai = error_message_on @training, :training_end %>
+<% input_selesai = "input-error" unless err_selesai.blank? %>
+
+<% input_person_trained_in = "input-field" %>
+<% err_person_trained_in = error_message_on @training, :person_trained_in %>
+<% input_person_trained_in = "input-error" unless err_person_trained_in.blank? %>
+
+
+
+<div class="input">
+  <a onclick="onChangeField()" class="grey_button_a top-right" href="#">
+      <span class="icons edit-icon">&nbsp;</span>
+        Edit
+    </a>
+  <span class="input-field">
+    <label>Jenis Pelatihan</label><span class="left">:&nbsp;</span>
+    <div id="field_training_type" style="display:none">
+      <%= f.select :training_type, @training.options[:type].collect{|p| [p.humanize,p]}, { :include_blank => 'Pilih' } %>
+    </div>
+    <div id="lbl_training_type">
+      <%= @training.training_type.blank? ? "-" : @training.training_type %>
+    </div>
+  </span>
+  <span class="clear"></span>
+
+  <span class="<%= input_person_trained_in %>" id="internal">
+    <label>Pelatih<span class="redstar">*</span></label><span class="left">:&nbsp;</span>
+    <div id="field_person_trained_in" style="display:none">
+       <%= f.text_field :person_trained_in %>
+       <%= err_person_trained_in %>
+    </div>
+    <div id="lbl_person_trained_in">
+      <%= @training.person_trained_in %>
+    </div>
+  </span>
+  <span class="clear"></span>
+
+  <div id="external">
+    <span class="input-field">
+      <label>Penyelenggara</label><span class="left">:&nbsp;</span>
+      <div id="field_promoter" style="display:none">
+        <%= f.text_field :promoter %>
+      </div>
+      <div id="lbl_promoter">
+        <%= @training.promoter.blank? ? "-" : @training.promoter %>
+      </div>
+    </span>
+    <span class="clear"></span>
+
+    <span class="input-field">
+      <label>No. Telp</label><span class="left">:&nbsp;</span>
+      <div id="field_promoter_phone" style="display:none">
+        <%= f.text_field :promoter_phone %>
+      </div>
+      <div id="lbl_promoter_phone">
+        <%= @training.promoter_phone.blank? ? "-" : @training.promoter_phone %>
+      </div>
+    </span>
+  </div>
+
+  <span class="clear"></span>
+    <span class="input-field">
+    <label>Tema</label><span class="left">:&nbsp;</span>
+    <div id="field_theme" style="display:none">
+      <%= f.text_field :theme %>
+    </div>
+    <div id="lbl_theme">
+       <%= @training.theme.blank? ? "-" : @training.theme %>
+    </div>
+  </span>
+
+  <span class="clear"></span>
+    <span class="input-field">
+      <label>No Sertifikat</label><span class="left">:&nbsp;</span>
+      <div id="field_certificate_number" style="display:none">
+        <%= f.text_field :certificate_number%>
+      </div>
+      <div id="lbl_certificate_number">
+         <%= @training.certificate_number.blank? ? "-" : @training.certificate_number %>
+      </div>
+    </span>
+  <span class="clear"></span>
+
+  <span class="<%= input_mulai %>">
+    <label>Tanggal Mulai <span class="redstar">*</span></label><span class="left">:&nbsp;</span>
+    <div id="field_training_start" style="display:none">
+      <%= f.text_field :training_start, :class => "ui-date", :value => (@training.training_start.blank? ? "" : @training.training_start.strftime("%d/%m/%Y")) %>
+      <div class="clear"></div>
+      <%= err_mulai %>
+    </div>
+    <div id="lbl_training_start">
+      <%= @training.training_start.blank? ? "" : @training.training_start.strftime("%d/%m/%Y") %>
+    </div>
+  </span>
+  <span class="clear"></span>
+
+  <span class="<%= input_selesai %>">
+    <label>Tanggal Selesai <span class="redstar">*</span></label><span class="left">:&nbsp;</span>
+    <div id="field_training_end" style="display:none">
+      <%= f.text_field :training_end, :class => "ui-date", :value => @training.training_end.blank? ? "" : @training.training_end.strftime("%d/%m/%Y")  %>
+      <div class="clear"></div>
+      <%= err_selesai %>
+    </div>
+    <div id="lbl_training_end">
+      <%= @training.training_end.blank? ? "" : @training.training_end.strftime("%d/%m/%Y") %>
+    </div>
+  </span>
+  <span class="clear"></span>
+
+  <span class="input-field">
+    <label>Keterangan </label><span class="left">:&nbsp;</span>
+    <div id="field_training_description" style="display:none">
+      <%= f.text_area :training_description, :rows => 3, :cols => 20 %>
+      <div class="clear"></div>
+    </div>
+    <div id="lbl_training_description">
+      <%= @training.training_description.blank? ? "-" : @training.training_description %>
+    </div>
+  </span>
+  <span class="clear"></span>
+</div>

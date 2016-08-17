@@ -1,0 +1,164 @@
+<!-- Tooltips for Department  -->
+<% if @get_departments.blank? %>
+  $('.add_department').qtip({
+    content: 'Klik disini untuk menambah department',
+    style: ('cls_add_department'),
+    position: {
+      adjust: { x: -70, y: -30},
+      my: 'bottom right',
+      at: 'bottom right'
+    },
+    show: { ready: true }
+  });
+  setTimeout("$('.add_department').qtip('hide');",2000);
+<% end %>
+<% if !@get_departments.blank? && @get_departments.size == 1 %>
+  $('.department_name').qtip({
+    content: 'Klik disini untuk mengedit department',
+    style: ('cls_department_name'),
+    position: {
+      adjust: { x: 20, y: 10},
+      my: 'top left',
+      at: 'top left'
+    },
+    show: { ready: true }
+  });
+
+  $('.delete_department').qtip({
+    content: 'Klik disini untuk menghapus department',
+    style: ('cls_delete_department'),
+    position: {
+      adjust: { x: 70, y: 20},
+      my: 'top left',
+      at: 'top left'
+    },
+    show: { ready: true }
+  });
+
+  setTimeout("$('.department_name').qtip('hide');",2000);
+  setTimeout("$('.delete_department').qtip('hide');",2000);
+<% end %>
+
+<!-- Tooltips for Bagian  -->
+<% if @get_divisions.blank? %>
+  $('.add_division').qtip({
+    content: 'Klik disini untuk menambah bagian',
+    style: ('cls_add_division'),
+    position: {
+      adjust: { x: -70, y: -30},
+      my: 'bottom right',
+      at: 'bottom right'
+    },
+    show: { ready: true }
+  });
+  setTimeout("$('.add_division').qtip('hide');",2000);
+<% end %>
+<% if !@get_divisions.blank? && @get_divisions.size == 1 %>
+  $('.division_name').qtip({
+    content: 'Klik disini untuk mengedit bagian',
+    style: ('cls_division_name'),
+    position: {
+      adjust: { x: 20, y: 15},
+      my: 'top left',
+      at: 'top left'
+    },
+    show: { ready: true }
+  });
+
+  $('.delete_division').qtip({
+    content: 'Klik disini untuk menghapus bagian',
+    style: ('cls_delete_division'),
+    position: {
+      adjust: { x: 70, y: 15},
+      my: 'top left',
+      at: 'top left'
+    },
+    show: { ready: true }
+  });
+
+  setTimeout("$('.division_name').qtip('hide');",2000);
+  setTimeout("$('.delete_division').qtip('hide');",2000);
+<% end %>
+
+<!-- Tooltips for Group  -->
+<% if @get_groups.blank? %>
+  $('.add_group').qtip({
+    content: 'Klik disini untuk menambah group',
+    style: ('cls_add_group'),
+    position: {
+      adjust: { x: -70, y: -30},
+      my: 'bottom right',
+      at: 'bottom right'
+    },
+    show: { ready: true }
+  });
+  setTimeout("$('.add_group').qtip('hide');",2000);
+<% end %>
+<% if !@get_groups.blank? && @get_groups.size == 1 %>
+  $('.group_name').qtip({
+    content: 'Klik disini untuk mengedit group',
+    style: ('cls_edit_group'),
+    position: {
+      adjust: { x: 20, y: 15},
+      my: 'top left',
+      at: 'top left'
+    },
+    show: { ready: true }
+  });
+
+  $('.delete_group').qtip({
+    content: 'Klik disini untuk menghapus group',
+    style: ('cls_delete_group'),
+    position: {
+      adjust: { x: 70, y: 15},
+      my: 'top left',
+      at: 'top left'
+    },
+    show: { ready: true }
+  });
+
+  setTimeout("$('.group_name').qtip('hide');",2000);
+  setTimeout("$('.delete_group').qtip('hide');",2000);
+<% end %>
+
+<!-- Tooltips for Group  -->
+<% if @positions.blank? %>
+  $('.add_position').qtip({
+    content: 'Klik disini untuk menambah jabatan',
+    style: ('cls_add_position'),
+    position: {
+      adjust: { x: -70, y: -30},
+      my: 'bottom right',
+      at: 'bottom right'
+    },
+    show: { ready: true }
+  });
+  setTimeout("$('.add_position').qtip('hide');",2000);
+<% end %>
+<% if !@get_positions.blank? && @get_positions.size == 1 %>
+  $('.position_name').qtip({
+    content: 'Klik disini untuk mengedit jabatan',
+    style: ('cls_position_name'),
+    position: {
+      adjust: { x: 20, y: 15},
+      my: 'top left',
+      at: 'top left'
+    },
+    show: { ready: true }
+  });
+
+  $('.delete_position').qtip({
+   content: 'Klik disini untuk menghapus jabatan',
+   style: ('cls_delete_position'),
+   position: {
+     adjust: { x: 70, y: 15},
+     my: 'top left',
+     at: 'top left'
+   },
+   show: { ready: true }
+  });
+
+  setTimeout("$('.position_name').qtip('hide');",2000);
+  setTimeout("$('.delete_position').qtip('hide');",2000);
+<% end %>
+

@@ -1,0 +1,76 @@
+<%= javascript_include_tag 'jquery.validate' %>	
+	  <script type="text/javascript"> 
+	    $(document).ready(function() { 
+	      $("#companyForm").validate();
+				if ($('#autocomplete_address_state_array').val()) {var state = $('#autocomplete_address_state_array').val().split(",");}
+				  $("#autocomplete_address_state").autocomplete(state, {
+				    matchContains: true,
+					minChars: 0,
+					selectFirst: false
+				  });
+
+				  if ($('#autocomplete_address_city_array').val()) {var city = $('#autocomplete_address_city_array').val().split(",");}
+				  $("#autocomplete_address_city").autocomplete(city, {
+				    matchContains: true,
+					minChars: 0,
+					selectFirst: false
+				  });
+	    }); 
+	  </script>
+<div id="pagelet_stream_header" style="padding-top: 10px;">
+	<div class="clearfix UIIntentionalStream_Top">
+		<div class="UIIntentionalStream_Top_Icon UIImageBlock clearfix">
+			<div class="UIImageBlock_Content UIImageBlock_ICON_Content">
+				<li class="UIIntentionalStream_Top_Header">
+					<span class="UIIntentionalStream_LiveHeader">Tambah <%=
+			      case params[:experience_type]
+			        when 'work'
+			          'Perusahaan'
+			        when 'training'
+			          'Perusahaan'
+			        when 'organizational'
+			          'Organisasi'
+			      end %></span>
+				</li>
+			</div>
+		</div>
+	</div>
+</div>
+<div id="info_tab" class="info_tab" style="padding: 15px 0px 20px; width: 470px;">       
+  <div id="info_section_basic" class="info_section edit_mode ">
+		<div class="section_header" id="info_section_header_basic">
+			<h3 class="clearfix">
+				<span>Info <%=
+		      case params[:experience_type]
+		        when 'work'
+		          'Perusahaan'
+		        when 'training'
+		          'Perusahaan'
+		        when 'organizational'
+		          'Organisasi'
+		      end %></span>
+				<div class="divider"> </div>
+			</h3>
+		</div>
+    <div class="profile_info_container clearfix">
+			<div id="info_section_editor_basic" class="profile_info section_editor" style="height: auto;">
+				<div class="editor_panel clearfix">
+					<% form_for @company, :html => { :id => 'companyForm'} do |f| %>
+						<div style="float:right;width: 15%;">* Harus di isi</div>
+						<%= render :partial => 'company_form', :locals => {:f => f} %>
+						<table class="editor">
+								<tr>
+									<td colspan="2">
+										<div class="buttons">
+                      <input id="info_section_cancel_basic" class="inputbutton inputaux" type="reset" value="Batal" name="info_section_cancel_basic" onclick="$.facebox.close();"/>
+											<input type="submit" value="Save" name="info_section_save_basic" id="info_section_save_basic" class="inputsubmit"/>											
+										</div>
+									</td>
+								</tr>
+						</table>
+      		<% end-%>
+				</div>
+			</div>
+    </div>
+  </div>
+</div>

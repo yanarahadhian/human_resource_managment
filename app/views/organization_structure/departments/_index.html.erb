@@ -1,0 +1,133 @@
+<%= render :partial=> "layouts/shared/breadcrumbs" %>
+<div class="clear"></div>
+<fieldset class="fm-table">
+  <legend><a href="#" id="help_dash" class="icons help-top-icon" title="Click to show/hide information">&nbsp;</a>
+   Struktur Organisasi - Departemen</legend>
+  <%= render :partial => "layouts/howto/howto_content"%>
+  <%= render :partial=>"layouts/top_menu_organization_structure" %>
+  <%= render :partial=> "layouts/delete_message" %>
+  <div class="panelFilter">
+    <table cellspacing="0" cellpadding="0">
+      <tbody><tr>
+          <% unless @departments.blank? %>
+            <td style="width:97px;">
+              <div class="action_menu">
+                <ul>
+                  <li>
+                    <a class="grey_button2 delete_department">
+                      <span class="left">More Actions</span>
+                      <span class="icons drop_arrow_ico">&nbsp;</span>
+                    </a>
+                    <div class="clear"></div>
+                    <ul>
+                      <li>
+                        <a class="list" onclick="onDelete()">Delete</a>
+                      </li>
+                    </ul>
+                  </li>
+                </ul>
+              </div>
+            </td>          
+            <td>
+              <div class="action_menu">
+                <ul>
+                  <li>
+                    <a class="grey_button2" id="filter_trigger" style="color: rgb(89, 119, 156); ">
+                      <span class="icons filter-ico">&nbsp;</span> Filter
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </td>
+          <% end %>
+          <% if current_features.include?('department_new') %>
+            <td style"width:270px;">
+              <div class="pagination">
+                <a class="grey_button2 add_department" id="import" href="#organization_structure/departments/new ">
+                  <span class="icons add_ico">&nbsp;</span>
+                  Tambah Departemen
+                </a>
+              </div>
+              <div class="clear"></div>
+            </td>
+          <% end %>
+        </tr>
+        <tr id="filter_block" style="display: table-row; ">
+          <td colspan="3">
+            <div class="expand_filter">
+              <div id="filter_st" style="display: block; ">
+                <% form_remote_tag :url => {:action=>:index}, :method => :get  do -%>
+                  <div class="left-filter" style="margin-left: 300px">
+                    <div id="filter_opt_1">
+                      <div class="clear"></div>
+                      <div class="filter_opt">
+                        <label class="left">Nama Departemen</label>
+                        <%= text_field :filter, :nama %>
+                      </div>
+                    </div>
+                    <div id="filter_opt_2">
+                      <div class="clear"></div>
+                      <div class="filter_opt">
+                        <label class="left">Jumlah karyawan</label>
+                        <select class="left" name="filter[ket_jumlah]" id="filter_select" style="width:80px;" onchange="onJumlahKaryawan()">
+                          <option value="">pilih</option>
+                          <option value="1">Minimal</option>
+                          <option value="2">Maksimal</option>
+                          <option value="3">Antara</option>
+                        </select>
+                        <span id="div_min_max" ><input type="text" id="filter_jumlah_karyawan" name="filter[jumlah_karyawan]" style="width: 30px"/></span>
+                        <span id="div_antara" style="display:none;">
+                          <input type="text" id="filter_awal" name="filter[awal]" style="width: 30px"/>
+                          s/d
+                          <input type="text" id="filter_akhir" name="filter[akhir]" style="width: 30px"/>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="clear"></div>
+                  <div class="center filter-btn">
+                    <%= render :partial => "layouts/button_loader"  %>
+                    <a id="filter_button">
+                      <span class="center"><%= submit_tag 'Tampilkan', :class=>"grey_button2", :onclick=> "progress_filter()", :style => 'float :none; margin-bottom :3px' %></span>
+                      <div class="clear"></div>
+                    </a>
+                  </div>
+                <% end %>
+              </div>
+            </div>
+          </td>
+        </tr>
+      </tbody></table>
+  </div>
+  <div class="clear"></div>
+  <div id="div_department">
+    <%= render :partial => "list_departments"  %>
+  </div>
+
+</fieldset>
+
+<script type="text/javascript">
+  //Javascript Filter
+  $(document).ready(function(){
+    error_handle("<%= flash.now[:notice] %>");
+    $('#filter_block').hide();
+    $('#filter_trigger').click(function(){
+      $(this).toggleClass("filter-active");
+      $('#filter_block').toggle();
+    });
+    $('.expand_filter .reset-filter-ico').click(function(){
+      $('#filter_block').hide();
+      $('#filter_trigger').removeClass("filter-active")
+    });
+    //Filter_Step
+    $('#filter_nd').hide();
+    $('#next_step').click(function(){
+      $('#filter_st').hide();
+      $('#filter_nd').show();
+    });
+    $('#save_create, #cancel_create').click(function(){
+      $('#filter_st').show();
+      $('#filter_nd').hide();
+    });    
+  });
+</script>

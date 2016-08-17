@@ -1,0 +1,27 @@
+{
+"sEcho": <%=h @sEcho %>,
+"iTotalRecords": <%= @iTotalRecords %>,
+"iTotalDisplayRecords": <%= @iTotalDisplayRecords %>,
+"presencesAllCount": <%= @presences_all_count %>,
+"sColumns": "id,name,department,division,start,end,break,work",
+"aaData" : [
+<%- @presences.each do |presence| %>
+  <% the_person = presence.person %>
+  <% the_presence_details = presence.presence_details(:order => 'start_working') %>
+  [ "<%= "<input id='person_#{the_person.id}' name='person_ids[]' type='checkbox' value=#{presence.id} />" %>",
+  "<%= "<a href='#dailyabsence?id=#{the_person.id}&date=#{presence.presence_date.strftime("%Y-%m-%d")}'> #{h the_person.full_name.titleize} </a>" %>",
+  "<%=h the_person.department(presence.presence_date).department_name.just_display if the_person.department(presence.presence_date) %>",
+  "<%=h the_person.division(presence.presence_date).name.just_display if the_person.division(presence.presence_date) %>",
+  <%- if the_presence_details.last %>
+    "<%= the_presence_details.first.start_working.getlocal.strftime("%H:%M") if the_presence_details.first.start_working %>",
+    "<%= the_presence_details.last.end_working.getlocal.strftime("%H:%M") if the_presence_details.last.end_working %>",
+  <%- else %>
+    "N/A","N/A",
+  <%- end %>
+  "<%= Presence.minutes_to_hour_text(presence.break_length_in_minutes.to_i) %>",
+  "<%= Presence.hours_to_hour_text(presence.presence_length_in_hours.to_f - presence.moved_worktime_in_hours.to_f) %>"
+  <%= "]," unless presence == @presences.last %>
+<% end %>
+<%= "]" unless @presences.blank? %>
+]
+}
